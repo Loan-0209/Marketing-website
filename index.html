@@ -5,68 +5,446 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HEART - Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .header { background: #1e3a8a; color: white; padding: 1rem; }
-        .nav { background: #3b82f6; padding: 0.5rem; }
-        .nav a { color: white; text-decoration: none; margin: 0 1rem; }
-        .hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 4rem 2rem; text-align: center; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .section { margin: 2rem 0; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card { background: #f8f9fa; padding: 2rem; border-radius: 8px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav .campus-3d {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav .campus-3d:hover {
+            background: #059669;
+        }
+        
+        .nav .contact-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .nav .contact-btn:hover {
+            background: #d97706;
+        }
+        
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .nav .login-btn:hover {
+            background: #d97706;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-button {
+            background: #10b981;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .section {
+            margin: 4rem 0;
+        }
+        
+        .section h2 {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+        }
+        
+        .card h3 {
+            color: #1e3a8a;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .stats {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 6rem 2rem;
+        }
+        
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #1e3a8a;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: #10b981;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>🚀 HEART Technology Park</h1>
-        <p>Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <div class="header-content">
+            <div class="logo">
+                HEART
+            </div>
+            <nav class="nav">
+                <a href="#home">Home</a>
+                <a href="#about">About Us</a>
+                <a href="#master-plan">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">🏢 3D Campus</a>
+                <a href="#facilities">Facilities</a>
+                <a href="#investment">Investment</a>
+                <a href="#technology">Technology</a>
+                <a href="#news">News</a>
+                <a href="#contact" class="contact-btn">Contact</a>
+                <a href="#login" class="login-btn">Login</a>
+            </nav>
+        </div>
     </header>
-    
-    <nav class="nav">
-        <a href="#home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#master-plan">Master Plan</a>
-        <a href="#facilities">Facilities</a>
-        <a href="#investment">Investment</a>
-        <a href="#contact">Contact</a>
-    </nav>
-    
-    <section class="hero">
-        <h2>Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam</h2>
+
+    <section id="home" class="hero">
+        <h1>HEART Technology Park</h1>
+        <p>Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <p>Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam</p>
         <p>Đổi mới sáng tạo • Phát triển bền vững • Hợp tác quốc tế</p>
+        <button class="cta-button">Khám phá ngay</button>
     </section>
-    
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">2000</div>
+                <div class="stat-label">Hecta</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">30K+</div>
+                <div class="stat-label">Việc làm</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Công ty</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">$2.5B</div>
+                <div class="stat-label">Đầu tư</div>
+            </div>
+        </div>
+    </section>
+
     <div class="container">
         <section id="about" class="section">
             <h2>About Us</h2>
-            <p>HEART Technology Park là khu công nghệ cao hàng đầu Việt Nam, tập trung phát triển công nghệ AI và đổi mới sáng tạo.</p>
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
+                HEART Technology Park là khu công nghệ cao hàng đầu Việt Nam, tập trung phát triển công nghệ AI và đổi mới sáng tạo.
+            </p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>🎯 Mission</h3>
+                    <p>Tạo ra một hệ sinh thái công nghệ toàn diện nơi các doanh nghiệp, nhà nghiên cứu và nhà đầu tư có thể hợp tác phát triển các giải pháp AI tiên tiến.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>⚡ Core Values</h3>
+                    <p>Đổi mới sáng tạo, phát triển bền vững, hợp tác và phát triển con người là những giá trị cốt lõi hướng dẫn mọi hoạt động của chúng tôi.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>👥 Our Team</h3>
+                    <p>Được dẫn dắt bởi các chuyên gia được công nhận quốc tế về AI và phát triển công nghệ, đội ngũ của chúng tôi quy tụ hơn 200 chuyên gia.</p>
+                </div>
+            </div>
         </section>
-        
+
         <section id="master-plan" class="section">
             <h2>Master Plan</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>Phase 1 (2025-2027): Foundation</h3>
-                    <p>Xây dựng hạ tầng cốt lõi, trung tâm dữ liệu và tòa nhà văn phòng thông minh đầu tiên.</p>
+                    <h3>📅 Phase 1 (2025-2027): Foundation</h3>
+                    <p>Xây dựng hạ tầng cốt lõi, trung tâm dữ liệu và tòa nhà văn phòng thông minh đầu tiên. Thành lập các khu vực nghiên cứu AI và phòng thí nghiệm.</p>
+                    <p><strong>Đầu tư:</strong> $600M | <strong>Kết quả:</strong> 5,000 việc làm, 50 công ty</p>
                 </div>
+                
                 <div class="card">
-                    <h3>Phase 2 (2027-2030): Expansion</h3>
-                    <p>Mở rộng khu vực sản xuất công nghệ cao, xây dựng trung tâm đào tạo và khu dân cư thông minh.</p>
+                    <h3>🚀 Phase 2 (2027-2030): Expansion</h3>
+                    <p>Mở rộng khu vực sản xuất công nghệ cao, xây dựng trung tâm đào tạo và khu dân cư thông minh cho nhân viên và gia đình.</p>
+                    <p><strong>Đầu tư:</strong> $800M | <strong>Kết quả:</strong> 15,000 việc làm bổ sung, 150 công ty</p>
+                </div>
+                
+                <div class="card">
+                    <h3>🌟 Phase 3 (2030+): Innovation Hub</h3>
+                    <p>Trở thành trung tâm đổi mới sáng tạo AI hàng đầu Đông Nam Á với các quan hệ đối tác quốc tế và cơ sở nghiên cứu tiên tiến.</p>
+                    <p><strong>Đầu tư:</strong> $1.2B | <strong>Kết quả:</strong> 30,000 việc làm, 300+ công ty</p>
                 </div>
             </div>
         </section>
-        
-        <section class="section">
-            <h2>🎯 Website đã hoạt động thành công\!</h2>
-            <p>✅ Marketing website hoàn chỉnh<br>
-               ✅ Responsive design<br>
-               ✅ SEO optimized<br>
-               ✅ GitHub Pages deployed</p>
-        </section>
     </div>
-    
-    <footer style="background: #1e3a8a; color: white; text-align: center; padding: 2rem;">
+
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Contact Us</h2>
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interest">Interested In</label>
+                        <select id="interest" name="interest">
+                            <option value="">Select your interest</option>
+                            <option value="investment">Investment Opportunities</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="office-space">Office Space</option>
+                            <option value="research">Research Collaboration</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us more about your needs..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
         <p>&copy; 2025 HEART Technology Park. All rights reserved.</p>
     </footer>
 </body>
