@@ -1,22 +1,360 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - HEART Technology Park</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Facilities - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .campus-3d {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav .campus-3d::before {
+            content: "🏢 ";
+        }
+        
+        .nav .contact-btn,
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .title-decoration {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .facilities-overview {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        .facility-category {
+            margin-bottom: 4rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .facility-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .facility-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3.5rem;
+        }
+        
+        .facility-content {
+            padding: 2.5rem;
+        }
+        
+        .facility-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .facility-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .facility-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .facility-features li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .facility-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .stats-showcase {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+            text-align: center;
+        }
+        
+        .stats-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .virtual-tour {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .tour-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .tour-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tour-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tour-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .facilities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-showcase {
+                padding: 3rem 1.5rem;
+            }
+            
+            .stats-title {
+                font-size: 2rem;
+            }
+            
+            .overview-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <\!-- Same header as index.html but About Us is active -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">HEART</a>
             <nav class="nav">
                 <a href="index.html">Home</a>
-                <a href="about.html" class="active">About Us</a>
+                <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
                 <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
-                <a href="facilities.html">Facilities</a>
+                <a href="facilities.html" class="active">Facilities</a>
                 <a href="investment.html">Investment</a>
                 <a href="technology.html">Technology</a>
                 <a href="news.html">News</a>
@@ -25,15 +363,176 @@
             </nav>
         </div>
     </header>
-    
-    <\!-- About Us content here -->
+
     <section class="page-header">
-        <h1 class="page-title">About Us</h1>
+        <h1 class="page-title">World-Class Facilities</h1>
         <div class="title-decoration"></div>
-        <p class="page-subtitle">Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <p class="page-subtitle">State-of-the-art infrastructure designed for innovation and collaboration</p>
     </section>
-    
-    <\!-- Add same styling from master-plan.html -->
+
+    <div class="container">
+        <div class="facilities-overview">
+            <h2 class="overview-title">Creating the Future of AI Innovation</h2>
+            <p class="overview-text">HEART Technology Park features cutting-edge facilities designed to foster innovation, collaboration, and breakthrough research in artificial intelligence. Our world-class infrastructure provides the perfect environment for companies, researchers, and entrepreneurs to thrive.</p>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🔬 Research & Development Centers</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">🧪</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">AI Research Labs</h4>
+                        <p class="facility-description">Advanced laboratories equipped with quantum computing systems, high-performance computing clusters, and specialized AI development tools.</p>
+                        <ul class="facility-features">
+                            <li>Quantum computing infrastructure</li>
+                            <li>GPU clusters for deep learning</li>
+                            <li>Advanced data analytics platforms</li>
+                            <li>Collaborative research spaces</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🤖</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Robotics Innovation Center</h4>
+                        <p class="facility-description">Dedicated spaces for robotics research, prototyping, and testing with industrial-grade equipment and safety systems.</p>
+                        <ul class="facility-features">
+                            <li>Robot testing environments</li>
+                            <li>3D printing and fabrication</li>
+                            <li>Motion capture systems</li>
+                            <li>Safety-certified testing areas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🧠</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Neural Network Institute</h4>
+                        <p class="facility-description">Specialized facility for neural network research, brain-computer interfaces, and cognitive computing studies.</p>
+                        <ul class="facility-features">
+                            <li>Neuromorphic computing systems</li>
+                            <li>EEG and brain imaging labs</li>
+                            <li>Virtual reality research pods</li>
+                            <li>Cognitive testing facilities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🏢 Business & Collaboration Spaces</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">💼</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Smart Office Buildings</h4>
+                        <p class="facility-description">Intelligent office spaces with IoT integration, automated systems, and flexible layouts for modern businesses.</p>
+                        <ul class="facility-features">
+                            <li>IoT-enabled smart systems</li>
+                            <li>Flexible workspace configurations</li>
+                            <li>High-speed fiber connectivity</li>
+                            <li>Energy-efficient design</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🚀</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Startup Incubator Hub</h4>
+                        <p class="facility-description">Dedicated spaces for startups with mentorship programs, shared resources, and networking opportunities.</p>
+                        <ul class="facility-features">
+                            <li>Coworking spaces</li>
+                            <li>Meeting and presentation rooms</li>
+                            <li>Mentorship programs</li>
+                            <li>Funding and investment support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🎯</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Innovation Commons</h4>
+                        <p class="facility-description">Open collaboration spaces designed to encourage cross-pollination of ideas between different companies and research groups.</p>
+                        <ul class="facility-features">
+                            <li>Open collaboration areas</li>
+                            <li>Interactive digital walls</li>
+                            <li>Brainstorming pods</li>
+                            <li>Community event spaces</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🎓 Education & Training Centers</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">🎓</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">AI Academy</h4>
+                        <p class="facility-description">Comprehensive education center offering courses, workshops, and certification programs in AI and related technologies.</p>
+                        <ul class="facility-features">
+                            <li>Modern lecture halls</li>
+                            <li>Hands-on laboratory sessions</li>
+                            <li>Online learning platforms</li>
+                            <li>Industry expert instructors</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🏋️</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Skills Development Center</h4>
+                        <p class="facility-description">Professional training facilities for upskilling workers and preparing them for the AI-driven economy.</p>
+                        <ul class="facility-features">
+                            <li>Simulation environments</li>
+                            <li>Virtual reality training</li>
+                            <li>Certification programs</li>
+                            <li>Career placement services</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-showcase">
+            <h3 class="stats-title">Our Facility Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">500K</div>
+                    <div class="stat-label">Square Meters</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Research Labs</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Office Spaces</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Security & Support</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="virtual-tour">
+            <h3 class="tour-title">Take a Virtual Tour</h3>
+            <p class="tour-description">Experience our world-class facilities through an immersive 3D virtual tour. Explore our labs, offices, and collaboration spaces from the comfort of your home.</p>
+            <a href="ai-campus-3d-structure.html" class="tour-button">
+                <span>🏢</span>
+                <span>Start Virtual Tour</span>
+            </a>
+        </div>
+    </div>
 </body>
 </html>
-EOF < /dev/null
