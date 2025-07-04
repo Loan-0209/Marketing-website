@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AI Campus 3D - Khu Công Nghệ Cao</title>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- Custom Scripts -->
+    <script src="force-render-loop.js"></script>
+    <script src="diagnostic-model-loader.js"></script>
+    
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Main Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Container for Three.js canvas */
+        #container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 15, 30, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        .loading-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4fc3f7;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(79, 195, 247, 0.3);
+            border-radius: 50%;
+            border-top-color: #4fc3f7;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Control Panel */
+        #control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #control-panel h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #4fc3f7;
+            text-align: center;
+        }
+        
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .btn {
+            background-color: rgba(79, 195, 247, 0.2);
+            color: #ffffff;
+            border: 1px solid #4fc3f7;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            outline: none;
+        }
+        
+        .btn:hover {
+            background-color: rgba(79, 195, 247, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.5);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(79, 195, 247, 0.5);
+        }
+        
+        /* Stats Panel */
+        #stats-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            min-width: 150px;
+        }
+        
+        #stats-panel h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #4fc3f7;
+            text-align: center;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .stat-value {
+            color: #4fc3f7;
+            font-weight: bold;
+        }
+        
+        /* Info Panel */
+        #info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+        }
+        
+        #info-panel h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #4fc3f7;
+            text-align: center;
+        }
+        
+        #info-panel p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #control-panel, #stats-panel, #info-panel {
+                padding: 10px;
+            }
+            
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            #stats-panel {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Container for Three.js -->
+    <div id="container"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-text">Đang tải AI Campus 3D...</div>
+        <div class="spinner"></div>
+    </div>
+    
+    <!-- Control Panel -->
+    <div id="control-panel">
+        <h3>Điều khiển</h3>
+        <div class="control-buttons">
+            <button class="btn" id="toggle-animation">Toggle Animation</button>
+            <button class="btn" id="change-view">Change View</button>
+            <button class="btn" id="toggle-lights">Toggle Lights</button>
+            <button class="btn" id="reset-camera">Reset Camera</button>
+        </div>
+    </div>
+    
+    <!-- Stats Panel -->
+    <div id="stats-panel">
+        <h3>Thống kê</h3>
+        <div class="stat-item">
+            <span>FPS:</span>
+            <span class="stat-value" id="fps-counter">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Objects:</span>
+            <span class="stat-value" id="objects-counter">0</span>
+        </div>
+        <div class="stat-item">
+            <span>Triangles:</span>
+            <span class="stat-value" id="triangles-counter">0</span>
+        </div>
+    </div>
+    
+    <!-- Info Panel -->
+    <div id="info-panel">
+        <h3>AI Campus 3D</h3>
+        <p>🏙️ Khu Công Nghệ Cao AI Campus</p>
+        <p>🖱️ Kéo chuột để xoay camera</p>
+        <p>🖲️ Cuộn chuột để zoom in/out</p>
+        <p>📱 Vuốt màn hình để điều khiển trên thiết bị di động</p>
+    </div>
+    
+    <!-- Custom Script -->
+    <script src="ai-campus-3d.js"></script>
+</body>
+</html>
