@@ -1,452 +1,4102 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEART - Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</title>
+    <title>HEART - Khu Công Nghệ Cao AI Hàng Đầu Việt Nam | Technology Park</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="HEART Technology Park - Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam. Đầu tư, nghiên cứu và phát triển công nghệ AI tiên tiến, smart city innovation.">
+    <meta name="keywords" content="HEART, AI Vietnam, technology park, khu công nghệ cao, trí tuệ nhân tạo, đầu tư công nghệ, smart city, innovation hub">
+    <meta name="author" content="HEART Technology Park">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Vietnamese">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://thuyloan0209.github.io/heart-technology-website/">
+    <meta property="og:title" content="HEART - Khu Công Nghệ Cao AI Hàng Đầu Việt Nam">
+    <meta property="og:description" content="Khám phá HEART - hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam. Trung tâm nghiên cứu và phát triển AI tiên tiến.">
+    <meta property="og:image" content="https://thuyloan0209.github.io/heart-technology-website/assets/heart-og-image.jpg">
+    <meta property="og:site_name" content="HEART Technology Park">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://thuyloan0209.github.io/heart-technology-website/">
+    <meta property="twitter:title" content="HEART - Khu Công Nghệ Cao AI Việt Nam">
+    <meta property="twitter:description" content="Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam">
+    <meta property="twitter:image" content="https://thuyloan0209.github.io/heart-technology-website/assets/heart-og-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://thuyloan0209.github.io/heart-technology-website/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="navbar-fix.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/news-manager.css">
+    <link rel="stylesheet" href="css/perfect-spacing.css?v=2">
+    <!-- ONLY ESSENTIAL SCRIPTS -->
+    <script src="js/auth-simple.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --light-blue: #3b82f6;
+            --primary-yellow: #fbbf24;
+            --light-yellow: #FFC107; /* Enhanced darker yellow/gold */
+            --dark-blue: #1e2148;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: var(--dark-blue);
+            overflow-x: hidden;
+            margin-top: 0;
+            padding-top: 0;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
             padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-        
-        .header-content {
-            max-width: 1200px;
+
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 2rem;
         }
-        
+
         .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-yellow);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            margin-top: -80px; /* Offset the body padding-top */
+            padding-top: 80px; /* Maintain proper spacing for content */
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
             display: flex;
             align-items: center;
-            color: white;
-            font-size: 1.5rem;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%23fbbf24" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="40" r="1.5" fill="%23fbbf24" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle><circle cx="40" cy="80" r="1" fill="%23fbbf24" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            margin-top: 0;
+            padding-top: 0;
+            padding: 1rem 0;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 0;
+            padding: 0 2rem;
+            padding-top: 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 100px;
+            height: 4px;
+            background: var(--primary-yellow);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* About Us */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            background: white !important;
+            background-image: none !important;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary-blue);
+            padding: 20px;
+        }
+
+        /* Parallax only for About page */
+        body.about-page .parallax-container,
+        #about .parallax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind content */
+            pointer-events: none; /* Allow clicks through */
+            overflow: hidden;
+        }
+
+        body.about-page .parallax-image,
+        #about .parallax-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: white !important;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .building-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: 60vh;
+            max-width: 80vw;
+            object-fit: contain;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        /* SIMPLE FORCE VISIBILITY - EXACT COPY FROM WORKING TEST */
+        #simple-about-parallax {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            width: 100% !important;
+            height: 300px !important;
+            background: red !important;
+            border: 10px solid blue !important;
+            margin: 50px auto !important;
+            z-index: 9999 !important;
+            box-sizing: border-box !important;
+        }
+
+        /* ENSURE NO CSS OVERRIDES THE BUILDING ELEMENT */
+        
+        /* FORCE ABOUT SECTION VISIBILITY */
+        #about {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        /* FORCE CONTAINER VISIBILITY */
+        .about-content, .about-text {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Disable parallax on all other pages */
+        body:not(.about-page) .parallax-container,
+        body:not(.about-page) .parallax-image,
+        section:not(#about) .parallax-container,
+        section:not(#about) .parallax-image {
+            transform: none !important;
+            position: static !important;
+            display: none !important;
+        }
+
+        /* Ensure content scrolls over the parallax background */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.95);
+            min-height: 100vh;
+            margin-top: 100vh; /* Start content after first viewport */
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .building-image:hover {
+            transform: translate(-50%, -50%) scale(1.05) !important;
+        }
+
+        /* Ensure building image is always visible */
+        .parallax-container .building-image,
+        .parallax-container img[alt*="HEART"],
+        .building-container {
+            opacity: 1 !important;
+            display: block !important;
+            visibility: visible !important;
+        }
+
+        /* SVG specific styling */
+        .building-image svg,
+        .parallax-container svg {
+            width: 100%;
+            height: 100%;
+            max-width: 80vw;
+            max-height: 60vh;
+        }
+
+        /* About Right-Side Parallax Base Styles */
+        .about-parallax-container {
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 480px) {
+            .about-parallax-container {
+                display: none !important;
+            }
+        }
+
+        /* Master Plan */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-yellow);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 0 2rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-yellow);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid var(--primary-blue);
+        }
+
+        /* Facilities */
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .facility-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--primary-yellow);
+        }
+
+        .facility-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .facility-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        /* Investment */
+        .investment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-yellow);
+        }
+
+        /* Technology */
+        .tech-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .tech-item {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .tech-item h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* Contact */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
             font-weight: bold;
         }
-        
-        .logo::before {
-            content: "🚀";
-            margin-right: 0.5rem;
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
-        
-        .nav {
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+
+        .char-counter.danger {
+            color: #ef4444;
+        }
+
+        .form-group small {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #6b7280;
+        }
+
+        .btn-draft {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-draft:hover {
+            background: #fcd34d;
+            transform: translateY(-1px);
+        }
+
+        .btn-publish {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-publish:hover {
+            background: var(--light-blue);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Pagination Styles */
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pagination-btn {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-blue);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .pagination-btn:disabled {
+            background: var(--light-gray);
+            color: var(--gray);
+            border-color: var(--light-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pagination-pages {
             display: flex;
             gap: 0.5rem;
             align-items: center;
         }
-        
-        .nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+
+        .page-number {
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--light-gray);
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
             transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .nav a:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .nav .campus-3d {
-            background: #10b981;
-            color: white;
-        }
-        
-        .nav .campus-3d:hover {
-            background: #059669;
-        }
-        
-        .nav .contact-btn {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .nav .contact-btn:hover {
-            background: #d97706;
-        }
-        
-        .nav .login-btn {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .nav .login-btn:hover {
-            background: #d97706;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 6rem 2rem;
+            min-width: 40px;
             text-align: center;
         }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+
+        .page-number:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-1px);
         }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
+
+        .page-number.active {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
         }
-        
-        .cta-button {
-            background: #10b981;
+
+        .pagination-info {
+            font-size: 0.9rem;
+        }
+
+        /* Image Upload Styles */
+        .image-preview {
+            position: relative;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .image-preview img {
+            border: 2px solid var(--light-gray);
+            transition: border-color 0.3s ease;
+        }
+
+        .image-preview:hover img {
+            border-color: var(--primary-blue);
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
             color: white;
-            padding: 1rem 2rem;
             border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .remove-image-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px dashed var(--light-gray);
             border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            background: var(--white);
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
-        .cta-button:hover {
-            background: #059669;
+
+        input[type="file"]:hover {
+            border-color: var(--primary-blue);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        input[type="file"]:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* News Image Styles */
+        .news-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .news-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .news-image-fallback {
+            font-size: 3rem;
+            color: var(--gray);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--light-blue);
             transform: translateY(-2px);
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .parallax-container {
+                height: 100vh;
+            }
+            
+            .parallax-image {
+                height: 110%; /* Less movement on mobile */
+            }
+            
+            .building-image {
+                height: 40vh;
+                max-width: 90vw;
+            }
+            
+            .content-wrapper {
+                margin-top: 80vh;
+                padding: 1rem;
+            }
+
+            /* About Right-Side Parallax Mobile */
+            .about-parallax-container {
+                width: 250px !important;
+            }
+            
+            .about-parallax-container .building-container {
+                width: 200px !important;
+                height: 150px !important;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .news-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .news-header-actions {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+            }
+
+            .create-post-btn {
+                font-size: 0.9rem;
+                padding: 0.7rem 1.2rem;
+                min-width: 140px;
+                height: 44px;
+                white-space: nowrap;
+                text-align: center;
+                box-sizing: border-box;
+                flex-shrink: 0;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-secondary,
+            .btn-draft,
+            .btn-publish {
+                width: 100%;
+                text-align: center;
+            }
+
+            .pagination-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .pagination-pages {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-number {
+                min-width: 35px;
+                padding: 0.4rem 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            .pagination-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .char-counter {
+                font-size: 0.75rem;
+            }
         }
-        
-        .section {
-            margin: 4rem 0;
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
         }
-        
-        .section h2 {
-            color: #1e3a8a;
-            font-size: 2.5rem;
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--primary-yellow);
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .close {
+            color: var(--gray);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--primary-blue);
+        }
+
+        /* News Styles */
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
-            text-align: center;
         }
-        
-        .grid {
+
+        .news-header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: nowrap;
+            justify-content: flex-end;
+        }
+
+        .create-post-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            min-width: 160px;
+            height: 48px;
+            text-align: center;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .create-post-btn:hover {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Ensure anchor buttons have same styling as button elements */
+        a.create-post-btn {
+            background: var(--primary-blue) !important;
+            color: var(--white) !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            white-space: nowrap !important;
+            text-align: center !important;
+            box-sizing: border-box !important;
+            flex-shrink: 0 !important;
+        }
+
+        a.create-post-btn:hover {
+            background: var(--light-blue) !important;
+            color: var(--white) !important;
+        }
+
+        .plus-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            text-align: center;
+            line-height: 1;
+        }
+
+
+        .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
-        
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+
+        .news-card {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
             transition: all 0.3s ease;
+            border-top: 4px solid var(--primary-yellow);
         }
-        
-        .card:hover {
+
+        .news-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
-        
-        .card h3 {
-            color: #1e3a8a;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .stats {
-            background: #f8fafc;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .stat-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-        }
-        
-        .stat-number {
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-yellow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 3rem;
-            font-weight: 700;
-            color: #1e3a8a;
         }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            color: #64748b;
-            margin-top: 0.5rem;
+
+        .news-content {
+            padding: 1.5rem;
         }
-        
-        .contact-section {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            color: white;
-            padding: 6rem 2rem;
-        }
-        
-        .contact-container {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .contact-form {
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 16px 64px rgba(0,0,0,0.1);
-        }
-        
-        .form-group {
-            margin-bottom: 2rem;
-        }
-        
-        .form-group label {
-            display: block;
-            color: #1e3a8a;
-            font-weight: 600;
+
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
             margin-bottom: 0.5rem;
         }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+
+        .news-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+
+        .news-excerpt {
+            color: var(--dark-blue);
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
-        
-        .form-group textarea {
-            height: 120px;
-            resize: vertical;
-        }
-        
-        .submit-btn {
-            background: #10b981;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
+
+        .read-more {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: bold;
             cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
         }
-        
-        .submit-btn:hover {
-            background: #059669;
-            transform: translateY(-2px);
+
+        .read-more:hover {
+            color: var(--light-blue);
         }
-        
-        .footer {
-            background: #1e3a8a;
-            color: white;
-            text-align: center;
-            padding: 2rem;
+
+        .admin-panel {
+            display: none;
+            background: var(--light-yellow);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
         }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
+
+        .admin-panel h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
         }
     </style>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "name": "HEART Technology Park",
+        "description": "Vietnam's leading AI technology park spanning 2,000 hectares with complete AI ecosystem",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "A00.10, Sarica, Sala",
+            "addressLocality": "Ho Chi Minh City",
+            "addressRegion": "Ho Chi Minh",
+            "addressCountry": "VN"
+        },
+        "telephone": "+84 28 1234 5678",
+        "email": "business@heart.com",
+        "url": "https://thuyloan0209.github.io/heart-technology-website/",
+        "image": "https://thuyloan0209.github.io/heart-technology-website/assets/heart-og-image.jpg",
+        "foundingDate": "2024",
+        "keywords": "AI, artificial intelligence, technology park, Vietnam, smart city, innovation",
+        "industry": "Technology",
+        "numberOfEmployees": "200+",
+        "areaServed": "Vietnam"
+    }
+    </script>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                HEART
-            </div>
-            <nav class="nav">
-                <a href="#home">Home</a>
-                <a href="#about">About Us</a>
-                <a href="#master-plan">Master Plan</a>
-                <a href="ai-campus-3d-structure.html" class="campus-3d">🏢 3D Campus</a>
-                <a href="#facilities">Facilities</a>
-                <a href="#investment">Investment</a>
-                <a href="#technology">Technology</a>
-                <a href="#news">News</a>
-                <a href="#contact" class="contact-btn">Contact</a>
-                <a href="#login" class="login-btn">Login</a>
-            </nav>
-        </div>
-    </header>
-
-    <section id="home" class="hero">
-        <h1>HEART Technology Park</h1>
-        <p>Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
-        <p>Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam</p>
-        <p>Đổi mới sáng tạo • Phát triển bền vững • Hợp tác quốc tế</p>
-        <button class="cta-button">Khám phá ngay</button>
-    </section>
-
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">2000</div>
-                <div class="stat-label">Hecta</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">30K+</div>
-                <div class="stat-label">Việc làm</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">Công ty</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">$2.5B</div>
-                <div class="stat-label">Đầu tư</div>
-            </div>
-        </div>
-    </section>
-
-    <div class="container">
-        <section id="about" class="section">
-            <h2>About Us</h2>
-            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
-                HEART Technology Park là khu công nghệ cao hàng đầu Việt Nam, tập trung phát triển công nghệ AI và đổi mới sáng tạo.
-            </p>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>🎯 Mission</h3>
-                    <p>Tạo ra một hệ sinh thái công nghệ toàn diện nơi các doanh nghiệp, nhà nghiên cứu và nhà đầu tư có thể hợp tác phát triển các giải pháp AI tiên tiến.</p>
-                </div>
-                
-                <div class="card">
-                    <h3>⚡ Core Values</h3>
-                    <p>Đổi mới sáng tạo, phát triển bền vững, hợp tác và phát triển con người là những giá trị cốt lõi hướng dẫn mọi hoạt động của chúng tôi.</p>
-                </div>
-                
-                <div class="card">
-                    <h3>👥 Our Team</h3>
-                    <p>Được dẫn dắt bởi các chuyên gia được công nhận quốc tế về AI và phát triển công nghệ, đội ngũ của chúng tôi quy tụ hơn 200 chuyên gia.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="master-plan" class="section">
-            <h2>Master Plan</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>📅 Phase 1 (2025-2027): Foundation</h3>
-                    <p>Xây dựng hạ tầng cốt lõi, trung tâm dữ liệu và tòa nhà văn phòng thông minh đầu tiên. Thành lập các khu vực nghiên cứu AI và phòng thí nghiệm.</p>
-                    <p><strong>Đầu tư:</strong> $600M | <strong>Kết quả:</strong> 5,000 việc làm, 50 công ty</p>
-                </div>
-                
-                <div class="card">
-                    <h3>🚀 Phase 2 (2027-2030): Expansion</h3>
-                    <p>Mở rộng khu vực sản xuất công nghệ cao, xây dựng trung tâm đào tạo và khu dân cư thông minh cho nhân viên và gia đình.</p>
-                    <p><strong>Đầu tư:</strong> $800M | <strong>Kết quả:</strong> 15,000 việc làm bổ sung, 150 công ty</p>
-                </div>
-                
-                <div class="card">
-                    <h3>🌟 Phase 3 (2030+): Innovation Hub</h3>
-                    <p>Trở thành trung tâm đổi mới sáng tạo AI hàng đầu Đông Nam Á với các quan hệ đối tác quốc tế và cơ sở nghiên cứu tiên tiến.</p>
-                    <p><strong>Đầu tư:</strong> $1.2B | <strong>Kết quả:</strong> 30,000 việc làm, 300+ công ty</p>
-                </div>
-            </div>
-        </section>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
     </div>
 
-    <section id="contact" class="contact-section">
-        <div class="contact-container">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Contact Us</h2>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link active" onclick="showSection('hero')">Home</a></li>
+                <li><a href="about.html" class="nav-link">About Us</a></li>
+                <li><a href="#masterplan" class="nav-link" onclick="showSection('masterplan')">Master Plan</a></li>
+                <li><a href="master-plan.html" class="nav-link" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 8px; margin: 0 0.5rem;">🏢 3D Campus</a></li>
+                <li><a href="#facilities" class="nav-link" onclick="showSection('facilities')">Facilities</a></li>
+                <li><a href="#investment" class="nav-link" onclick="showSection('investment')">Investment</a></li>
+                <li><a href="#technology" class="nav-link" onclick="showSection('technology')">Technology</a></li>
+                <li><a href="#news" class="nav-link" onclick="showSection('news')">News</a></li>
+                <li><a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a></li>
+                <li><a href="#" class="nav-link" onclick="showLogin()" style="background: var(--primary-yellow); color: var(--primary-blue); border-radius: 0; margin-left: 1rem;">Login</a></li>
+                <li><a href="#" class="nav-link" onclick="adminDashboard.showDashboard()" style="border-radius: 0; margin-left: 0.5rem; display: none;" id="dashboardBtn">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to HEART</h1>
+            <p>Where future technology and innovation converge. Discover Vietnam's most advanced technology park with a complete AI ecosystem, spanning 2,000 hectares of cutting-edge infrastructure.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                <a href="about.html" class="cta-button">Explore Now</a>
+                <a href="master-plan.html" class="cta-button" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: 2px solid #10b981;">🏢 View 3D Campus</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Wrapper for Full Page Parallax -->
+    <div class="content-wrapper">
+    
+    <!-- About Us section has been moved to about.html -->
+
+    <!-- Master Plan Section -->
+    <section id="masterplan" class="section">
+        <div class="container">
+            <h2 class="section-title">Master Plan</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 1 (2025-2027): Foundation</h3>
+                        <p>Building core infrastructure, data centers, and the first smart office buildings. Establishing AI research areas and laboratories. Investment: $600M. Expected outcomes: 5,000 jobs, 50 companies, basic infrastructure completion.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 2 (2027-2030): Expansion</h3>
+                        <p>Expanding high-tech manufacturing areas, building training centers and smart residential areas for employees and families. Investment: $800M. Expected outcomes: 15,000 additional jobs, 150 companies, residential and education facilities.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 3 (2030-2035): Completion</h3>
+                        <p>Completing the ecosystem with commercial, entertainment, and social facilities. Becoming the leading AI center in the region. Investment: $600M. Expected outcomes: 50,000 total jobs, 500 companies, full smart city infrastructure.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 4rem; text-align: center;">
+                <h3>Development Highlights</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div style="padding: 1.5rem; background: #FFC107; border-radius: 10px; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);">
+                        <h4 class="card-title" style="white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; font-size: 1.1rem !important; line-height: 1.2 !important; margin-bottom: 0.5rem !important; color: var(--dark-blue) !important;">2,000 Hectares</h4>
+                        <p style="color: var(--dark-blue);">Total development area</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: #FFC107; border-radius: 10px; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);">
+                        <h4 class="card-title" style="font-size: 0.95rem !important; line-height: 1.1 !important; margin-bottom: 0.5rem !important; height: 1.1rem !important; display: block !important; color: var(--dark-blue) !important;">Smart Infrastructure</h4>
+                        <p style="color: var(--dark-blue);">5G, IoT, AI-powered systems</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: #FFC107; border-radius: 10px; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);">
+                        <h4 class="card-title" style="font-size: 0.95rem !important; line-height: 1.1 !important; margin-bottom: 0.5rem !important; height: 1.1rem !important; display: block !important; color: var(--dark-blue) !important;">Green Certification</h4>
+                        <p style="color: var(--dark-blue);">LEED Platinum standard</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: #FFC107; border-radius: 10px; box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);">
+                        <h4 class="card-title" style="font-size: 0.95rem !important; line-height: 1.1 !important; margin-bottom: 0.5rem !important; height: 1.1rem !important; display: block !important; color: var(--dark-blue) !important;">Transportation Hub</h4>
+                        <p style="color: var(--dark-blue);">Metro, expressway connectivity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3D Campus Visualization Link -->
+            <div style="margin-top: 4rem; text-align: center; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 3rem 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(30, 58, 138, 0.3);">
+                <h3 style="color: white; margin-bottom: 1rem; font-size: 2rem;">🏢 Interactive 3D Campus Tour</h3>
+                <p style="color: #e2e8f0; margin-bottom: 2rem; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Explore our AI Campus in stunning 3D detail with photorealistic buildings, landscaping, and interactive features. Experience the future of technology parks with our immersive virtual tour.
+                </p>
+                <a href="master-plan.html" 
+                   style="display: inline-block; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); 
+                          color: #1e3a8a; padding: 1rem 2rem; border-radius: 10px; text-decoration: none; 
+                          font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4); 
+                          transition: all 0.3s ease; border: none; cursor: pointer;"
+                   onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(251, 191, 36, 0.6)';"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(251, 191, 36, 0.4)';">
+                    🚀 Launch 3D Campus Visualization
+                </a>
+                <div style="margin-top: 1.5rem;">
+                    <small style="color: #cbd5e1; font-size: 0.9rem;">
+                        ✨ Features: 132 Objects • 51,744 Triangles • Photorealistic Rendering • Interactive Controls
+                    </small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section id="facilities" class="section">
+        <div class="container">
+            <h2 class="section-title">Facilities & Infrastructure</h2>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-icon">🖥️</div>
+                    <h3>Data Center</h3>
+                    <p>Modern data center system with 50MW capacity, ensuring big data processing for AI applications.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🔬</div>
+                    <h3>AI Laboratory</h3>
+                    <p>Laboratories equipped with advanced equipment for machine learning and deep learning research.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🏢</div>
+                    <h3>Smart Offices</h3>
+                    <p>Modern workspace with IoT technology, creating optimal working environment for tech companies.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🎓</div>
+                    <h3>Training Center</h3>
+                    <p>Specialized AI and high-tech training facility with international expert team.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🌱</div>
+                    <h3>Green Areas</h3>
+                    <p>30% of area dedicated to greenery and parks, creating sustainable and friendly working environment.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🚗</div>
+                    <h3>Smart Transportation</h3>
+                    <p>Automated transportation system with electric vehicles and AI-controlled smart roads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section id="investment" class="section">
+        <div class="container">
+            <h2 class="section-title">Investment Opportunities</h2>
+            <div class="investment-stats">
+                <div class="stat-card">
+                    <div class="stat-number">$2B</div>
+                    <h3>Total Investment</h3>
+                    <p>Total investment of $2 billion over 10 years</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500</div>
+                    <h3>Companies</h3>
+                    <p>Expected to attract 500 high-tech companies</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50K</div>
+                    <h3>Jobs Created</h3>
+                    <p>Creating 50,000 high-quality jobs</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <h3>Expected ROI</h3>
+                    <p>Expected annual return rate of 15%</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3>Attractive Investment Packages</h3>
+                <p style="font-size: 1.1rem; margin: 1rem 0;">
+                    We offer flexible investment packages from equity investment, 
+                    industrial land purchase to project development partnerships. 
+                    Contact us for detailed consultation on suitable investment opportunities.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0;">
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">🏢 Office Space Investment</h4>
+                        <p><strong>Starting from:</strong> $500K</p>
+                        <p><strong>ROI:</strong> 12-15% annually</p>
+                        <p><strong>Benefits:</strong> Premium location, smart building features, high-tech tenants</p>
+                    </div>
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">🏭 Industrial Land</h4>
+                        <p><strong>Starting from:</strong> $2M</p>
+                        <p><strong>ROI:</strong> 15-18% annually</p>
+                        <p><strong>Benefits:</strong> Manufacturing facilities, logistics support, skilled workforce</p>
+                    </div>
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">📈 Equity Partnership</h4>
+                        <p><strong>Starting from:</strong> $10M</p>
+                        <p><strong>ROI:</strong> 18-25% annually</p>
+                        <p><strong>Benefits:</strong> Strategic partnerships, technology access, market expansion</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 3rem;">
+                    <h3>Government Incentives</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">💰</div>
+                            <h4>Tax Holidays</h4>
+                            <p>10-15 years corporate tax exemption</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🚛</div>
+                            <h4>Import Duty Exemption</h4>
+                            <p>0% duty on machinery and equipment</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🎓</div>
+                            <h4>Workforce Support</h4>
+                            <p>Government-subsidized training programs</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🌐</div>
+                            <h4>Fast-track Permits</h4>
+                            <p>Streamlined licensing and approvals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="section">
+        <div class="container">
+            <h2 class="section-title">Advanced Technology</h2>
+            <div class="tech-showcase">
+                <div class="tech-item">
+                    <h3>🤖 Artificial Intelligence</h3>
+                    <p>AI research center with advanced machine learning and deep learning algorithms, serving automation and intelligent data analysis. Our AI Lab features 500+ GPUs, quantum-enhanced computing, and partnerships with global tech giants for cutting-edge research.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>☁️ Cloud Computing</h3>
+                    <p>Powerful cloud infrastructure with flexible scalability, ensuring high performance for complex computing applications. Features include multi-cloud architecture, edge computing nodes, and 99.99% uptime guarantee with disaster recovery capabilities.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🌐 IoT & Smart City</h3>
+                    <p>Comprehensive IoT system connecting all devices in the high-tech park, creating a true smart city with intelligent management. Over 100,000 sensors monitor everything from air quality to traffic flow, optimizing resource usage and enhancing quality of life.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🔐 Blockchain & Security</h3>
+                    <p>Blockchain technology ensuring data security and transactions, along with advanced cybersecurity systems protecting the entire infrastructure. Features quantum-resistant encryption, zero-trust architecture, and compliance with international security standards.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🚀 Quantum Computing</h3>
+                    <p>Investment in quantum computing research for complex problems, laying the foundation for future technology. Our quantum lab houses 3 quantum computers with 50+ qubits, focusing on optimization, cryptography, and drug discovery applications.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🔋 Green Technology</h3>
+                    <p>100% renewable energy from solar and wind power, combined with smart energy-saving technology. Features include 200MW solar farm, advanced battery storage, smart grid management, and carbon-negative operations by 2030.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 4rem;">
+                <h3 style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem;">Technology Partnerships</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏛️ Academic Partners</h4>
+                        <p>MIT, Stanford, NUS, VinUni</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏢 Industry Partners</h4>
+                        <p>Google, Microsoft, NVIDIA, AWS</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏛️ Government Partners</h4>
+                        <p>Ministry of Science & Technology</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🌍 International</h4>
+                        <p>UN AI for Good, IEEE, ISO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="section">
+        <div class="container">
+            <div class="news-header">
+                <h2 class="section-title">Latest News & Updates</h2>
+                <div class="news-header-actions">
+                    <button class="create-post-btn" onclick="showCreatePostModal()" style="display: none;" id="createPostBtn">
+                        <span class="plus-icon">+</span>
+                        Create New Post
+                    </button>
+                    <button class="create-post-btn" onclick="debugLocalStorage()">
+                        <span class="plus-icon">📊</span>
+                        VIEW DATA
+                    </button>
+                    <a href="admin/post-news.html" class="create-post-btn" id="adminLink" style="display: none; text-decoration: none;">
+                        <span class="plus-icon">📝</span>
+                        Admin Panel
+                    </a>
+                </div>
+            </div>
+            
+            <!-- News will be dynamically loaded here -->
+            <div class="news-grid" id="newsGrid">
+                <div style="text-align: center; grid-column: 1/-1; padding: 2rem;">
+                    <div class="loader"></div>
+                    <p>Loading news...</p>
+                </div>
+            </div>
+            
+            <!-- No news message -->
+            <div id="noNewsMessage" style="display: none; text-align: center; padding: 3rem;">
+                <h3 style="color: var(--gray); margin-bottom: 1rem;">📰 No News Articles Yet</h3>
+                <p style="color: var(--gray); margin-bottom: 2rem;">Be the first to share exciting updates from HEART Technology Park!</p>
+                <a href="admin/post-news.html" class="cta-button">Create First Article</a>
+            </div>
+            
+            <!-- Pagination -->
+            <div id="newsPagination" style="display: none; text-align: center; margin-top: 3rem;">
+                <div class="pagination-info" style="margin-bottom: 1rem; color: var(--gray);">
+                    <span id="paginationInfo">Showing 1-6 of 12 articles</span>
+                </div>
+                <div class="pagination-controls">
+                    <button class="pagination-btn" id="prevBtn" onclick="changePage(-1)" disabled>
+                        ← Previous
+                    </button>
+                    <span class="pagination-pages" id="paginationPages">
+                        <!-- Page numbers will be generated here -->
+                    </span>
+                    <button class="pagination-btn" id="nextBtn" onclick="changePage(1)">
+                        Next →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
             <div class="contact-form">
                 <form>
                     <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" required>
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required>
                     </div>
-                    
                     <div class="form-group">
                         <label for="company">Company</label>
                         <input type="text" id="company" name="company">
                     </div>
-                    
                     <div class="form-group">
                         <label for="interest">Interested In</label>
-                        <select id="interest" name="interest">
+                        <select id="interest" name="interest" style="width: 100%; padding: 1rem; border: 2px solid var(--light-gray); border-radius: 10px;">
                             <option value="">Select your interest</option>
-                            <option value="investment">Investment Opportunities</option>
+                            <option value="investment">Investment</option>
                             <option value="partnership">Partnership</option>
-                            <option value="office-space">Office Space</option>
-                            <option value="research">Research Collaboration</option>
+                            <option value="office">Office Rental</option>
+                            <option value="technology">Technology Transfer</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
-                    
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" name="message" placeholder="Tell us more about your needs..."></textarea>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell us more about your needs..."></textarea>
                     </div>
-                    
                     <button type="submit" class="submit-btn">Send Message</button>
                 </form>
+                
+                <div style="margin-top: 3rem; text-align: center;">
+                    <h3>Contact Information</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                        <div>
+                            <h4>🏢 Main Office</h4>
+                            <p><strong>📍 Address:</strong> A00.10, Sarica, Sala, HCM City</p>
+                            <p><strong>📞 Phone:</strong> +84 28 1234 5678</p>
+                            <p><strong>📠 Fax:</strong> +84 28 1234 5679</p>
+                        </div>
+                        <div>
+                            <h4>💼 Business Development</h4>
+                            <p><strong>📞 Hotline:</strong> +84 28 1234 5680</p>
+                            <p><strong>✉️ Email:</strong> business@heart.com</p>
+                            <p><strong>👤 Director:</strong> Mr. John Smith</p>
+                        </div>
+                        <div>
+                            <h4>🔬 Research & Innovation</h4>
+                            <p><strong>📞 Direct:</strong> +84 28 1234 5681</p>
+                            <p><strong>✉️ Email:</strong> research@heart.com</p>
+                            <p><strong>👤 Director:</strong> Dr. Sarah Johnson</p>
+                        </div>
+                        <div>
+                            <h4>💰 Investment Relations</h4>
+                            <p><strong>📞 Direct:</strong> +84 28 1234 5682</p>
+                            <p><strong>✉️ Email:</strong> investors@heart.com</p>
+                            <p><strong>👤 Director:</strong> Ms. Lisa Chen</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem;">
+                        <h3>Office Hours & Additional Info</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🕐</div>
+                                <h4>Business Hours</h4>
+                                <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+                                <h4>Website & Social</h4>
+                                <p><strong>Web:</strong> www.heart.com<br>
+                                <strong>LinkedIn:</strong> /company/heart-ai<br>
+                                <strong>Twitter:</strong> @HeartAI_VN</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚗</div>
+                                <h4>Getting Here</h4>
+                                <p>Metro Line 1: Saigon Railway Station • District 2: 10 mins from Sala • Airport: 30 mins from Tan Son Nhat</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                                <h4>Resources</h4>
+                                <p>Investment Brochure<br>
+                                Technical Specifications<br>
+                                Virtual Tour Available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
+    
+    </div> <!-- End Content Wrapper -->
 
-    <footer class="footer">
-        <p>&copy; 2025 HEART Technology Park. All rights reserved.</p>
-    </footer>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLogin()">&times;</span>
+            <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem; text-align: center;">Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
+                Demo credentials:<br>
+                Username: <strong>admin</strong><br>
+                Password: <strong>heart2024</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="hideCreatePostModal()">&times;</span>
+            <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem; text-align: center;">📝 Create New Post</h2>
+            <form id="createPostForm">
+                <div class="form-group">
+                    <label for="postTitle">Post Title *</label>
+                    <input type="text" id="postTitle" required maxlength="100" placeholder="Enter an engaging title...">
+                    <div class="char-counter" id="titleCounter">0/100</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postCategory">Category *</label>
+                    <select id="postCategory" required>
+                        <option value="">Select category</option>
+                        <option value="technology">🔬 Technology</option>
+                        <option value="business">💼 Business</option>
+                        <option value="innovation">💡 Innovation</option>
+                        <option value="investment">💰 Investment</option>
+                        <option value="partnership">🤝 Partnership</option>
+                        <option value="general">📰 General</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postSummary">Short Summary *</label>
+                    <textarea id="postSummary" required maxlength="200" rows="3" placeholder="Write a brief summary for the post..."></textarea>
+                    <div class="char-counter" id="summaryCounter">0/200</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postContent">Main Content *</label>
+                    <textarea id="postContent" required maxlength="10000" rows="8" placeholder="Write the detailed content of the post..."></textarea>
+                    <div class="char-counter" id="contentCounter">0/10000</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postImage">Post Image</label>
+                    <input type="file" id="postImage" accept="image/*" onchange="handleImageUpload(event)">
+                    <small>Upload an image for the post (JPG, PNG, GIF - max 5MB)</small>
+                    <div id="imagePreview" class="image-preview" style="display: none;">
+                        <img id="previewImg" src="" alt="Preview" style="max-width: 200px; max-height: 150px; border-radius: 8px; margin-top: 0.5rem;">
+                        <button type="button" class="remove-image-btn" onclick="removeImage()">✕ Remove</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postIcon">Fallback Icon/Emoji</label>
+                    <input type="text" id="postIcon" maxlength="2" placeholder="📰" value="📰">
+                    <small>Emoji to show if no image is uploaded</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postTags">Tags (comma separated)</label>
+                    <input type="text" id="postTags" placeholder="technology, AI, startup">
+                    <small>Example: technology, AI, startup</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postAuthor">Author</label>
+                    <input type="text" id="postAuthor" placeholder="HEART Technology" value="HEART Technology">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="hideCreatePostModal()">Cancel</button>
+                    <button type="button" class="btn-draft" onclick="savePostDraft()">💾 Save Draft</button>
+                    <button type="submit" class="btn-publish">🚀 Publish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section, .hero');
+            sections.forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+                
+                // If showing news section, load news
+                if (sectionId === 'news') {
+                    setTimeout(() => {
+                        loadNewsFromStorage();
+                    }, 100);
+                }
+            }
+            
+            // Update navigation - exclude login button from active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (!link.onclick || link.onclick.toString().indexOf('showLogin') === -1) {
+                    link.classList.remove('active');
+                }
+            });
+            
+            const activeLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your interest! We will contact you as soon as possible.');
+            this.reset();
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        // Login functionality
+        let isLoggedIn = false;
+
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function hideLogin() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function showAddNewsForm() {
+            document.getElementById('adminPanel').style.display = 'block';
+        }
+
+        function hideAddNewsForm() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('newsForm').reset();
+        }
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                Toast.error('Please enter both username and password');
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Logging in...';
+                submitBtn.disabled = true;
+                
+                // Call Simple Auth
+                const response = await simpleAuth.login(username, password);
+                
+                if (response.success) {
+                    isLoggedIn = true;
+                    hideLogin();
+                    
+                    // Show admin link
+                    const adminLink = document.getElementById('adminLink');
+                    if (adminLink) {
+                        adminLink.style.display = 'block';
+                    }
+                    
+                    // Show create post button
+                    const createPostBtn = document.getElementById('createPostBtn');
+                    if (createPostBtn) {
+                        createPostBtn.style.display = 'flex';
+                    }
+                    
+                    // Update login button to logout
+                    const loginBtn = document.querySelector('[onclick="showLogin()"]');
+                    if (loginBtn) {
+                        loginBtn.textContent = `Logout (${response.data.user.username})`;
+                        loginBtn.onclick = logout;
+                        loginBtn.style.background = 'var(--gray)';
+                    }
+                    
+                    Toast.success(`Welcome back, ${response.data.user.firstName || response.data.user.username}!`);
+                    
+                    // Reload news to show admin features
+                    setTimeout(() => {
+                        loadNewsFromStorage();
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                Toast.error(error.message || 'Login failed. Please check your credentials.');
+            } finally {
+                // Reset button state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Login';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        async function logout() {
+            try {
+                // Call Simple Auth logout
+                await simpleAuth.logout();
+                
+                isLoggedIn = false;
+                
+                // Hide admin link
+                const adminLink = document.getElementById('adminLink');
+                if (adminLink) {
+                    adminLink.style.display = 'none';
+                }
+                
+                // Hide create post button
+                const createPostBtn = document.getElementById('createPostBtn');
+                if (createPostBtn) {
+                    createPostBtn.style.display = 'none';
+                }
+                
+                // Update logout button back to login
+                const logoutBtn = document.querySelector('[onclick="logout()"]');
+                if (logoutBtn) {
+                    logoutBtn.textContent = 'Login';
+                    logoutBtn.onclick = showLogin;
+                    logoutBtn.style.background = 'var(--primary-yellow)';
+                }
+                
+                Toast.info('You have been logged out successfully');
+                
+                // Reload news to hide admin features
+                setTimeout(() => {
+                    loadNewsFromStorage();
+                }, 500);
+                
+            } catch (error) {
+                console.error('Logout error:', error);
+                Toast.error('Logout failed');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const createPostModal = document.getElementById('createPostModal');
+            
+            if (event.target === loginModal) {
+                hideLogin();
+            }
+            if (event.target === createPostModal) {
+                hideCreatePostModal();
+            }
+        }
+
+        // Create Post Modal Functions
+        function showCreatePostModal() {
+            document.getElementById('createPostModal').style.display = 'block';
+            setupCharacterCounters();
+        }
+
+        function hideCreatePostModal() {
+            document.getElementById('createPostModal').style.display = 'none';
+            document.getElementById('createPostForm').reset();
+            resetCharacterCounters();
+            // Reset image upload AFTER a short delay to ensure data is saved
+            setTimeout(() => {
+                uploadedImageData = null;
+                hideImagePreview();
+            }, 100);
+        }
+
+        // Character counters setup
+        function setupCharacterCounters() {
+            const counters = [
+                { input: 'postTitle', counter: 'titleCounter', max: 100 },
+                { input: 'postSummary', counter: 'summaryCounter', max: 200 },
+                { input: 'postContent', counter: 'contentCounter', max: 10000 }
+            ];
+
+            counters.forEach(item => {
+                const input = document.getElementById(item.input);
+                const counter = document.getElementById(item.counter);
+                
+                input.addEventListener('input', function() {
+                    const length = this.value.length;
+                    counter.textContent = `${length}/${item.max}`;
+                    
+                    // Add warning/danger classes
+                    counter.classList.remove('warning', 'danger');
+                    if (length >= item.max * 0.9) {
+                        counter.classList.add('danger');
+                    } else if (length >= item.max * 0.7) {
+                        counter.classList.add('warning');
+                    }
+                });
+            });
+        }
+
+        function resetCharacterCounters() {
+            document.getElementById('titleCounter').textContent = '0/100';
+            document.getElementById('summaryCounter').textContent = '0/200';
+            document.getElementById('contentCounter').textContent = '0/2000';
+            
+            // Remove classes
+            document.querySelectorAll('.char-counter').forEach(counter => {
+                counter.classList.remove('warning', 'danger');
+            });
+        }
+
+        // Save post as draft
+        function savePostDraft() {
+            const postData = getPostFormData();
+            postData.status = 'draft';
+            
+            if (validatePostForm(postData, false)) {
+                savePostToStorage(postData);
+                Toast.success('Post saved as draft!');
+                hideCreatePostModal();
+                loadNewsFromStorage();
+            }
+        }
+
+        // Image upload handling
+        let uploadedImageData = null;
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (!file) {
+                hideImagePreview();
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                Toast.error('Please select a valid image file');
+                event.target.value = '';
+                hideImagePreview();
+                return;
+            }
+            
+            // Validate file size (5MB limit)
+            if (file.size > 5 * 1024 * 1024) {
+                Toast.error('Image size must be less than 5MB');
+                event.target.value = '';
+                hideImagePreview();
+                return;
+            }
+            
+            // Convert to base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImageData = e.target.result;
+                
+                // 🔍 DEBUG: Check image upload process
+                console.log('=== DEBUG: IMAGE UPLOAD SUCCESS ===');
+                console.log('📸 File name:', file.name);
+                console.log('📏 File size:', file.size, 'bytes');
+                console.log('📄 File type:', file.type);
+                console.log('🔗 Base64 data length:', uploadedImageData.length);
+                console.log('🔍 Base64 preview:', uploadedImageData.substring(0, 50) + '...');
+                
+                previewImg.src = uploadedImageData;
+                preview.style.display = 'block';
+                Toast.success('Image uploaded successfully');
+            };
+            reader.onerror = function() {
+                console.error('🚨 ERROR: Failed to read image file');
+                Toast.error('Error reading image file');
+                event.target.value = '';
+                hideImagePreview();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function removeImage() {
+            uploadedImageData = null;
+            document.getElementById('postImage').value = '';
+            hideImagePreview();
+            Toast.info('Image removed');
+        }
+        
+        function hideImagePreview() {
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('previewImg').src = '';
+        }
+
+        // Get form data
+        function getPostFormData() {
+            const postData = {
+                id: Date.now().toString(),
+                title: document.getElementById('postTitle').value.trim(),
+                summary: document.getElementById('postSummary').value.trim(),
+                content: document.getElementById('postContent').value.trim(),
+                category: document.getElementById('postCategory').value,
+                icon: document.getElementById('postIcon').value || '📰',
+                image: uploadedImageData, // Add image data
+                tags: document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag),
+                author: document.getElementById('postAuthor').value.trim() || 'HEART Technology',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                status: 'published'
+            };
+            
+            // 🔍 DEBUG: Check form data creation
+            console.log('=== DEBUG: CREATING POST DATA ===');
+            console.log('📝 Post data object:', postData);
+            console.log('🖼️ Image data exists:', !!uploadedImageData);
+            console.log('📸 Image data type:', typeof uploadedImageData);
+            console.log('📏 Image data length:', uploadedImageData ? uploadedImageData.length : 'No image');
+            if (uploadedImageData) {
+                console.log('🔍 Image data preview:', uploadedImageData.substring(0, 50) + '...');
+            }
+            
+            return postData;
+        }
+
+        // Validate form
+        function validatePostForm(data, requireAll = true) {
+            const errors = [];
+            
+            if (!data.title) errors.push('Post title is required');
+            if (!data.summary && requireAll) errors.push('Summary is required');
+            if (!data.content && requireAll) errors.push('Content is required');
+            if (!data.category) errors.push('Category is required');
+            
+            if (data.title && data.title.length > 100) errors.push('Title cannot exceed 100 characters');
+            if (data.summary && data.summary.length > 200) errors.push('Summary cannot exceed 200 characters');
+            if (data.content && data.content.length > 10000) errors.push('Content cannot exceed 10000 characters');
+            
+            if (errors.length > 0) {
+                Toast.error('Error: ' + errors[0]);
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Save to localStorage
+        function savePostToStorage(postData) {
+            // 🔍 DEBUG: Check saving process
+            console.log('=== DEBUG: SAVING POST TO STORAGE ===');
+            console.log('💾 Data to save:', postData);
+            console.log('🖼️ Image in save data:', postData.image ? 'YES' : 'NO');
+            console.log('📏 Image data length:', postData.image ? postData.image.length : 'No image');
+            
+            let articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            console.log('📚 Existing articles:', articles.length);
+            
+            articles.unshift(postData); // Add to beginning
+            localStorage.setItem('heart-news', JSON.stringify(articles));
+            
+            // 🔍 DEBUG: Verify save
+            const savedData = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            console.log('✅ After save - total articles:', savedData.length);
+            console.log('🔍 First article (just saved):', savedData[0]);
+            console.log('🖼️ First article has image:', savedData[0].image ? 'YES' : 'NO');
+            if (savedData[0].image) {
+                console.log('📸 Saved image preview:', savedData[0].image.substring(0, 50) + '...');
+            }
+        }
+
+        // Form submission with double-submit prevention
+        let isSubmitting = false;
+        
+        document.getElementById('createPostForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Prevent double submission
+            if (isSubmitting) {
+                console.log('Form submission already in progress, ignoring...');
+                return;
+            }
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            try {
+                isSubmitting = true;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Publishing...';
+                submitBtn.style.opacity = '0.6';
+                
+                const postData = getPostFormData();
+                postData.status = 'published';
+                
+                if (validatePostForm(postData, true)) {
+                    // Try to save via API first, fallback to localStorage
+                    try {
+                        if (api.isAuthenticated()) {
+                            const response = await api.createNews(postData);
+                            if (response.success) {
+                                Toast.success('Post published successfully!');
+                                hideCreatePostModal();
+                                loadNewsFromStorage();
+                                return;
+                            }
+                        }
+                    } catch (apiError) {
+                        console.warn('API creation failed, using localStorage:', apiError);
+                        
+                        // Check for duplicate title error
+                        if (apiError.message && apiError.message.includes('title already exists')) {
+                            Toast.error('An article with this title already exists. Please choose a different title.');
+                            return;
+                        }
+                    }
+                    
+                    // Fallback to localStorage
+                    savePostToStorage(postData);
+                    Toast.success('Post saved locally!');
+                    hideCreatePostModal();
+                    loadNewsFromStorage();
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                Toast.error('Failed to publish post. Please try again.');
+            } finally {
+                // Reset button state
+                isSubmitting = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                submitBtn.style.opacity = '1';
+            }
+        });
+
+    </script>
+    <!-- DISABLE news-manager.js temporarily for debugging -->
+    <!-- <script src="js/news-manager.js"></script> -->
+    <script>
+        // News pagination variables
+        let currentPage = 1;
+        const postsPerPage = 6;
+        let allPublishedArticles = [];
+
+        // 🚨 ENHANCED IMAGE ERROR HANDLING - Prevents Red X Display
+        function handleImageError(imgElement, articleId, category, displayType) {
+            console.error('🚨 IMAGE LOAD ERROR for article:', articleId);
+            console.error('   Original URL:', imgElement.src);
+            console.error('   Display type:', displayType);
+            console.error('   Category:', category);
+            
+            // Enhanced fallback images (higher quality)
+            const EMERGENCY_FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InRlY2hHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA3YmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwNTZiMztzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCN0ZWNoR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💻</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">TECHNOLOGY</text></svg>',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJ1c0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyOGE3NDU7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTk2NjMzO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2J1c0dyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💼</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">BUSINESS</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Imlubm9HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZjMTA3O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2Y1OTUwMjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNpbm5vR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💡</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INNOVATION</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImludkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyMGM5OTc7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTU5OTg4O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2ludkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INVESTMENT</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InBhcnRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmY0MmMxO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzUyMzNhYjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNwYXJ0R3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+🤝</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">PARTNERSHIP</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdlbkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2Yzc1N2Q7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDk1MDU3O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2dlbkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj📰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">NEWS</text></svg>'
+            };
+            
+            // Get emergency fallback image
+            const categoryLower = category.toLowerCase();
+            const emergencyFallback = EMERGENCY_FALLBACK_IMAGES[categoryLower] || EMERGENCY_FALLBACK_IMAGES['general'];
+            
+            // Replace with emergency fallback - NO RED X WILL SHOW
+            imgElement.src = emergencyFallback;
+            imgElement.alt = `${category.toUpperCase()} Article Image`;
+            
+            // Add visual indicator that this is a fallback
+            imgElement.style.border = '2px solid #ffc107';
+            imgElement.style.opacity = '0.9';
+            
+            console.log('🔧 REPLACED with emergency fallback for category:', category);
+            console.log('✅ Red X error prevented successfully');
+            
+            // Optional: Update localStorage to fix this permanently
+            try {
+                const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+                const articleIndex = articles.findIndex(a => a.id === articleId);
+                if (articleIndex !== -1 && displayType === 'USER_UPLOADED_IMAGE') {
+                    articles[articleIndex].image = emergencyFallback;
+                    localStorage.setItem('heart-news', JSON.stringify(articles));
+                    console.log('💾 Auto-fixed article in localStorage to prevent future errors');
+                }
+            } catch (error) {
+                console.error('Failed to auto-fix localStorage:', error);
+            }
+        }
+
+        // News loading functionality - load from API instead of localStorage
+        async function loadNewsFromStorage(page = 1) {
+            currentPage = page;
+            let articles = [];
+            
+            try {
+                // Load from API instead of localStorage
+                const response = await api.getNews({ page, limit: postsPerPage });
+                articles = response.data.news || [];
+                
+                console.log('=== DEBUG: LOADING NEWS FROM API ===');
+                console.log('API response:', response);
+                console.log('Articles from API:', articles);
+                console.log('Number of articles:', articles.length);
+                
+            } catch (error) {
+                console.error('Failed to load news from API:', error);
+                // Fallback to localStorage if API fails
+                articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+                console.log('Using localStorage fallback:', articles);
+            }
+            
+            const newsGrid = document.getElementById('newsGrid');
+            const noNewsMessage = document.getElementById('noNewsMessage');
+            const newsPagination = document.getElementById('newsPagination');
+            
+            // Articles from API are already filtered for published status
+            allPublishedArticles = articles;
+            
+            if (articles.length === 0) {
+                newsGrid.style.display = 'none';
+                noNewsMessage.style.display = 'block';
+                newsPagination.style.display = 'none';
+                return;
+            }
+            
+            newsGrid.style.display = 'grid';
+            noNewsMessage.style.display = 'none';
+            
+            // Articles are already paginated by API, so show all returned articles
+            const articlesToShow = articles;
+            
+            // Hide pagination for now (API handles it)
+            newsPagination.style.display = 'none';
+            
+            // 🎨 FALLBACK IMAGES BY CATEGORY
+            const FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💻</text></svg>',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzI4YTc0NSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💼</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzEwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💡</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzIwYzk5NyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💰</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZmNDJjMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🤝</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZjNzU3ZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+📰</text></svg>'
+            };
+
+            newsGrid.innerHTML = articlesToShow.map((article, index) => {
+                // 🔍 ENHANCED DEBUG: Check each article data
+                console.log(`=== DEBUG: RENDERING ARTICLE ${index + 1} ===`);
+                console.log('Article ID:', article.id);
+                console.log('Article title:', article.title);
+                console.log('Article category:', article.category);
+                console.log('Article image field:', article.image);
+                console.log('Article image type:', typeof article.image);
+                console.log('Article image length:', article.image ? article.image.length : 'No image');
+                console.log('Article icon:', article.icon);
+                console.log('Full article object:', article);
+                
+                const publishedDate = new Date(article.publishedAt || article.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // 🎯 ENHANCED IMAGE LOGIC: GUARANTEE ALL ARTICLES HAVE IMAGES
+                let imageToShow = '';
+                let displayType = '';
+                
+                if (article.image && typeof article.image === 'string' && article.image.length > 10) {
+                    // Article has valid image data
+                    imageToShow = article.image;
+                    displayType = 'USER_UPLOADED_IMAGE';
+                } else {
+                    // No valid image - use fallback by category
+                    const category = (article.category || 'general').toLowerCase();
+                    imageToShow = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                    displayType = 'FALLBACK_IMAGE';
+                }
+                
+                console.log('🖼️ Image Decision:', displayType);
+                console.log('📸 Image to show:', imageToShow.substring(0, 50) + '...');
+                console.log('🎨 Category fallback:', article.category || 'general');
+                
+                return `
+                    <div class="news-card" style="animation: fadeInUp 0.6s ease-out;">
+                        <div class="news-image">
+                            <img src="${imageToShow}" alt="${article.title}" class="article-image" 
+                                onload="console.log('✅ ${displayType} LOADED successfully for article: ${article.title}');"
+                                onerror="handleImageError(this, '${article.id}', '${article.category || 'general'}', '${displayType}');">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-title">${article.title}</div>
+                            <div class="news-date">${publishedDate}</div>
+                            <div class="news-excerpt">${article.excerpt || article.summary}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <a href="#" class="read-more" onclick="showNewsDetail('${article.id}')">Read more →</a>
+                                <div style="color: var(--gray); font-size: 0.9rem;">
+                                    <span>${article.category}</span>
+                                    ${article.tags && article.tags.length > 0 ? ` • ${article.tags.slice(0, 2).join(', ')}` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        async function showNewsDetail(articleId) {
+            try {
+                const response = await api.getNewsById(articleId);
+                const article = response.data.news;
+            
+            if (!article) return;
+            
+            // 🎨 SAME FALLBACK LOGIC FOR MODAL
+            const FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMDA3YmZmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5K7PC90ZXh0Pjwvc3ZnPg==',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzI4YTc0NSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💼</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzEwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💡</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzIwYzk5NyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💰</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZmNDJjMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🤝</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZjNzU3ZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+📰</text></svg>'
+            };
+            
+            let modalImageToShow = '';
+            if (article.image && typeof article.image === 'string' && article.image.length > 10) {
+                modalImageToShow = article.image;
+            } else {
+                const category = (article.category || 'general').toLowerCase();
+                modalImageToShow = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                    <div class="modal-header">
+                        <h2>
+                            <img src="${modalImageToShow}" alt="${article.title}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-right: 0.5rem; vertical-align: middle;">
+                            ${article.title}
+                        </h2>
+                        <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                            📅 ${new Date(article.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                            ${article.author ? ` • ✍️ ${article.author}` : ''}
+                            • 📂 ${article.category}
+                        </div>
+                        <div style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; white-space: pre-line;">
+                            ${article.content}
+                        </div>
+                        ${article.tags && article.tags.length > 0 ? `
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--light-gray);">
+                                ${article.tags.map(tag => `<span style="background: var(--light-blue); color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+            
+            } catch (error) {
+                console.error('Failed to load article details:', error);
+                Toast.error('Failed to load article details');
+            }
+        }
+
+        // Pagination functions
+        function updatePagination() {
+            const totalPages = Math.ceil(allPublishedArticles.length / postsPerPage);
+            const startIndex = (currentPage - 1) * postsPerPage + 1;
+            const endIndex = Math.min(currentPage * postsPerPage, allPublishedArticles.length);
+            
+            // Update pagination info
+            document.getElementById('paginationInfo').textContent = 
+                `Showing ${startIndex}-${endIndex} of ${allPublishedArticles.length} articles`;
+            
+            // Update previous/next buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages;
+            
+            // Generate page numbers
+            const paginationPages = document.getElementById('paginationPages');
+            paginationPages.innerHTML = generatePageNumbers(currentPage, totalPages);
+        }
+
+        function generatePageNumbers(current, total) {
+            let pages = [];
+            const maxVisible = 5;
+            
+            if (total <= maxVisible) {
+                // Show all pages if total pages <= maxVisible
+                for (let i = 1; i <= total; i++) {
+                    pages.push(i);
+                }
+            } else {
+                // Show page numbers with ellipsis
+                if (current <= 3) {
+                    // Show first pages
+                    pages = [1, 2, 3, 4, '...', total];
+                } else if (current >= total - 2) {
+                    // Show last pages
+                    pages = [1, '...', total - 3, total - 2, total - 1, total];
+                } else {
+                    // Show middle pages
+                    pages = [1, '...', current - 1, current, current + 1, '...', total];
+                }
+            }
+            
+            return pages.map(page => {
+                if (page === '...') {
+                    return '<span style="padding: 0.5rem;">...</span>';
+                } else {
+                    const isActive = page === current ? 'active' : '';
+                    return `<button class="page-number ${isActive}" onclick="goToPage(${page})">${page}</button>`;
+                }
+            }).join('');
+        }
+
+        function changePage(direction) {
+            const newPage = currentPage + direction;
+            const totalPages = Math.ceil(allPublishedArticles.length / postsPerPage);
+            
+            if (newPage >= 1 && newPage <= totalPages) {
+                loadNewsFromStorage(newPage);
+                
+                // Scroll to news section
+                document.getElementById('news').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function goToPage(page) {
+            if (page !== currentPage) {
+                loadNewsFromStorage(page);
+                
+                // Scroll to news section
+                document.getElementById('news').scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Check authentication status on page load
+        async function checkAuthStatus() {
+            if (simpleAuth.isAuthenticated()) {
+                try {
+                    // Verify token is still valid
+                    await simpleAuth.getMe();
+                    
+                    isLoggedIn = true;
+                    
+                    // Show admin link
+                    const adminLink = document.getElementById('adminLink');
+                    if (adminLink && simpleAuth.canManageNews()) {
+                        adminLink.style.display = 'block';
+                    }
+                    
+                    // Show create post button
+                    const createPostBtn = document.getElementById('createPostBtn');
+                    if (createPostBtn && simpleAuth.canManageNews()) {
+                        createPostBtn.style.display = 'flex';
+                    }
+                    
+                    // Update login button
+                    const loginBtn = document.querySelector('[onclick="showLogin()"]');
+                    if (loginBtn) {
+                        loginBtn.textContent = `Logout (${simpleAuth.getUser().username})`;
+                        loginBtn.onclick = logout;
+                        loginBtn.style.background = 'var(--gray)';
+                    }
+                    
+                } catch (error) {
+                    console.log('Token expired or invalid, clearing auth data');
+                    isLoggedIn = false;
+                }
+            }
+        }
+
+        // Initialize news loading when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication first
+            await checkAuthStatus();
+            
+            // Load news immediately when page loads
+            loadNewsFromStorage();
+            
+            // Also load when News section becomes active
+            const newsSection = document.getElementById('news');
+            if (newsSection) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            if (newsSection.classList.contains('active')) {
+                                loadNewsFromStorage();
+                            }
+                        }
+                    });
+                });
+                observer.observe(newsSection, { attributes: true });
+            }
+        });
+        
+        // Refresh news when returning from admin panel
+        window.addEventListener('focus', function() {
+            loadNewsFromStorage();
+        });
+        
+        // Add storage event listener to refresh news when localStorage changes
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'heart-news') {
+                loadNewsFromStorage();
+            }
+        });
+        
+        // Update login/logout functions to work with news manager
+        function originalLogin() {
+            // Your existing login code here
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'heart2024') {
+                isLoggedIn = true;
+                hideLogin();
+                newsManager.setAdminStatus(true);
+                
+                // Update login button to logout
+                const loginBtn = document.querySelector('[onclick="showLogin()"]');
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = originalLogout;
+                loginBtn.style.background = 'var(--gray)';
+                
+                newsManager.showToast('Login successful! You can now manage news articles.', 'success');
+            } else {
+                newsManager.showToast('Invalid credentials. Please try again.', 'error');
+            }
+        }
+        
+        function originalLogout() {
+            isLoggedIn = false;
+            newsManager.setAdminStatus(false);
+            
+            // Update logout button back to login
+            const logoutBtn = document.querySelector('[onclick="originalLogout()"]');
+            logoutBtn.textContent = 'Login';
+            logoutBtn.onclick = showLogin;
+            logoutBtn.style.background = 'var(--primary-yellow)';
+            
+            newsManager.showToast('You have been logged out.', 'info');
+        }
+        
+        // 🔍 DEBUG: Function to check localStorage data
+        function debugLocalStorage() {
+            console.clear();
+            console.log('🔍 ================ DEBUG LOCALSTORAGE ================');
+            
+            // Check both storage keys
+            const newFormat = localStorage.getItem('heart-news');
+            const oldFormat = localStorage.getItem('heart_news');
+            
+            // 🚨 POTENTIAL CONFLICT CHECK
+            if (newFormat && oldFormat) {
+                console.warn('⚠️ CONFLICT: Both storage formats exist!');
+                console.warn('This might cause data override issues');
+            }
+            
+            console.log('📚 NEW FORMAT (heart-news):');
+            console.log('Raw data:', newFormat);
+            if (newFormat) {
+                const parsed = JSON.parse(newFormat);
+                console.log('Parsed data:', parsed);
+                console.log('Number of articles:', parsed.length);
+                parsed.forEach((article, index) => {
+                    console.log(`Article ${index + 1}:`, {
+                        id: article.id,
+                        title: article.title,
+                        hasImage: !!article.image,
+                        imageLength: article.image ? article.image.length : 0,
+                        icon: article.icon
+                    });
+                });
+            } else {
+                console.log('❌ No new format data found');
+            }
+            
+            console.log('\n📚 OLD FORMAT (heart_news):');
+            console.log('Raw data:', oldFormat);
+            if (oldFormat) {
+                const parsed = JSON.parse(oldFormat);
+                console.log('Parsed data:', parsed);
+                console.log('Number of articles:', parsed.length);
+            } else {
+                console.log('❌ No old format data found');
+            }
+            
+            console.log('\n🖼️ UPLOADED IMAGE DATA STATUS:');
+            console.log('Current uploadedImageData:', uploadedImageData);
+            console.log('Type:', typeof uploadedImageData);
+            console.log('Length:', uploadedImageData ? uploadedImageData.length : 'null');
+            
+            console.log('🔍 ================ END DEBUG ================');
+            
+            // Also show in alert for user
+            const newData = newFormat ? JSON.parse(newFormat) : [];
+            const oldData = oldFormat ? JSON.parse(oldFormat) : [];
+            
+            alert(`🔍 DEBUG REPORT:
+            
+New Format Articles: ${newData.length}
+Old Format Articles: ${oldData.length}
+Current Image Data: ${uploadedImageData ? 'Loaded' : 'None'}
+
+Check Browser Console (F12) for detailed logs!`);
+        }
+        
+        // 🧹 CLEAN UP: Fix storage conflicts
+        function fixStorageConflicts() {
+            console.log('🧹 ================ FIXING STORAGE CONFLICTS ================');
+            
+            const newFormat = localStorage.getItem('heart-news');
+            const oldFormat = localStorage.getItem('heart_news');
+            
+            if (newFormat && oldFormat) {
+                console.log('🚨 Found both formats - prioritizing new format');
+                // Keep new format, remove old format
+                localStorage.removeItem('heart_news');
+                console.log('✅ Removed old format storage');
+            } else if (oldFormat && !newFormat) {
+                console.log('📦 Converting old format to new format');
+                const oldData = JSON.parse(oldFormat);
+                const convertedData = oldData.map(item => ({
+                    id: item.id.toString(),
+                    title: item.title,
+                    summary: item.excerpt || item.summary,
+                    content: item.content,
+                    category: item.category,
+                    author: item.author,
+                    icon: item.icon,
+                    image: item.image || null,
+                    tags: item.tags || [],
+                    createdAt: new Date(item.date).toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: item.status
+                }));
+                
+                localStorage.setItem('heart-news', JSON.stringify(convertedData));
+                localStorage.removeItem('heart_news');
+                console.log('✅ Conversion complete');
+            }
+            
+            // 🔍 Check for articles with missing image field
+            if (newFormat) {
+                const articles = JSON.parse(newFormat);
+                let fixedCount = 0;
+                const fixedArticles = articles.map(article => {
+                    if (article.image === undefined) {
+                        fixedCount++;
+                        return { ...article, image: null };
+                    }
+                    return article;
+                });
+                
+                if (fixedCount > 0) {
+                    localStorage.setItem('heart-news', JSON.stringify(fixedArticles));
+                    console.log(`🔧 Fixed ${fixedCount} articles with undefined image field`);
+                }
+            }
+            
+            alert('🧹 Storage cleanup complete! Refresh page to see results.');
+        }
+        
+        // 🧪 TEST: Image workflow testing
+        function testImageWorkflow() {
+            console.clear();
+            console.log('🧪 ================ TESTING IMAGE WORKFLOW ================');
+            
+            // Check current uploadedImageData
+            console.log('1. Current uploadedImageData:', uploadedImageData);
+            console.log('   Type:', typeof uploadedImageData);
+            console.log('   Length:', uploadedImageData ? uploadedImageData.length : 'null');
+            
+            // Check existing articles with images
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            console.log('\n2. Existing articles:', articles.length);
+            
+            let articlesWithImages = 0;
+            let articlesWithoutImages = 0;
+            let articlesWithUndefinedImages = 0;
+            
+            articles.forEach((article, index) => {
+                if (article.image === undefined) {
+                    articlesWithUndefinedImages++;
+                    console.log(`   Article ${index + 1}: "${article.title}" - IMAGE UNDEFINED`);
+                } else if (article.image === null) {
+                    articlesWithoutImages++;
+                    console.log(`   Article ${index + 1}: "${article.title}" - No image (null)`);
+                } else if (article.image) {
+                    articlesWithImages++;
+                    console.log(`   Article ${index + 1}: "${article.title}" - Has image (${article.image.length} chars)`);
+                }
+            });
+            
+            console.log('\n3. Image Statistics:');
+            console.log(`   📸 With images: ${articlesWithImages}`);
+            console.log(`   📰 Without images: ${articlesWithoutImages}`);
+            console.log(`   ❓ Undefined images: ${articlesWithUndefinedImages}`);
+            
+            // Test modal state
+            const modal = document.getElementById('createPostModal');
+            const isModalOpen = modal.style.display === 'block';
+            console.log('\n4. Modal state:', isModalOpen ? 'OPEN' : 'CLOSED');
+            
+            alert(`🧪 IMAGE WORKFLOW TEST RESULTS:
+            
+📊 Statistics:
+• Articles with images: ${articlesWithImages}
+• Articles without images: ${articlesWithoutImages}  
+• Articles with undefined images: ${articlesWithUndefinedImages}
+
+🔍 Current Image Data: ${uploadedImageData ? 'Loaded (' + uploadedImageData.length + ' chars)' : 'None'}
+
+Check console for detailed analysis!`);
+        }
+        
+        // 🧪 CREATE TEST ARTICLE WITH IMAGE
+        function createTestArticleWithImage() {
+            console.clear();
+            console.log('🧪 ================ CREATING TEST ARTICLE WITH IMAGE ================');
+            
+            // Create a simple test image (1x1 red pixel base64)
+            const testImageBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+            
+            const testArticle = {
+                id: Date.now().toString(),
+                title: '🧪 TEST ARTICLE WITH IMAGE - ' + new Date().toLocaleTimeString(),
+                summary: 'This is a test article created to verify image display functionality.',
+                content: 'This test article was automatically created to check if images display correctly in the news grid. It should show a red pixel image instead of an icon.',
+                category: 'technology',
+                author: 'Test System',
+                icon: '🧪',
+                image: testImageBase64,
+                tags: ['test', 'image', 'debug'],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                status: 'published'
+            };
+            
+            console.log('📝 Test article created:', testArticle);
+            console.log('🖼️ Image data:', testArticle.image ? 'YES (' + testArticle.image.length + ' chars)' : 'NO');
+            
+            // Save to storage
+            let articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            articles.unshift(testArticle);
+            localStorage.setItem('heart-news', JSON.stringify(articles));
+            
+            console.log('💾 Saved to localStorage');
+            
+            // Reload news
+            loadNewsFromStorage();
+            
+            alert(`🧪 TEST ARTICLE CREATED!
+            
+✅ Article: "${testArticle.title}"
+✅ Image: ${testArticle.image ? 'Included (' + testArticle.image.length + ' chars)' : 'Missing'}
+✅ Status: Published
+
+Check if it shows image instead of icon in the news grid!`);
+        }
+        
+        // 🔧 QUICK FIX: Force add fallback images to all articles
+        function quickFixAllImages() {
+            console.clear();
+            console.log('🔧 ================ QUICK FIX ALL IMAGES ================');
+            
+            const FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💻</text></svg>',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzI4YTc0NSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💼</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzEwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💡</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzIwYzk5NyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💰</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZmNDJjMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🤝</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZjNzU3ZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+📰</text></svg>'
+            };
+            
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            let fixedCount = 0;
+            
+            articles.forEach((article, index) => {
+                if (!article.image || article.image === null || article.image === '') {
+                    const category = (article.category || 'general').toLowerCase();
+                    const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                    
+                    articles[index].image = fallbackImage;
+                    fixedCount++;
+                    
+                    console.log(`🔧 Fixed article: "${article.title}" with ${category} fallback image`);
+                }
+            });
+            
+            if (fixedCount > 0) {
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                console.log(`✅ Fixed ${fixedCount} articles total`);
+                
+                // Reload news display
+                loadNewsFromStorage();
+                
+                alert(`✅ QUICK FIX COMPLETE!
+                
+Fixed ${fixedCount} articles with fallback images.
+All articles now have images!
+
+Check the news grid - no more newspaper icons!`);
+            } else {
+                alert('ℹ️ All articles already have valid images.');
+            }
+        }
+    </script>
+
+    <!-- Parallax Scroll Effect -->
+    <script>
+    // Performance optimized parallax effect with Intersection Observer
+    function initParallaxEffect() {
+        console.log("=== INIT PARALLAX EFFECT ===");
+        const parallaxElement = document.getElementById('buildingParallax');
+        const container = document.querySelector('.parallax-container');
+        
+        console.log("Parallax element found:", parallaxElement);
+        console.log("Container found:", container);
+        
+        if (!parallaxElement || !container) {
+            console.log("Missing elements - parallax will not work");
+            return;
+        }
+        
+        let isInView = false;
+        let ticking = false;
+        
+        // Intersection Observer to check if element is in viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isInView = entry.isIntersecting;
+            });
+        }, {
+            threshold: 0,
+            rootMargin: '100px'
+        });
+        
+        observer.observe(container);
+        
+        // Simplified parallax function
+        function updateParallax() {
+            if (!isInView) {
+                ticking = false;
+                return;
+            }
+            
+            const scrolled = window.pageYOffset;
+            const parallaxSpeed = 0.3; // Simple multiplier
+            const yPos = scrolled * parallaxSpeed;
+            
+            console.log("Parallax update - Scroll:", scrolled, "YPos:", yPos);
+            
+            // Apply simple transform
+            parallaxElement.style.transform = `translateY(${yPos}px)`;
+            
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+        
+        // Listen for scroll events with passive option for better performance
+        window.addEventListener('scroll', requestTick, { passive: true });
+        
+        // Initial update
+        updateParallax();
+        
+        // Update on resize
+        window.addEventListener('resize', () => {
+            requestTick();
+        }, { passive: true });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initParallaxEffect);
+
+    // Also initialize if DOM is already loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParallaxEffect);
+    } else {
+        initParallaxEffect();
+    }
+    </script>
+
+    <!-- Parallax Debug Script -->
+    <script>
+    // Diagnostic script to check if elements exist
+    function debugParallax() {
+        console.log("=== PARALLAX DEBUG ===");
+        console.log("Building element:", document.getElementById('buildingParallax'));
+        console.log("Container element:", document.querySelector('.parallax-container'));
+        console.log("Image element:", document.querySelector('.building-image'));
+        console.log("About image element:", document.querySelector('.about-image'));
+        
+        // Check if CSS is applied
+        const container = document.querySelector('.parallax-container');
+        if (container) {
+            const styles = window.getComputedStyle(container);
+            console.log("Container position:", styles.position);
+            console.log("Container overflow:", styles.overflow);
+            console.log("Container height:", styles.height);
+        }
+        
+        const parallaxImg = document.getElementById('buildingParallax');
+        if (parallaxImg) {
+            const styles = window.getComputedStyle(parallaxImg);
+            console.log("Parallax element position:", styles.position);
+            console.log("Parallax element transform:", styles.transform);
+            console.log("Parallax element will-change:", styles.willChange);
+        }
+        
+        // Test scroll event
+        let scrollCount = 0;
+        window.addEventListener('scroll', () => {
+            scrollCount++;
+            if (scrollCount <= 5) { // Only log first 5 scroll events
+                console.log("Scroll detected:", window.pageYOffset);
+            }
+        });
+        
+        console.log("Debug setup complete");
+    }
+
+    // Run debug after a short delay to ensure DOM is ready
+    setTimeout(debugParallax, 1000);
+    </script>
+
+    <!-- Simple Fallback Parallax -->
+    <script>
+    // Simple fallback parallax effect
+    function simpleParallax() {
+        console.log("=== SIMPLE PARALLAX INIT ===");
+        
+        const image = document.querySelector('.building-image') || 
+                      document.querySelector('[alt*="HEART"]') ||
+                      document.querySelector('.hero-image') ||
+                      document.getElementById('buildingParallax');
+        
+        if (!image) {
+            console.log("No image found for simple parallax");
+            return;
+        }
+        
+        console.log("Image found for simple parallax:", image);
+        
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.3;
+            if (image.style) {
+                image.style.transform = `translateY(${rate}px)`;
+                console.log("Simple parallax applied:", `translateY(${rate}px)`);
+            }
+        }, { passive: true });
+        
+        console.log("Simple parallax setup complete");
+    }
+
+    // Enable simple parallax as primary method
+    setTimeout(simpleParallax, 2000);
+    
+    // Also create a direct parallax implementation
+    function directParallax() {
+        console.log("=== DIRECT PARALLAX INIT ===");
+        
+        const aboutSection = document.getElementById('about');
+        const buildingImage = document.querySelector('.building-image');
+        
+        if (!buildingImage) {
+            console.log("Building image not found for direct parallax");
+            return;
+        }
+        
+        console.log("Building image found, setting up direct parallax");
+        
+        function handleScroll() {
+            if (!aboutSection) return;
+            
+            const rect = aboutSection.getBoundingClientRect();
+            const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+            
+            if (scrollPercent >= 0 && scrollPercent <= 1) {
+                const moveY = (scrollPercent - 0.5) * 100;
+                buildingImage.style.transform = `translateY(${moveY}px)`;
+                console.log("Direct parallax applied:", moveY);
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        console.log("Direct parallax setup complete");
+    }
+    
+    // Run direct parallax after simple parallax
+    setTimeout(directParallax, 3000);
+    </script>
+
+    <!-- Full Page Parallax Implementation -->
+    <script>
+    function initFullPageParallax() {
+        console.log("=== FULL PAGE PARALLAX INIT ===");
+        
+        const parallaxElement = document.querySelector('.parallax-image');
+        const container = document.querySelector('.parallax-container');
+        
+        console.log("Full page parallax element found:", parallaxElement);
+        console.log("Full page container found:", container);
+        
+        if (!parallaxElement || !container) {
+            console.log("Creating full page parallax structure...");
+            createFullPageParallax();
+            return;
+        }
+        
+        let ticking = false;
+        
+        function updateFullPageParallax() {
+            const scrolled = window.pageYOffset;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            
+            // Calculate scroll progress (0 to 1)
+            const scrollProgress = scrolled / (documentHeight - windowHeight);
+            
+            // Parallax movement: slower than scroll
+            const parallaxSpeed = 0.5;
+            const yOffset = scrolled * parallaxSpeed;
+            
+            // Apply transform with scale effect
+            const scale = 1 + scrollProgress * 0.2;
+            parallaxElement.style.transform = `translateY(${yOffset}px) scale(${scale})`;
+            
+            // Optional: Add opacity fade effect
+            const opacity = Math.max(0.3, 1 - scrollProgress * 0.7);
+            container.style.opacity = opacity;
+            
+            console.log(`Full Page - Scroll: ${scrolled}px, Parallax: ${yOffset}px, Progress: ${(scrollProgress * 100).toFixed(1)}%`);
+            
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateFullPageParallax);
+                ticking = true;
+            }
+        }
+        
+        // Listen for scroll events
+        window.addEventListener('scroll', requestTick, { passive: true });
+        
+        // Initial update
+        updateFullPageParallax();
+        
+        console.log("Full page parallax initialized successfully");
+    }
+
+    function createFullPageParallax() {
+        console.log("Creating full page parallax structure...");
+        
+        // Find existing building image
+        const existingImage = document.querySelector('.building-image') || 
+                             document.querySelector('[alt*="HEART"]') ||
+                             document.querySelector('.hero-image');
+        
+        if (!existingImage) {
+            console.log("No building image found");
+            return;
+        }
+        
+        console.log("Found existing image:", existingImage);
+        
+        // Hide original image container
+        const originalContainer = document.querySelector('.about-image');
+        if (originalContainer) {
+            originalContainer.style.display = 'none';
+            console.log("Hidden original container");
+        }
+        
+        // Create full page structure
+        const fullPageContainer = document.createElement('div');
+        fullPageContainer.className = 'parallax-container';
+        
+        const parallaxImage = document.createElement('div');
+        parallaxImage.className = 'parallax-image';
+        
+        // Clone the building image
+        const buildingClone = existingImage.cloneNode(true);
+        buildingClone.className = 'building-image';
+        
+        // Build structure
+        parallaxImage.appendChild(buildingClone);
+        fullPageContainer.appendChild(parallaxImage);
+        
+        // Insert at the beginning of body
+        document.body.insertBefore(fullPageContainer, document.body.firstChild);
+        
+        console.log("Full page parallax structure created");
+        
+        // Initialize parallax effect
+        setTimeout(initFullPageParallax, 100);
+    }
+
+    function makeExistingContainerFullPage() {
+        console.log("=== CONVERT EXISTING CONTAINER ===");
+        
+        const existingContainer = document.querySelector('.parallax-container');
+        
+        if (existingContainer) {
+            console.log("Converting existing container to full page");
+            
+            // Convert to full page
+            existingContainer.style.position = 'fixed';
+            existingContainer.style.top = '0';
+            existingContainer.style.left = '0';
+            existingContainer.style.width = '100vw';
+            existingContainer.style.height = '100vh';
+            existingContainer.style.zIndex = '-1';
+            existingContainer.style.pointerEvents = 'none';
+            
+            // Full page scroll parallax
+            let ticking = false;
+            
+            function handleScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrolled = window.pageYOffset;
+                        const parallaxImage = existingContainer.querySelector('.parallax-image');
+                        
+                        if (parallaxImage) {
+                            const yOffset = scrolled * 0.5;
+                            const scale = 1 + (scrolled / window.innerHeight) * 0.2;
+                            parallaxImage.style.transform = `translateY(${yOffset}px) scale(${scale})`;
+                            
+                            console.log(`Converted parallax: ${yOffset}px, scale: ${scale.toFixed(2)}`);
+                        }
+                        
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            
+            console.log("Converted existing container to full page parallax");
+            return true;
+        }
+        
+        return false;
+    }
+
+    // Initialize full page parallax
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOM loaded - initializing full page parallax");
+        
+        // Try converting existing container first
+        if (makeExistingContainerFullPage()) {
+            console.log("Used existing container approach");
+        } else {
+            // Fallback to creating new structure
+            setTimeout(initFullPageParallax, 500);
+        }
+    });
+
+    // Also try immediate initialization
+    if (document.readyState !== 'loading') {
+        console.log("Document ready - initializing immediately");
+        if (!makeExistingContainerFullPage()) {
+            setTimeout(initFullPageParallax, 100);
+        }
+    }
+    </script>
+
+    <!-- Building Image Restoration -->
+    <script>
+    // Debug: Check current state of building images
+    function debugBuildingImages() {
+        console.log("=== BUILDING IMAGE DEBUG ===");
+        console.log("Original building image:", document.querySelector('.building-image'));
+        console.log("Hidden building images:", document.querySelectorAll('[style*="display: none"]'));
+        console.log("Parallax container:", document.querySelector('.parallax-container'));
+        console.log("All images in parallax:", document.querySelectorAll('.parallax-container img'));
+        console.log("All building-related elements:", document.querySelectorAll('[class*="building"], [alt*="HEART"]'));
+    }
+
+    function restoreBuildingImage() {
+        console.log("=== RESTORING BUILDING IMAGE ===");
+        
+        const parallaxContainer = document.querySelector('.parallax-container');
+        const parallaxImage = document.querySelector('.parallax-image');
+        
+        if (!parallaxContainer || !parallaxImage) {
+            console.log("Parallax containers not found");
+            return false;
+        }
+        
+        // Check if building image exists in parallax
+        let buildingInParallax = parallaxContainer.querySelector('.building-image') || 
+                                parallaxContainer.querySelector('img');
+        
+        if (!buildingInParallax) {
+            console.log("Building image missing from parallax, creating new one...");
+            
+            // Find any hidden or original building image
+            const originalBuilding = document.querySelector('.building-image[style*="display: none"]') ||
+                                   document.querySelector('[alt*="HEART"]') ||
+                                   document.querySelector('.hero-image');
+            
+            if (originalBuilding) {
+                console.log("Found original building, cloning:", originalBuilding);
+                // Clone and restore
+                buildingInParallax = originalBuilding.cloneNode(true);
+                buildingInParallax.style.display = 'block';
+                buildingInParallax.className = 'building-image';
+            } else {
+                console.log("No original building found, creating SVG");
+                // Create building image element
+                buildingInParallax = document.createElement('img');
+                buildingInParallax.src = '/assets/images/heart-building.svg';
+                buildingInParallax.alt = 'HEART Technology Park Building';
+                buildingInParallax.className = 'building-image';
+                buildingInParallax.loading = 'lazy';
+            }
+            
+            parallaxImage.appendChild(buildingInParallax);
+        }
+        
+        // Ensure proper styling for the building image
+        buildingInParallax.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            height: 60vh;
+            max-width: 80vw;
+            object-fit: contain;
+            z-index: 2;
+            display: block !important;
+            opacity: 1;
+        `;
+        
+        console.log("Building image restored:", buildingInParallax);
+        return true;
+    }
+
+    function recreateBuildingWithGradient() {
+        console.log("=== RECREATING BUILDING WITH GRADIENT ===");
+        
+        const parallaxImage = document.querySelector('.parallax-image');
+        
+        if (!parallaxImage) {
+            console.log("Parallax image container not found");
+            return false;
+        }
+        
+        // Clear existing content except for existing images
+        const existingImages = parallaxImage.querySelectorAll('img');
+        if (existingImages.length === 0) {
+            parallaxImage.innerHTML = '';
+        }
+        
+        // Add gradient background (if not already set)
+        if (!parallaxImage.style.background) {
+            parallaxImage.style.background = 'white';
+        }
+        
+        // Create building structure
+        const buildingHTML = `
+            <div class="building-container" style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 400px;
+                height: 300px;
+                z-index: 2;
+            ">
+                <!-- Background buildings -->
+                <div style="position: absolute; left: 20px; top: 50px; width: 120px; height: 200px; background: rgba(59, 130, 246, 0.7); border-radius: 10px;"></div>
+                <div style="position: absolute; right: 20px; top: 50px; width: 120px; height: 200px; background: rgba(156, 163, 175, 0.7); border-radius: 10px;"></div>
+                
+                <!-- Main building -->
+                <div style="
+                    position: absolute;
+                    left: 50%;
+                    top: 20px;
+                    transform: translateX(-50%);
+                    width: 200px;
+                    height: 250px;
+                    background: #2E3A8C;
+                    border-radius: 15px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                ">
+                    <!-- Building header -->
+                    <div style="
+                        position: absolute;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 160px;
+                        height: 30px;
+                        background: #FFD700;
+                        border-radius: 10px;
+                    "></div>
+                    
+                    <!-- HEART TECHNOLOGY label -->
+                    <div style="
+                        position: absolute;
+                        top: 60px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 160px;
+                        height: 25px;
+                        background: white;
+                        border-radius: 5px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-family: Arial;
+                        font-size: 10px;
+                        font-weight: bold;
+                        color: #2E3A8C;
+                    ">HEART TECHNOLOGY</div>
+                    
+                    <!-- Windows grid -->
+                    <div style="
+                        position: absolute;
+                        top: 100px;
+                        left: 20px;
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 15px;
+                        width: 160px;
+                    ">
+                        ${Array(12).fill().map(() => `
+                            <div style="
+                                width: 35px;
+                                height: 25px;
+                                background: white;
+                                border-radius: 3px;
+                                opacity: 0.9;
+                            "></div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- Side elements -->
+                <div style="position: absolute; left: 10px; top: 30px; width: 8px; height: 80px; background: #FFD700; border-radius: 4px;"></div>
+                <div style="position: absolute; left: 25px; top: 20px; width: 8px; height: 100px; background: #3B82F6; border-radius: 4px;"></div>
+                <div style="position: absolute; right: 10px; top: 30px; width: 8px; height: 80px; background: #FFD700; border-radius: 4px;"></div>
+                <div style="position: absolute; right: 25px; top: 20px; width: 8px; height: 100px; background: #3B82F6; border-radius: 4px;"></div>
+            </div>
+        `;
+        
+        // Add the building if no existing images
+        if (existingImages.length === 0) {
+            parallaxImage.innerHTML = buildingHTML;
+        }
+        
+        console.log("Building recreated with gradient");
+        return true;
+    }
+
+    function restoreHiddenImages() {
+        console.log("=== RESTORING HIDDEN IMAGES ===");
+        
+        // Unhide any hidden original images as backup
+        document.querySelectorAll('[style*="display: none"]').forEach(el => {
+            if ((el.alt && el.alt.includes('HEART')) || el.classList.contains('building-image')) {
+                el.style.display = 'block';
+                el.style.opacity = '1';
+                console.log("Restored hidden building image:", el);
+            }
+        });
+    }
+
+    function initBuildingRestoration() {
+        console.log("=== INITIALIZING BUILDING RESTORATION ===");
+        
+        // First debug current state
+        debugBuildingImages();
+        
+        // Try to restore building image
+        let success = restoreBuildingImage();
+        
+        if (!success) {
+            console.log("Restore failed, trying to recreate building...");
+            success = recreateBuildingWithGradient();
+        }
+        
+        // Additional check after restoration
+        setTimeout(() => {
+            const buildingCheck = document.querySelector('.parallax-container .building-image') ||
+                                 document.querySelector('.parallax-container img') ||
+                                 document.querySelector('.building-container');
+            
+            if (!buildingCheck) {
+                console.log("Building still missing after restoration, recreating with HTML...");
+                recreateBuildingWithGradient();
+            } else {
+                console.log("Building restoration successful:", buildingCheck);
+            }
+            
+            // Final debug
+            debugBuildingImages();
+        }, 500);
+    }
+
+    // Run the restoration
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initBuildingRestoration, 300);
+    });
+
+    // Also try immediate execution
+    if (document.readyState !== 'loading') {
+        setTimeout(initBuildingRestoration, 100);
+    }
+
+    // Emergency building restoration - force create if nothing works
+    function emergencyBuildingRestore() {
+        console.log("=== EMERGENCY BUILDING RESTORE ===");
+        
+        const parallaxContainer = document.querySelector('.parallax-container');
+        if (!parallaxContainer) {
+            console.log("No parallax container found for emergency restore");
+            return;
+        }
+        
+        // Force create building if missing
+        const existingBuilding = parallaxContainer.querySelector('.building-image, .building-container, img');
+        
+        if (!existingBuilding) {
+            console.log("Emergency: Creating building immediately");
+            
+            const parallaxImage = parallaxContainer.querySelector('.parallax-image');
+            if (parallaxImage) {
+                // Create a simple but visible building structure
+                const emergencyBuilding = document.createElement('div');
+                emergencyBuilding.className = 'building-container emergency-building';
+                emergencyBuilding.innerHTML = `
+                    <div style="
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 300px;
+                        height: 200px;
+                        background: linear-gradient(45deg, #2E3A8C, #3B82F6);
+                        border-radius: 20px;
+                        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-family: Arial, sans-serif;
+                        font-size: 24px;
+                        font-weight: bold;
+                        text-align: center;
+                        z-index: 10;
+                    ">
+                        <div>
+                            <div style="font-size: 48px; margin-bottom: 10px;">🏢</div>
+                            <div>HEART</div>
+                            <div style="font-size: 16px;">Technology Park</div>
+                        </div>
+                    </div>
+                `;
+                
+                parallaxImage.appendChild(emergencyBuilding);
+                console.log("Emergency building created successfully");
+            }
+        } else {
+            console.log("Building exists, no emergency restore needed:", existingBuilding);
+        }
+    }
+
+    // Run emergency restore after other attempts
+    setTimeout(emergencyBuildingRestore, 1000);
+    setTimeout(emergencyBuildingRestore, 2000); // Double check
+    setTimeout(emergencyBuildingRestore, 3000); // Final check
+    </script>
+
+    <!-- Aggressive Parallax Removal & Strict About-Only Implementation -->
+    <script>
+    (function() {
+    function forceRemoveAllParallax() {
+        console.log("=== FORCE REMOVING ALL PARALLAX ===");
+        
+        // Remove all possible parallax containers
+        const parallaxSelectors = [
+            '.parallax-container',
+            '.vision-parallax-container', 
+            '.about-parallax-container',
+            '.confirmed-about-parallax',
+            '.parallax-image',
+            '.vision-parallax-image',
+            '.about-parallax-image',
+            '.confirmed-parallax-image',
+            '.building-container',
+            '[class*="parallax"]',
+            '[id*="parallax"]'
+        ];
+        
+        parallaxSelectors.forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => {
+                el.remove();
+                console.log(`Removed: ${selector}`);
+            });
+        });
+        
+        // Remove any fixed positioned elements that might be parallax
+        document.querySelectorAll('[style*="position: fixed"]').forEach(el => {
+            if (el.style.right === '0px' || el.style.right === '0' || 
+                el.className.includes('parallax') ||
+                el.innerHTML.includes('HEART TECHNOLOGY')) {
+                el.remove();
+                console.log("Removed fixed positioned parallax element");
+            }
+        });
+        
+        // Clear any background styles that might be parallax
+        document.querySelectorAll('[style*="gradient"]').forEach(el => {
+            if (el.style.position === 'fixed' || el.style.position === 'absolute') {
+                el.remove();
+                console.log("Removed gradient parallax element");
+            }
+        });
+        
+        // Remove parallax styles from body
+        document.body.style.overflow = 'auto';
+        document.body.style.height = 'auto';
+        
+        // Remove content wrapper modifications
+        const contentWrapper = document.querySelector('.content-wrapper');
+        if (contentWrapper) {
+            contentWrapper.style.marginTop = '0';
+            contentWrapper.style.background = 'transparent';
+            contentWrapper.style.backdropFilter = 'none';
+            contentWrapper.style.position = 'static';
+            contentWrapper.style.zIndex = 'auto';
+        }
+        
+        console.log("All parallax elements force removed");
+    }
+
+    function isStrictAboutPage() {
+        const url = window.location.href.toLowerCase();
+        const path = window.location.pathname.toLowerCase();
+        const hash = window.location.hash.toLowerCase();
+        
+        // Very strict checks
+        const isAboutURL = url.includes('/about') || path.includes('/about');
+        const isAboutHash = hash === '#about' || hash.includes('about');
+        
+        // Check if About Us navigation is actually clicked/active
+        const aboutNav = document.querySelector('a[href*="about"], button[href*="about"]');
+        const aboutActive = aboutNav && (
+            aboutNav.classList.contains('active') ||
+            aboutNav.style.backgroundColor === 'rgb(252, 211, 77)' || // yellow color
+            aboutNav.style.background.includes('yellow') ||
+            aboutNav.style.background.includes('#FCD34D')
+        );
+        
+        // Check current section visibility
+        const aboutSection = document.querySelector('#about');
+        let sectionVisible = false;
+        if (aboutSection) {
+            const rect = aboutSection.getBoundingClientRect();
+            sectionVisible = rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5;
+        }
+        
+        // Check page title/content ONLY if navigation suggests About
+        let contentCheck = false;
+        if (isAboutURL || isAboutHash || aboutActive || sectionVisible) {
+            const pageContent = document.body.textContent.toLowerCase();
+            contentCheck = pageContent.includes('vision') && 
+                          pageContent.includes('mission') && 
+                          pageContent.includes('about');
+        }
+        
+        const result = (isAboutURL || isAboutHash || aboutActive || sectionVisible) && contentCheck;
+        
+        console.log("=== STRICT ABOUT PAGE DETECTION ===");
+        console.log("URL:", url);
+        console.log("Path:", path);  
+        console.log("Hash:", hash);
+        console.log("About URL check:", isAboutURL);
+        console.log("About Hash check:", isAboutHash);
+        console.log("About Nav Active:", aboutActive);
+        console.log("Section Visible:", sectionVisible);
+        console.log("Content check:", contentCheck);
+        console.log("Final Result:", result);
+        
+        return result;
+    }
+
+    function createStrictAboutParallax() {
+        // Triple check before creating
+        if (!isStrictAboutPage()) {
+            console.log("❌ NOT About page - No parallax created");
+            return false;
+        }
+        
+        // Extra confirmation - look for specific About page elements
+        const visionHeading = Array.from(document.querySelectorAll('h1, h2, h3')).find(h => 
+            h.textContent.toLowerCase().includes('vision')
+        );
+        const missionHeading = Array.from(document.querySelectorAll('h1, h2, h3')).find(h => 
+            h.textContent.toLowerCase().includes('mission')
+        );
+        
+        if (!visionHeading || !missionHeading) {
+            console.log("❌ Vision/Mission sections not found - Not creating parallax");
+            return false;
+        }
+        
+        console.log("✅ CONFIRMED About page - Creating parallax");
+        
+        // Create parallax (only if all checks pass)
+        const container = document.createElement('div');
+        container.className = 'confirmed-about-parallax';
+        container.style.cssText = `
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            display: none;
+        `;
+        
+        const image = document.createElement('div');
+        image.className = 'confirmed-parallax-image';
+        image.style.cssText = `
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--primary-blue) 50%, var(--primary-yellow) 100%);
+            will-change: transform;
+        `;
+        
+        // Add building (simplified for reliability)
+        image.innerHTML = `
+            <div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 200px;
+                height: 150px;
+                background: #2E3A8C;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            ">
+                <div style="
+                    position: absolute;
+                    top: 15px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 150px;
+                    height: 15px;
+                    background: #FFD700;
+                    border-radius: 5px;
+                "></div>
+                <div style="
+                    position: absolute;
+                    top: 40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 150px;
+                    height: 12px;
+                    background: white;
+                    border-radius: 3px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 6px;
+                    font-weight: bold;
+                    color: #2E3A8C;
+                    font-family: Arial;
+                ">HEART TECHNOLOGY</div>
+                <div style="
+                    position: absolute;
+                    top: 65px;
+                    left: 20px;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 6px;
+                    width: 160px;
+                ">
+                    ${Array(9).fill().map(() => `
+                        <div style="width: 18px; height: 14px; background: white; border-radius: 2px;"></div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(image);
+        document.body.appendChild(container);
+        
+        // Scroll effect
+        let ticking = false;
+        function handleScroll() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    if (!isStrictAboutPage()) {
+                        container.remove();
+                        return;
+                    }
+                    
+                    const scrolled = window.pageYOffset;
+                    const visionTop = visionHeading.offsetTop - window.innerHeight * 0.3;
+                    
+                    if (scrolled >= visionTop) {
+                        container.style.display = 'block';
+                        const offset = (scrolled - visionTop) * 0.3;
+                        image.style.transform = `translateY(${offset}px)`;
+                        
+                        // Opacity fade
+                        const documentHeight = document.documentElement.scrollHeight;
+                        const maxScroll = documentHeight - window.innerHeight;
+                        const scrollProgress = (scrolled - visionTop) / (maxScroll - visionTop);
+                        const opacity = Math.max(0.3, 1 - scrollProgress * 0.7);
+                        container.style.opacity = opacity;
+                    } else {
+                        container.style.display = 'none';
+                    }
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        console.log("✅ About parallax created successfully");
+        return true;
+    }
+
+    function strictAboutOnlyController() {
+        console.log("=== STRICT ABOUT ONLY CONTROLLER ===");
+        
+        // ALWAYS remove all parallax first (no exceptions)
+        forceRemoveAllParallax();
+        
+        // Wait a moment for DOM cleanup
+        setTimeout(() => {
+            // Only create if STRICTLY About page
+            if (isStrictAboutPage()) {
+                createStrictAboutParallax();
+            } else {
+                console.log("Not About page - staying clean");
+            }
+        }, 100);
+    }
+
+    function setupStrictNavigationControl() {
+        // Listen for ALL navigation
+        const observer = new MutationObserver(() => {
+            strictAboutOnlyController();
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class', 'style']
+        });
+        
+        // Click listener
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a, button');
+            if (link) {
+                // Immediate cleanup
+                forceRemoveAllParallax();
+                
+                setTimeout(() => {
+                    strictAboutOnlyController();
+                }, 200);
+            }
+        });
+        
+        // Hash change
+        window.addEventListener('hashchange', () => {
+            forceRemoveAllParallax();
+            setTimeout(strictAboutOnlyController, 100);
+        });
+        
+        // Page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                setTimeout(strictAboutOnlyController, 100);
+            }
+        });
+        
+        // Scroll-based section detection
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const currentlyAbout = isStrictAboutPage();
+                const hasParallax = document.querySelector('.confirmed-about-parallax');
+                
+                if (!currentlyAbout && hasParallax) {
+                    forceRemoveAllParallax();
+                    console.log("Removed parallax - no longer on About page");
+                } else if (currentlyAbout && !hasParallax) {
+                    createStrictAboutParallax();
+                    console.log("Added parallax - now on About page");
+                }
+            }, 500);
+        }, { passive: true });
+    }
+
+    // Manual test function
+    window.testParallaxCleanup = function() {
+        console.log("=== MANUAL TEST ===");
+        forceRemoveAllParallax();
+        console.log("Current page is About:", isStrictAboutPage());
+        
+        if (isStrictAboutPage()) {
+            createStrictAboutParallax();
+        }
+    };
+
+    // Execute immediately and repeatedly
+    forceRemoveAllParallax();
+
+    setTimeout(() => {
+        strictAboutOnlyController();
+        setupStrictNavigationControl();
+    }, 200);
+
+    // Also on load
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            forceRemoveAllParallax();
+            strictAboutOnlyController();
+        }, 300);
+    });
+
+    // Backup execution every 2 seconds for 10 seconds
+    let cleanupCount = 0;
+    const cleanupInterval = setInterval(() => {
+        if (!isStrictAboutPage()) {
+            forceRemoveAllParallax();
+        }
+        
+        cleanupCount++;
+        if (cleanupCount >= 5) {
+            clearInterval(cleanupInterval);
+        }
+    }, 2000);
+
+    })();
+    </script>
+
+    <!-- SIMPLE TEST SCRIPT - EXACT COPY FROM WORKING PAGE -->
+    <script>
+        console.log("✅ Simple test script loaded");
+        console.log("Element found:", !!document.querySelector('#simple-about-parallax'));
+        
+        // Test element visibility
+        function checkElement() {
+            const element = document.querySelector('#simple-about-parallax');
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                console.log("Element rect:", rect);
+                console.log("Element visible:", rect.width > 0 && rect.height > 0);
+                
+                // Force styles again
+                element.style.cssText = `
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    position: relative !important;
+                    width: 100% !important;
+                    height: 300px !important;
+                    background: red !important;
+                    border: 10px solid blue !important;
+                    margin: 50px auto !important;
+                    z-index: 99999 !important;
+                    box-sizing: border-box !important;
+                `;
+                
+                return element;
+            }
+            return null;
+        }
+        
+        // Manual test function
+        window.testElement = function() {
+            const element = document.querySelector('#simple-about-parallax');
+            if (element) {
+                element.style.background = 'lime';
+                element.scrollIntoView({ behavior: 'smooth' });
+                console.log("Element forced to lime and scrolled to");
+                return true;
+            }
+            console.error("Element not found");
+            return false;
+        };
+        
+        // Force check when About section becomes active
+        function checkAboutSection() {
+            const aboutSection = document.querySelector('#about');
+            if (aboutSection && (aboutSection.classList.contains('active') || getComputedStyle(aboutSection).display !== 'none')) {
+                console.log("About section is active, checking element");
+                setTimeout(checkElement, 100);
+            }
+        }
+        
+        // Auto check
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                console.log("DOM loaded, checking element");
+                checkElement();
+                checkAboutSection();
+            }, 500);
+        });
+        
+        // Check every 2 seconds for first 10 seconds
+        let checkCount = 0;
+        const checkInterval = setInterval(() => {
+            checkCount++;
+            console.log(`Auto check ${checkCount}`);
+            checkElement();
+            
+            if (checkCount >= 5) {
+                clearInterval(checkInterval);
+            }
+        }, 2000);
+        
+        console.log("✅ Available functions:");
+        console.log("- window.testElement() - Test element visibility");
+    </script>
 </body>
 </html>
-EOF < /dev/null
