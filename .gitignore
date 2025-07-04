@@ -104,3 +104,6 @@ temp/
 
 # Live server
 .live-server/
+
+# Uploads
+uploads/
