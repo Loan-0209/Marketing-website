@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Plan 3D - HEART Technology Park</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --light-blue: #3b82f6;
+            --primary-yellow: #fbbf24;
+            --light-yellow: #FFC107;
+            --dark-blue: #1e2148;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+            --success: #10b981;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--dark-blue);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-yellow);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: 100vh;
+            gap: 0;
+            padding-top: 80px;
+            transition: grid-template-columns 0.3s ease;
+        }
+
+        /* 3D Viewer Container */
+        .viewer-container {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            overflow: hidden;
+            border-radius: 0 20px 0 0;
+        }
+
+        #threejs-container {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        #threejs-container:active {
+            cursor: grabbing;
+        }
+
+        /* Viewer Controls */
+        .viewer-controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 12px var(--shadow-light);
+            user-select: none;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .control-btn.active {
+            background: var(--primary-yellow);
+            color: var(--dark-blue);
+            box-shadow: 0 4px 16px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Timeline Panel */
+        .timeline-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            overflow-y: auto;
+            box-shadow: -10px 0 40px var(--shadow-light);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .panel-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary-yellow), var(--light-blue), var(--success));
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-item:hover {
+            transform: translateX(12px);
+        }
+
+        .timeline-item.active {
+            transform: translateX(18px);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -40px;
+            top: 12px;
+            width: 24px;
+            height: 24px;
+            background: var(--white);
+            border: 4px solid var(--primary-yellow);
+            border-radius: 50%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
+            box-shadow: 0 4px 12px var(--shadow-light);
+        }
+
+        .timeline-item:hover .timeline-marker,
+        .timeline-item.active .timeline-marker {
+            background: var(--primary-yellow);
+            transform: scale(1.3);
+            box-shadow: 0 0 24px rgba(251, 191, 36, 0.6);
+            border-color: var(--white);
+        }
+
+        .timeline-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timeline-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-yellow), var(--light-blue));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .timeline-item:hover .timeline-card,
+        .timeline-item.active .timeline-card {
+            border-color: var(--primary-yellow);
+            box-shadow: 0 16px 48px var(--shadow-medium);
+            transform: translateY(-4px);
+        }
+
+        .timeline-item:hover .timeline-card::before,
+        .timeline-item.active .timeline-card::before {
+            transform: scaleX(1);
+        }
+
+        .phase-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .phase-period {
+            font-size: 1rem;
+            color: var(--light-blue);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .phase-description {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+        }
+
+        .phase-features {
+            list-style: none;
+            margin: 0;
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .phase-features li {
+            position: relative;
+            padding-left: 32px;
+            font-size: 0.95rem;
+            color: var(--dark-blue);
+            transition: color 0.3s ease;
+        }
+
+        .phase-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 20px;
+            height: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Loading States */
+        #loadingOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(30, 58, 138, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-content {
+            text-align: center;
+            color: var(--white);
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid var(--primary-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.025em;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Performance Indicators */
+        .performance-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--success);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr 350px;
+            }
+            
+            .timeline-panel {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60vh auto;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .viewer-container {
+                border-radius: 0;
+            }
+
+            .timeline-panel {
+                padding: 1.5rem;
+                max-height: none;
+                border-radius: 20px 20px 0 0;
+                margin-top: -20px;
+                position: relative;
+                z-index: 10;
+            }
+
+            .panel-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .timeline {
+                padding-left: 30px;
+            }
+
+            .timeline-marker {
+                left: -32px;
+                width: 20px;
+                height: 20px;
+            }
+
+            .timeline-card {
+                padding: 1.5rem;
+            }
+
+            .phase-title {
+                font-size: 1.2rem;
+            }
+
+            .viewer-controls {
+                top: 10px;
+                left: 10px;
+                flex-wrap: wrap;
+                max-width: calc(100% - 20px);
+            }
+
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+                min-width: 70px;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Focus and Accessibility */
+        .control-btn:focus,
+        .timeline-item:focus {
+            outline: 2px solid var(--primary-yellow);
+            outline-offset: 2px;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="master-plan.html" class="nav-link active">Master Plan</a></li>
+                <li><a href="index.html#facilities" class="nav-link">Facilities</a></li>
+                <li><a href="index.html#investment" class="nav-link">Investment</a></li>
+                <li><a href="index.html#technology" class="nav-link">Technology</a></li>
+                <li><a href="index.html#news" class="nav-link">News</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- 3D Viewer -->
+        <div class="viewer-container">
+            <div id="loadingOverlay">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text">Loading 3D Master Plan...</p>
+                </div>
+            </div>
+            
+            <div class="viewer-controls">
+                <button class="control-btn active" data-view="overview">Overview</button>
+                <button class="control-btn" data-view="aerial">Aerial</button>
+                <button class="control-btn" data-view="ground">Ground</button>
+                <button class="control-btn" data-action="auto-rotate">Auto Rotate</button>
+            </div>
+            
+            <div class="performance-indicator" id="performanceIndicator">Loading...</div>
+            
+            <div id="threejs-container"></div>
+        </div>
+
+        <!-- Timeline Panel -->
+        <div class="timeline-panel">
+            <h2 class="panel-title">Development Timeline</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item active fade-in" data-phase="phase1">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <h3 class="phase-title">Phase 1: Foundation</h3>
+                        <p class="phase-period">2025 - 2027</p>
+                        <p class="phase-description">Infrastructure development and core facility construction</p>
+                        <ul class="phase-features">
+                            <li>Main infrastructure setup</li>
+                            <li>Research & Development Center</li>
+                            <li>AI Innovation Hub</li>
+                            <li>Basic utilities and connectivity</li>
+                            <li>Administration buildings</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-phase="phase2">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <h3 class="phase-title">Phase 2: Expansion</h3>
+                        <p class="phase-period">2027 - 2030</p>
+                        <p class="phase-description">Technology sectors and business districts development</p>
+                        <ul class="phase-features">
+                            <li>Tech company offices</li>
+                            <li>Manufacturing facilities</li>
+                            <li>Conference & exhibition center</li>
+                            <li>Residential complex</li>
+                            <li>Transportation hub</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in" data-phase="phase3">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-card">
+                        <h3 class="phase-title">Phase 3: Integration</h3>
+                        <p class="phase-period">2030+</p>
+                        <p class="phase-description">Smart city features and ecosystem completion</p>
+                        <ul class="phase-features">
+                            <li>Smart city infrastructure</li>
+                            <li>Green energy systems</li>
+                            <li>Advanced AI systems</li>
+                            <li>Recreation & lifestyle areas</li>
+                            <li>International collaboration centers</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // OrbitControls implementation (embedded to avoid CDN issues)
+        THREE.OrbitControls = function (object, domElement) {
+            this.object = object;
+            this.domElement = (domElement !== undefined) ? domElement : document;
+            
+            this.enabled = true;
+            this.target = new THREE.Vector3();
+            
+            this.minDistance = 0;
+            this.maxDistance = Infinity;
+            
+            this.minPolarAngle = 0;
+            this.maxPolarAngle = Math.PI;
+            
+            this.enableDamping = false;
+            this.dampingFactor = 0.25;
+            
+            this.enableZoom = true;
+            this.zoomSpeed = 1.0;
+            
+            this.enableRotate = true;
+            this.rotateSpeed = 1.0;
+            
+            this.enablePan = true;
+            this.panSpeed = 1.0;
+            
+            this.autoRotate = false;
+            this.autoRotateSpeed = 2.0;
+            
+            var scope = this;
+            var changeEvent = { type: 'change' };
+            var startEvent = { type: 'start' };
+            var endEvent = { type: 'end' };
+            
+            var STATE = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2, TOUCH_ROTATE: 3, TOUCH_DOLLY: 4, TOUCH_PAN: 5 };
+            var state = STATE.NONE;
+            
+            var EPS = 0.000001;
+            var spherical = new THREE.Spherical();
+            var sphericalDelta = new THREE.Spherical();
+            var scale = 1;
+            var panOffset = new THREE.Vector3();
+            var zoomChanged = false;
+            
+            var rotateStart = new THREE.Vector2();
+            var rotateEnd = new THREE.Vector2();
+            var rotateDelta = new THREE.Vector2();
+            
+            var panStart = new THREE.Vector2();
+            var panEnd = new THREE.Vector2();
+            var panDelta = new THREE.Vector2();
+            
+            var dollyStart = new THREE.Vector2();
+            var dollyEnd = new THREE.Vector2();
+            var dollyDelta = new THREE.Vector2();
+            
+            this.update = function () {
+                var offset = new THREE.Vector3();
+                var quat = new THREE.Quaternion().setFromUnitVectors(object.up, new THREE.Vector3(0, 1, 0));
+                var quatInverse = quat.clone().inverse();
+                var lastPosition = new THREE.Vector3();
+                var lastQuaternion = new THREE.Quaternion();
+                
+                return function update() {
+                    var position = scope.object.position;
+                    offset.copy(position).sub(scope.target);
+                    offset.applyQuaternion(quat);
+                    spherical.setFromVector3(offset);
+                    
+                    if (scope.autoRotate && state === STATE.NONE) {
+                        rotateLeft(getAutoRotationAngle());
+                    }
+                    
+                    spherical.theta += sphericalDelta.theta;
+                    spherical.phi += sphericalDelta.phi;
+                    
+                    spherical.theta = Math.max(scope.minAzimuthAngle, Math.min(scope.maxAzimuthAngle, spherical.theta));
+                    spherical.phi = Math.max(scope.minPolarAngle, Math.min(scope.maxPolarAngle, spherical.phi));
+                    spherical.makeSafe();
+                    spherical.radius *= scale;
+                    spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
+                    
+                    scope.target.add(panOffset);
+                    offset.setFromSpherical(spherical);
+                    offset.applyQuaternion(quatInverse);
+                    position.copy(scope.target).add(offset);
+                    scope.object.lookAt(scope.target);
+                    
+                    if (scope.enableDamping === true) {
+                        sphericalDelta.theta *= (1 - scope.dampingFactor);
+                        sphericalDelta.phi *= (1 - scope.dampingFactor);
+                        panOffset.multiplyScalar(1 - scope.dampingFactor);
+                    } else {
+                        sphericalDelta.set(0, 0, 0);
+                        panOffset.set(0, 0, 0);
+                    }
+                    
+                    scale = 1;
+                    
+                    if (zoomChanged ||
+                        lastPosition.distanceToSquared(scope.object.position) > EPS ||
+                        8 * (1 - lastQuaternion.dot(scope.object.quaternion)) > EPS) {
+                        scope.dispatchEvent(changeEvent);
+                        lastPosition.copy(scope.object.position);
+                        lastQuaternion.copy(scope.object.quaternion);
+                        zoomChanged = false;
+                        return true;
+                    }
+                    return false;
+                };
+            }();
+            
+            function getAutoRotationAngle() {
+                return 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
+            }
+            
+            function rotateLeft(angle) {
+                sphericalDelta.theta -= angle;
+            }
+            
+            function rotateUp(angle) {
+                sphericalDelta.phi -= angle;
+            }
+            
+            function dollyIn(dollyScale) {
+                scale /= dollyScale;
+            }
+            
+            function dollyOut(dollyScale) {
+                scale *= dollyScale;
+            }
+            
+            // Mouse event handlers
+            function handleMouseDownRotate(event) {
+                rotateStart.set(event.clientX, event.clientY);
+            }
+            
+            function handleMouseMoveRotate(event) {
+                rotateEnd.set(event.clientX, event.clientY);
+                rotateDelta.subVectors(rotateEnd, rotateStart);
+                
+                var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+                rotateLeft(2 * Math.PI * rotateDelta.x / element.clientWidth * scope.rotateSpeed);
+                rotateUp(2 * Math.PI * rotateDelta.y / element.clientHeight * scope.rotateSpeed);
+                
+                rotateStart.copy(rotateEnd);
+                scope.update();
+            }
+            
+            function handleMouseWheel(event) {
+                if (event.deltaY < 0) {
+                    dollyOut(getZoomScale());
+                } else if (event.deltaY > 0) {
+                    dollyIn(getZoomScale());
+                }
+                scope.update();
+            }
+            
+            function getZoomScale() {
+                return Math.pow(0.95, scope.zoomSpeed);
+            }
+            
+            function onMouseDown(event) {
+                if (scope.enabled === false) return;
+                event.preventDefault();
+                
+                if (event.button === 0) {
+                    state = STATE.ROTATE;
+                    handleMouseDownRotate(event);
+                }
+                
+                scope.domElement.addEventListener('mousemove', onMouseMove, false);
+                scope.domElement.addEventListener('mouseup', onMouseUp, false);
+                scope.dispatchEvent(startEvent);
+            }
+            
+            function onMouseMove(event) {
+                if (scope.enabled === false) return;
+                event.preventDefault();
+                
+                if (state === STATE.ROTATE) {
+                    handleMouseMoveRotate(event);
+                }
+            }
+            
+            function onMouseUp(event) {
+                if (scope.enabled === false) return;
+                
+                scope.domElement.removeEventListener('mousemove', onMouseMove, false);
+                scope.domElement.removeEventListener('mouseup', onMouseUp, false);
+                scope.dispatchEvent(endEvent);
+                state = STATE.NONE;
+            }
+            
+            function onMouseWheel(event) {
+                if (scope.enabled === false || scope.enableZoom === false || (state !== STATE.NONE && state !== STATE.ROTATE)) return;
+                event.preventDefault();
+                event.stopPropagation();
+                handleMouseWheel(event);
+                scope.dispatchEvent(startEvent);
+                scope.dispatchEvent(endEvent);
+            }
+            
+            scope.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
+            scope.domElement.addEventListener('mousedown', onMouseDown, false);
+            scope.domElement.addEventListener('wheel', onMouseWheel, false);
+            
+            this.update();
+        };
+        
+        THREE.OrbitControls.prototype = Object.create(THREE.EventDispatcher.prototype);
+        THREE.OrbitControls.prototype.constructor = THREE.OrbitControls;
+
+        // Master Plan 3D Implementation
+        class MasterPlan3D {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.buildings = [];
+                this.currentPhase = 'phase1';
+                this.currentView = 'overview';
+                this.isInitialized = false;
+                this.animationId = null;
+                
+                // Performance monitoring
+                this.frameCount = 0;
+                this.lastTime = performance.now();
+                this.fps = 60;
+                
+                this.phases = {
+                    phase1: {
+                        buildings: ['admin', 'research', 'innovation'],
+                        cameraPosition: { x: 50, y: 30, z: 50 },
+                        color: 0x3b82f6,
+                        label: 'Foundation Phase'
+                    },
+                    phase2: {
+                        buildings: ['admin', 'research', 'innovation', 'office1', 'office2', 'manufacturing', 'conference'],
+                        cameraPosition: { x: 0, y: 40, z: 80 },
+                        color: 0xfbbf24,
+                        label: 'Expansion Phase'
+                    },
+                    phase3: {
+                        buildings: ['admin', 'research', 'innovation', 'office1', 'office2', 'manufacturing', 'conference', 'residential', 'transport', 'energy'],
+                        cameraPosition: { x: -30, y: 50, z: 60 },
+                        color: 0x10b981,
+                        label: 'Integration Phase'
+                    }
+                };
+
+                this.viewPositions = {
+                    overview: { x: 100, y: 80, z: 100, name: 'Overview' },
+                    aerial: { x: 0, y: 150, z: 0, name: 'Aerial View' },
+                    ground: { x: 80, y: 10, z: 40, name: 'Ground Level' }
+                };
+            }
+
+            async init() {
+                try {
+                    console.log('🚀 Initializing HEART 3D Master Plan...');
+                    
+                    await this.initThreeJS();
+                    await this.createScene();
+                    await this.createBuildings();
+                    
+                    this.setCameraView('overview');
+                    this.updatePhaseVisibility('phase1');
+                    this.setupEventListeners();
+                    this.startAnimation();
+                    
+                    this.isInitialized = true;
+                    console.log('✅ 3D Master Plan initialized successfully');
+                    
+                    this.hideLoading();
+                    
+                } catch (error) {
+                    console.error('❌ Failed to initialize 3D Master Plan:', error);
+                    this.showError('Failed to load 3D visualization. Please refresh the page.');
+                }
+            }
+
+            async initThreeJS() {
+                const container = document.getElementById('threejs-container');
+                if (!container) throw new Error('Container not found');
+
+                // Scene
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x87ceeb);
+                this.scene.fog = new THREE.Fog(0x87ceeb, 100, 300);
+
+                // Camera
+                const aspect = container.clientWidth / container.clientHeight;
+                this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+                
+                // Renderer with optimizations
+                this.renderer = new THREE.WebGLRenderer({ 
+                    antialias: window.devicePixelRatio < 2,
+                    powerPreference: 'high-performance'
+                });
+                
+                this.renderer.setSize(container.clientWidth, container.clientHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                container.appendChild(this.renderer.domElement);
+
+                // Controls
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.05;
+                this.controls.maxPolarAngle = Math.PI / 2.2;
+                this.controls.minDistance = 30;
+                this.controls.maxDistance = 200;
+                this.controls.autoRotate = false;
+                this.controls.autoRotateSpeed = 0.5;
+            }
+
+            async createScene() {
+                // Enhanced Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(50, 100, 50);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                directionalLight.shadow.camera.near = 0.5;
+                directionalLight.shadow.camera.far = 200;
+                directionalLight.shadow.camera.left = -100;
+                directionalLight.shadow.camera.right = 100;
+                directionalLight.shadow.camera.top = 100;
+                directionalLight.shadow.camera.bottom = -100;
+                this.scene.add(directionalLight);
+
+                // Enhanced Ground with texture-like appearance
+                const groundGeometry = new THREE.PlaneGeometry(200, 200, 20, 20);
+                const groundMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x4ade80,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                // Add environment elements
+                this.createEnvironment();
+            }
+
+            createEnvironment() {
+                // Add some decorative trees
+                const treePositions = [
+                    [-80, 0, -80], [80, 0, -80], [-80, 0, 80], [80, 0, 80]
+                ];
+
+                treePositions.forEach(pos => {
+                    const tree = this.createTree();
+                    tree.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(tree);
+                });
+            }
+
+            createTree() {
+                const group = new THREE.Group();
+                
+                // Trunk
+                const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 8, 8);
+                const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 4;
+                group.add(trunk);
+                
+                // Leaves
+                const leavesGeometry = new THREE.SphereGeometry(6, 8, 8);
+                const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x228b22 });
+                const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+                leaves.position.y = 10;
+                group.add(leaves);
+                
+                return group;
+            }
+
+            async createBuildings() {
+                const buildingConfigs = {
+                    admin: { 
+                        pos: [0, 0, 0], 
+                        size: [15, 20, 15], 
+                        color: 0x1e3a8a,
+                        name: 'Administration Center'
+                    },
+                    research: { 
+                        pos: [-30, 0, -20], 
+                        size: [20, 25, 20], 
+                        color: 0x3b82f6,
+                        name: 'Research & Development'
+                    },
+                    innovation: { 
+                        pos: [30, 0, -20], 
+                        size: [18, 22, 18], 
+                        color: 0x6366f1,
+                        name: 'Innovation Hub'
+                    },
+                    office1: { 
+                        pos: [-50, 0, 20], 
+                        size: [12, 30, 12], 
+                        color: 0xfbbf24,
+                        name: 'Office Complex A'
+                    },
+                    office2: { 
+                        pos: [50, 0, 20], 
+                        size: [12, 28, 12], 
+                        color: 0xf59e0b,
+                        name: 'Office Complex B'
+                    },
+                    manufacturing: { 
+                        pos: [0, 0, 50], 
+                        size: [25, 15, 20], 
+                        color: 0xd97706,
+                        name: 'Manufacturing Facility'
+                    },
+                    conference: { 
+                        pos: [-25, 0, 40], 
+                        size: [20, 12, 15], 
+                        color: 0xeab308,
+                        name: 'Conference Center'
+                    },
+                    residential: { 
+                        pos: [40, 0, 60], 
+                        size: [15, 35, 15], 
+                        color: 0x10b981,
+                        name: 'Residential Complex'
+                    },
+                    transport: { 
+                        pos: [-40, 0, 70], 
+                        size: [30, 8, 12], 
+                        color: 0x059669,
+                        name: 'Transportation Hub'
+                    },
+                    energy: { 
+                        pos: [20, 0, 80], 
+                        size: [10, 40, 10], 
+                        color: 0x047857,
+                        name: 'Energy Center'
+                    }
+                };
+
+                const buildingPromises = Object.entries(buildingConfigs).map(([id, config]) => {
+                    return this.createBuilding(id, config);
+                });
+
+                this.buildings = await Promise.all(buildingPromises);
+            }
+
+            async createBuilding(id, config) {
+                return new Promise((resolve) => {
+                    const geometry = new THREE.BoxGeometry(config.size[0], config.size[1], config.size[2]);
+                    
+                    // Enhanced materials with better lighting response
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: config.color,
+                        transparent: true,
+                        opacity: 0,
+                        shininess: 30,
+                        specular: 0x222222
+                    });
+                    
+                    const building = new THREE.Mesh(geometry, material);
+                    building.position.set(config.pos[0], config.size[1]/2, config.pos[2]);
+                    building.castShadow = true;
+                    building.receiveShadow = true;
+                    
+                    building.userData = { 
+                        id, 
+                        name: config.name,
+                        originalColor: config.color,
+                        material: material
+                    };
+                    
+                    this.scene.add(building);
+                    resolve(building);
+                });
+            }
+
+            updatePhaseVisibility(phase) {
+                if (!this.phases[phase] || this.currentPhase === phase) return;
+                
+                this.currentPhase = phase;
+                const phaseData = this.phases[phase];
+                
+                console.log(`🔄 Switching to ${phaseData.label}`);
+                
+                this.buildings.forEach(building => {
+                    const shouldShow = phaseData.buildings.includes(building.userData.id);
+                    this.animateBuildingVisibility(building, shouldShow);
+                });
+
+                this.animateCamera(phaseData.cameraPosition);
+            }
+
+            animateBuildingVisibility(building, show) {
+                const targetOpacity = show ? 1 : 0.1;
+                const material = building.userData.material;
+                const startOpacity = material.opacity;
+                
+                if (startOpacity === targetOpacity) return;
+                
+                let progress = 0;
+                const duration = 1000;
+                const startTime = performance.now();
+                
+                const animate = (currentTime) => {
+                    progress = Math.min((currentTime - startTime) / duration, 1);
+                    const easeProgress = this.easeInOutCubic(progress);
+                    
+                    const currentOpacity = THREE.MathUtils.lerp(startOpacity, targetOpacity, easeProgress);
+                    material.opacity = currentOpacity;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+
+            setCameraView(view) {
+                if (!this.viewPositions[view] || this.currentView === view) return;
+                
+                this.currentView = view;
+                const position = this.viewPositions[view];
+                this.animateCamera(position);
+                
+                console.log(`📷 Camera view: ${position.name}`);
+                
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
+            }
+
+            animateCamera(targetPosition) {
+                const startPosition = this.camera.position.clone();
+                const endPosition = new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z);
+                
+                let progress = 0;
+                const duration = 2000;
+                const startTime = performance.now();
+                
+                const animate = (currentTime) => {
+                    progress = Math.min((currentTime - startTime) / duration, 1);
+                    const easeProgress = this.easeInOutCubic(progress);
+                    
+                    this.camera.position.lerpVectors(startPosition, endPosition, easeProgress);
+                    this.camera.lookAt(0, 0, 0);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+
+            easeInOutCubic(t) {
+                return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+            }
+
+            updateFPS() {
+                this.frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - this.lastTime >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (currentTime - this.lastTime));
+                    this.frameCount = 0;
+                    this.lastTime = currentTime;
+                    
+                    const indicator = document.getElementById('performanceIndicator');
+                    if (indicator) {
+                        indicator.textContent = `${this.fps} FPS`;
+                        indicator.style.color = this.fps >= 30 ? '#10b981' : this.fps >= 20 ? '#f59e0b' : '#ef4444';
+                    }
+                }
+            }
+
+            startAnimation() {
+                const animate = () => {
+                    this.animationId = requestAnimationFrame(animate);
+                    
+                    this.updateFPS();
+                    this.controls.update();
+                    this.render();
+                };
+                
+                animate();
+            }
+
+            render() {
+                if (this.renderer && this.scene && this.camera) {
+                    this.renderer.render(this.scene, this.camera);
+                }
+            }
+
+            setupEventListeners() {
+                window.addEventListener('resize', () => this.handleResize());
+
+                // Timeline interaction
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                        
+                        const phase = item.dataset.phase;
+                        this.updatePhaseVisibility(phase);
+                    });
+                });
+
+                // View controls
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const view = btn.dataset.view;
+                        const action = btn.dataset.action;
+                        
+                        if (view) {
+                            this.setCameraView(view);
+                        } else if (action === 'auto-rotate') {
+                            this.controls.autoRotate = !this.controls.autoRotate;
+                            btn.classList.toggle('active');
+                        }
+                    });
+                });
+            }
+
+            handleResize() {
+                const container = document.getElementById('threejs-container');
+                if (!container || !this.camera || !this.renderer) return;
+                
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+                
+                console.log(`📐 Resized: ${width}x${height}`);
+            }
+
+            hideLoading() {
+                const overlay = document.getElementById('loadingOverlay');
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 600);
+                }
+            }
+
+            showError(message) {
+                const overlay = document.getElementById('loadingOverlay');
+                if (overlay) {
+                    overlay.innerHTML = `
+                        <div class="loading-content">
+                            <div style="color: #ef4444; font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
+                            <p style="color: white; text-align: center;">${message}</p>
+                            <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                Retry
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            const masterPlan = new MasterPlan3D();
+            await masterPlan.init();
+        });
+    </script>
+</body>
+</html>

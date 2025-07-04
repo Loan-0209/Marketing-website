@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-element {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            width: 100% !important;
+            height: 300px !important;
+            background: red !important;
+            border: 10px solid blue !important;
+            margin: 50px auto !important;
+            z-index: 9999 !important;
+        }
+        
+        .test-content {
+            color: white;
+            font-size: 50px;
+            text-align: center;
+            padding: 100px;
+            margin: 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Test Page</h1>
+    <p>This page should load quickly and show the red box below:</p>
+    
+    <div class="test-element">
+        <div class="test-content">
+            🏢 BUILDING PARALLAX HERE! 🏢
+        </div>
+    </div>
+    
+    <h2>About Section Test</h2>
+    <div id="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Vision</h3>
+                    <p>This is the vision text.</p>
+                    
+                    <div id="simple-about-parallax" class="test-element">
+                        <div class="test-content">
+                            🎯 ABOUT BUILDING HERE! 🎯
+                        </div>
+                    </div>
+                    
+                    <h3>Mission</h3>
+                    <p>This is the mission text.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        console.log("✅ Simple test page loaded");
+        console.log("Element found:", !!document.querySelector('#simple-about-parallax'));
+        
+        // Test element visibility
+        const element = document.querySelector('#simple-about-parallax');
+        if (element) {
+            const rect = element.getBoundingClientRect();
+            console.log("Element rect:", rect);
+            console.log("Element visible:", rect.width > 0 && rect.height > 0);
+        }
+        
+        // Manual test function
+        window.testElement = function() {
+            const element = document.querySelector('#simple-about-parallax');
+            if (element) {
+                element.style.background = 'lime';
+                element.scrollIntoView({ behavior: 'smooth' });
+                console.log("Element forced to lime and scrolled to");
+            }
+        };
+        
+        console.log("Use window.testElement() to test");
+    </script>
+</body>
+</html>

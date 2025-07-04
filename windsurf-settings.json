@@ -1,0 +1,15 @@
+{
+  "mcp.enabled": false,
+  "mcp.timeout": 60000,
+  "mcp.retries": 1,
+  "mcp.autoConnect": false,
+  "mcp.reconnectDelay": 10000,
+  "http.timeout": 120000,
+  "extensions.autoCheckUpdates": false,
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "manual",
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  "security.workspace.trust.banner": "never",
+  "security.workspace.trust.startupPrompt": "never",
+  "remote.downloadExtensionsLocally": false
+}

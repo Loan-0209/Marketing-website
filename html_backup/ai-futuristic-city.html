@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Futuristic City - Living Ecosystem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Arial', sans-serif;
+            background: radial-gradient(ellipse at center, #0f0f23 0%, #000015 100%);
+            overflow: hidden;
+            color: #00ffff;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 15, 35, 0.9);
+            border: 2px solid #00ffff;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        #stats {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 15, 35, 0.9);
+            border: 2px solid #00ff00;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        #building-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.2), rgba(138, 43, 226, 0.2));
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 90px;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.4), rgba(138, 43, 226, 0.4));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(45deg, #00ffff, #8a2be2);
+            color: #000015;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            text-align: center;
+            background: rgba(0, 15, 35, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .ai-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: aiSpin 1s linear infinite;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .ai-spinner::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-top: 2px solid #8a2be2;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: aiSpin 0.5s linear infinite reverse;
+        }
+
+        @keyframes aiSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #00ffff;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        h3 {
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-size: 14px;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+            color: #00ff00;
+        }
+
+        .feature-item {
+            margin: 5px 0;
+            color: #00ddff;
+            font-size: 12px;
+        }
+
+        .feature-item::before {
+            content: "◆ ";
+            color: #00ffff;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="ai-city-canvas"></canvas>
+        
+        <div id="loading">
+            <div class="ai-spinner"></div>
+            <h2>Initializing AI Ecosystem...</h2>
+            <p>Building neural networks...</p>
+        </div>
+
+        <div id="info-panel">
+            <h2>AI City System</h2>
+            <div class="feature-item">Neural Network Architecture</div>
+            <div class="feature-item">Interconnected Sky Bridges</div>
+            <div class="feature-item">Data Flow Visualization</div>
+            <div class="feature-item">Morphing Geometries</div>
+            <div class="feature-item">Holographic Projections</div>
+            <div class="feature-item">Living Building Ecosystem</div>
+        </div>
+
+        <div id="controls">
+            <button class="control-btn" id="neural-mode">Neural View</button>
+            <button class="control-btn" id="data-flow">Data Flow</button>
+            <button class="control-btn" id="morph-mode">Morph Mode</button>
+            <button class="control-btn" id="assembly-mode">Assembly</button>
+        </div>
+
+        <div id="building-controls">
+            <button class="control-btn" id="add-building">Add Node</button>
+            <button class="control-btn" id="connect-all">Connect All</button>
+            <button class="control-btn" id="reset-city">Reset</button>
+        </div>
+
+        <div id="stats">
+            <h3>System Status</h3>
+            <div class="stat-item">
+                <span>Active Nodes:</span>
+                <span id="node-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Connections:</span>
+                <span id="connection-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Data Streams:</span>
+                <span id="stream-count">0</span>
+            </div>
+            <div class="stat-item">
+                <span>FPS:</span>
+                <span id="fps-counter">--</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // AI Building Architecture System
+        class AIBuildingSystem {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.buildings = [];
+                this.connections = [];
+                this.dataStreams = [];
+                this.particleSystems = [];
+                
+                this.modes = {
+                    neural: false,
+                    dataFlow: true,
+                    morph: false,
+                    assembly: false
+                };
+                
+                this.stats = {
+                    nodeCount: 0,
+                    connectionCount: 0,
+                    streamCount: 0,
+                    fps: 0
+                };
+                
+                this.time = 0;
+                this.fpsCounter = 0;
+                this.lastTime = performance.now();
+                
+                this.init();
+            }
+
+            init() {
+                this.setupScene();
+                this.setupLighting();
+                this.setupCamera();
+                this.setupRenderer();
+                this.setupControls();
+                this.createGround();
+                this.generateAICity();
+                this.setupEventListeners();
+                this.animate();
+                this.hideLoading();
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x000015);
+                this.scene.fog = new THREE.Fog(0x000015, 50, 400);
+            }
+
+            setupLighting() {
+                // Ambient lighting for AI atmosphere
+                this.ambientLight = new THREE.AmbientLight(0x001122, 0.3);
+                this.scene.add(this.ambientLight);
+
+                // Main directional light
+                this.mainLight = new THREE.DirectionalLight(0x00ffff, 0.8);
+                this.mainLight.position.set(50, 100, 50);
+                this.mainLight.castShadow = true;
+                this.mainLight.shadow.mapSize.width = 2048;
+                this.mainLight.shadow.mapSize.height = 2048;
+                this.scene.add(this.mainLight);
+
+                // Accent lights for AI glow
+                const accentLight1 = new THREE.PointLight(0x8a2be2, 0.5, 100);
+                accentLight1.position.set(-30, 40, -30);
+                this.scene.add(accentLight1);
+
+                const accentLight2 = new THREE.PointLight(0x00ff00, 0.4, 80);
+                accentLight2.position.set(30, 30, 30);
+                this.scene.add(accentLight2);
+            }
+
+            setupCamera() {
+                this.camera = new THREE.PerspectiveCamera(
+                    70,
+                    window.innerWidth / window.innerHeight,
+                    1,
+                    1000
+                );
+                this.camera.position.set(80, 60, 80);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            setupRenderer() {
+                const canvas = document.getElementById('ai-city-canvas');
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas, 
+                    antialias: true,
+                    alpha: true 
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            }
+
+            setupControls() {
+                this.mouseDown = false;
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.cameraRotationX = 0;
+                this.cameraRotationY = 0;
+                this.cameraDistance = 120;
+
+                const canvas = this.renderer.domElement;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    this.mouseDown = true;
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    if (!this.mouseDown) return;
+                    
+                    const deltaX = e.clientX - this.mouseX;
+                    const deltaY = e.clientY - this.mouseY;
+                    
+                    this.cameraRotationY += deltaX * 0.01;
+                    this.cameraRotationX += deltaY * 0.01;
+                    this.cameraRotationX = Math.max(-Math.PI/2, Math.min(Math.PI/2, this.cameraRotationX));
+                    
+                    this.updateCameraPosition();
+                    
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mouseup', () => {
+                    this.mouseDown = false;
+                });
+
+                canvas.addEventListener('wheel', (e) => {
+                    this.cameraDistance += e.deltaY * 0.1;
+                    this.cameraDistance = Math.max(30, Math.min(200, this.cameraDistance));
+                    this.updateCameraPosition();
+                });
+            }
+
+            updateCameraPosition() {
+                const x = Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                const y = Math.sin(this.cameraRotationX) * this.cameraDistance + 30;
+                const z = Math.sin(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                
+                this.camera.position.set(x, y, z);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            createGround() {
+                // AI-inspired ground with circuit patterns
+                const groundGeometry = new THREE.PlaneGeometry(200, 200, 50, 50);
+                const vertices = groundGeometry.attributes.position.array;
+                
+                // Create circuit-like elevation patterns
+                for (let i = 0; i < vertices.length; i += 3) {
+                    const x = vertices[i];
+                    const z = vertices[i + 2];
+                    vertices[i + 1] = Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.5;
+                }
+                
+                const groundMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0x001122,
+                    emissive: 0x000511,
+                    shininess: 100,
+                    wireframe: false
+                });
+                
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                // Add circuit pattern overlay
+                this.addCircuitPattern();
+            }
+
+            addCircuitPattern() {
+                const circuitGroup = new THREE.Group();
+                
+                for (let i = 0; i < 20; i++) {
+                    const lineGeometry = new THREE.BufferGeometry();
+                    const points = [];
+                    
+                    const startX = (Math.random() - 0.5) * 180;
+                    const startZ = (Math.random() - 0.5) * 180;
+                    const endX = startX + (Math.random() - 0.5) * 40;
+                    const endZ = startZ + (Math.random() - 0.5) * 40;
+                    
+                    points.push(new THREE.Vector3(startX, 0.1, startZ));
+                    points.push(new THREE.Vector3(endX, 0.1, endZ));
+                    
+                    lineGeometry.setFromPoints(points);
+                    
+                    const lineMaterial = new THREE.LineBasicMaterial({ 
+                        color: 0x00ffff,
+                        transparent: true,
+                        opacity: 0.3
+                    });
+                    
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    circuitGroup.add(line);
+                }
+                
+                this.scene.add(circuitGroup);
+            }
+
+            generateAICity() {
+                const buildingPositions = [
+                    { x: -40, z: -40, type: 'neural' },
+                    { x: 40, z: -40, type: 'processor' },
+                    { x: 40, z: 40, type: 'memory' },
+                    { x: -40, z: 40, type: 'quantum' },
+                    { x: 0, z: 0, type: 'core' },
+                    { x: -60, z: 0, type: 'network' },
+                    { x: 60, z: 0, type: 'data' },
+                    { x: 0, z: -60, type: 'sensor' },
+                    { x: 0, z: 60, type: 'output' }
+                ];
+
+                buildingPositions.forEach(pos => {
+                    const building = this.createAIBuilding(pos.type, pos.x, pos.z);
+                    this.buildings.push(building);
+                    this.scene.add(building.group);
+                });
+
+                this.stats.nodeCount = this.buildings.length;
+                this.createInterconnections();
+                this.updateStats();
+            }
+
+            createAIBuilding(type, x, z) {
+                const building = {
+                    group: new THREE.Group(),
+                    type: type,
+                    position: { x, z },
+                    components: [],
+                    animations: []
+                };
+
+                const baseHeight = 15 + Math.random() * 25;
+                building.group.position.set(x, 0, z);
+
+                switch(type) {
+                    case 'neural':
+                        this.createNeuralTower(building, baseHeight);
+                        break;
+                    case 'processor':
+                        this.createProcessorCore(building, baseHeight);
+                        break;
+                    case 'memory':
+                        this.createMemoryMatrix(building, baseHeight);
+                        break;
+                    case 'quantum':
+                        this.createQuantumSphere(building, baseHeight);
+                        break;
+                    case 'core':
+                        this.createCoreHub(building, baseHeight * 1.5);
+                        break;
+                    case 'network':
+                        this.createNetworkNode(building, baseHeight);
+                        break;
+                    case 'data':
+                        this.createDataSilo(building, baseHeight);
+                        break;
+                    case 'sensor':
+                        this.createSensorArray(building, baseHeight);
+                        break;
+                    case 'output':
+                        this.createOutputTerminal(building, baseHeight);
+                        break;
+                }
+
+                return building;
+            }
+
+            createNeuralTower(building, height) {
+                // Main tower with neural network pattern
+                const towerGeometry = new THREE.CylinderGeometry(2, 4, height, 12);
+                const towerMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00aaff,
+                    emissive: 0x001144,
+                    shininess: 100,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const tower = new THREE.Mesh(towerGeometry, towerMaterial);
+                tower.position.y = height / 2;
+                tower.castShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+
+                // Neural nodes around the tower
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2;
+                    const radius = 6;
+                    const nodeHeight = (i / 8) * height + 5;
+                    
+                    const nodeGeometry = new THREE.SphereGeometry(0.5, 12, 8);
+                    const nodeMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x003333
+                    });
+                    
+                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                    node.position.set(
+                        Math.cos(angle) * radius,
+                        nodeHeight,
+                        Math.sin(angle) * radius
+                    );
+                    
+                    building.group.add(node);
+                    building.components.push(node);
+                }
+
+                // Top neural dome
+                const domeGeometry = new THREE.SphereGeometry(3, 16, 8);
+                const domeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.4,
+                    emissive: 0x002244
+                });
+                
+                const dome = new THREE.Mesh(domeGeometry, domeMaterial);
+                dome.position.y = height + 3;
+                building.group.add(dome);
+                building.components.push(dome);
+            }
+
+            createProcessorCore(building, height) {
+                // Hexagonal processor design
+                const coreGeometry = new THREE.CylinderGeometry(5, 5, height, 6);
+                const coreMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x8a2be2,
+                    emissive: 0x220544,
+                    shininess: 80
+                });
+                
+                const core = new THREE.Mesh(coreGeometry, coreMaterial);
+                core.position.y = height / 2;
+                building.group.add(core);
+                building.components.push(core);
+
+                // Processing units on each face
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const unitGeometry = new THREE.BoxGeometry(1, height * 0.8, 0.5);
+                    const unitMaterial = new THREE.MeshPhongMaterial({
+                        color: 0xff00ff,
+                        emissive: 0x330033
+                    });
+                    
+                    const unit = new THREE.Mesh(unitGeometry, unitMaterial);
+                    unit.position.set(
+                        Math.cos(angle) * 5.5,
+                        height / 2,
+                        Math.sin(angle) * 5.5
+                    );
+                    unit.rotation.y = angle;
+                    
+                    building.group.add(unit);
+                    building.components.push(unit);
+                }
+            }
+
+            createMemoryMatrix(building, height) {
+                // Stacked memory blocks
+                const blockHeight = height / 8;
+                
+                for (let i = 0; i < 8; i++) {
+                    const blockGeometry = new THREE.BoxGeometry(6, blockHeight, 6);
+                    const blockMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x00ff00,
+                        emissive: 0x001100,
+                        shininess: 100
+                    });
+                    
+                    const block = new THREE.Mesh(blockGeometry, blockMaterial);
+                    block.position.y = i * blockHeight + blockHeight / 2;
+                    building.group.add(block);
+                    building.components.push(block);
+
+                    // Memory cells on block faces
+                    for (let j = 0; j < 4; j++) {
+                        const angle = (j / 4) * Math.PI * 2;
+                        const cellGeometry = new THREE.BoxGeometry(0.2, blockHeight * 0.8, 0.2);
+                        const cellMaterial = new THREE.MeshBasicMaterial({
+                            color: 0x00ffff,
+                            emissive: 0x003333
+                        });
+                        
+                        const cell = new THREE.Mesh(cellGeometry, cellMaterial);
+                        cell.position.set(
+                            Math.cos(angle) * 3.2,
+                            i * blockHeight + blockHeight / 2,
+                            Math.sin(angle) * 3.2
+                        );
+                        
+                        building.group.add(cell);
+                        building.components.push(cell);
+                    }
+                }
+            }
+
+            createQuantumSphere(building, height) {
+                // Central quantum sphere
+                const sphereGeometry = new THREE.SphereGeometry(4, 20, 16);
+                const sphereMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xffd700,
+                    emissive: 0x332200,
+                    shininess: 120,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                sphere.position.y = height / 2;
+                building.group.add(sphere);
+                building.components.push(sphere);
+
+                // Quantum rings
+                for (let i = 0; i < 3; i++) {
+                    const ringGeometry = new THREE.TorusGeometry(6 + i * 2, 0.3, 8, 20);
+                    const ringMaterial = new THREE.MeshPhongMaterial({
+                        color: 0xffff00,
+                        emissive: 0x444400
+                    });
+                    
+                    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                    ring.position.y = height / 2;
+                    ring.rotation.x = i * Math.PI / 3;
+                    ring.rotation.z = i * Math.PI / 4;
+                    
+                    building.group.add(ring);
+                    building.components.push(ring);
+                }
+            }
+
+            createCoreHub(building, height) {
+                // Central processing hub - most complex
+                const hubGeometry = new THREE.ConeGeometry(8, height, 8);
+                const hubMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00ffff,
+                    emissive: 0x003344,
+                    shininess: 150
+                });
+                
+                const hub = new THREE.Mesh(hubGeometry, hubMaterial);
+                hub.position.y = height / 2;
+                building.group.add(hub);
+                building.components.push(hub);
+
+                // Surrounding data towers
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const towerGeometry = new THREE.CylinderGeometry(1, 1.5, height * 0.6, 6);
+                    const towerMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x8a2be2,
+                        emissive: 0x220544
+                    });
+                    
+                    const tower = new THREE.Mesh(towerGeometry, towerMaterial);
+                    tower.position.set(
+                        Math.cos(angle) * 12,
+                        height * 0.3,
+                        Math.sin(angle) * 12
+                    );
+                    
+                    building.group.add(tower);
+                    building.components.push(tower);
+                }
+            }
+
+            createNetworkNode(building, height) {
+                // Network connection hub
+                const nodeGeometry = new THREE.OctahedronGeometry(4);
+                const nodeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xff6600,
+                    emissive: 0x331100,
+                    shininess: 90
+                });
+                
+                const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                node.position.y = height / 2;
+                building.group.add(node);
+                building.components.push(node);
+
+                // Network spikes
+                const directions = [
+                    { x: 1, y: 0, z: 0 }, { x: -1, y: 0, z: 0 },
+                    { x: 0, y: 1, z: 0 }, { x: 0, y: -1, z: 0 },
+                    { x: 0, y: 0, z: 1 }, { x: 0, y: 0, z: -1 }
+                ];
+                
+                directions.forEach(dir => {
+                    const spikeGeometry = new THREE.ConeGeometry(0.5, 3, 6);
+                    const spikeMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x002244
+                    });
+                    
+                    const spike = new THREE.Mesh(spikeGeometry, spikeMaterial);
+                    spike.position.set(
+                        dir.x * 5,
+                        height / 2 + dir.y * 5,
+                        dir.z * 5
+                    );
+                    
+                    if (dir.x !== 0) spike.rotation.z = dir.x > 0 ? -Math.PI/2 : Math.PI/2;
+                    if (dir.z !== 0) spike.rotation.x = dir.z > 0 ? Math.PI/2 : -Math.PI/2;
+                    if (dir.y < 0) spike.rotation.z = Math.PI;
+                    
+                    building.group.add(spike);
+                    building.components.push(spike);
+                });
+            }
+
+            createDataSilo(building, height) {
+                // Data storage silo
+                const siloGeometry = new THREE.CylinderGeometry(4, 4, height, 16);
+                const siloMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00cc88,
+                    emissive: 0x002211,
+                    shininess: 110
+                });
+                
+                const silo = new THREE.Mesh(siloGeometry, siloMaterial);
+                silo.position.y = height / 2;
+                building.group.add(silo);
+                building.components.push(silo);
+
+                // Data stream indicators
+                for (let i = 0; i < 12; i++) {
+                    const indicatorGeometry = new THREE.BoxGeometry(0.3, height * 0.9, 0.3);
+                    const indicatorMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x003333
+                    });
+                    
+                    const indicator = new THREE.Mesh(indicatorGeometry, indicatorMaterial);
+                    const angle = (i / 12) * Math.PI * 2;
+                    indicator.position.set(
+                        Math.cos(angle) * 4.3,
+                        height / 2,
+                        Math.sin(angle) * 4.3
+                    );
+                    
+                    building.group.add(indicator);
+                    building.components.push(indicator);
+                }
+            }
+
+            createSensorArray(building, height) {
+                // Sensor array tower
+                const arrayGeometry = new THREE.CylinderGeometry(3, 5, height, 8);
+                const arrayMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x9966cc,
+                    emissive: 0x221144,
+                    shininess: 95
+                });
+                
+                const array = new THREE.Mesh(arrayGeometry, arrayMaterial);
+                array.position.y = height / 2;
+                building.group.add(array);
+                building.components.push(array);
+
+                // Sensor dishes
+                for (let i = 0; i < 4; i++) {
+                    const dishGeometry = new THREE.SphereGeometry(1.5, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2);
+                    const dishMaterial = new THREE.MeshPhongMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x002244
+                    });
+                    
+                    const dish = new THREE.Mesh(dishGeometry, dishMaterial);
+                    const angle = (i / 4) * Math.PI * 2;
+                    dish.position.set(
+                        Math.cos(angle) * 6,
+                        height * 0.8,
+                        Math.sin(angle) * 6
+                    );
+                    dish.lookAt(0, height * 0.8, 0);
+                    
+                    building.group.add(dish);
+                    building.components.push(dish);
+                }
+            }
+
+            createOutputTerminal(building, height) {
+                // Output terminal
+                const terminalGeometry = new THREE.BoxGeometry(6, height, 6);
+                const terminalMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xee1177,
+                    emissive: 0x330011,
+                    shininess: 85
+                });
+                
+                const terminal = new THREE.Mesh(terminalGeometry, terminalMaterial);
+                terminal.position.y = height / 2;
+                building.group.add(terminal);
+                building.components.push(terminal);
+
+                // Output screens
+                for (let i = 0; i < 4; i++) {
+                    const screenGeometry = new THREE.PlaneGeometry(4, 3);
+                    const screenMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ffff,
+                        emissive: 0x004444
+                    });
+                    
+                    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+                    const angle = (i / 4) * Math.PI * 2;
+                    screen.position.set(
+                        Math.cos(angle) * 3.1,
+                        height / 2,
+                        Math.sin(angle) * 3.1
+                    );
+                    screen.rotation.y = angle + Math.PI;
+                    
+                    building.group.add(screen);
+                    building.components.push(screen);
+                }
+            }
+
+            createInterconnections() {
+                // Create sky bridges and data connections between buildings
+                this.connections = [];
+                
+                for (let i = 0; i < this.buildings.length; i++) {
+                    for (let j = i + 1; j < this.buildings.length; j++) {
+                        const building1 = this.buildings[i];
+                        const building2 = this.buildings[j];
+                        
+                        const distance = Math.sqrt(
+                            Math.pow(building1.position.x - building2.position.x, 2) +
+                            Math.pow(building1.position.z - building2.position.z, 2)
+                        );
+                        
+                        // Only connect nearby buildings or important connections
+                        if (distance < 60 || building1.type === 'core' || building2.type === 'core') {
+                            this.createConnection(building1, building2);
+                        }
+                    }
+                }
+                
+                this.stats.connectionCount = this.connections.length;
+            }
+
+            createConnection(building1, building2) {
+                const connection = {
+                    from: building1,
+                    to: building2,
+                    bridge: null,
+                    dataStream: null
+                };
+
+                // Create sky bridge
+                const bridgeGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 8);
+                const bridgeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x00aaff,
+                    emissive: 0x001122,
+                    transparent: true,
+                    opacity: 0.7
+                });
+
+                const midX = (building1.position.x + building2.position.x) / 2;
+                const midZ = (building1.position.z + building2.position.z) / 2;
+                const distance = Math.sqrt(
+                    Math.pow(building2.position.x - building1.position.x, 2) +
+                    Math.pow(building2.position.z - building1.position.z, 2)
+                );
+
+                const bridge = new THREE.Mesh(bridgeGeometry, bridgeMaterial);
+                bridge.position.set(midX, 20, midZ);
+                bridge.scale.y = distance;
+                bridge.rotation.y = Math.atan2(
+                    building2.position.z - building1.position.z,
+                    building2.position.x - building1.position.x
+                ) - Math.PI / 2;
+                bridge.rotation.z = Math.PI / 2;
+
+                this.scene.add(bridge);
+                connection.bridge = bridge;
+
+                // Create data stream particles
+                this.createDataStream(building1.position, building2.position, connection);
+                
+                this.connections.push(connection);
+            }
+
+            createDataStream(pos1, pos2, connection) {
+                // Particle system for data flow
+                const particleCount = 20;
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+
+                for (let i = 0; i < particleCount; i++) {
+                    const progress = i / particleCount;
+                    positions[i * 3] = pos1.x + (pos2.x - pos1.x) * progress;
+                    positions[i * 3 + 1] = 15 + Math.sin(progress * Math.PI) * 5;
+                    positions[i * 3 + 2] = pos1.z + (pos2.z - pos1.z) * progress;
+
+                    colors[i * 3] = 0;     // R
+                    colors[i * 3 + 1] = 1; // G (cyan)
+                    colors[i * 3 + 2] = 1; // B
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+                const material = new THREE.PointsMaterial({
+                    size: 0.5,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    blending: THREE.AdditiveBlending
+                });
+
+                const particles = new THREE.Points(geometry, material);
+                this.scene.add(particles);
+                
+                connection.dataStream = particles;
+                this.dataStreams.push({ particles, connection, offset: 0 });
+                this.stats.streamCount++;
+            }
+
+            setupEventListeners() {
+                // Neural View Mode
+                document.getElementById('neural-mode').addEventListener('click', (e) => {
+                    this.modes.neural = !this.modes.neural;
+                    e.target.classList.toggle('active');
+                    this.updateNeuralView();
+                });
+
+                // Data Flow Toggle
+                document.getElementById('data-flow').addEventListener('click', (e) => {
+                    this.modes.dataFlow = !this.modes.dataFlow;
+                    e.target.classList.toggle('active');
+                    this.toggleDataFlow();
+                });
+
+                // Morph Mode
+                document.getElementById('morph-mode').addEventListener('click', (e) => {
+                    this.modes.morph = !this.modes.morph;
+                    e.target.classList.toggle('active');
+                    this.toggleMorphMode();
+                });
+
+                // Assembly Mode
+                document.getElementById('assembly-mode').addEventListener('click', (e) => {
+                    this.modes.assembly = !this.modes.assembly;
+                    e.target.classList.toggle('active');
+                    this.toggleAssemblyMode();
+                });
+
+                // Add Building
+                document.getElementById('add-building').addEventListener('click', () => {
+                    this.addRandomBuilding();
+                });
+
+                // Connect All
+                document.getElementById('connect-all').addEventListener('click', () => {
+                    this.connectAllBuildings();
+                });
+
+                // Reset City
+                document.getElementById('reset-city').addEventListener('click', () => {
+                    this.resetCity();
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            updateNeuralView() {
+                // Toggle wireframe mode for neural network visualization
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        if (component.material) {
+                            component.material.wireframe = this.modes.neural;
+                        }
+                    });
+                });
+            }
+
+            toggleDataFlow() {
+                this.dataStreams.forEach(stream => {
+                    stream.particles.visible = this.modes.dataFlow;
+                });
+            }
+
+            toggleMorphMode() {
+                // Enable/disable morphing animations
+                this.buildings.forEach(building => {
+                    building.morphing = this.modes.morph;
+                });
+            }
+
+            toggleAssemblyMode() {
+                if (this.modes.assembly) {
+                    this.startAssemblyAnimation();
+                } else {
+                    this.stopAssemblyAnimation();
+                }
+            }
+
+            startAssemblyAnimation() {
+                // Animate buildings growing/assembling
+                this.buildings.forEach((building, index) => {
+                    building.components.forEach(component => {
+                        component.scale.set(0.1, 0.1, 0.1);
+                        
+                        const targetScale = { x: 1, y: 1, z: 1 };
+                        const startTime = performance.now() + index * 200;
+                        
+                        const animate = () => {
+                            const elapsed = performance.now() - startTime;
+                            const progress = Math.min(elapsed / 1000, 1);
+                            
+                            if (progress > 0) {
+                                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                                component.scale.setScalar(0.1 + (1 - 0.1) * easeProgress);
+                            }
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(animate);
+                            }
+                        };
+                        
+                        if (elapsed > 0) animate();
+                    });
+                });
+            }
+
+            stopAssemblyAnimation() {
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        component.scale.set(1, 1, 1);
+                    });
+                });
+            }
+
+            addRandomBuilding() {
+                const types = ['neural', 'processor', 'memory', 'quantum', 'network', 'data', 'sensor', 'output'];
+                const randomType = types[Math.floor(Math.random() * types.length)];
+                const x = (Math.random() - 0.5) * 120;
+                const z = (Math.random() - 0.5) * 120;
+                
+                const building = this.createAIBuilding(randomType, x, z);
+                this.buildings.push(building);
+                this.scene.add(building.group);
+                
+                this.stats.nodeCount = this.buildings.length;
+                this.updateStats();
+            }
+
+            connectAllBuildings() {
+                // Clear existing connections
+                this.connections.forEach(conn => {
+                    if (conn.bridge) this.scene.remove(conn.bridge);
+                    if (conn.dataStream) this.scene.remove(conn.dataStream);
+                });
+                this.connections = [];
+                this.dataStreams = [];
+                
+                // Reconnect all buildings
+                this.createInterconnections();
+                this.updateStats();
+            }
+
+            resetCity() {
+                // Clear everything and regenerate
+                this.buildings.forEach(building => {
+                    this.scene.remove(building.group);
+                });
+                this.connections.forEach(conn => {
+                    if (conn.bridge) this.scene.remove(conn.bridge);
+                    if (conn.dataStream) this.scene.remove(conn.dataStream);
+                });
+                
+                this.buildings = [];
+                this.connections = [];
+                this.dataStreams = [];
+                
+                this.generateAICity();
+            }
+
+            updateStats() {
+                document.getElementById('node-count').textContent = this.stats.nodeCount;
+                document.getElementById('connection-count').textContent = this.stats.connectionCount;
+                document.getElementById('stream-count').textContent = this.stats.streamCount;
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                this.time = performance.now() * 0.001;
+                
+                // Update FPS counter
+                this.fpsCounter++;
+                const currentTime = performance.now();
+                const deltaTime = currentTime - this.lastTime;
+                
+                if (deltaTime >= 1000) {
+                    this.stats.fps = Math.round(this.fpsCounter * 1000 / deltaTime);
+                    document.getElementById('fps-counter').textContent = this.stats.fps;
+                    this.fpsCounter = 0;
+                    this.lastTime = currentTime;
+                }
+
+                // Animate building components
+                this.buildings.forEach((building, buildingIndex) => {
+                    building.components.forEach((component, componentIndex) => {
+                        // Subtle pulsing effect
+                        const pulseIntensity = 0.05;
+                        const pulse = Math.sin(this.time * 2 + buildingIndex + componentIndex) * pulseIntensity;
+                        
+                        if (component.material && component.material.emissive) {
+                            const originalEmissive = component.material.emissive.clone();
+                            component.material.emissive.multiplyScalar(1 + pulse);
+                        }
+                        
+                        // Morphing mode transformations
+                        if (this.modes.morph && building.morphing) {
+                            component.rotation.y += 0.005;
+                            const scale = 1 + Math.sin(this.time + componentIndex) * 0.1;
+                            component.scale.setScalar(scale);
+                        }
+                    });
+                });
+
+                // Animate data streams
+                this.dataStreams.forEach(stream => {
+                    if (!stream.particles.visible) return;
+                    
+                    stream.offset += 0.02;
+                    const positions = stream.particles.geometry.attributes.position.array;
+                    const colors = stream.particles.geometry.attributes.color.array;
+                    
+                    for (let i = 0; i < positions.length / 3; i++) {
+                        const wave = Math.sin(stream.offset + i * 0.3) * 0.5 + 0.5;
+                        colors[i * 3 + 1] = wave; // Green channel for pulsing effect
+                        colors[i * 3 + 2] = wave; // Blue channel
+                    }
+                    
+                    stream.particles.geometry.attributes.color.needsUpdate = true;
+                });
+
+                // Animate connections
+                this.connections.forEach(conn => {
+                    if (conn.bridge && conn.bridge.material) {
+                        const pulse = Math.sin(this.time * 3) * 0.2 + 0.8;
+                        conn.bridge.material.opacity = pulse * 0.7;
+                    }
+                });
+
+                // Auto-rotate camera if no mouse interaction
+                if (!this.mouseDown) {
+                    this.cameraRotationY += 0.002;
+                    this.updateCameraPosition();
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            hideLoading() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Initialize the AI city when page loads
+        window.addEventListener('load', () => {
+            new AIBuildingSystem();
+        });
+    </script>
+</body>
+</html>

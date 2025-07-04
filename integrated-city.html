@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Khu Công Nghệ Cao AI | 3D Campus Visualization</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="HEART Technology Park - Hệ sinh thái AI hoàn chỉnh 2000 hecta tại Việt Nam với mô hình 3D chi tiết.">
+    <meta name="keywords" content="HEART, AI Vietnam, technology park, khu công nghệ cao, trí tuệ nhân tạo, 3D visualization">
+    
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+        }
+        canvas { 
+            display: block; 
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 400px;
+            max-height: 400px;
+            overflow: auto;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        #stats {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        .success {
+            color: #4CAF50;
+        }
+        .warning {
+            color: #FFC107;
+        }
+        .error {
+            color: #F44336;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* Loading Screen */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            flex-direction: column;
+        }
+        
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 18px;
+            margin-top: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(30, 58, 138, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            color: #fbbf24;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #fbbf24;
+        }
+        
+        .back-to-site {
+            background: #fbbf24;
+            color: #1e3a8a;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-site:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+        }
+    </style>
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- Our Diagnostic Loader with timestamp to avoid cache -->
+    <script>
+        const scriptElement = document.createElement('script');
+        scriptElement.src = `diagnostic-model-loader.js?v=${new Date().getTime()}`;
+        document.head.appendChild(scriptElement);
+    </script>
+    
+    <!-- Force Render Loop with timestamp to avoid cache -->
+    <script>
+        const renderLoopScript = document.createElement('script');
+        renderLoopScript.src = `force-render-loop.js?v=${new Date().getTime()}`;
+        document.head.appendChild(renderLoopScript);
+    </script>
+    
+    <!-- Cache Clearer Utility -->
+    <script src="cache-clearer.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+        <div class="loading-text">Đang tải HEART Technology Park 3D...</div>
+        <div class="loading-text" style="font-size: 14px; margin-top: 5px; color: #aaa;">Xây dựng tương lai công nghệ Việt Nam</div>
+    </div>
+    
+    <!-- Header -->
+    <div class="header">
+        <a href="#" class="logo">🚀 HEART</a>
+        <div class="nav-links">
+            <a href="#" class="nav-link" id="toggleWireframe">Bật/Tắt Wireframe</a>
+            <a href="#" class="nav-link" id="toggleSolid">Chuyển sang SOLID</a>
+            <a href="#" class="nav-link" id="toggleReflections">Bật/Tắt Phản chiếu</a>
+            <a href="index.html" class="back-to-site">Trở về Trang Chính</a>
+        </div>
+    </div>
+    
+    <div id="info">Khởi tạo mô hình 3D HEART Technology Park...</div>
+    <div id="stats"></div>
+    
+    <script>
+        // Debug log function
+        function log(message, type = 'info') {
+            const infoDiv = document.getElementById('info');
+            const classType = type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'success');
+            infoDiv.innerHTML += `<div class="${classType}">${message}</div>`;
+            infoDiv.scrollTop = infoDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        // Update stats display
+        function updateStats(stats) {
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <h3>Thống kê</h3>
+                <div>Mô hình đã tải: <span class="success">${stats.loaded}</span></div>
+                <div>Mô hình thất bại: <span class="error">${stats.failed}</span></div>
+                <div>Tổng số mô hình: ${stats.total}</div>
+                <div>Đối tượng trong cảnh: ${stats.sceneObjects}</div>
+                <div>Mô hình trong bộ nhớ đệm: ${stats.cachedModels || 0}</div>
+            `;
+        }
+        
+        // Main variables
+        let scene, camera, renderer, controls, modelLoader;
+        let forceRenderActive = false;
+        let cubeCamera, cubeRenderTarget;
+        let reflectionsEnabled = true;
+        
+        // Initialize Three.js scene
+        function init() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Light blue sky
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(20, 20, 20);
+            
+            // Create renderer with antialias for better quality
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+            
+            // Create orbit controls for camera
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Add ambient light for base illumination
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            // Add directional light for shadows
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(50, 50, 50);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.near = 0.5;
+            directionalLight.shadow.camera.far = 500;
+            directionalLight.shadow.camera.left = -100;
+            directionalLight.shadow.camera.right = 100;
+            directionalLight.shadow.camera.top = 100;
+            directionalLight.shadow.camera.bottom = -100;
+            scene.add(directionalLight);
+            
+            // Add hemisphere light for natural sky/ground lighting
+            const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x444444, 0.8);
+            scene.add(hemisphereLight);
+            
+            // Create ground
+            const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+            const groundMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0x1a5e1a,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Add grid helper for reference
+            const gridHelper = new THREE.GridHelper(100, 100, 0x444444, 0x888888);
+            gridHelper.position.y = 0.01; // Slightly above ground to avoid z-fighting
+            scene.add(gridHelper);
+            
+            // Create cube camera for reflections
+            cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+                format: THREE.RGBFormat,
+                generateMipmaps: true,
+                minFilter: THREE.LinearMipmapLinearFilter
+            });
+            
+            cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget);
+            cubeCamera.position.set(0, 10, 0);
+            scene.add(cubeCamera);
+            
+            // Create model loader
+            modelLoader = new DiagnosticModelLoader(scene);
+            
+            // Add window resize event listener
+            window.addEventListener('resize', onWindowResize);
+            
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+            }, 1500);
+            
+            // Log initialization success
+            log('✓ Khởi tạo thành công', 'success');
+            
+            // Load models
+            loadModels();
+        }
+        
+        // Load models with our diagnostic loader
+        function loadModels() {
+            log('Đang tải mô hình...', 'info');
+            
+            // Create a city grid of buildings
+            const citySize = 5;
+            const spacing = 10;
+            
+            for (let x = -citySize; x <= citySize; x++) {
+                for (let z = -citySize; z <= citySize; z++) {
+                    // Skip center for open space
+                    if (x === 0 && z === 0) continue;
+                    
+                    const posX = x * spacing;
+                    const posZ = z * spacing;
+                    
+                    // Determine building type based on position
+                    let buildingType = 'building';
+                    let modelPath = null;
+                    
+                    // Create different building types based on position
+                    if (x === 0 || z === 0) {
+                        // Main avenues get special buildings
+                        if (Math.abs(x) === citySize || Math.abs(z) === citySize) {
+                            buildingType = 'garden';
+                        } else if (Math.random() > 0.7) {
+                            buildingType = 'bridge';
+                        }
+                    } else if (Math.abs(x) === Math.abs(z)) {
+                        // Diagonal positions get special buildings
+                        buildingType = Math.random() > 0.5 ? 'parking' : 'light';
+                    } else if (Math.abs(x) === citySize || Math.abs(z) === citySize) {
+                        // Edge buildings
+                        buildingType = Math.random() > 0.7 ? 'furniture' : 'building';
+                    }
+                    
+                    // Random height for buildings
+                    const height = buildingType === 'building' ? 
+                        5 + Math.random() * 15 : 
+                        2 + Math.random() * 5;
+                    
+                    // Try to load model, fallback to procedural building
+                    modelLoader.loadWithFallback(
+                        modelPath, // null will trigger fallback immediately
+                        {
+                            position: { x: posX, y: 0, z: posZ },
+                            scale: { x: 1, y: 1, z: 1 },
+                            rotation: { x: 0, y: Math.random() * Math.PI * 2, z: 0 }
+                        },
+                        {
+                            type: buildingType,
+                            width: 2 + Math.random() * 3,
+                            depth: 2 + Math.random() * 3,
+                            height: height
+                        }
+                    );
+                }
+            }
+            
+            // Add special central building
+            modelLoader.loadWithFallback(
+                null,
+                {
+                    position: { x: 0, y: 0, z: 0 },
+                    scale: { x: 1.5, y: 1.5, z: 1.5 },
+                    rotation: { x: 0, y: 0, z: 0 }
+                },
+                {
+                    type: 'building',
+                    width: 8,
+                    depth: 8,
+                    height: 25
+                }
+            );
+            
+            // Update stats
+            updateStats(modelLoader.getStats());
+            
+            log('✓ Tạo thành phố hoàn tất', 'success');
+        }
+        
+        // Clear the scene of all models
+        function clearScene() {
+            log('Đang xóa cảnh...', 'info');
+            
+            const objectsToRemove = [];
+            
+            // Find all objects to remove
+            scene.traverse(function(object) {
+                if (object.isMesh && object !== ground) {
+                    objectsToRemove.push(object);
+                }
+            });
+            
+            // Remove objects
+            objectsToRemove.forEach(object => {
+                scene.remove(object);
+            });
+            
+            log(`Đã xóa ${objectsToRemove.length} đối tượng khỏi cảnh`, 'success');
+            
+            // Reset model loader
+            modelLoader = new DiagnosticModelLoader(scene);
+            
+            // Update stats
+            updateStats(modelLoader.getStats());
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Animation loop
+        let frameCount = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            controls.update();
+            
+            // Update cube camera for reflections
+            if (cubeCamera && cubeRenderTarget && reflectionsEnabled) {
+                // Update reflections every 10 frames for performance
+                if (frameCount % 10 === 0) {
+                    cubeCamera.update(renderer, scene);
+                }
+                
+                // Apply environment map to transparent materials
+                scene.traverse((object) => {
+                    if (object.isMesh && object.material && 
+                        object.material.type === 'MeshPhysicalMaterial' && 
+                        object.material.transparent) {
+                        object.material.envMap = cubeRenderTarget.texture;
+                        object.material.needsUpdate = true;
+                    }
+                });
+            }
+            
+            // Activate force render loop if available
+            if (window.forceRenderLoop) {
+                window.forceRenderLoop.update();
+            }
+            
+            frameCount++;
+            renderer.render(scene, camera);
+        }
+        
+        // Start when page is loaded
+        window.addEventListener('load', init);
+        
+        // Add event listeners for buttons
+        document.getElementById('toggleWireframe').addEventListener('click', function(e) {
+            e.preventDefault();
+            scene.traverse(function(object) {
+                if (object.isMesh && object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            mat.wireframe = !mat.wireframe;
+                            mat.needsUpdate = true;
+                        });
+                    } else {
+                        object.material.wireframe = !object.material.wireframe;
+                        object.material.needsUpdate = true;
+                    }
+                }
+            });
+            log('Đã chuyển đổi chế độ wireframe', 'success');
+        });
+        
+        document.getElementById('toggleSolid').addEventListener('click', function(e) {
+            e.preventDefault();
+            scene.traverse(function(object) {
+                if (object.isMesh && object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            mat.transparent = false;
+                            mat.opacity = 1.0;
+                            mat.color.setHex(0x0047AB); // Cobalt blue
+                            mat.needsUpdate = true;
+                        });
+                    } else {
+                        object.material.transparent = false;
+                        object.material.opacity = 1.0;
+                        object.material.color.setHex(0x0047AB); // Cobalt blue
+                        object.material.needsUpdate = true;
+                    }
+                }
+            });
+            log('✓ SOLID material created (NO TRANSPARENCY)', 'success');
+        });
+        
+        document.getElementById('toggleReflections').addEventListener('click', function(e) {
+            e.preventDefault();
+            reflectionsEnabled = !reflectionsEnabled;
+            
+            if (!reflectionsEnabled) {
+                // Remove environment maps
+                scene.traverse((object) => {
+                    if (object.isMesh && object.material && object.material.envMap) {
+                        object.material.envMap = null;
+                        object.material.needsUpdate = true;
+                    }
+                });
+                log('Đã tắt phản chiếu môi trường', 'warning');
+            } else {
+                log('Đã bật phản chiếu môi trường', 'success');
+            }
+        });
+        
+        // Start animation loop
+        animate();
+    </script>
+    
+    <!-- EnhancedDetailedBlueCity Class -->
+    <script>
+        class EnhancedDetailedBlueCity {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                
+                // Store building references
+                this.buildings = [];
+                this.specialBuildings = [];
+                
+                // Environment maps
+                this.cubeCamera = null;
+                this.cubeRenderTarget = null;
+                
+                // Animation properties
+                this.frameCount = 0;
+                this.animationMixers = [];
+                this.clock = new THREE.Clock();
+            }
+            
+            // Initialize the city
+            init() {
+                // This method is not used directly, but kept for reference
+                console.log("EnhancedDetailedBlueCity class is available for advanced features");
+            }
+            
+            // Create a concrete material
+            createConcreteMaterial() {
+                return new THREE.MeshStandardMaterial({
+                    color: 0xCCCCCC,
+                    roughness: 0.7,
+                    metalness: 0.1
+                });
+            }
+            
+            // Create a glass material
+            createGlassMaterial(color = 0x0047AB, opacity = 0.8) {
+                return new THREE.MeshPhysicalMaterial({
+                    color: color,
+                    metalness: 0.9,
+                    roughness: 0.05,
+                    transparent: true,
+                    opacity: opacity,
+                    reflectivity: 1.0,
+                    transmission: 0.5,
+                    side: THREE.DoubleSide,
+                    clearcoat: 1.0,
+                    clearcoatRoughness: 0
+                });
+            }
+            
+            // Add advanced features to existing buildings
+            enhanceExistingBuildings() {
+                // This method can be called to enhance buildings with additional features
+                console.log("Enhanced building features are available");
+            }
+        }
+        
+        // Create instance but don't initialize (used as utility class)
+        window.enhancedCity = new EnhancedDetailedBlueCity();
+    </script>
+</body>
+</html>

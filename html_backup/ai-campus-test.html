@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Campus 3D - HEART Technology Park (Test)</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 16px 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Main Container */
+        .main-container {
+            position: relative;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 3D Viewer Container */
+        .viewer-container {
+            position: relative;
+            flex: 1;
+            background: #000;
+        }
+
+        #threejs-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+            min-width: 200px;
+        }
+
+        .control-panel h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group-title {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .control-btn {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .control-btn:hover {
+            background: #f8f9fa;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .control-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <a href="#" class="brand">
+                🚀 <span>HEART AI Campus</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- 3D Viewer Container -->
+        <div class="viewer-container">
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <h2>Đang tải AI Campus...</h2>
+                    <p>Vui lòng đợi trong khi chúng tôi khởi tạo mô hình 3D</p>
+                </div>
+            </div>
+
+            <!-- Three.js Container -->
+            <div id="threejs-container"></div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h3>🎮 Điều khiển</h3>
+                
+                <div class="control-group">
+                    <div class="control-group-title">Góc nhìn</div>
+                    <div class="control-buttons">
+                        <button class="control-btn active" id="view-overview">Tổng quan</button>
+                        <button class="control-btn" id="view-aerial">Trên cao</button>
+                        <button class="control-btn" id="view-ground">Mặt đất</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-group-title">Tùy chọn</div>
+                    <div class="control-buttons">
+                        <button class="control-btn" id="toggle-rotate">Xoay tự động</button>
+                        <button class="control-btn" id="toggle-wireframe">Khung dây</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-group-title">Thời gian</div>
+                    <div class="control-buttons">
+                        <button class="control-btn" id="time-morning">Sáng</button>
+                        <button class="control-btn active" id="time-noon">Trưa</button>
+                        <button class="control-btn" id="time-evening">Chiều</button>
+                        <button class="control-btn" id="time-night">Đêm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- City Core and Integration -->
+    <script src="realistic-city-core.js"></script>
+    <script src="ai-campus-integration.js"></script>
+
+    <!-- Integration Script -->
+    <script>
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize the city integration
+            const cityIntegration = new RealisticCityIntegration('threejs-container');
+            
+            try {
+                // Initialize the city
+                const result = await cityIntegration.init();
+                
+                if (!result.success) {
+                    console.error('Failed to initialize city:', result.error);
+                    alert('Không thể khởi tạo mô hình 3D: ' + result.error);
+                    return;
+                }
+                
+                // Set up view buttons
+                document.getElementById('view-overview').addEventListener('click', (e) => {
+                    setActiveButton('view', e.target);
+                    cityIntegration.setView('overview');
+                });
+                
+                document.getElementById('view-aerial').addEventListener('click', (e) => {
+                    setActiveButton('view', e.target);
+                    cityIntegration.setView('aerial');
+                });
+                
+                document.getElementById('view-ground').addEventListener('click', (e) => {
+                    setActiveButton('view', e.target);
+                    cityIntegration.setView('ground');
+                });
+                
+                // Set up toggle buttons
+                document.getElementById('toggle-rotate').addEventListener('click', (e) => {
+                    const isActive = cityIntegration.toggleAutoRotate();
+                    e.target.classList.toggle('active', isActive);
+                });
+                
+                document.getElementById('toggle-wireframe').addEventListener('click', (e) => {
+                    const isActive = cityIntegration.toggleWireframe();
+                    e.target.classList.toggle('active', isActive);
+                });
+                
+                // Set up time buttons
+                document.getElementById('time-morning').addEventListener('click', (e) => {
+                    setActiveButton('time', e.target);
+                    cityIntegration.updateTimeOfDay('morning');
+                });
+                
+                document.getElementById('time-noon').addEventListener('click', (e) => {
+                    setActiveButton('time', e.target);
+                    cityIntegration.updateTimeOfDay('noon');
+                });
+                
+                document.getElementById('time-evening').addEventListener('click', (e) => {
+                    setActiveButton('time', e.target);
+                    cityIntegration.updateTimeOfDay('evening');
+                });
+                
+                document.getElementById('time-night').addEventListener('click', (e) => {
+                    setActiveButton('time', e.target);
+                    cityIntegration.updateTimeOfDay('night');
+                });
+                
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    cityIntegration.handleResize();
+                });
+                
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                alert('Lỗi khởi tạo: ' + error.message);
+            }
+            
+            // Helper function to set active button in a group
+            function setActiveButton(group, activeButton) {
+                // Find all buttons in the same group
+                let buttons;
+                if (group === 'view') {
+                    buttons = document.querySelectorAll('[id^="view-"]');
+                } else if (group === 'time') {
+                    buttons = document.querySelectorAll('[id^="time-"]');
+                }
+                
+                // Remove active class from all buttons
+                buttons.forEach(button => {
+                    button.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                activeButton.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

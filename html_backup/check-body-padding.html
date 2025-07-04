@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Dimensions Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            border-left: 4px solid #1e3a8a;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Element Dimensions Checker</h1>
+    <p>Click the button below to check dimensions and padding values:</p>
+    <button id="checkButton">Check Values</button>
+    <div id="result">Results will appear here...</div>
+
+    <script>
+        document.getElementById('checkButton').addEventListener('click', function() {
+            // Check body padding
+            const bodyPaddingTop = getComputedStyle(document.body).paddingTop;
+            
+            // Check if main element exists
+            const mainElement = document.querySelector('main');
+            const mainPaddingTop = mainElement ? getComputedStyle(mainElement).paddingTop : 'Main element not found';
+            
+            // Check navbar height
+            const navbar = document.querySelector('.navbar');
+            const navbarHeight = navbar ? navbar.offsetHeight + 'px' : 'Navbar not found';
+            
+            // Display the result
+            document.getElementById('result').innerHTML = `
+                <h3>Element Dimensions Results:</h3>
+                <p>Body padding-top: <strong>${bodyPaddingTop}</strong></p>
+                <p>Main padding-top: <strong>${mainPaddingTop}</strong></p>
+                <p>Navbar height: <strong>${navbarHeight}</strong></p>
+                <p><em>Note: This page has its own styling. To check the main site's values, use the console code below on the main page.</em></p>
+                <pre>console.log('Body padding-top:', getComputedStyle(document.body).paddingTop);
+console.log('Main padding-top:', getComputedStyle(document.querySelector('main')).paddingTop);
+console.log('Header height:', document.querySelector('.navbar').offsetHeight);</pre>
+            `;
+        });
+
+        // Auto-run on page load
+        window.addEventListener('load', function() {
+            document.getElementById('checkButton').click();
+        });
+    </script>
+</body>
+</html>

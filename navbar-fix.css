@@ -15,15 +15,16 @@
 }
 
 body {
-    padding-top: 80px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .hero {
-    margin-top: -80px;
-    padding-top: 80px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .section {
-    margin-top: -80px;
-    padding-top: 120px;
+    margin-top: 0;
+    padding-top: 0;
 }

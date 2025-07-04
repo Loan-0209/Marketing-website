@@ -49,5 +49,8 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "dependencies": {
+    "playwright": "^1.53.1"
+  }
 }

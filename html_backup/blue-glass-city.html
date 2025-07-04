@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Blue Glass City District</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #E6F3FF 0%, #B3D9FF 100%);
+            overflow: hidden;
+            color: #2C3E50;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2C3E50;
+            border: 2px solid #87CEEB;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(135, 206, 235, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        #material-info {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: rgba(183, 230, 255, 0.9);
+            color: #1E3A8A;
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 280px;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.2);
+        }
+
+        #building-details {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(30, 58, 138, 0.9);
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 320px;
+            display: none;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+        }
+
+        #stats {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(135, 206, 235, 0.9);
+            color: #1E3A8A;
+            border-radius: 10px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            box-shadow: 0 6px 20px rgba(135, 206, 235, 0.4);
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #87CEEB, #B0E0E6);
+            color: #1E3A8A;
+            border: 2px solid #4682B4;
+            padding: 12px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 130px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(70, 130, 180, 0.2);
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, #B0E0E6, #E0F6FF);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(70, 130, 180, 0.3);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, #4682B4, #1E90FF);
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
+        }
+
+        #glass-controls {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .glass-btn {
+            background: rgba(135, 206, 235, 0.8);
+            color: #1E3A8A;
+            border: 2px solid #87CEEB;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .glass-btn:hover {
+            background: rgba(176, 224, 230, 0.9);
+            transform: translateX(-3px);
+        }
+
+        .glass-btn.active {
+            background: #4682B4;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(70, 130, 180, 0.4);
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1E3A8A;
+            padding: 35px;
+            border-radius: 20px;
+            border: 3px solid #87CEEB;
+            box-shadow: 0 15px 40px rgba(135, 206, 235, 0.4);
+        }
+
+        .blue-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(135, 206, 235, 0.3);
+            border-top: 4px solid #4682B4;
+            border-radius: 50%;
+            animation: blueSpinAnimation 1.2s linear infinite;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .blue-spinner::after {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(30, 144, 255, 0.4);
+            border-top: 3px solid #1E90FF;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: blueSpinAnimation 0.8s linear infinite reverse;
+        }
+
+        @keyframes blueSpinAnimation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #1E3A8A;
+            font-size: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(30, 58, 138, 0.1);
+        }
+
+        h3 {
+            margin-bottom: 12px;
+            color: #4682B4;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .feature-item {
+            margin: 10px 0;
+            color: #2C3E50;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .feature-item::before {
+            content: "◆";
+            color: #4682B4;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .glass-feature {
+            margin: 8px 0;
+            color: #1E3A8A;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .glass-feature::before {
+            content: "▣";
+            color: #87CEEB;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            color: #1E3A8A;
+            font-weight: 500;
+        }
+
+        .building-detail {
+            margin: 6px 0;
+            font-size: 13px;
+            color: #E0F6FF;
+        }
+
+        .building-detail strong {
+            color: #87CEEB;
+        }
+
+        .glass-tint-demo {
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #87CEEB, #B0E0E6, #E0F6FF);
+            border-radius: 2px;
+            margin: 10px 0;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="blue-city-canvas"></canvas>
+        
+        <div id="loading">
+            <div class="blue-spinner"></div>
+            <h2>Building Blue Glass District...</h2>
+            <p>Creating modern architecture with light blue tinted glass</p>
+        </div>
+
+        <div id="info-panel">
+            <h2>Modern Blue Glass City</h2>
+            <div class="feature-item">Light Blue Tinted Glass Curtain Walls</div>
+            <div class="feature-item">75% Transparency with Blue Tint</div>
+            <div class="feature-item">Realistic Glass Reflections</div>
+            <div class="feature-item">Visible Interior Lobbies</div>
+            <div class="feature-item">AI-Inspired Geometric Patterns</div>
+            <div class="feature-item">Blue Glass Balconies & Railings</div>
+            <div class="feature-item">Digital Displays on Blue Glass</div>
+            <div class="feature-item">Circuit-Pattern Rooftop Gardens</div>
+        </div>
+
+        <div id="material-info">
+            <h3>Glass Specifications</h3>
+            <div class="glass-tint-demo"></div>
+            <div class="glass-feature">Color: Light Cyan Blue (#87CEEB)</div>
+            <div class="glass-feature">Transparency: 75% visible</div>
+            <div class="glass-feature">Reflectivity: Environmental mapping</div>
+            <div class="glass-feature">Tint: Consistent across all surfaces</div>
+            <div class="glass-feature">Interior visibility: Maintained</div>
+        </div>
+
+        <div id="controls">
+            <button class="control-btn" id="interior-showcase">Interior View</button>
+            <button class="control-btn" id="glass-focus">Glass Focus</button>
+            <button class="control-btn" id="building-select">Building Info</button>
+            <button class="control-btn" id="architectural-view">Architecture</button>
+        </div>
+
+        <div id="glass-controls">
+            <button class="glass-btn active" id="glass-75">75% Glass</button>
+            <button class="glass-btn" id="glass-50">50% Glass</button>
+            <button class="glass-btn" id="glass-90">90% Glass</button>
+            <button class="glass-btn" id="glass-demo">Demo Mode</button>
+        </div>
+
+        <div id="building-details">
+            <h3 id="selected-building">Building Information</h3>
+            <div class="building-detail"><strong>Type:</strong> <span id="building-type-info">-</span></div>
+            <div class="building-detail"><strong>Height:</strong> <span id="building-height-info">-</span></div>
+            <div class="building-detail"><strong>Glass Area:</strong> <span id="building-glass-info">-</span></div>
+            <div class="building-detail"><strong>Blue Tint:</strong> <span id="building-tint-info">Light Cyan (#87CEEB)</span></div>
+            <div class="building-detail"><strong>AI Features:</strong> <span id="building-ai-info">-</span></div>
+        </div>
+
+        <div id="stats">
+            <h3>Blue Glass District Stats</h3>
+            <div class="stat-row">
+                <span>Buildings:</span>
+                <span id="building-count">0</span>
+            </div>
+            <div class="stat-row">
+                <span>Blue Glass Area:</span>
+                <span id="glass-coverage">0 m²</span>
+            </div>
+            <div class="stat-row">
+                <span>Transparency:</span>
+                <span id="glass-transparency">75%</span>
+            </div>
+            <div class="stat-row">
+                <span>Performance:</span>
+                <span id="fps-display">-- FPS</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class BlueGlassCity {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.buildings = [];
+                this.glassTransparency = 0.75;
+                
+                this.modes = {
+                    interior: false,
+                    glassFocus: false,
+                    buildingSelect: false,
+                    architectural: false
+                };
+                
+                this.glassSettings = {
+                    baseColor: 0x87CEEB,  // Light cyan blue
+                    transparency: 0.25,   // 75% visible
+                    metalness: 0.1,
+                    roughness: 0.05,
+                    ior: 1.5,
+                    reflectivity: 0.8
+                };
+                
+                this.stats = {
+                    buildingCount: 0,
+                    glassArea: 0,
+                    fps: 0
+                };
+                
+                this.time = 0;
+                this.fpsCounter = 0;
+                this.lastTime = performance.now();
+                this.selectedBuilding = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.setupScene();
+                this.setupLighting();
+                this.setupCamera();
+                this.setupRenderer();
+                this.setupControls();
+                this.createEnvironment();
+                this.generateBlueGlassDistrict();
+                this.setupRaycasting();
+                this.setupEventListeners();
+                this.animate();
+                this.hideLoading();
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0xE6F3FF);
+                this.scene.fog = new THREE.Fog(0xE6F3FF, 150, 1000);
+            }
+
+            setupLighting() {
+                // Optimized lighting for blue glass
+                this.ambientLight = new THREE.AmbientLight(0xB3D9FF, 0.6);
+                this.scene.add(this.ambientLight);
+
+                // Main directional light optimized for blue glass appearance
+                this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.4);
+                this.directionalLight.position.set(120, 180, 120);
+                this.directionalLight.castShadow = true;
+                this.directionalLight.shadow.mapSize.width = 4096;
+                this.directionalLight.shadow.mapSize.height = 4096;
+                this.directionalLight.shadow.camera.near = 1;
+                this.directionalLight.shadow.camera.far = 600;
+                this.directionalLight.shadow.camera.left = -250;
+                this.directionalLight.shadow.camera.right = 250;
+                this.directionalLight.shadow.camera.top = 250;
+                this.directionalLight.shadow.camera.bottom = -250;
+                this.directionalLight.shadow.bias = -0.0002;
+                this.scene.add(this.directionalLight);
+
+                // Secondary lights to enhance blue glass reflections
+                const blueAccentLight = new THREE.DirectionalLight(0x87CEEB, 0.4);
+                blueAccentLight.position.set(-80, 120, -80);
+                this.scene.add(blueAccentLight);
+
+                const skyLight = new THREE.DirectionalLight(0xE0F6FF, 0.3);
+                skyLight.position.set(0, 100, -150);
+                this.scene.add(skyLight);
+            }
+
+            setupCamera() {
+                this.camera = new THREE.PerspectiveCamera(
+                    65,
+                    window.innerWidth / window.innerHeight,
+                    1,
+                    2500
+                );
+                this.camera.position.set(180, 100, 180);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            setupRenderer() {
+                const canvas = document.getElementById('blue-city-canvas');
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas, 
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: "high-performance"
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.1;
+                this.renderer.physicallyCorrectLights = true;
+            }
+
+            setupControls() {
+                this.mouseDown = false;
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.cameraRotationX = 0;
+                this.cameraRotationY = 0;
+                this.cameraDistance = 250;
+
+                const canvas = this.renderer.domElement;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    this.mouseDown = true;
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    if (!this.mouseDown) return;
+                    
+                    const deltaX = e.clientX - this.mouseX;
+                    const deltaY = e.clientY - this.mouseY;
+                    
+                    this.cameraRotationY += deltaX * 0.008;
+                    this.cameraRotationX += deltaY * 0.008;
+                    this.cameraRotationX = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, this.cameraRotationX));
+                    
+                    this.updateCameraPosition();
+                    
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mouseup', () => {
+                    this.mouseDown = false;
+                });
+
+                canvas.addEventListener('wheel', (e) => {
+                    this.cameraDistance += e.deltaY * 0.3;
+                    this.cameraDistance = Math.max(80, Math.min(500, this.cameraDistance));
+                    this.updateCameraPosition();
+                });
+
+                canvas.addEventListener('click', (e) => {
+                    if (this.modes.buildingSelect) {
+                        this.handleBuildingClick(e);
+                    }
+                });
+            }
+
+            updateCameraPosition() {
+                const x = Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                const y = Math.sin(this.cameraRotationX) * this.cameraDistance + 60;
+                const z = Math.sin(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                
+                this.camera.position.set(x, y, z);
+                this.camera.lookAt(0, 20, 0);
+            }
+
+            createBlueGlassMaterial(opacity = null) {
+                const finalOpacity = opacity !== null ? opacity : this.glassSettings.transparency;
+                
+                return new THREE.MeshPhysicalMaterial({
+                    color: this.glassSettings.baseColor,
+                    metalness: this.glassSettings.metalness,
+                    roughness: this.glassSettings.roughness,
+                    transmission: 1 - finalOpacity,
+                    transparent: true,
+                    opacity: finalOpacity + 0.1, // Slight base opacity for visibility
+                    ior: this.glassSettings.ior,
+                    reflectivity: this.glassSettings.reflectivity,
+                    clearcoat: 0.3,
+                    clearcoatRoughness: 0.1,
+                    side: THREE.DoubleSide
+                });
+            }
+
+            createEnvironment() {
+                // Modern urban ground
+                const groundGeometry = new THREE.PlaneGeometry(500, 500);
+                const groundMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xF0F0F0
+                });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                this.createUrbanInfrastructure();
+                this.createLandscaping();
+            }
+
+            createUrbanInfrastructure() {
+                // Roads optimized for blue glass district
+                const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x404040 });
+                
+                // Main arterial roads
+                for (let i = -4; i <= 4; i++) {
+                    if (i === 0) continue; // Skip center for main plaza
+                    
+                    const roadGeometry = new THREE.PlaneGeometry(500, 10);
+                    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(0, 0.05, i * 70);
+                    this.scene.add(road);
+                }
+
+                for (let i = -4; i <= 4; i++) {
+                    if (i === 0) continue;
+                    
+                    const roadGeometry = new THREE.PlaneGeometry(10, 500);
+                    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(i * 70, 0.05, 0);
+                    this.scene.add(road);
+                }
+
+                // Premium sidewalks for blue glass district
+                const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0xE6E6E6 });
+                for (let x = -4; x <= 4; x++) {
+                    for (let z = -4; z <= 4; z++) {
+                        if (x === 0 && z === 0) continue; // Center plaza
+                        
+                        const sidewalkGeometry = new THREE.PlaneGeometry(50, 50);
+                        const sidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
+                        sidewalk.rotation.x = -Math.PI / 2;
+                        sidewalk.position.set(x * 70, 0.1, z * 70);
+                        this.scene.add(sidewalk);
+                    }
+                }
+
+                // Central plaza for the blue glass district
+                const plazaGeometry = new THREE.PlaneGeometry(60, 60);
+                const plazaMaterial = new THREE.MeshLambertMaterial({ color: 0xB3D9FF });
+                const plaza = new THREE.Mesh(plazaGeometry, plazaMaterial);
+                plaza.rotation.x = -Math.PI / 2;
+                plaza.position.set(0, 0.15, 0);
+                this.scene.add(plaza);
+            }
+
+            createLandscaping() {
+                // Trees and greenery positioned to complement blue glass buildings
+                for (let i = 0; i < 80; i++) {
+                    const tree = this.createTree();
+                    let x, z;
+                    do {
+                        x = (Math.random() - 0.5) * 450;
+                        z = (Math.random() - 0.5) * 450;
+                    } while (this.isInBuildingZone(x, z) || this.isOnRoad(x, z));
+                    
+                    tree.position.set(x, 0, z);
+                    this.scene.add(tree);
+                }
+            }
+
+            isInBuildingZone(x, z) {
+                // Check if position is too close to building locations
+                const buildingPositions = [
+                    {x: -140, z: -140}, {x: 140, z: -140}, {x: 140, z: 140}, {x: -140, z: 140},
+                    {x: -70, z: -140}, {x: 70, z: -140}, {x: 140, z: -70}, {x: 140, z: 70},
+                    {x: 70, z: 140}, {x: -70, z: 140}, {x: -140, z: 70}, {x: -140, z: -70},
+                    {x: 0, z: 0}, {x: -70, z: 0}, {x: 70, z: 0}, {x: 0, z: -70}, {x: 0, z: 70}
+                ];
+                
+                return buildingPositions.some(pos => {
+                    const dist = Math.sqrt((x - pos.x) ** 2 + (z - pos.z) ** 2);
+                    return dist < 25;
+                });
+            }
+
+            isOnRoad(x, z) {
+                const roadWidth = 10;
+                const blockSize = 70;
+                
+                const xMod = Math.abs(x % blockSize);
+                const zMod = Math.abs(z % blockSize);
+                
+                return (xMod < roadWidth || xMod > blockSize - roadWidth) ||
+                       (zMod < roadWidth || zMod > blockSize - roadWidth);
+            }
+
+            createTree() {
+                const treeGroup = new THREE.Group();
+                
+                const trunkGeometry = new THREE.CylinderGeometry(0.4, 0.6, 5);
+                const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 2.5;
+                trunk.castShadow = true;
+                treeGroup.add(trunk);
+                
+                const foliageGeometry = new THREE.SphereGeometry(2.5, 12, 8);
+                const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+                foliage.position.y = 6;
+                foliage.castShadow = true;
+                treeGroup.add(foliage);
+                
+                return treeGroup;
+            }
+
+            generateBlueGlassDistrict() {
+                const buildingConfigs = [
+                    // Premier blue glass towers
+                    { x: -140, z: -140, type: 'blue_office_tower', height: 55 },
+                    { x: 140, z: -140, type: 'blue_residential_tower', height: 42 },
+                    { x: 140, z: 140, type: 'blue_corporate_hq', height: 60 },
+                    { x: -140, z: 140, type: 'blue_tech_campus', height: 35 },
+                    
+                    // Mid-rise blue glass buildings
+                    { x: -70, z: -140, type: 'blue_mixed_use', height: 28 },
+                    { x: 70, z: -140, type: 'blue_innovation_hub', height: 32 },
+                    { x: 140, z: -70, type: 'blue_office_complex', height: 25 },
+                    { x: 140, z: 70, type: 'blue_research_center', height: 30 },
+                    { x: 70, z: 140, type: 'blue_startup_tower', height: 26 },
+                    { x: -70, z: 140, type: 'blue_data_center', height: 18 },
+                    { x: -140, z: 70, type: 'blue_conference_center', height: 22 },
+                    { x: -140, z: -70, type: 'blue_medical_complex', height: 29 },
+                    
+                    // Central district
+                    { x: 0, z: 0, type: 'blue_ai_headquarters', height: 65 },
+                    { x: -70, z: 0, type: 'blue_smart_building', height: 38 },
+                    { x: 70, z: 0, type: 'blue_innovation_tower', height: 40 },
+                    { x: 0, z: -70, type: 'blue_tech_tower', height: 36 },
+                    { x: 0, z: 70, type: 'blue_future_center', height: 34 }
+                ];
+
+                buildingConfigs.forEach(config => {
+                    const building = this.createBlueGlassBuilding(config.type, config.x, config.z, config.height);
+                    this.buildings.push(building);
+                    this.scene.add(building.group);
+                });
+
+                this.updateStats();
+            }
+
+            createBlueGlassBuilding(type, x, z, targetHeight) {
+                const building = {
+                    group: new THREE.Group(),
+                    type: type,
+                    position: { x, z },
+                    height: targetHeight,
+                    floors: Math.floor(targetHeight / 3.8),
+                    components: [],
+                    glassComponents: [],
+                    aiFeatures: [],
+                    blueGlassArea: 0
+                };
+
+                building.group.position.set(x, 0, z);
+                building.group.userData = { buildingInfo: building };
+
+                switch(type) {
+                    case 'blue_office_tower':
+                        this.createBlueOfficeTower(building);
+                        break;
+                    case 'blue_residential_tower':
+                        this.createBlueResidentialTower(building);
+                        break;
+                    case 'blue_corporate_hq':
+                        this.createBlueCorporateHQ(building);
+                        break;
+                    case 'blue_tech_campus':
+                        this.createBlueTechCampus(building);
+                        break;
+                    case 'blue_ai_headquarters':
+                        this.createBlueAIHeadquarters(building);
+                        break;
+                    case 'blue_mixed_use':
+                        this.createBlueMixedUse(building);
+                        break;
+                    case 'blue_innovation_hub':
+                        this.createBlueInnovationHub(building);
+                        break;
+                    case 'blue_office_complex':
+                        this.createBlueOfficeComplex(building);
+                        break;
+                    case 'blue_research_center':
+                        this.createBlueResearchCenter(building);
+                        break;
+                    case 'blue_startup_tower':
+                        this.createBlueStartupTower(building);
+                        break;
+                    case 'blue_data_center':
+                        this.createBlueDataCenter(building);
+                        break;
+                    case 'blue_conference_center':
+                        this.createBlueConferenceCenter(building);
+                        break;
+                    case 'blue_medical_complex':
+                        this.createBlueMedicalComplex(building);
+                        break;
+                    case 'blue_smart_building':
+                        this.createBlueSmartBuilding(building);
+                        break;
+                    case 'blue_innovation_tower':
+                        this.createBlueInnovationTower(building);
+                        break;
+                    case 'blue_tech_tower':
+                        this.createBlueTechTower(building);
+                        break;
+                    case 'blue_future_center':
+                        this.createBlueFutureCenter(building);
+                        break;
+                }
+
+                return building;
+            }
+
+            createBlueOfficeTower(building) {
+                const width = 14;
+                const depth = 14;
+                const height = building.height;
+
+                // Concrete base with premium finish
+                const baseHeight = height * 0.15;
+                const baseGeometry = new THREE.BoxGeometry(width, baseHeight, depth);
+                const baseMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xF5F5F5,
+                    shininess: 60
+                });
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.y = baseHeight / 2;
+                base.castShadow = true;
+                base.receiveShadow = true;
+                building.group.add(base);
+                building.components.push(base);
+
+                // Main blue glass tower
+                const towerHeight = height - baseHeight;
+                const towerGeometry = new THREE.BoxGeometry(width * 0.95, towerHeight, depth * 0.95);
+                const glassMaterial = this.createBlueGlassMaterial();
+                const tower = new THREE.Mesh(towerGeometry, glassMaterial);
+                tower.position.y = baseHeight + towerHeight / 2;
+                tower.castShadow = true;
+                tower.receiveShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+                building.glassComponents.push(tower);
+
+                building.blueGlassArea = (width * towerHeight * 4) * 0.9;
+
+                this.addBlueGlassWindows(building, width, depth, baseHeight, towerHeight);
+                this.addBlueGlassLobby(building, width, depth, baseHeight);
+                this.addBlueGlassAIElements(building, width, depth, height, 'office');
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            createBlueResidentialTower(building) {
+                const width = 12;
+                const depth = 16;
+                const height = building.height;
+
+                // Main residential structure
+                const towerGeometry = new THREE.BoxGeometry(width, height, depth);
+                const concreteMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xE8E8E8,
+                    shininess: 40
+                });
+                const tower = new THREE.Mesh(towerGeometry, concreteMaterial);
+                tower.position.y = height / 2;
+                tower.castShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+
+                // Blue glass sections for balconies and windows
+                for (let floor = 2; floor < building.floors; floor += 3) {
+                    const balconyHeight = floor * 3.8;
+                    this.addBlueGlassBalcony(building, width, depth, balconyHeight);
+                }
+
+                building.blueGlassArea = (width * height * 2 + depth * height * 2) * 0.6;
+
+                this.addBlueGlassWindows(building, width, depth, 0, height);
+                this.addBlueGlassLobby(building, width, depth, 0);
+                this.addBlueGlassAIElements(building, width, depth, height, 'residential');
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            createBlueCorporateHQ(building) {
+                const width = 18;
+                const depth = 18;
+                const height = building.height;
+
+                // Multi-tier design with increasing blue glass
+                const tier1Height = height * 0.3;
+                const tier2Height = height * 0.4;
+                const tier3Height = height * 0.3;
+
+                // Bottom tier - mixed materials
+                const tier1Geometry = new THREE.BoxGeometry(width, tier1Height, depth);
+                const tier1Material = new THREE.MeshPhongMaterial({
+                    color: 0xDDDDDD,
+                    shininess: 70
+                });
+                const tier1 = new THREE.Mesh(tier1Geometry, tier1Material);
+                tier1.position.y = tier1Height / 2;
+                tier1.castShadow = true;
+                building.group.add(tier1);
+                building.components.push(tier1);
+
+                // Middle tier - blue glass dominant
+                const tier2Geometry = new THREE.BoxGeometry(width * 0.9, tier2Height, depth * 0.9);
+                const tier2Material = this.createBlueGlassMaterial();
+                const tier2 = new THREE.Mesh(tier2Geometry, tier2Material);
+                tier2.position.y = tier1Height + tier2Height / 2;
+                tier2.castShadow = true;
+                building.group.add(tier2);
+                building.components.push(tier2);
+                building.glassComponents.push(tier2);
+
+                // Top tier - premium blue glass
+                const tier3Geometry = new THREE.BoxGeometry(width * 0.75, tier3Height, depth * 0.75);
+                const tier3Material = this.createBlueGlassMaterial(0.15); // More transparent
+                const tier3 = new THREE.Mesh(tier3Geometry, tier3Material);
+                tier3.position.y = tier1Height + tier2Height + tier3Height / 2;
+                tier3.castShadow = true;
+                building.group.add(tier3);
+                building.components.push(tier3);
+                building.glassComponents.push(tier3);
+
+                building.blueGlassArea = (width * 0.9 * tier2Height * 4) + (width * 0.75 * tier3Height * 4);
+
+                this.addBlueGlassWindows(building, width, depth, 0, tier1Height);
+                this.addBlueGlassLobby(building, width, depth, 0, true);
+                this.addBlueGlassAIElements(building, width, depth, height, 'corporate');
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            createBlueTechCampus(building) {
+                const width = 22;
+                const depth = 18;
+                const height = building.height;
+
+                // Low-rise campus with extensive blue glass
+                const campusGeometry = new THREE.BoxGeometry(width, height, depth);
+                const glassMaterial = this.createBlueGlassMaterial(0.2); // Very transparent
+                const campus = new THREE.Mesh(campusGeometry, glassMaterial);
+                campus.position.y = height / 2;
+                campus.castShadow = true;
+                building.group.add(campus);
+                building.components.push(campus);
+                building.glassComponents.push(campus);
+
+                building.blueGlassArea = (width * height * 2 + depth * height * 2) * 0.95;
+
+                this.addBlueGlassWindows(building, width, depth, 0, height);
+                this.addBlueGlassLobby(building, width, depth, 0, true);
+                this.addBlueGlassAIElements(building, width, depth, height, 'tech');
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            createBlueAIHeadquarters(building) {
+                const width = 20;
+                const depth = 20;
+                const height = building.height;
+
+                // Distinctive cylindrical design with blue glass
+                const mainGeometry = new THREE.CylinderGeometry(width/2.2, width/2, height, 16);
+                const glassMaterial = this.createBlueGlassMaterial(0.18);
+                const main = new THREE.Mesh(mainGeometry, glassMaterial);
+                main.position.y = height / 2;
+                main.castShadow = true;
+                building.group.add(main);
+                building.components.push(main);
+                building.glassComponents.push(main);
+
+                building.blueGlassArea = Math.PI * width * height * 0.95;
+
+                this.addBlueGlassHexagonalElements(building, width, height);
+                this.addBlueGlassLobby(building, width, depth, 0, true);
+                this.addBlueGlassAIElements(building, width, depth, height, 'ai_hq');
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            // Simplified implementations for remaining building types
+            createBlueMixedUse(building) {
+                this.createBlueGenericBuilding(building, 'mixed', 0xF0F0F0);
+            }
+
+            createBlueInnovationHub(building) {
+                this.createBlueGenericBuilding(building, 'innovation', 0xF8F8F8);
+            }
+
+            createBlueOfficeComplex(building) {
+                this.createBlueGenericBuilding(building, 'office', 0xE8E8E8);
+            }
+
+            createBlueResearchCenter(building) {
+                this.createBlueGenericBuilding(building, 'research', 0xF5F5F5);
+            }
+
+            createBlueStartupTower(building) {
+                this.createBlueGenericBuilding(building, 'startup', 0xFAFAFA);
+            }
+
+            createBlueDataCenter(building) {
+                this.createBlueGenericBuilding(building, 'data', 0xE0E0E0);
+            }
+
+            createBlueConferenceCenter(building) {
+                this.createBlueGenericBuilding(building, 'conference', 0xF2F2F2);
+            }
+
+            createBlueMedicalComplex(building) {
+                this.createBlueGenericBuilding(building, 'medical', 0xFFFAFA);
+            }
+
+            createBlueSmartBuilding(building) {
+                this.createBlueGenericBuilding(building, 'smart', 0xF0F8FF);
+            }
+
+            createBlueInnovationTower(building) {
+                this.createBlueGenericBuilding(building, 'innovation_tower', 0xE6F3FF);
+            }
+
+            createBlueTechTower(building) {
+                this.createBlueGenericBuilding(building, 'tech_tower', 0xF0F8FF);
+            }
+
+            createBlueFutureCenter(building) {
+                this.createBlueGenericBuilding(building, 'future', 0xE8F4FD);
+            }
+
+            createBlueGenericBuilding(building, type, baseColor) {
+                const width = 10 + Math.random() * 8;
+                const depth = 10 + Math.random() * 8;
+                const height = building.height;
+
+                // Base structure
+                const baseHeight = height * 0.2;
+                const baseGeometry = new THREE.BoxGeometry(width, baseHeight, depth);
+                const baseMaterial = new THREE.MeshPhongMaterial({
+                    color: baseColor,
+                    shininess: 50
+                });
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.y = baseHeight / 2;
+                base.castShadow = true;
+                building.group.add(base);
+                building.components.push(base);
+
+                // Blue glass upper section
+                const towerHeight = height - baseHeight;
+                const towerGeometry = new THREE.BoxGeometry(width * 0.9, towerHeight, depth * 0.9);
+                const glassMaterial = this.createBlueGlassMaterial();
+                const tower = new THREE.Mesh(towerGeometry, glassMaterial);
+                tower.position.y = baseHeight + towerHeight / 2;
+                tower.castShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+                building.glassComponents.push(tower);
+
+                building.blueGlassArea = (width * 0.9 * towerHeight * 4) * 0.8;
+
+                this.addBlueGlassWindows(building, width, depth, 0, height);
+                this.addBlueGlassLobby(building, width, depth, 0);
+                this.addBlueGlassAIElements(building, width, depth, height, type);
+                this.addRooftopFeaturesBlue(building, width, depth, height);
+            }
+
+            addBlueGlassWindows(building, width, depth, startHeight, totalHeight) {
+                const floorHeight = 3.8;
+                const floors = Math.floor(totalHeight / floorHeight);
+                
+                for (let floor = 0; floor < floors; floor++) {
+                    const y = startHeight + floor * floorHeight + floorHeight / 2;
+                    
+                    this.addBlueGlassWindowRow(building, width, depth, y, 'front');
+                    this.addBlueGlassWindowRow(building, width, depth, y, 'back');
+                    this.addBlueGlassWindowRow(building, width, depth, y, 'left');
+                    this.addBlueGlassWindowRow(building, width, depth, y, 'right');
+                }
+            }
+
+            addBlueGlassWindowRow(building, width, depth, y, side) {
+                const windowWidth = 1.4;
+                const windowHeight = 3;
+                const spacing = 1.8;
+                
+                let sideWidth, rotation, offsetX, offsetZ;
+                
+                switch(side) {
+                    case 'front':
+                        sideWidth = width;
+                        rotation = 0;
+                        offsetX = 0;
+                        offsetZ = depth / 2 + 0.02;
+                        break;
+                    case 'back':
+                        sideWidth = width;
+                        rotation = Math.PI;
+                        offsetX = 0;
+                        offsetZ = -depth / 2 - 0.02;
+                        break;
+                    case 'left':
+                        sideWidth = depth;
+                        rotation = Math.PI / 2;
+                        offsetX = -width / 2 - 0.02;
+                        offsetZ = 0;
+                        break;
+                    case 'right':
+                        sideWidth = depth;
+                        rotation = -Math.PI / 2;
+                        offsetX = width / 2 + 0.02;
+                        offsetZ = 0;
+                        break;
+                }
+                
+                const windowCount = Math.floor(sideWidth / spacing);
+                
+                for (let i = 0; i < windowCount; i++) {
+                    const windowGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+                    const windowMaterial = this.createBlueGlassMaterial(0.3);
+                    
+                    const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                    const x = offsetX + (side === 'left' || side === 'right' ? 0 : (i - windowCount/2) * spacing);
+                    const z = offsetZ + (side === 'front' || side === 'back' ? 0 : (i - windowCount/2) * spacing);
+                    
+                    window.position.set(x, y, z);
+                    window.rotation.y = rotation;
+                    building.group.add(window);
+                    building.components.push(window);
+                    building.glassComponents.push(window);
+                }
+            }
+
+            addBlueGlassLobby(building, width, depth, baseHeight, premium = false) {
+                const lobbyHeight = premium ? 10 : 8;
+                const lobbyWidth = width * 0.85;
+                const lobbyDepth = depth * 0.85;
+                
+                // Blue glass lobby walls
+                const lobbyGeometry = new THREE.BoxGeometry(lobbyWidth, lobbyHeight, lobbyDepth);
+                const lobbyMaterial = this.createBlueGlassMaterial(0.15);
+                
+                const lobby = new THREE.Mesh(lobbyGeometry, lobbyMaterial);
+                lobby.position.y = baseHeight + lobbyHeight / 2;
+                building.group.add(lobby);
+                building.components.push(lobby);
+                building.glassComponents.push(lobby);
+                
+                this.addBlueGlassLobbyInterior(building, lobbyWidth, lobbyDepth, baseHeight, lobbyHeight, premium);
+            }
+
+            addBlueGlassLobbyInterior(building, width, depth, baseHeight, height, premium) {
+                // Reception desk with modern design
+                const deskGeometry = new THREE.BoxGeometry(width * 0.35, 1.4, 1);
+                const deskMaterial = new THREE.MeshPhongMaterial({ 
+                    color: premium ? 0x4682B4 : 0x708090,
+                    shininess: 80
+                });
+                const desk = new THREE.Mesh(deskGeometry, deskMaterial);
+                desk.position.set(0, baseHeight + 0.7, -depth * 0.25);
+                building.group.add(desk);
+                building.components.push(desk);
+                
+                // Modern seating with blue accents
+                for (let i = 0; i < 6; i++) {
+                    const chairGeometry = new THREE.BoxGeometry(0.7, 0.9, 0.7);
+                    const chairMaterial = new THREE.MeshPhongMaterial({ 
+                        color: premium ? 0x87CEEB : 0xB0E0E6,
+                        shininess: 60
+                    });
+                    const chair = new THREE.Mesh(chairGeometry, chairMaterial);
+                    const angle = (i / 6) * Math.PI * 2;
+                    chair.position.set(
+                        Math.cos(angle) * width * 0.25,
+                        baseHeight + 0.45,
+                        depth * 0.25 + Math.sin(angle) * depth * 0.15
+                    );
+                    building.group.add(chair);
+                    building.components.push(chair);
+                }
+
+                // Modern lighting fixtures
+                for (let i = 0; i < 4; i++) {
+                    const lightGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.1);
+                    const lightMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0xFFFFFF,
+                        emissive: 0x444444
+                    });
+                    const light = new THREE.Mesh(lightGeometry, lightMaterial);
+                    light.position.set(
+                        (i % 2 - 0.5) * width * 0.4,
+                        baseHeight + height - 0.2,
+                        (Math.floor(i / 2) - 0.5) * depth * 0.4
+                    );
+                    building.group.add(light);
+                    building.components.push(light);
+                }
+            }
+
+            addBlueGlassBalcony(building, width, depth, height) {
+                const balconyGeometry = new THREE.BoxGeometry(width + 1.5, 0.3, 2.5);
+                const balconyMaterial = new THREE.MeshPhongMaterial({ color: 0xD3D3D3 });
+                const balcony = new THREE.Mesh(balconyGeometry, balconyMaterial);
+                balcony.position.set(0, height, depth / 2 + 1.2);
+                balcony.castShadow = true;
+                building.group.add(balcony);
+                building.components.push(balcony);
+                
+                // Blue glass railing
+                const railingGeometry = new THREE.BoxGeometry(width + 1.5, 1.2, 0.1);
+                const railingMaterial = this.createBlueGlassMaterial(0.4);
+                const railing = new THREE.Mesh(railingGeometry, railingMaterial);
+                railing.position.set(0, height + 0.6, depth / 2 + 2.4);
+                building.group.add(railing);
+                building.components.push(railing);
+                building.glassComponents.push(railing);
+                
+                // Planters with greenery
+                for (let i = 0; i < 4; i++) {
+                    const planterGeometry = new THREE.BoxGeometry(0.8, 0.4, 0.8);
+                    const planterMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
+                    const planter = new THREE.Mesh(planterGeometry, planterMaterial);
+                    planter.position.set(
+                        (i - 1.5) * (width / 4),
+                        height + 0.35,
+                        depth / 2 + 0.9
+                    );
+                    building.group.add(planter);
+                    building.components.push(planter);
+                    
+                    const plantGeometry = new THREE.SphereGeometry(0.4, 8, 6);
+                    const plantMaterial = new THREE.MeshLambertMaterial({ color: 0x32CD32 });
+                    const plant = new THREE.Mesh(plantGeometry, plantMaterial);
+                    plant.position.set(
+                        (i - 1.5) * (width / 4),
+                        height + 0.65,
+                        depth / 2 + 0.9
+                    );
+                    building.group.add(plant);
+                    building.components.push(plant);
+                }
+            }
+
+            addBlueGlassAIElements(building, width, depth, height, type) {
+                building.aiFeatures = [];
+                
+                // Blue-tinted LED strips
+                this.addBlueLEDStrips(building, width, depth, height);
+                building.aiFeatures.push('Blue LED Accent Lighting');
+                
+                // Digital displays with blue glass integration
+                if (['office', 'corporate', 'ai_hq', 'tech'].includes(type)) {
+                    this.addBlueDigitalDisplays(building, width, depth, height);
+                    building.aiFeatures.push('Blue Glass Digital Displays');
+                }
+                
+                // Communication arrays
+                if (['ai_hq', 'tech', 'data', 'research'].includes(type)) {
+                    this.addBlueCommunicationArray(building, width, depth, height);
+                    building.aiFeatures.push('Advanced Communication Systems');
+                }
+                
+                // Hexagonal patterns for AI buildings
+                if (['ai_hq', 'tech', 'innovation', 'smart'].includes(type)) {
+                    this.addBlueGlassHexagonalElements(building, width, height);
+                    building.aiFeatures.push('AI-Inspired Hexagonal Patterns');
+                }
+            }
+
+            addBlueLEDStrips(building, width, depth, height) {
+                const ledMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x4682B4,
+                    emissive: 0x1E3A8A,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const corners = [
+                    { x: width/2, z: depth/2 },
+                    { x: -width/2, z: depth/2 },
+                    { x: width/2, z: -depth/2 },
+                    { x: -width/2, z: -depth/2 }
+                ];
+                
+                corners.forEach(corner => {
+                    const ledGeometry = new THREE.CylinderGeometry(0.08, 0.08, height * 0.85);
+                    const led = new THREE.Mesh(ledGeometry, ledMaterial);
+                    led.position.set(corner.x, height * 0.425, corner.z);
+                    building.group.add(led);
+                    building.components.push(led);
+                });
+            }
+
+            addBlueDigitalDisplays(building, width, depth, height) {
+                const displayGeometry = new THREE.PlaneGeometry(width * 0.7, 5);
+                const displayMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x87CEEB,
+                    emissive: 0x1E3A8A,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const display = new THREE.Mesh(displayGeometry, displayMaterial);
+                display.position.set(0, height * 0.25, depth / 2 + 0.03);
+                building.group.add(display);
+                building.components.push(display);
+            }
+
+            addBlueCommunicationArray(building, width, depth, height) {
+                const arrayMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x87CEEB,
+                    shininess: 90,
+                    emissive: 0x001122
+                });
+                
+                for (let i = 0; i < 4; i++) {
+                    const arrayGeometry = new THREE.CylinderGeometry(0.6, 0.9, 3.5);
+                    const array = new THREE.Mesh(arrayGeometry, arrayMaterial);
+                    array.position.set(
+                        (i - 1.5) * 2.5,
+                        height + 1.75,
+                        0
+                    );
+                    building.group.add(array);
+                    building.components.push(array);
+                }
+            }
+
+            addBlueGlassHexagonalElements(building, width, height) {
+                const hexGeometry = new THREE.CylinderGeometry(1, 1, 0.15, 6);
+                const hexMaterial = this.createBlueGlassMaterial(0.3);
+                
+                const rows = Math.floor(height / 10);
+                const cols = Math.floor(width / 4);
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        if (Math.random() > 0.6) {
+                            const hex = new THREE.Mesh(hexGeometry, hexMaterial);
+                            hex.position.set(
+                                (col - cols/2) * 4,
+                                row * 10 + 5,
+                                width / 2 + 0.08
+                            );
+                            hex.rotation.z = Math.PI / 2;
+                            building.group.add(hex);
+                            building.components.push(hex);
+                            building.glassComponents.push(hex);
+                        }
+                    }
+                }
+            }
+
+            addRooftopFeaturesBlue(building, width, depth, height) {
+                // Blue-tinted solar panels
+                this.addBlueSolarPanels(building, width, depth, height);
+                
+                // Rooftop gardens with geometric patterns
+                this.addBlueRooftopGarden(building, width, depth, height);
+                
+                // Building systems with blue accents
+                this.addBlueBuildingSystems(building, width, depth, height);
+            }
+
+            addBlueSolarPanels(building, width, depth, height) {
+                const panelWidth = 2.2;
+                const panelDepth = 1.2;
+                const rows = Math.floor((width - 2) / panelWidth);
+                const cols = Math.floor((depth - 2) / panelDepth);
+                
+                const panelMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x1E3A8A,
+                    shininess: 120,
+                    emissive: 0x000511
+                });
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        if ((row + col) % 3 === 0) { // Circuit-like pattern
+                            const panelGeometry = new THREE.BoxGeometry(panelWidth * 0.95, 0.12, panelDepth * 0.95);
+                            const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+                            panel.position.set(
+                                (row - rows/2) * panelWidth,
+                                height + 0.25,
+                                (col - cols/2) * panelDepth
+                            );
+                            building.group.add(panel);
+                            building.components.push(panel);
+                        }
+                    }
+                }
+            }
+
+            addBlueRooftopGarden(building, width, depth, height) {
+                const gardenSize = Math.min(width, depth) * 0.4;
+                const gardenGeometry = new THREE.CylinderGeometry(gardenSize, gardenSize, 0.6, 6);
+                const gardenMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                
+                for (let i = 0; i < 3; i++) {
+                    const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                    const angle = (i / 3) * Math.PI * 2;
+                    garden.position.set(
+                        Math.cos(angle) * width * 0.25,
+                        height + 0.4,
+                        Math.sin(angle) * depth * 0.25
+                    );
+                    building.group.add(garden);
+                    building.components.push(garden);
+                }
+            }
+
+            addBlueBuildingSystems(building, width, depth, height) {
+                const hvacMaterial = new THREE.MeshPhongMaterial({ color: 0x87CEEB });
+                
+                for (let i = 0; i < 3; i++) {
+                    const hvacGeometry = new THREE.BoxGeometry(2.5, 1.8, 3.5);
+                    const hvac = new THREE.Mesh(hvacGeometry, hvacMaterial);
+                    hvac.position.set(
+                        (i - 1) * width * 0.3,
+                        height + 0.9,
+                        depth * 0.3
+                    );
+                    building.group.add(hvac);
+                    building.components.push(hvac);
+                }
+            }
+
+            setupRaycasting() {
+                this.raycaster = new THREE.Raycaster();
+                this.mouse = new THREE.Vector2();
+            }
+
+            handleBuildingClick(event) {
+                this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                
+                const allObjects = [];
+                this.buildings.forEach(building => {
+                    allObjects.push(...building.components);
+                });
+                
+                const intersects = this.raycaster.intersectObjects(allObjects);
+                
+                if (intersects.length > 0) {
+                    const clickedObject = intersects[0].object;
+                    const building = this.buildings.find(b => 
+                        b.components.includes(clickedObject)
+                    );
+                    
+                    if (building) {
+                        this.showBuildingDetails(building);
+                    }
+                }
+            }
+
+            showBuildingDetails(building) {
+                this.selectedBuilding = building;
+                const detailsPanel = document.getElementById('building-details');
+                
+                document.getElementById('selected-building').textContent = 
+                    building.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                document.getElementById('building-type-info').textContent = building.type;
+                document.getElementById('building-height-info').textContent = `${building.height}m`;
+                document.getElementById('building-glass-info').textContent = `${Math.round(building.blueGlassArea)} m²`;
+                document.getElementById('building-ai-info').textContent = building.aiFeatures.join(', ');
+                
+                detailsPanel.style.display = 'block';
+            }
+
+            setupEventListeners() {
+                // Interior showcase
+                document.getElementById('interior-showcase').addEventListener('click', (e) => {
+                    this.modes.interior = !this.modes.interior;
+                    e.target.classList.toggle('active');
+                    this.toggleInteriorView();
+                });
+
+                // Glass focus mode
+                document.getElementById('glass-focus').addEventListener('click', (e) => {
+                    this.modes.glassFocus = !this.modes.glassFocus;
+                    e.target.classList.toggle('active');
+                    this.toggleGlassFocus();
+                });
+
+                // Building selection
+                document.getElementById('building-select').addEventListener('click', (e) => {
+                    this.modes.buildingSelect = !this.modes.buildingSelect;
+                    e.target.classList.toggle('active');
+                    if (!this.modes.buildingSelect) {
+                        document.getElementById('building-details').style.display = 'none';
+                    }
+                });
+
+                // Architectural view
+                document.getElementById('architectural-view').addEventListener('click', (e) => {
+                    this.modes.architectural = !this.modes.architectural;
+                    e.target.classList.toggle('active');
+                    this.toggleArchitecturalView();
+                });
+
+                // Glass transparency controls
+                document.getElementById('glass-75').addEventListener('click', (e) => {
+                    this.setGlassTransparency(0.25, e.target);
+                });
+
+                document.getElementById('glass-50').addEventListener('click', (e) => {
+                    this.setGlassTransparency(0.5, e.target);
+                });
+
+                document.getElementById('glass-90').addEventListener('click', (e) => {
+                    this.setGlassTransparency(0.1, e.target);
+                });
+
+                document.getElementById('glass-demo').addEventListener('click', (e) => {
+                    this.startGlassDemo(e.target);
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            toggleInteriorView() {
+                this.buildings.forEach(building => {
+                    building.glassComponents.forEach(component => {
+                        if (component.material) {
+                            component.material.opacity = this.modes.interior ? 0.05 : 0.25;
+                            component.material.transmission = this.modes.interior ? 0.95 : 0.75;
+                        }
+                    });
+                });
+            }
+
+            toggleGlassFocus() {
+                // Highlight glass elements
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        if (building.glassComponents.includes(component)) {
+                            component.material.emissive.setHex(this.modes.glassFocus ? 0x003366 : 0x000000);
+                        } else {
+                            component.material.opacity = this.modes.glassFocus ? 0.3 : 1.0;
+                        }
+                    });
+                });
+            }
+
+            toggleArchitecturalView() {
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        if (component.material) {
+                            component.material.wireframe = this.modes.architectural;
+                        }
+                    });
+                });
+            }
+
+            setGlassTransparency(transparency, button) {
+                // Update active button
+                document.querySelectorAll('.glass-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                this.glassSettings.transparency = transparency;
+                
+                // Update all glass materials
+                this.buildings.forEach(building => {
+                    building.glassComponents.forEach(component => {
+                        if (component.material) {
+                            component.material.opacity = transparency + 0.1;
+                            component.material.transmission = 1 - transparency;
+                        }
+                    });
+                });
+                
+                // Update stats
+                const percentage = Math.round((1 - transparency) * 100);
+                document.getElementById('glass-transparency').textContent = `${percentage}%`;
+            }
+
+            startGlassDemo(button) {
+                button.classList.add('active');
+                let phase = 0;
+                
+                const demo = () => {
+                    const transparency = 0.1 + (Math.sin(phase) + 1) * 0.35; // 0.1 to 0.8
+                    
+                    this.buildings.forEach(building => {
+                        building.glassComponents.forEach(component => {
+                            if (component.material) {
+                                component.material.opacity = transparency + 0.1;
+                                component.material.transmission = 1 - transparency;
+                            }
+                        });
+                    });
+                    
+                    const percentage = Math.round((1 - transparency) * 100);
+                    document.getElementById('glass-transparency').textContent = `${percentage}%`;
+                    
+                    phase += 0.05;
+                    
+                    if (button.classList.contains('active')) {
+                        requestAnimationFrame(demo);
+                    }
+                };
+                
+                demo();
+                
+                // Stop demo after 10 seconds
+                setTimeout(() => {
+                    button.classList.remove('active');
+                    this.setGlassTransparency(0.25, document.getElementById('glass-75'));
+                }, 10000);
+            }
+
+            updateStats() {
+                this.stats.buildingCount = this.buildings.length;
+                this.stats.glassArea = Math.round(this.buildings.reduce((total, building) => 
+                    total + building.blueGlassArea, 0));
+                
+                document.getElementById('building-count').textContent = this.stats.buildingCount;
+                document.getElementById('glass-coverage').textContent = this.stats.glassArea.toLocaleString() + ' m²';
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                this.time = performance.now() * 0.001;
+                
+                // Update FPS
+                this.fpsCounter++;
+                const currentTime = performance.now();
+                const deltaTime = currentTime - this.lastTime;
+                
+                if (deltaTime >= 1000) {
+                    this.stats.fps = Math.round(this.fpsCounter * 1000 / deltaTime);
+                    document.getElementById('fps-display').textContent = `${this.stats.fps} FPS`;
+                    this.fpsCounter = 0;
+                    this.lastTime = currentTime;
+                }
+
+                // Animate LED elements
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        if (component.material && component.material.emissive) {
+                            const pulse = Math.sin(this.time * 2.5) * 0.15 + 0.85;
+                            component.material.emissive.multiplyScalar(pulse);
+                        }
+                    });
+                });
+
+                // Gentle camera auto-rotation
+                if (!this.mouseDown) {
+                    this.cameraRotationY += 0.0008;
+                    this.updateCameraPosition();
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            hideLoading() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Initialize the blue glass city
+        window.addEventListener('load', () => {
+            new BlueGlassCity();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Parallax</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 200vh;
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+        }
+        
+        .content {
+            padding: 50px;
+            text-align: center;
+        }
+        
+        .scroll-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        
+        #test-parallax {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100vh;
+            background: rgba(255, 0, 0, 0.3);
+            border: 3px solid red;
+            z-index: 999;
+            pointer-events: none;
+        }
+        
+        .building {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 120px;
+            background: #2E3A8C;
+            border-radius: 10px;
+            border: 2px solid yellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-info" id="scroll-info">
+        Scroll: 0px<br>
+        Transform: 0px<br>
+        Status: Ready
+    </div>
+
+    <div class="content">
+        <h1>Test Parallax Page</h1>
+        <p>Scroll down to test parallax effect</p>
+        <p>The red box should move when you scroll</p>
+        
+        <div style="height: 100vh;"></div>
+        
+        <h2>Middle Section</h2>
+        <p>Keep scrolling...</p>
+        
+        <div style="height: 100vh;"></div>
+        
+        <h2>Bottom Section</h2>
+        <p>Parallax should be working above!</p>
+    </div>
+
+    <div id="test-parallax">
+        <div class="building">
+            <div style="position: absolute; top: 10px; left: 10px; right: 10px; height: 15px; background: #3B82F6; border-radius: 3px;"></div>
+            <div style="position: absolute; top: 30px; left: 10px; right: 10px; height: 12px; background: white; border-radius: 2px; text-align: center; font-size: 8px; line-height: 12px; color: #2E3A8C;">TEST BUILDING</div>
+        </div>
+    </div>
+
+    <script>
+        console.log("🚀 Test Parallax Script Loading");
+        
+        const parallaxElement = document.getElementById('test-parallax');
+        const building = parallaxElement.querySelector('.building');
+        const scrollInfo = document.getElementById('scroll-info');
+        
+        let ticking = false;
+        
+        function updateParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const parallaxSpeed = 0.3;
+                    const yOffset = scrolled * parallaxSpeed;
+                    
+                    // Apply transform
+                    building.style.transform = `translate(-50%, -50%) translateY(${yOffset}px)`;
+                    
+                    // Update info
+                    scrollInfo.innerHTML = `
+                        Scroll: ${scrolled}px<br>
+                        Transform: ${yOffset}px<br>
+                        Status: Active
+                    `;
+                    
+                    console.log(`Parallax: scroll=${scrolled}, offset=${yOffset}`);
+                    
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', updateParallax, { passive: true });
+        
+        // Test immediately
+        updateParallax();
+        
+        console.log("✅ Test Parallax Ready");
+        
+        // Manual test function
+        window.testParallax = function() {
+            console.log("🔧 Manual test");
+            updateParallax();
+        };
+    </script>
+</body>
+</html>

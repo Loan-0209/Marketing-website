@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Server - HEART AI Campus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .status-box {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #10b981;
+        }
+        .link-box {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #3b82f6;
+        }
+        .link {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .link:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+        .error-info {
+            background: rgba(239, 68, 68, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #ef4444;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 HEART AI Campus - Server Status</h1>
+        
+        <div class="status-box">
+            <h3>✅ Server đang hoạt động</h3>
+            <p>Nếu bạn thấy trang này, server localhost đang chạy bình thường</p>
+            <p><strong>Port:</strong> 3000</p>
+            <p><strong>Thời gian:</strong> <span id="current-time"></span></p>
+        </div>
+        
+        <div class="link-box">
+            <h3>🔗 Truy cập trang web</h3>
+            <a href="/index.html" class="link">🏠 Trang chủ</a>
+            <a href="/master-plan.html" class="link">🏢 3D Campus</a>
+            <a href="/simple-test.html" class="link">🔧 Test Server</a>
+        </div>
+        
+        <div class="error-info">
+            <h3>❌ Nếu không thể truy cập:</h3>
+            <p>1. Kiểm tra URL: <strong>http://localhost:3000/</strong></p>
+            <p>2. Thử mở trong trình duyệt khác</p>
+            <p>3. Xóa cache trình duyệt (Ctrl+Shift+Delete)</p>
+            <p>4. Kiểm tra firewall/antivirus</p>
+        </div>
+        
+        <div class="status-box">
+            <h3>📋 Thông tin Debug</h3>
+            <p>URL hiện tại: <span id="current-url"></span></p>
+            <p>User Agent: <span id="user-agent"></span></p>
+            <p>Kết nối: <span id="connection-status">Đang kiểm tra...</span></p>
+        </div>
+    </div>
+    
+    <script>
+        // Update current time
+        function updateTime() {
+            document.getElementById('current-time').textContent = new Date().toLocaleString('vi-VN');
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Display current URL
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('user-agent').textContent = navigator.userAgent.substring(0, 80) + '...';
+        
+        // Test connection to master-plan.html
+        fetch('/master-plan.html')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('connection-status').innerHTML = '<span style="color: #10b981;">✅ Kết nối thành công</span>';
+                } else {
+                    document.getElementById('connection-status').innerHTML = '<span style="color: #ef4444;">❌ Lỗi HTTP: ' + response.status + '</span>';
+                }
+            })
+            .catch(error => {
+                document.getElementById('connection-status').innerHTML = '<span style="color: #ef4444;">❌ Lỗi kết nối: ' + error.message + '</span>';
+            });
+    </script>
+</body>
+</html>

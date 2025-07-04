@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Campus 3D Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #phase-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        #fps-counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            color: #00ff41;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 250px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            margin-right: 10px;
+            border-radius: 3px;
+        }
+
+        .control-btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            border: 2px solid #4a90e2;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .control-btn:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: #4a90e2;
+            color: #ffffff;
+        }
+
+        .phase-btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            border: 2px solid #27ae60;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .phase-btn:hover {
+            background: rgba(39, 174, 96, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .phase-btn.active {
+            background: #27ae60;
+            color: #ffffff;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #4a90e2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: #4a90e2;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="campus-canvas"></canvas>
+        
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Loading AI Campus...</p>
+        </div>
+
+        <div id="legend">
+            <h3>Building Types</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FFFFFF; border: 1px solid #ddd;"></div>
+                <span>Innovation District</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #F5F5DC;"></div>
+                <span>Startup Hub</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #98FB98;"></div>
+                <span>Demo Zone</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #F0E68C;"></div>
+                <span>Conference Center</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #87CEEB;"></div>
+                <span>Residential Area</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #DDA0DD;"></div>
+                <span>Commercial Plaza</span>
+            </div>
+        </div>
+
+        <div id="controls">
+            <button class="control-btn" id="ground-view">Ground</button>
+            <button class="control-btn" id="auto-rotate">Auto</button>
+            <button class="control-btn" id="day-night">Day/Night</button>
+            <button class="control-btn" id="help">Help</button>
+        </div>
+
+        <div id="phase-controls">
+            <button class="phase-btn active" id="phase-1">Phase 1</button>
+            <button class="phase-btn" id="phase-2">Phase 2</button>
+            <button class="phase-btn" id="phase-3">Phase 3</button>
+        </div>
+
+        <div id="fps-counter">FPS: --</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class CampusMap3D {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.buildings = [];
+                this.aiElements = [];
+                this.trees = [];
+                
+                this.currentPhase = 1;
+                this.isDayMode = true;
+                this.isAutoRotating = false;
+                this.fpsCounter = 0;
+                this.lastTime = performance.now();
+                
+                this.clusterConfigs = {
+                    innovation: { color: 0xFFFFFF, position: [-60, 60], name: 'Innovation District' },
+                    startup: { color: 0xF5F5DC, position: [60, 60], name: 'Startup Hub' },
+                    demo: { color: 0x98FB98, position: [60, -60], name: 'Demo Zone' },
+                    conference: { color: 0xF0E68C, position: [-60, -60], name: 'Conference Center' },
+                    residential: { color: 0x87CEEB, position: [-90, 0], name: 'Residential Area' },
+                    commercial: { color: 0xDDA0DD, position: [90, 0], name: 'Commercial Plaza' }
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.setupScene();
+                this.setupLighting();
+                this.setupCamera();
+                this.setupRenderer();
+                this.setupControls();
+                this.createGround();
+                this.createRoads();
+                this.generateBuildings();
+                this.placeTrees();
+                this.addAIElements();
+                this.setupEventListeners();
+                this.animate();
+                this.hideLoading();
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x87CEEB);
+                this.scene.fog = new THREE.Fog(0x87CEEB, 100, 500);
+            }
+
+            setupLighting() {
+                // Ambient light
+                this.ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                this.scene.add(this.ambientLight);
+
+                // Directional light (sun)
+                this.directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+                this.directionalLight.position.set(50, 100, 50);
+                this.directionalLight.castShadow = true;
+                this.directionalLight.shadow.mapSize.width = 2048;
+                this.directionalLight.shadow.mapSize.height = 2048;
+                this.directionalLight.shadow.camera.near = 1;
+                this.directionalLight.shadow.camera.far = 300;
+                this.directionalLight.shadow.camera.left = -100;
+                this.directionalLight.shadow.camera.right = 100;
+                this.directionalLight.shadow.camera.top = 100;
+                this.directionalLight.shadow.camera.bottom = -100;
+                this.scene.add(this.directionalLight);
+
+                // Additional fill lights
+                const fillLight1 = new THREE.DirectionalLight(0x4a90e2, 0.3);
+                fillLight1.position.set(-50, 50, -50);
+                this.scene.add(fillLight1);
+
+                const fillLight2 = new THREE.DirectionalLight(0x4a90e2, 0.2);
+                fillLight2.position.set(0, 50, -100);
+                this.scene.add(fillLight2);
+            }
+
+            setupCamera() {
+                this.camera = new THREE.PerspectiveCamera(
+                    60,
+                    window.innerWidth / window.innerHeight,
+                    1,
+                    1000
+                );
+                this.camera.position.set(120, 80, 120);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            setupRenderer() {
+                const canvas = document.getElementById('campus-canvas');
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas, 
+                    antialias: true,
+                    alpha: true 
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            }
+
+            setupControls() {
+                // Simple mouse controls
+                this.mouseDown = false;
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.cameraRotationX = 0;
+                this.cameraRotationY = 0;
+                this.cameraDistance = 150;
+
+                const canvas = this.renderer.domElement;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    this.mouseDown = true;
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    if (!this.mouseDown) return;
+                    
+                    const deltaX = e.clientX - this.mouseX;
+                    const deltaY = e.clientY - this.mouseY;
+                    
+                    this.cameraRotationY += deltaX * 0.01;
+                    this.cameraRotationX += deltaY * 0.01;
+                    this.cameraRotationX = Math.max(-Math.PI/3, Math.min(Math.PI/3, this.cameraRotationX));
+                    
+                    this.updateCameraPosition();
+                    
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mouseup', () => {
+                    this.mouseDown = false;
+                });
+
+                canvas.addEventListener('wheel', (e) => {
+                    this.cameraDistance += e.deltaY * 0.1;
+                    this.cameraDistance = Math.max(50, Math.min(300, this.cameraDistance));
+                    this.updateCameraPosition();
+                });
+            }
+
+            updateCameraPosition() {
+                const x = Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                const y = Math.sin(this.cameraRotationX) * this.cameraDistance + 40;
+                const z = Math.sin(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                
+                this.camera.position.set(x, y, z);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            createGround() {
+                const groundGeometry = new THREE.PlaneGeometry(180, 180);
+                const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x8FBC8F });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                // Add cluster highlighting zones
+                Object.values(this.clusterConfigs).forEach(cluster => {
+                    const zoneGeometry = new THREE.CircleGeometry(25, 32);
+                    const zoneMaterial = new THREE.MeshLambertMaterial({ 
+                        color: cluster.color,
+                        transparent: true,
+                        opacity: 0.1
+                    });
+                    const zone = new THREE.Mesh(zoneGeometry, zoneMaterial);
+                    zone.rotation.x = -Math.PI / 2;
+                    zone.position.set(cluster.position[0], 0.1, cluster.position[1]);
+                    this.scene.add(zone);
+                });
+            }
+
+            createRoads() {
+                const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                
+                // Main cross roads
+                const mainRoadH = new THREE.PlaneGeometry(180, 6);
+                const roadH = new THREE.Mesh(mainRoadH, roadMaterial);
+                roadH.rotation.x = -Math.PI / 2;
+                roadH.position.y = 0.05;
+                this.scene.add(roadH);
+
+                const mainRoadV = new THREE.PlaneGeometry(6, 180);
+                const roadV = new THREE.Mesh(mainRoadV, roadMaterial);
+                roadV.rotation.x = -Math.PI / 2;
+                roadV.position.y = 0.05;
+                this.scene.add(roadV);
+
+                // Connecting roads to clusters
+                Object.values(this.clusterConfigs).forEach(cluster => {
+                    const connectGeometry = new THREE.PlaneGeometry(2, 30);
+                    const connectRoad = new THREE.Mesh(connectGeometry, roadMaterial);
+                    connectRoad.rotation.x = -Math.PI / 2;
+                    connectRoad.position.set(
+                        cluster.position[0] / 2, 
+                        0.05, 
+                        cluster.position[1] / 2
+                    );
+                    
+                    if (Math.abs(cluster.position[0]) > Math.abs(cluster.position[1])) {
+                        connectRoad.rotation.z = Math.PI / 2;
+                    }
+                    
+                    this.scene.add(connectRoad);
+                });
+            }
+
+            generateBuildings() {
+                Object.entries(this.clusterConfigs).forEach(([type, config]) => {
+                    this.createBuildingCluster(type, config);
+                });
+            }
+
+            createBuildingCluster(type, config) {
+                const clusterBuildings = [];
+                const buildingCount = 4 + Math.floor(Math.random() * 2); // 4-5 buildings
+                
+                for (let i = 0; i < buildingCount; i++) {
+                    const building = this.createBuilding(type, config, i);
+                    clusterBuildings.push(building);
+                    this.scene.add(building);
+                }
+                
+                this.buildings.push(...clusterBuildings);
+            }
+
+            createBuilding(type, config, index) {
+                const height = 12 + Math.random() * 23; // 12-35 floors
+                const width = 3 + Math.random() * 4;
+                const depth = 3 + Math.random() * 4;
+                
+                const geometry = new THREE.BoxGeometry(width, height, depth);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: config.color,
+                    shininess: 30,
+                    transparent: true,
+                    opacity: 0.95
+                });
+                
+                const building = new THREE.Mesh(geometry, material);
+                
+                // Position within cluster
+                const angle = (index / 5) * Math.PI * 2;
+                const radius = 8 + Math.random() * 12;
+                const x = config.position[0] + Math.cos(angle) * radius;
+                const z = config.position[1] + Math.sin(angle) * radius;
+                
+                building.position.set(x, height / 2, z);
+                building.castShadow = true;
+                building.receiveShadow = true;
+                
+                // Add architectural details based on type
+                this.addBuildingDetails(building, type, height, width, depth);
+                
+                // Add glass facade windows
+                this.addGlassFacade(building, width, height, depth);
+                
+                // Add modern details like balconies and LED lights
+                this.addModernDetails(building, type, height, width, depth);
+                
+                return building;
+            }
+
+            addGlassFacade(building, width, height, depth) {
+                // Add blue tinted glass windows on facades
+                const windowMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0x4169E1,
+                    transparent: true,
+                    opacity: 0.3,
+                    reflectivity: 0.8
+                });
+                
+                // Front facade windows
+                const frontWindowsGeometry = new THREE.PlaneGeometry(width * 0.8, height * 0.9);
+                const frontWindows = new THREE.Mesh(frontWindowsGeometry, windowMaterial);
+                frontWindows.position.set(0, 0, depth/2 + 0.01);
+                building.add(frontWindows);
+                
+                // Back facade windows
+                const backWindows = new THREE.Mesh(frontWindowsGeometry, windowMaterial);
+                backWindows.position.set(0, 0, -depth/2 - 0.01);
+                backWindows.rotation.y = Math.PI;
+                building.add(backWindows);
+                
+                // Side facades
+                const sideWindowsGeometry = new THREE.PlaneGeometry(depth * 0.8, height * 0.9);
+                const leftWindows = new THREE.Mesh(sideWindowsGeometry, windowMaterial);
+                leftWindows.position.set(-width/2 - 0.01, 0, 0);
+                leftWindows.rotation.y = Math.PI/2;
+                building.add(leftWindows);
+                
+                const rightWindows = new THREE.Mesh(sideWindowsGeometry, windowMaterial);
+                rightWindows.position.set(width/2 + 0.01, 0, 0);
+                rightWindows.rotation.y = -Math.PI/2;
+                building.add(rightWindows);
+            }
+            
+            addModernDetails(building, type, height, width, depth) {
+                // Add balconies with plants
+                const balconyLevels = Math.floor(height / 8) + 1;
+                for (let i = 1; i < balconyLevels; i++) {
+                    const balconyY = (i * 8) - height/2 + 2;
+                    
+                    // Balcony structure
+                    const balconyGeometry = new THREE.BoxGeometry(width + 0.4, 0.1, 1);
+                    const balconyMaterial = new THREE.MeshPhongMaterial({ color: 0xE6E6FA });
+                    const balcony = new THREE.Mesh(balconyGeometry, balconyMaterial);
+                    balcony.position.set(0, balconyY, depth/2 + 0.5);
+                    building.add(balcony);
+                    
+                    // Plants on balcony
+                    const plantGeometry = new THREE.SphereGeometry(0.15, 8, 6);
+                    const plantMaterial = new THREE.MeshLambertMaterial({ color: 0x32CD32 });
+                    const plant1 = new THREE.Mesh(plantGeometry, plantMaterial);
+                    plant1.position.set(-width/3, balconyY + 0.2, depth/2 + 0.6);
+                    building.add(plant1);
+                    
+                    const plant2 = new THREE.Mesh(plantGeometry, plantMaterial);
+                    plant2.position.set(width/3, balconyY + 0.2, depth/2 + 0.6);
+                    building.add(plant2);
+                }
+                
+                // LED accent lighting
+                const ledMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00BFFF,
+                    emissive: 0x004488,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                // Vertical LED strips
+                const ledGeometry = new THREE.CylinderGeometry(0.02, 0.02, height * 0.8);
+                const led1 = new THREE.Mesh(ledGeometry, ledMaterial);
+                led1.position.set(-width/3, 0, depth/2 + 0.02);
+                building.add(led1);
+                
+                const led2 = new THREE.Mesh(ledGeometry, ledMaterial);
+                led2.position.set(width/3, 0, depth/2 + 0.02);
+                building.add(led2);
+            }
+            
+            addBuildingDetails(building, type, height, width, depth) {
+                switch(type) {
+                    case 'innovation':
+                        // Modern glass dome
+                        const domeGeometry = new THREE.SphereGeometry(1.5, 16, 8);
+                        const domeMaterial = new THREE.MeshPhongMaterial({ 
+                            color: 0xE0F6FF,
+                            transparent: true,
+                            opacity: 0.6,
+                            shininess: 100
+                        });
+                        const dome = new THREE.Mesh(domeGeometry, domeMaterial);
+                        dome.position.y = height / 2 + 2;
+                        building.add(dome);
+                        break;
+                        
+                    case 'startup':
+                        // Modern antenna array
+                        const coreGeometry = new THREE.CylinderGeometry(0.3, 0.5, 2);
+                        const coreMaterial = new THREE.MeshPhongMaterial({ 
+                            color: 0xFFD700,
+                            emissive: 0x332200,
+                            shininess: 80
+                        });
+                        const core = new THREE.Mesh(coreGeometry, coreMaterial);
+                        core.position.y = height / 2 + 1;
+                        building.add(core);
+                        break;
+                        
+                    case 'demo':
+                        // Modern digital display
+                        const screenGeometry = new THREE.PlaneGeometry(2.5, 1.8);
+                        const screenMaterial = new THREE.MeshPhongMaterial({ 
+                            color: 0x87CEEB,
+                            emissive: 0x112233,
+                            shininess: 100
+                        });
+                        const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+                        screen.position.set(0, height / 4, depth / 2 + 0.1);
+                        building.add(screen);
+                        break;
+                        
+                    case 'conference':
+                        // Modern conference dome
+                        const qDomeGeometry = new THREE.SphereGeometry(1.2, 12, 6);
+                        const qDomeMaterial = new THREE.MeshPhongMaterial({ 
+                            color: 0xFFE4B5,
+                            transparent: true,
+                            opacity: 0.7,
+                            shininess: 60
+                        });
+                        const qDome = new THREE.Mesh(qDomeGeometry, qDomeMaterial);
+                        qDome.position.y = height / 2 + 1.5;
+                        building.add(qDome);
+                        break;
+                        
+                    case 'residential':
+                        // Rooftop garden
+                        const gardenGeometry = new THREE.CylinderGeometry(width/2, width/2, 0.2);
+                        const gardenMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                        const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                        garden.position.y = height / 2 + 0.3;
+                        building.add(garden);
+                        break;
+                        
+                    case 'commercial':
+                        // Modern spire
+                        const spireGeometry = new THREE.ConeGeometry(0.4, 3, 8);
+                        const spireMaterial = new THREE.MeshPhongMaterial({ 
+                            color: 0xE6E6FA,
+                            shininess: 90
+                        });
+                        const spire = new THREE.Mesh(spireGeometry, spireMaterial);
+                        spire.position.y = height / 2 + 2;
+                        building.add(spire);
+                        break;
+                }
+            }
+
+            placeTrees() {
+                for (let i = 0; i < 35; i++) {
+                    const tree = this.createTree();
+                    
+                    // Random position avoiding building clusters
+                    let x, z;
+                    do {
+                        x = (Math.random() - 0.5) * 160;
+                        z = (Math.random() - 0.5) * 160;
+                    } while (this.isNearCluster(x, z));
+                    
+                    tree.position.set(x, 0, z);
+                    this.scene.add(tree);
+                    this.trees.push(tree);
+                }
+            }
+
+            isNearCluster(x, z) {
+                return Object.values(this.clusterConfigs).some(cluster => {
+                    const distance = Math.sqrt(
+                        Math.pow(x - cluster.position[0], 2) + 
+                        Math.pow(z - cluster.position[1], 2)
+                    );
+                    return distance < 30;
+                });
+            }
+
+            createTree() {
+                const treeGroup = new THREE.Group();
+                
+                // Trunk
+                const trunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 3);
+                const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 1.5;
+                treeGroup.add(trunk);
+                
+                // Foliage
+                const foliageGeometry = new THREE.SphereGeometry(1.5, 8, 6);
+                const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+                foliage.position.y = 3.5;
+                treeGroup.add(foliage);
+                
+                return treeGroup;
+            }
+
+            addAIElements() {
+                // Add floating AI orbs around clusters
+                Object.values(this.clusterConfigs).forEach(cluster => {
+                    for (let i = 0; i < 3; i++) {
+                        const orb = this.createAIOrb();
+                        const angle = (i / 3) * Math.PI * 2;
+                        const radius = 20 + Math.random() * 10;
+                        orb.position.set(
+                            cluster.position[0] + Math.cos(angle) * radius,
+                            8 + Math.random() * 5,
+                            cluster.position[1] + Math.sin(angle) * radius
+                        );
+                        this.scene.add(orb);
+                        this.aiElements.push({ mesh: orb, type: 'orb', baseY: orb.position.y });
+                    }
+                });
+            }
+
+            createAIOrb() {
+                const orbGeometry = new THREE.SphereGeometry(0.5, 12, 8);
+                const orbMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x4a90e2,
+                    emissive: 0x001122,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                return new THREE.Mesh(orbGeometry, orbMaterial);
+            }
+
+            setupEventListeners() {
+                // Ground view button
+                document.getElementById('ground-view').addEventListener('click', () => {
+                    this.cameraRotationX = -0.3;
+                    this.cameraRotationY = 0;
+                    this.cameraDistance = 80;
+                    this.updateCameraPosition();
+                });
+
+                // Auto rotate button
+                document.getElementById('auto-rotate').addEventListener('click', (e) => {
+                    this.isAutoRotating = !this.isAutoRotating;
+                    e.target.classList.toggle('active');
+                });
+
+                // Day/Night toggle
+                document.getElementById('day-night').addEventListener('click', (e) => {
+                    this.isDayMode = !this.isDayMode;
+                    this.toggleDayNight();
+                    e.target.classList.toggle('active');
+                });
+
+                // Help button
+                document.getElementById('help').addEventListener('click', () => {
+                    alert('Campus Map Controls:\n\n• Drag to rotate camera\n• Scroll to zoom\n• Ground: Reset to ground view\n• Auto: Toggle auto-rotation\n• Day/Night: Switch lighting mode\n• Phase 1-3: Show development phases');
+                });
+
+                // Phase buttons
+                document.querySelectorAll('.phase-btn').forEach((btn, index) => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        this.currentPhase = index + 1;
+                        this.updatePhase();
+                    });
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            toggleDayNight() {
+                if (this.isDayMode) {
+                    // Day mode
+                    this.scene.background = new THREE.Color(0x87CEEB);
+                    this.directionalLight.color.setHex(0xffffff);
+                    this.directionalLight.intensity = 1;
+                    this.ambientLight.intensity = 0.4;
+                } else {
+                    // Night mode
+                    this.scene.background = new THREE.Color(0x191970);
+                    this.directionalLight.color.setHex(0x404040);
+                    this.directionalLight.intensity = 0.3;
+                    this.ambientLight.intensity = 0.1;
+                }
+            }
+
+            updatePhase() {
+                // Show/hide buildings based on phase
+                this.buildings.forEach((building, index) => {
+                    const buildingPhase = Math.floor(index / (this.buildings.length / 3)) + 1;
+                    building.visible = buildingPhase <= this.currentPhase;
+                });
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+
+                const currentTime = performance.now();
+                const deltaTime = currentTime - this.lastTime;
+                
+                // Update FPS counter
+                this.fpsCounter++;
+                if (deltaTime >= 1000) {
+                    document.getElementById('fps-counter').textContent = `FPS: ${Math.round(this.fpsCounter * 1000 / deltaTime)}`;
+                    this.fpsCounter = 0;
+                    this.lastTime = currentTime;
+                }
+
+                // Auto rotation
+                if (this.isAutoRotating) {
+                    this.cameraRotationY += 0.005;
+                    this.updateCameraPosition();
+                }
+
+                // Animate AI elements
+                this.aiElements.forEach((element, index) => {
+                    const time = currentTime * 0.001;
+                    
+                    if (element.type === 'orb') {
+                        // Floating motion
+                        element.mesh.position.y = element.baseY + Math.sin(time + index) * 0.5;
+                        element.mesh.rotation.y += 0.01;
+                    }
+                });
+
+                // Animate trees (subtle swaying)
+                this.trees.forEach((tree, index) => {
+                    const time = currentTime * 0.0005;
+                    tree.rotation.z = Math.sin(time + index) * 0.02;
+                    tree.position.y = Math.sin(time * 2 + index) * 0.1;
+                });
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            hideLoading() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        // Initialize the campus map when page loads
+        window.addEventListener('load', () => {
+            new CampusMap3D();
+        });
+    </script>
+</body>
+</html>

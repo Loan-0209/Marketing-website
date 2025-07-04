@@ -1,0 +1,476 @@
+/**
+ * RealisticModernCity Core Class
+ * Extracted from realistic-modern-city.html
+ */
+
+class RealisticModernCity {
+    constructor(containerId = 'city-canvas') {
+        this.containerId = containerId;
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.buildings = [];
+        this.environmentCube = null;
+        
+        this.modes = {
+            interior: false,
+            wireframe: false,
+            buildingInfo: false
+        };
+        
+        this.timeOfDay = 'noon';
+        this.stats = {
+            buildingCount: 0,
+            floorCount: 0,
+            glassArea: 0,
+            fps: 0
+        };
+        
+        this.time = 0;
+        this.fpsCounter = 0;
+        this.lastTime = performance.now();
+        this.selectedBuilding = null;
+        
+        // Initialize the scene
+        this.init();
+    }
+
+    // Hàm đảm bảo wireframe luôn tắt
+    ensureWireframeOff() {
+        // Đảm bảo wireframe luôn tắt
+        this.modes.wireframe = false;
+        
+        // Cập nhật trạng thái nút wireframe trong UI
+        const wireframeButton = document.getElementById('wireframe-mode');
+        if (wireframeButton) {
+            wireframeButton.classList.remove('active');
+        }
+        
+        // Áp dụng cài đặt wireframe cho tất cả các thành phần
+        this.buildings.forEach(building => {
+            building.components.forEach(component => {
+                if (component.material) {
+                    component.material.wireframe = false;
+                }
+            });
+        });
+        
+        console.log('Wireframe mode forced OFF');
+    }
+    
+    init() {
+        this.setupScene();
+        this.setupLighting();
+        this.setupCamera();
+        this.setupRenderer();
+        this.setupControls();
+        this.createEnvironment();
+        this.generateCityDistrict();
+        this.setupEventListeners();
+        this.setupRaycasting();
+        
+        // Đảm bảo wireframe luôn tắt
+        this.ensureWireframeOff();
+        
+        this.animate();
+        this.hideLoading();
+    }
+
+    setupScene() {
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x87CEEB); // Sky blue background
+    }
+
+    setupLighting() {
+        // Ambient light
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        this.scene.add(ambientLight);
+        
+        // Directional light (sun)
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(50, 200, 100);
+        directionalLight.castShadow = true;
+        
+        // Cấu hình shadow
+        directionalLight.shadow.mapSize.width = 1024;
+        directionalLight.shadow.mapSize.height = 1024;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 500;
+        directionalLight.shadow.camera.left = -100;
+        directionalLight.shadow.camera.right = 100;
+        directionalLight.shadow.camera.top = 100;
+        directionalLight.shadow.camera.bottom = -100;
+        
+        this.scene.add(directionalLight);
+        
+        // Hemisphere light (sky and ground)
+        const hemisphereLight = new THREE.HemisphereLight(0x87CEEB, 0x444444, 0.5);
+        this.scene.add(hemisphereLight);
+    }
+
+    setupCamera() {
+        const canvas = document.getElementById(this.containerId);
+        const aspect = canvas.clientWidth / canvas.clientHeight;
+        this.camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1000);
+        this.camera.position.set(30, 30, 30);
+        this.camera.lookAt(0, 0, 0);
+        
+        // Camera position variables for smooth transitions
+        this.cameraDistance = 50;
+        this.cameraHeight = 30;
+        this.cameraRotationY = 0;
+    }
+
+    setupRenderer() {
+        const canvas = document.getElementById(this.containerId);
+        this.renderer = new THREE.WebGLRenderer({ 
+            canvas: canvas,
+            antialias: true,
+            alpha: true 
+        });
+        
+        this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1.2;
+    }
+
+    setupControls() {
+        // Tạo OrbitControls để điều khiển camera
+        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.05;
+        this.controls.screenSpacePanning = false;
+        this.controls.minDistance = 10;
+        this.controls.maxDistance = 100;
+        this.controls.maxPolarAngle = Math.PI / 2;
+    }
+
+    createEnvironment() {
+        // Tạo mặt đất
+        const groundGeometry = new THREE.PlaneGeometry(500, 500);
+        const groundMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x1a5e1a,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -0.5;
+        ground.receiveShadow = true;
+        this.scene.add(ground);
+        
+        // Tạo bầu trời
+        const skyGeometry = new THREE.SphereGeometry(200, 32, 32);
+        const skyMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x87CEEB,
+            side: THREE.BackSide
+        });
+        
+        const sky = new THREE.Mesh(skyGeometry, skyMaterial);
+        this.scene.add(sky);
+    }
+
+    generateCityDistrict() {
+        console.log('Generating city district...');
+        
+        // Số lượng tòa nhà (giảm xuống để tránh quá tải)
+        const buildingCount = 30;
+        
+        // Kích thước khu vực thành phố
+        const citySize = 80;
+        const halfCitySize = citySize / 2;
+        
+        // Mảng lưu vị trí đã sử dụng để tránh chồng chéo
+        const usedPositions = [];
+        
+        // Tạo các tòa nhà
+        for (let i = 0; i < buildingCount; i++) {
+            let x, z, width, depth;
+            let attempts = 0;
+            let validPosition = false;
+            
+            // Tìm vị trí hợp lệ không chồng chéo
+            while (!validPosition && attempts < 20) {
+                // Vị trí ngẫu nhiên trong khu vực thành phố
+                x = Math.random() * citySize - halfCitySize;
+                z = Math.random() * citySize - halfCitySize;
+                
+                // Kích thước ngẫu nhiên cho tòa nhà
+                width = 2 + Math.random() * 6;
+                const height = 5 + Math.random() * 35;
+                depth = 2 + Math.random() * 6;
+                
+                // Kiểm tra chồng chéo
+                validPosition = true;
+                for (const pos of usedPositions) {
+                    const distance = Math.sqrt(Math.pow(x - pos.x, 2) + Math.pow(z - pos.z, 2));
+                    if (distance < (width/2 + pos.width/2 + 1)) {
+                        validPosition = false;
+                        break;
+                    }
+                }
+                
+                attempts++;
+            }
+            
+            if (validPosition) {
+                // Tạo tòa nhà
+                this.createBuilding(x, 0, z, width, Math.random() * 35 + 5, depth);
+                
+                // Lưu vị trí đã sử dụng
+                usedPositions.push({x, z, width, depth});
+            }
+        }
+        
+        // Tạo một số tòa nhà cao tầng ở trung tâm
+        for (let i = 0; i < 5; i++) {
+            const angle = i * Math.PI * 2 / 5;
+            const distance = 15;
+            const x = Math.cos(angle) * distance;
+            const z = Math.sin(angle) * distance;
+            const width = 4 + Math.random() * 4;
+            const height = 40 + Math.random() * 20;
+            const depth = 4 + Math.random() * 4;
+            
+            this.createBuilding(x, 0, z, width, height, depth);
+        }
+        
+        // Tạo tòa nhà cao nhất ở trung tâm
+        this.createBuilding(0, 0, 0, 8, 60, 8);
+        
+        // Cập nhật thống kê
+        this.stats.buildingCount = this.buildings.length;
+        console.log(`Generated ${this.buildings.length} buildings`);
+    }
+    
+    createBuilding(x, y, z, width, height, depth) {
+        try {
+            // Tạo geometry cho tòa nhà
+            const buildingGeometry = new THREE.BoxGeometry(width, height, depth);
+            
+            // Tạo material cho tòa nhà (kính màu xanh trong suốt)
+            const buildingMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0x88ccff,
+                metalness: 0.9,
+                roughness: 0.1,
+                transparent: true,
+                opacity: 0.7,
+                reflectivity: 1.0,
+                transmission: 0.5
+            });
+            
+            // Tạo mesh cho tòa nhà
+            const buildingMesh = new THREE.Mesh(buildingGeometry, buildingMaterial);
+            buildingMesh.position.set(x, y + height/2, z);
+            buildingMesh.castShadow = true;
+            buildingMesh.receiveShadow = true;
+            
+            // Thêm vào scene
+            this.scene.add(buildingMesh);
+            
+            // Tính số tầng dựa trên chiều cao
+            const floors = Math.floor(height / 3);
+            
+            // Tính diện tích kính
+            const glassArea = 2 * (width * height + depth * height);
+            
+            // Cập nhật thống kê
+            this.stats.floorCount += floors;
+            this.stats.glassArea += glassArea;
+            
+            // Lưu thông tin tòa nhà
+            const building = {
+                mesh: buildingMesh,
+                components: [buildingMesh],
+                position: { x, y, z },
+                dimensions: { width, height, depth },
+                floors: floors
+            };
+            
+            this.buildings.push(building);
+            console.log(`Building created at (${x}, ${y}, ${z}) with dimensions ${width}x${height}x${depth}`);
+            
+            return building;
+        } catch (error) {
+            console.error('Error creating building:', error);
+            return null;
+        }
+    }
+
+    setupEventListeners() {
+        // Xử lý sự kiện resize cửa sổ
+        window.addEventListener('resize', () => this.handleResize());
+        
+        // Xử lý sự kiện click chuột để chọn tòa nhà
+        const canvas = document.getElementById(this.containerId);
+        canvas.addEventListener('click', (event) => this.handleClick(event));
+    }
+
+    setupRaycasting() {
+        // Khởi tạo raycaster để chọn tòa nhà
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+    }
+
+    toggleWireframe() {
+        this.modes.wireframe = !this.modes.wireframe;
+        
+        this.buildings.forEach(building => {
+            building.components.forEach(component => {
+                if (component.material) {
+                    component.material.wireframe = this.modes.wireframe;
+                }
+            });
+        });
+    }
+
+    updateTimeOfDay() {
+        switch(this.timeOfDay) {
+            case 'morning':
+                this.scene.background = new THREE.Color(0xFFE4B5);
+                this.directionalLight.color.setHex(0xFFE4B5);
+                this.directionalLight.intensity = 0.8;
+                this.ambientLight.intensity = 0.6;
+                break;
+            case 'noon':
+                this.scene.background = new THREE.Color(0x87CEEB);
+                this.directionalLight.color.setHex(0xffffff);
+                this.directionalLight.intensity = 1.2;
+                this.ambientLight.intensity = 0.4;
+                break;
+            case 'evening':
+                this.scene.background = new THREE.Color(0xFF6347);
+                this.directionalLight.color.setHex(0xFF6347);
+                this.directionalLight.intensity = 0.6;
+                this.ambientLight.intensity = 0.3;
+                break;
+            case 'night':
+                this.scene.background = new THREE.Color(0x191970);
+                this.directionalLight.color.setHex(0x404040);
+                this.directionalLight.intensity = 0.2;
+                this.ambientLight.intensity = 0.1;
+                break;
+        }
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+        
+        // Cập nhật controls
+        if (this.controls) {
+            this.controls.update();
+        }
+        
+        // Tính FPS
+        const now = performance.now();
+        const delta = now - this.lastTime;
+        this.fpsCounter++;
+        
+        if (delta >= 1000) {
+            this.stats.fps = Math.round((this.fpsCounter * 1000) / delta);
+            this.fpsCounter = 0;
+            this.lastTime = now;
+        }
+        
+        // Animation logic - xoay nhẹ các tòa nhà nếu đang ở chế độ auto-rotate
+        if (this.controls && this.controls.autoRotate) {
+            this.time += 0.01;
+            this.buildings.forEach((building, index) => {
+                building.mesh.rotation.y = Math.sin(this.time + index) * 0.01;
+            });
+        }
+        
+        // Render scene
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    hideLoading() {
+        setTimeout(() => {
+            const loadingElement = document.getElementById('loading');
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+        }, 2500);
+    }
+    
+    // Add method for handling resize
+    handleResize() {
+        if (this.camera && this.renderer) {
+            const canvas = document.getElementById(this.containerId);
+            if (canvas) {
+                this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                console.log('Resized renderer to:', canvas.clientWidth, canvas.clientHeight);
+            } else {
+                console.warn('Canvas element not found for resize');
+            }
+        }
+    }
+    
+    handleClick(event) {
+        // Tính toán vị trí chuột chuẩn hóa
+        const canvas = document.getElementById(this.containerId);
+        const rect = canvas.getBoundingClientRect();
+        
+        this.mouse.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+        this.mouse.y = -((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+        
+        // Cập nhật raycaster
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+        
+        // Tìm các đối tượng giao với tia
+        const buildingMeshes = this.buildings.map(building => building.mesh);
+        const intersects = this.raycaster.intersectObjects(buildingMeshes);
+        
+        if (intersects.length > 0) {
+            // Tìm tòa nhà được chọn
+            const selectedMesh = intersects[0].object;
+            const selectedBuilding = this.buildings.find(building => building.mesh === selectedMesh);
+            
+            if (selectedBuilding) {
+                this.selectBuilding(selectedBuilding);
+            }
+        } else {
+            // Bỏ chọn nếu click vào khoảng trống
+            this.deselectBuilding();
+        }
+    }
+    
+    selectBuilding(building) {
+        // Bỏ chọn tòa nhà hiện tại nếu có
+        this.deselectBuilding();
+        
+        // Đánh dấu tòa nhà được chọn
+        this.selectedBuilding = building;
+        
+        // Highlight tòa nhà được chọn
+        const originalMaterial = building.mesh.material;
+        building.originalMaterial = originalMaterial;
+        
+        building.mesh.material = new THREE.MeshPhysicalMaterial({
+            color: 0xffcc00,
+            metalness: 0.9,
+            roughness: 0.1,
+            transparent: true,
+            opacity: 0.8,
+            reflectivity: 1.0,
+            transmission: 0.5
+        });
+        
+        console.log('Selected building:', building);
+    }
+    
+    deselectBuilding() {
+        if (this.selectedBuilding && this.selectedBuilding.originalMaterial) {
+            // Khôi phục material ban đầu
+            this.selectedBuilding.mesh.material = this.selectedBuilding.originalMaterial;
+            this.selectedBuilding = null;
+        }
+    }
+}

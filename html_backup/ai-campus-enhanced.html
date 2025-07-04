@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART AI Research Campus - Enhanced Interactive</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ai-blue: #0066cc;
+            --innovation-orange: #ff8800;
+            --startup-green: #00cc66;
+            --data-gray: #333366;
+            --lab-cyan: #00cccc;
+            --conference-purple: #6633cc;
+            --residential-brown: #cc6633;
+            --demo-pink: #cc3366;
+            --commercial-gold: #ccaa00;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
+            color: #1e2148;
+            overflow-x: hidden;
+        }
+
+        /* Professional Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 138, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            padding: 1rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fbbf24;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #fbbf24;
+            color: #1e3a8a;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* 3D Viewer */
+        .viewer-container {
+            position: relative;
+            background: var(--primary-gradient);
+            overflow: hidden;
+        }
+
+        #threejs-container {
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        #threejs-container:active {
+            cursor: grabbing;
+        }
+
+        /* STEP 1: Compact Legend Panel */
+        .campus-zones-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            max-height: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .campus-zones-panel.collapsed {
+            max-height: 40px;
+        }
+
+        .panel-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .panel-header:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .panel-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin: 0;
+        }
+
+        .toggle-arrow {
+            font-size: 10px;
+            color: #6b7280;
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+
+        .campus-zones-panel.collapsed .toggle-arrow {
+            transform: rotate(-90deg);
+        }
+
+        .panel-content {
+            max-height: 250px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .campus-zones-panel.collapsed .panel-content {
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .zone-item {
+            padding: 4px 12px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .zone-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+            border-left-color: #1e3a8a;
+            transform: translateX(2px);
+        }
+
+        .color-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+
+        .zone-name {
+            font-weight: 500;
+            color: #374151;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Camera Controls */
+        .camera-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1e3a8a;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .control-btn:hover, .control-btn.active {
+            background: #fbbf24;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Timeline Controls */
+        .timeline-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .phase-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1e3a8a;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .phase-btn:hover, .phase-btn.active {
+            background: #1e3a8a;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Performance Indicator */
+        .performance-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        /* Zone Info Popup */
+        .zone-info-popup {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 280px;
+            z-index: 200;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+
+        .zone-info-popup.show {
+            transform: scale(1);
+        }
+
+        .popup-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .popup-description {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .popup-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 10px;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 4px 6px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .stat-value {
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        /* Loading */
+        #loadingOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #fbbf24;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Help Overlay */
+        .help-overlay {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 500;
+            max-width: 250px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .help-overlay.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .help-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fbbf24;
+        }
+
+        .help-item {
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .help-key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .campus-zones-panel {
+                width: 180px;
+                top: 15px;
+                left: 15px;
+            }
+            
+            .camera-controls {
+                top: 15px;
+                right: 15px;
+                flex-direction: column;
+            }
+            
+            .timeline-controls {
+                bottom: 15px;
+                left: 15px;
+                transform: none;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .performance-indicator {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">🧠 HEART AI Campus</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="ai-campus-enhanced.html" class="nav-link active">AI Campus</a></li>
+                <li><a href="index.html#research" class="nav-link">Research</a></li>
+                <li><a href="index.html#innovation" class="nav-link">Innovation</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- 3D Viewer -->
+        <div class="viewer-container">
+            <div id="loadingOverlay">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <h3>Loading Enhanced AI Campus...</h3>
+                    <p>Initializing interactive features</p>
+                </div>
+            </div>
+
+            <!-- STEP 1: Compact Legend Panel -->
+            <div class="campus-zones-panel" id="campusZonesPanel">
+                <div class="panel-header" id="panelHeader">
+                    <h4 class="panel-title">🏢 Campus Zones</h4>
+                    <span class="toggle-arrow">▼</span>
+                </div>
+                <div class="panel-content" id="panelContent">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Camera Controls -->
+            <div class="camera-controls">
+                <button class="control-btn active" data-view="overview">Overview</button>
+                <button class="control-btn" data-view="aerial">Aerial</button>
+                <button class="control-btn" data-view="ground">Ground</button>
+                <button class="control-btn" data-action="auto-rotate">Auto</button>
+                <button class="control-btn" data-action="day-night">Day/Night</button>
+                <button class="control-btn" data-action="help">Help</button>
+            </div>
+
+            <!-- Timeline Controls -->
+            <div class="timeline-controls">
+                <button class="phase-btn active" data-phase="phase1">Phase 1: Core Research</button>
+                <button class="phase-btn" data-phase="phase2">Phase 2: Innovation</button>
+                <button class="phase-btn" data-phase="phase3">Phase 3: Integration</button>
+            </div>
+
+            <div class="performance-indicator" id="performanceIndicator">Loading...</div>
+            
+            <!-- Zone Info Popup -->
+            <div class="zone-info-popup" id="zoneInfoPopup">
+                <div class="popup-title" id="popupTitle"></div>
+                <div class="popup-description" id="popupDescription"></div>
+                <div class="popup-stats" id="popupStats"></div>
+            </div>
+
+            <!-- Help Overlay -->
+            <div class="help-overlay" id="helpOverlay">
+                <div class="help-title">Keyboard Shortcuts</div>
+                <div class="help-item">
+                    <span>Toggle Labels</span>
+                    <span class="help-key">L</span>
+                </div>
+                <div class="help-item">
+                    <span>Toggle Panel</span>
+                    <span class="help-key">P</span>
+                </div>
+                <div class="help-item">
+                    <span>Reset View</span>
+                    <span class="help-key">R</span>
+                </div>
+                <div class="help-item">
+                    <span>Auto Rotate</span>
+                    <span class="help-key">Space</span>
+                </div>
+                <div class="help-item">
+                    <span>Day/Night</span>
+                    <span class="help-key">N</span>
+                </div>
+            </div>
+
+            <div id="threejs-container"></div>
+        </div>
+    </div>
+
+    <!-- Three.js and GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        console.log('🧠 Starting Enhanced AI Research Campus...');
+
+        // Professional OrbitControls (same as before)
+        THREE.OrbitControls = function (object, domElement) {
+            this.object = object;
+            this.domElement = domElement || document;
+            this.enabled = true;
+            this.target = new THREE.Vector3();
+            this.minDistance = 30;
+            this.maxDistance = 500;
+            this.enableDamping = true;
+            this.dampingFactor = 0.05;
+            this.enableZoom = true;
+            this.enableRotate = true;
+            this.enablePan = true;
+            this.autoRotate = false;
+            this.autoRotateSpeed = 1.5;
+            
+            var scope = this;
+            var STATE = { NONE: -1, ROTATE: 0, DOLLY: 1, PAN: 2 };
+            var state = STATE.NONE;
+            var EPS = 0.000001;
+            
+            var spherical = new THREE.Spherical();
+            var sphericalDelta = new THREE.Spherical();
+            var scale = 1;
+            var panOffset = new THREE.Vector3();
+            
+            var rotateStart = new THREE.Vector2();
+            var rotateEnd = new THREE.Vector2();
+            var rotateDelta = new THREE.Vector2();
+            
+            this.update = function () {
+                var offset = new THREE.Vector3();
+                var quat = new THREE.Quaternion().setFromUnitVectors(object.up, new THREE.Vector3(0, 1, 0));
+                var quatInverse = quat.clone().inverse();
+                
+                return function update() {
+                    var position = scope.object.position;
+                    offset.copy(position).sub(scope.target);
+                    offset.applyQuaternion(quat);
+                    spherical.setFromVector3(offset);
+                    
+                    if (scope.autoRotate && state === STATE.NONE) {
+                        sphericalDelta.theta -= 2 * Math.PI / 60 / 60 * scope.autoRotateSpeed;
+                    }
+                    
+                    spherical.theta += sphericalDelta.theta;
+                    spherical.phi += sphericalDelta.phi;
+                    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+                    spherical.radius *= scale;
+                    spherical.radius = Math.max(scope.minDistance, Math.min(scope.maxDistance, spherical.radius));
+                    
+                    scope.target.add(panOffset);
+                    offset.setFromSpherical(spherical);
+                    offset.applyQuaternion(quatInverse);
+                    position.copy(scope.target).add(offset);
+                    scope.object.lookAt(scope.target);
+                    
+                    if (scope.enableDamping === true) {
+                        sphericalDelta.theta *= (1 - scope.dampingFactor);
+                        sphericalDelta.phi *= (1 - scope.dampingFactor);
+                        panOffset.multiplyScalar(1 - scope.dampingFactor);
+                    } else {
+                        sphericalDelta.set(0, 0, 0);
+                        panOffset.set(0, 0, 0);
+                    }
+                    
+                    scale = 1;
+                    return true;
+                };
+            }();
+            
+            function onMouseDown(event) {
+                if (scope.enabled === false) return;
+                event.preventDefault();
+                
+                if (event.button === 0) {
+                    state = STATE.ROTATE;
+                    rotateStart.set(event.clientX, event.clientY);
+                }
+                
+                scope.domElement.addEventListener('mousemove', onMouseMove, false);
+                scope.domElement.addEventListener('mouseup', onMouseUp, false);
+            }
+            
+            function onMouseMove(event) {
+                if (scope.enabled === false) return;
+                event.preventDefault();
+                
+                if (state === STATE.ROTATE) {
+                    rotateEnd.set(event.clientX, event.clientY);
+                    rotateDelta.subVectors(rotateEnd, rotateStart);
+                    
+                    var element = scope.domElement === document ? scope.domElement.body : scope.domElement;
+                    sphericalDelta.theta -= 2 * Math.PI * rotateDelta.x / element.clientWidth;
+                    sphericalDelta.phi -= 2 * Math.PI * rotateDelta.y / element.clientHeight;
+                    
+                    rotateStart.copy(rotateEnd);
+                    scope.update();
+                }
+            }
+            
+            function onMouseUp() {
+                scope.domElement.removeEventListener('mousemove', onMouseMove, false);
+                scope.domElement.removeEventListener('mouseup', onMouseUp, false);
+                state = STATE.NONE;
+            }
+            
+            function onMouseWheel(event) {
+                if (scope.enabled === false || scope.enableZoom === false) return;
+                event.preventDefault();
+                
+                if (event.deltaY < 0) {
+                    scale /= 0.95;
+                } else if (event.deltaY > 0) {
+                    scale *= 0.95;
+                }
+                scope.update();
+            }
+            
+            scope.domElement.addEventListener('mousedown', onMouseDown, false);
+            scope.domElement.addEventListener('wheel', onMouseWheel, false);
+            scope.domElement.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
+            
+            this.update();
+        };
+
+        // Enhanced AI Campus with Interactive Features
+        class EnhancedAICampus3D {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.zones = new Map();
+                this.labels = new Map();
+                this.currentPhase = 'phase1';
+                this.isNightMode = false;
+                this.showLabels = true;
+                this.panelCollapsed = false;
+                this.animationId = null;
+                this.frameCount = 0;
+                this.lastTime = performance.now();
+                this.fps = 60;
+                this.raycaster = new THREE.Raycaster();
+                this.mouse = new THREE.Vector2();
+                this.selectedZone = null;
+                this.hoveredBuilding = null;
+                
+                // AI Campus Zone Definitions (same as before but with label specifications)
+                this.aiCampusZones = {
+                    aiResearchCenter: {
+                        name: 'AI Research Center',
+                        nameVi: 'Trung tâm nghiên cứu AI',
+                        shortName: 'AI Research',
+                        description: 'Main AI research facility with advanced laboratories and computing resources',
+                        buildings: [
+                            { type: 'main_tower', height: 45, width: 20, depth: 20, position: [0, 0, 0], label: 'Main Tower' },
+                            { type: 'research_lab', height: 25, width: 15, depth: 25, position: [25, 0, -5], label: 'Research Lab' },
+                            { type: 'server_room', height: 18, width: 12, depth: 15, position: [15, 0, 20], label: 'Server Room' }
+                        ],
+                        color: 0x0066cc,
+                        materialType: 'glass',
+                        phase: 1,
+                        area: '15,000 m²',
+                        capacity: '500 researchers'
+                    },
+                    
+                    dataCenter: {
+                        name: 'Data Center',
+                        nameVi: 'Trung tâm Dữ liệu',
+                        shortName: 'Data Center',
+                        description: 'High-security data processing and storage facility',
+                        buildings: [
+                            { type: 'main_block', height: 20, width: 30, depth: 40, position: [-60, 0, -40], label: 'Main Block' },
+                            { type: 'cooling_plant', height: 15, width: 20, depth: 15, position: [-35, 0, -50], label: 'Cooling Plant' },
+                            { type: 'backup_facility', height: 12, width: 15, depth: 20, position: [-80, 0, -20], label: 'Backup' }
+                        ],
+                        color: 0x333366,
+                        materialType: 'metal',
+                        phase: 1,
+                        area: '8,000 m²',
+                        capacity: '10 petabytes'
+                    },
+
+                    aiLabComplex: {
+                        name: 'AI Lab Complex',
+                        nameVi: 'Khu phức hợp Lab AI',
+                        shortName: 'AI Labs',
+                        description: 'Specialized AI development and testing laboratories',
+                        buildings: [
+                            { type: 'lab_pod_1', height: 15, width: 18, depth: 18, position: [60, 0, -30], label: 'Lab Pod 1' },
+                            { type: 'lab_pod_2', height: 15, width: 18, depth: 18, position: [80, 0, -15], label: 'Lab Pod 2' },
+                            { type: 'lab_pod_3', height: 15, width: 18, depth: 18, position: [75, 0, -45], label: 'Lab Pod 3' },
+                            { type: 'connector', height: 8, width: 25, depth: 8, position: [72, 0, -30], label: 'Connector' }
+                        ],
+                        color: 0x00cccc,
+                        materialType: 'glass',
+                        phase: 1,
+                        area: '5,500 m²',
+                        capacity: '200 researchers'
+                    },
+
+                    innovationHub: {
+                        name: 'Innovation Hub',
+                        nameVi: 'Trung tâm đổi mới',
+                        shortName: 'Innovation',
+                        description: 'Collaborative innovation space with flexible work areas',
+                        buildings: [
+                            { type: 'dome_main', height: 30, width: 35, depth: 35, position: [-30, 0, 40], label: 'Main Dome' },
+                            { type: 'workshop_1', height: 15, width: 20, depth: 15, position: [-55, 0, 35], label: 'Workshop 1' },
+                            { type: 'workshop_2', height: 15, width: 20, depth: 15, position: [-10, 0, 60], label: 'Workshop 2' }
+                        ],
+                        color: 0xff8800,
+                        materialType: 'concrete',
+                        phase: 2,
+                        area: '7,200 m²',
+                        capacity: '300 innovators'
+                    },
+
+                    startupIncubator: {
+                        name: 'Startup Incubator',
+                        nameVi: 'Vườn ươm Startup',
+                        shortName: 'Startup Hub',
+                        description: 'Flexible modular spaces for startup development',
+                        buildings: [
+                            { type: 'module_a', height: 12, width: 15, depth: 15, position: [40, 0, 80], label: 'Module A' },
+                            { type: 'module_b', height: 12, width: 15, depth: 15, position: [58, 0, 80], label: 'Module B' },
+                            { type: 'module_c', height: 12, width: 15, depth: 15, position: [49, 0, 95], label: 'Module C' },
+                            { type: 'shared_space', height: 8, width: 25, depth: 20, position: [49, 0, 65], label: 'Shared Space' }
+                        ],
+                        color: 0x00cc66,
+                        materialType: 'concrete',
+                        phase: 2,
+                        area: '4,800 m²',
+                        capacity: '150 startups'
+                    },
+
+                    techDemoZone: {
+                        name: 'Tech Demo Zone',
+                        nameVi: 'Khu vực Demo Công nghệ',
+                        shortName: 'Demo Zone',
+                        description: 'Interactive technology demonstration and showcase area',
+                        buildings: [
+                            { type: 'pavilion_1', height: 10, width: 25, depth: 20, position: [-90, 0, 60], label: 'Pavilion 1' },
+                            { type: 'pavilion_2', height: 10, width: 25, depth: 20, position: [-65, 0, 75], label: 'Pavilion 2' },
+                            { type: 'outdoor_stage', height: 5, width: 30, depth: 25, position: [-77, 0, 45], label: 'Stage' }
+                        ],
+                        color: 0xcc3366,
+                        materialType: 'glass',
+                        phase: 2,
+                        area: '6,000 m²',
+                        capacity: '1000 visitors'
+                    },
+
+                    conferenceCenter: {
+                        name: 'Conference Center',
+                        nameVi: 'Trung tâm Hội nghị',
+                        shortName: 'Conference',
+                        description: 'Large-scale conference and event facility',
+                        buildings: [
+                            { type: 'main_auditorium', height: 25, width: 40, depth: 50, position: [0, 0, -80], label: 'Auditorium' },
+                            { type: 'meeting_wing', height: 15, width: 30, depth: 20, position: [-35, 0, -70], label: 'Meeting Wing' },
+                            { type: 'exhibition_hall', height: 12, width: 35, depth: 25, position: [30, 0, -95], label: 'Exhibition' }
+                        ],
+                        color: 0x6633cc,
+                        materialType: 'brick',
+                        phase: 3,
+                        area: '12,000 m²',
+                        capacity: '2000 attendees'
+                    },
+
+                    expertResidential: {
+                        name: 'Expert Residential Area',
+                        nameVi: 'Khu dân cư Chuyên gia',
+                        shortName: 'Residential',
+                        description: 'High-quality residential complex for researchers and experts',
+                        buildings: [
+                            { type: 'apartment_1', height: 20, width: 15, depth: 30, position: [-120, 0, 0], label: 'Apartment 1' },
+                            { type: 'apartment_2', height: 20, width: 15, depth: 30, position: [-140, 0, 15], label: 'Apartment 2' },
+                            { type: 'apartment_3', height: 20, width: 15, depth: 30, position: [-140, 0, -15], label: 'Apartment 3' },
+                            { type: 'community_center', height: 8, width: 25, depth: 20, position: [-130, 0, 35], label: 'Community' }
+                        ],
+                        color: 0xcc6633,
+                        materialType: 'brick',
+                        phase: 3,
+                        area: '8,500 m²',
+                        capacity: '400 residents'
+                    },
+
+                    commercialDistrict: {
+                        name: 'Commercial Service District',
+                        nameVi: 'Khu Thương mại Dịch vụ',
+                        shortName: 'Commercial',
+                        description: 'Mixed-use commercial and service facilities',
+                        buildings: [
+                            { type: 'retail_complex', height: 18, width: 25, depth: 40, position: [100, 0, 40], label: 'Retail Complex' },
+                            { type: 'office_tower', height: 30, width: 20, depth: 20, position: [130, 0, 20], label: 'Office Tower' },
+                            { type: 'service_center', height: 12, width: 20, depth: 25, position: [115, 0, 65], label: 'Service Center' },
+                            { type: 'restaurant_area', height: 8, width: 30, depth: 15, position: [85, 0, 55], label: 'Restaurant' }
+                        ],
+                        color: 0xccaa00,
+                        materialType: 'glass',
+                        phase: 3,
+                        area: '9,200 m²',
+                        capacity: '500 businesses'
+                    }
+                };
+
+                // Phase definitions
+                this.phases = {
+                    phase1: {
+                        zones: ['aiResearchCenter', 'dataCenter', 'aiLabComplex'],
+                        cameraPosition: { x: 80, y: 60, z: 80 },
+                        description: 'Core Research Infrastructure'
+                    },
+                    phase2: {
+                        zones: ['aiResearchCenter', 'dataCenter', 'aiLabComplex', 'innovationHub', 'startupIncubator', 'techDemoZone'],
+                        cameraPosition: { x: -20, y: 80, z: 120 },
+                        description: 'Innovation Ecosystem Development'
+                    },
+                    phase3: {
+                        zones: Object.keys(this.aiCampusZones),
+                        cameraPosition: { x: -60, y: 120, z: 100 },
+                        description: 'Complete Campus Integration'
+                    }
+                };
+
+                // View positions
+                this.viewPositions = {
+                    overview: { x: 100, y: 80, z: 100, target: { x: 0, y: 0, z: 0 } },
+                    aerial: { x: 0, y: 200, z: 0, target: { x: 0, y: 0, z: 0 } },
+                    ground: { x: 150, y: 15, z: 80, target: { x: 0, y: 15, z: 0 } }
+                };
+
+                console.log('🏗️ Enhanced AI Campus initialized');
+            }
+
+            async init() {
+                try {
+                    console.log('🚀 Starting enhanced initialization...');
+                    
+                    await this.initThreeJS();
+                    await this.createMaterials();
+                    await this.createScene();
+                    await this.createCampusZones();
+                    
+                    this.setCameraView('overview');
+                    this.updatePhaseVisibility('phase1');
+                    this.setupEventListeners();
+                    this.createCompactLegend();
+                    this.createLabels(); // STEP 2
+                    this.startAnimation();
+                    
+                    this.hideLoading();
+                    console.log('✅ Enhanced AI Campus initialized successfully');
+                    
+                } catch (error) {
+                    console.error('❌ Failed to initialize:', error);
+                }
+            }
+
+            async initThreeJS() {
+                const container = document.getElementById('threejs-container');
+                if (!container) throw new Error('Container not found');
+
+                // Enhanced scene
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x87ceeb);
+                this.scene.fog = new THREE.Fog(0x87ceeb, 200, 600);
+
+                // Professional camera
+                const aspect = container.clientWidth / container.clientHeight;
+                this.camera = new THREE.PerspectiveCamera(60, aspect, 0.1, 1500);
+                this.camera.position.set(100, 80, 100);
+
+                // Enhanced renderer
+                this.renderer = new THREE.WebGLRenderer({ 
+                    antialias: true,
+                    powerPreference: 'high-performance'
+                });
+                this.renderer.setSize(container.clientWidth, container.clientHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.0;
+                
+                container.appendChild(this.renderer.domElement);
+
+                // Professional controls
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.05;
+                this.controls.minDistance = 40;
+                this.controls.maxDistance = 400;
+                this.controls.target.set(0, 0, 0);
+                this.controls.maxPolarAngle = Math.PI / 2.1;
+            }
+
+            async createMaterials() {
+                // Glass material
+                this.glassMaterial = new THREE.MeshPhysicalMaterial({
+                    color: 0x88ccee,
+                    metalness: 0.0,
+                    roughness: 0.1,
+                    transmission: 0.8,
+                    transparent: true,
+                    opacity: 0.9,
+                    reflectivity: 0.8,
+                    ior: 1.5
+                });
+
+                // Concrete material
+                this.concreteMaterial = new THREE.MeshStandardMaterial({
+                    color: 0xaaaaaa,
+                    metalness: 0.1,
+                    roughness: 0.8
+                });
+
+                // Metal material
+                this.metalMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x666666,
+                    metalness: 0.9,
+                    roughness: 0.3
+                });
+
+                // Brick material
+                this.brickMaterial = new THREE.MeshStandardMaterial({
+                    color: 0xcc6666,
+                    metalness: 0.0,
+                    roughness: 0.9
+                });
+            }
+
+            async createScene() {
+                // Professional lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+                sunLight.position.set(150, 150, 100);
+                sunLight.castShadow = true;
+                sunLight.shadow.mapSize.width = 4096;
+                sunLight.shadow.mapSize.height = 4096;
+                sunLight.shadow.camera.near = 0.5;
+                sunLight.shadow.camera.far = 800;
+                sunLight.shadow.camera.left = -200;
+                sunLight.shadow.camera.right = 200;
+                sunLight.shadow.camera.top = 200;
+                sunLight.shadow.camera.bottom = -200;
+                this.scene.add(sunLight);
+
+                // Enhanced ground
+                const groundGeometry = new THREE.PlaneGeometry(500, 500, 100, 100);
+                const groundMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x4ade80,
+                    metalness: 0.0,
+                    roughness: 0.8
+                });
+                
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                // Add campus infrastructure
+                this.createCampusInfrastructure();
+            }
+
+            createCampusInfrastructure() {
+                // Central plaza
+                const plazaGeometry = new THREE.CircleGeometry(25, 32);
+                const plazaMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xdddddd,
+                    roughness: 0.6
+                });
+                const plaza = new THREE.Mesh(plazaGeometry, plazaMaterial);
+                plaza.rotation.x = -Math.PI / 2;
+                plaza.position.y = 0.1;
+                plaza.receiveShadow = true;
+                this.scene.add(plaza);
+
+                // Main pathways
+                this.createPathways();
+                
+                // Landscaping
+                this.createLandscaping();
+            }
+
+            createPathways() {
+                const pathMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x555555,
+                    roughness: 0.7
+                });
+
+                // Main road network
+                const roads = [
+                    { width: 8, length: 400, position: [0, 0.05, 0], rotation: 0 },
+                    { width: 8, length: 400, position: [0, 0.05, 0], rotation: Math.PI / 2 },
+                    { width: 6, length: 200, position: [100, 0.05, 0], rotation: 0 },
+                    { width: 6, length: 200, position: [-100, 0.05, 0], rotation: 0 },
+                    { width: 6, length: 200, position: [0, 0.05, 100], rotation: Math.PI / 2 },
+                    { width: 6, length: 200, position: [0, 0.05, -100], rotation: Math.PI / 2 }
+                ];
+
+                roads.forEach(road => {
+                    const roadGeometry = new THREE.PlaneGeometry(road.length, road.width);
+                    const roadMesh = new THREE.Mesh(roadGeometry, pathMaterial);
+                    roadMesh.rotation.x = -Math.PI / 2;
+                    roadMesh.rotation.z = road.rotation;
+                    roadMesh.position.set(road.position[0], road.position[1], road.position[2]);
+                    roadMesh.receiveShadow = true;
+                    this.scene.add(roadMesh);
+                });
+            }
+
+            createLandscaping() {
+                // Trees around the campus
+                const treePositions = [
+                    [-35, 0, -35], [35, 0, -35], [-35, 0, 35], [35, 0, 35],
+                    [-150, 0, -50], [-150, 0, 50], [150, 0, -50], [150, 0, 50],
+                    [-80, 0, -120], [80, 0, -120], [-80, 0, 120], [80, 0, 120],
+                    [20, 0, -40], [-20, 0, 40], [120, 0, 80], [-120, 0, -80]
+                ];
+
+                treePositions.forEach(pos => {
+                    const tree = this.createTree();
+                    tree.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(tree);
+                });
+            }
+
+            createTree() {
+                const group = new THREE.Group();
+                
+                // Trunk
+                const trunkGeometry = new THREE.CylinderGeometry(1.2, 1.8, 15, 8);
+                const trunkMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x4a4a4a,
+                    roughness: 0.9
+                });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 7.5;
+                trunk.castShadow = true;
+                group.add(trunk);
+                
+                // Leaves
+                const leavesGeometry = new THREE.SphereGeometry(10, 12, 12);
+                const leavesMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x228b22,
+                    roughness: 0.8
+                });
+                const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+                leaves.position.y = 18;
+                leaves.castShadow = true;
+                leaves.receiveShadow = true;
+                group.add(leaves);
+                
+                return group;
+            }
+
+            async createCampusZones() {
+                Object.entries(this.aiCampusZones).forEach(([zoneId, zoneData]) => {
+                    const zoneGroup = new THREE.Group();
+                    zoneGroup.userData = { 
+                        zoneId, 
+                        zoneData,
+                        originalOpacity: 1.0 
+                    };
+
+                    zoneData.buildings.forEach(buildingConfig => {
+                        const building = this.createZoneBuilding(buildingConfig, zoneData);
+                        zoneGroup.add(building);
+                    });
+
+                    this.zones.set(zoneId, zoneGroup);
+                    this.scene.add(zoneGroup);
+                });
+
+                console.log(`🏢 Created ${this.zones.size} campus zones`);
+            }
+
+            createZoneBuilding(buildingConfig, zoneData) {
+                const geometry = new THREE.BoxGeometry(
+                    buildingConfig.width,
+                    buildingConfig.height,
+                    buildingConfig.depth
+                );
+
+                // Select material based on zone type
+                let baseMaterial;
+                switch (zoneData.materialType) {
+                    case 'glass':
+                        baseMaterial = this.glassMaterial;
+                        break;
+                    case 'concrete':
+                        baseMaterial = this.concreteMaterial;
+                        break;
+                    case 'metal':
+                        baseMaterial = this.metalMaterial;
+                        break;
+                    case 'brick':
+                        baseMaterial = this.brickMaterial;
+                        break;
+                    default:
+                        baseMaterial = this.concreteMaterial;
+                }
+
+                const material = baseMaterial.clone();
+                material.color.setHex(zoneData.color);
+
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(
+                    buildingConfig.position[0],
+                    buildingConfig.height / 2,
+                    buildingConfig.position[2]
+                );
+                building.castShadow = true;
+                building.receiveShadow = true;
+
+                building.userData = {
+                    buildingType: buildingConfig.type,
+                    buildingLabel: buildingConfig.label,
+                    zoneId: zoneData.name,
+                    zoneName: zoneData.shortName,
+                    zoneData: zoneData,
+                    material: material,
+                    originalColor: zoneData.color
+                };
+
+                return building;
+            }
+
+            // STEP 1: Create Compact Legend Panel
+            createCompactLegend() {
+                const panelContent = document.getElementById('panelContent');
+                
+                Object.entries(this.aiCampusZones).forEach(([zoneId, zoneData]) => {
+                    const zoneItem = document.createElement('div');
+                    zoneItem.className = 'zone-item';
+                    zoneItem.dataset.zoneId = zoneId;
+                    
+                    const colorIndicator = document.createElement('div');
+                    colorIndicator.className = 'color-indicator';
+                    colorIndicator.style.backgroundColor = `#${zoneData.color.toString(16).padStart(6, '0')}`;
+                    
+                    const zoneName = document.createElement('span');
+                    zoneName.className = 'zone-name';
+                    zoneName.textContent = zoneData.shortName;
+                    zoneName.title = zoneData.nameVi; // Tooltip
+                    
+                    zoneItem.appendChild(colorIndicator);
+                    zoneItem.appendChild(zoneName);
+                    
+                    // Click to focus on zone
+                    zoneItem.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.focusOnZone(zoneId);
+                    });
+                    
+                    panelContent.appendChild(zoneItem);
+                });
+
+                // Setup panel toggle
+                const panelHeader = document.getElementById('panelHeader');
+                const panel = document.getElementById('campusZonesPanel');
+                
+                panelHeader.addEventListener('click', () => {
+                    this.panelCollapsed = !this.panelCollapsed;
+                    panel.classList.toggle('collapsed', this.panelCollapsed);
+                });
+
+                console.log('📋 Compact legend panel created');
+            }
+
+            // STEP 2: Create 3D Building Labels
+            createLabels() {
+                this.zones.forEach((zoneGroup, zoneId) => {
+                    const zoneData = this.aiCampusZones[zoneId];
+                    
+                    zoneGroup.children.forEach(building => {
+                        const label = this.createBuildingLabel(building, zoneData);
+                        if (label) {
+                            this.scene.add(label);
+                            this.labels.set(building.uuid, label);
+                        }
+                    });
+                });
+
+                console.log(`🏷️ Created ${this.labels.size} building labels`);
+            }
+
+            createBuildingLabel(building, zoneData) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                // Calculate label text
+                const zoneName = zoneData.shortName;
+                const buildingName = building.userData.buildingLabel;
+                const labelText = `${zoneName}\n${buildingName}`;
+                
+                // Canvas setup
+                canvas.width = 256;
+                canvas.height = 128;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Text styling
+                context.font = 'bold 16px Arial';
+                context.textAlign = 'center';
+                context.textBaseline = 'middle';
+                
+                // Background (subtle shadow)
+                context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Calculate contrast color
+                const contrastColor = this.getContrastColor(zoneData.color);
+                context.fillStyle = contrastColor;
+                
+                // Draw text lines
+                const lines = labelText.split('\n');
+                const lineHeight = 20;
+                const startY = canvas.height / 2 - (lines.length - 1) * lineHeight / 2;
+                
+                lines.forEach((line, index) => {
+                    context.fillText(line, canvas.width / 2, startY + index * lineHeight);
+                });
+                
+                // Create texture and material
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.minFilter = THREE.LinearFilter;
+                texture.magFilter = THREE.LinearFilter;
+                
+                const material = new THREE.MeshBasicMaterial({
+                    map: texture,
+                    transparent: true,
+                    alphaTest: 0.1,
+                    side: THREE.DoubleSide
+                });
+                
+                // Create label geometry
+                const geometry = new THREE.PlaneGeometry(20, 10);
+                const label = new THREE.Mesh(geometry, material);
+                
+                // Position label above building
+                const buildingBox = new THREE.Box3().setFromObject(building);
+                const buildingCenter = buildingBox.getCenter(new THREE.Vector3());
+                
+                label.position.copy(buildingCenter);
+                label.position.y = buildingBox.max.y + 8;
+                
+                // Label will face camera (billboard effect) - handled in animation loop
+                label.userData = {
+                    isLabel: true,
+                    building: building,
+                    baseScale: 1.0,
+                    maxDistance: 200,
+                    minDistance: 30
+                };
+                
+                return label;
+            }
+
+            getContrastColor(hexColor) {
+                // Convert hex to RGB
+                const r = (hexColor >> 16) & 255;
+                const g = (hexColor >> 8) & 255;
+                const b = hexColor & 255;
+                
+                // Calculate luminance
+                const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+                
+                // Return white or black based on luminance
+                return luminance > 0.5 ? '#000000' : '#ffffff';
+            }
+
+            // STEP 3: Enhanced Interactions
+            setupEventListeners() {
+                // Window resize
+                window.addEventListener('resize', () => this.handleResize());
+
+                // Mouse interaction for building selection
+                this.renderer.domElement.addEventListener('click', (event) => {
+                    this.onMouseClick(event);
+                });
+
+                this.renderer.domElement.addEventListener('mousemove', (event) => {
+                    this.onMouseMove(event);
+                });
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (event) => {
+                    this.onKeyDown(event);
+                });
+
+                // Timeline controls
+                document.querySelectorAll('.phase-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        const phase = btn.dataset.phase;
+                        this.updatePhaseVisibility(phase);
+                    });
+                });
+
+                // Camera controls
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const view = btn.dataset.view;
+                        const action = btn.dataset.action;
+                        
+                        if (view) {
+                            this.setCameraView(view);
+                        } else if (action === 'auto-rotate') {
+                            this.controls.autoRotate = !this.controls.autoRotate;
+                            btn.classList.toggle('active');
+                        } else if (action === 'day-night') {
+                            this.toggleDayNight();
+                            btn.classList.toggle('active');
+                        } else if (action === 'help') {
+                            this.toggleHelp();
+                        }
+                    });
+                });
+
+                console.log('⚙️ Enhanced event listeners setup');
+            }
+
+            // STEP 3: Keyboard Shortcuts
+            onKeyDown(event) {
+                switch (event.key.toLowerCase()) {
+                    case 'l':
+                        event.preventDefault();
+                        this.toggleLabels();
+                        break;
+                    case 'p':
+                        event.preventDefault();
+                        this.togglePanel();
+                        break;
+                    case 'r':
+                        event.preventDefault();
+                        this.resetView();
+                        break;
+                    case ' ':
+                        event.preventDefault();
+                        this.toggleAutoRotate();
+                        break;
+                    case 'n':
+                        event.preventDefault();
+                        this.toggleDayNight();
+                        break;
+                    case 'h':
+                        event.preventDefault();
+                        this.toggleHelp();
+                        break;
+                }
+            }
+
+            onMouseMove(event) {
+                // Calculate mouse position
+                const rect = this.renderer.domElement.getBoundingClientRect();
+                this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                
+                // Raycasting for hover effects
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+                
+                // Reset previous hover
+                if (this.hoveredBuilding) {
+                    this.resetBuildingHighlight(this.hoveredBuilding);
+                    this.hoveredBuilding = null;
+                }
+                
+                // Check for building hover
+                for (let intersect of intersects) {
+                    if (intersect.object.userData.zoneId) {
+                        this.hoveredBuilding = intersect.object;
+                        this.highlightBuilding(this.hoveredBuilding);
+                        break;
+                    }
+                }
+            }
+
+            onMouseClick(event) {
+                // Calculate mouse position
+                const rect = this.renderer.domElement.getBoundingClientRect();
+                this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                
+                // Raycasting
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                const intersects = this.raycaster.intersectObjects(this.scene.children, true);
+                
+                if (intersects.length > 0) {
+                    const object = intersects[0].object;
+                    if (object.userData.zoneId) {
+                        this.selectBuilding(object, event);
+                    }
+                }
+            }
+
+            highlightBuilding(building) {
+                // Add glow effect
+                const material = building.userData.material;
+                if (material) {
+                    material.emissive.setHex(0x222222);
+                    
+                    // Enhance label prominence
+                    const label = this.labels.get(building.uuid);
+                    if (label && this.showLabels) {
+                        label.scale.setScalar(1.2);
+                    }
+                }
+            }
+
+            resetBuildingHighlight(building) {
+                // Remove glow effect
+                const material = building.userData.material;
+                if (material) {
+                    material.emissive.setHex(0x000000);
+                    
+                    // Reset label scale
+                    const label = this.labels.get(building.uuid);
+                    if (label) {
+                        label.scale.setScalar(1.0);
+                    }
+                }
+            }
+
+            selectBuilding(building, event) {
+                // Highlight selected building
+                this.selectedZone = building;
+                this.highlightBuilding(building);
+                
+                // Show detailed popup
+                this.showBuildingDetails(building, event);
+                
+                console.log(`🎯 Selected: ${building.userData.buildingLabel} in ${building.userData.zoneName}`);
+            }
+
+            showBuildingDetails(building, event) {
+                const zoneData = building.userData.zoneData;
+                
+                const popup = document.getElementById('zoneInfoPopup');
+                const title = document.getElementById('popupTitle');
+                const description = document.getElementById('popupDescription');
+                const stats = document.getElementById('popupStats');
+
+                title.textContent = `${building.userData.zoneName} - ${building.userData.buildingLabel}`;
+                title.style.color = `#${zoneData.color.toString(16).padStart(6, '0')}`;
+                description.textContent = zoneData.description;
+                
+                stats.innerHTML = `
+                    <div class="stat-item">
+                        <div class="stat-label">Area</div>
+                        <div class="stat-value">${zoneData.area}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Capacity</div>
+                        <div class="stat-value">${zoneData.capacity}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Phase</div>
+                        <div class="stat-value">${zoneData.phase}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Type</div>
+                        <div class="stat-value">${zoneData.materialType}</div>
+                    </div>
+                `;
+
+                // Position popup
+                popup.style.left = `${event.clientX + 10}px`;
+                popup.style.top = `${event.clientY - 50}px`;
+                popup.style.borderColor = `#${zoneData.color.toString(16).padStart(6, '0')}`;
+                popup.classList.add('show');
+
+                // Auto-hide popup
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 4000);
+            }
+
+            focusOnZone(zoneId) {
+                const zoneGroup = this.zones.get(zoneId);
+                const zoneData = this.aiCampusZones[zoneId];
+                if (!zoneGroup || !zoneData) return;
+
+                // Calculate zone center
+                const box = new THREE.Box3().setFromObject(zoneGroup);
+                const center = box.getCenter(new THREE.Vector3());
+                
+                // Move camera to focus on zone
+                gsap.to(this.camera.position, {
+                    duration: 2.5,
+                    x: center.x + 80,
+                    y: center.y + 50,
+                    z: center.z + 80,
+                    ease: "power2.inOut"
+                });
+                
+                gsap.to(this.controls.target, {
+                    duration: 2.5,
+                    x: center.x,
+                    y: center.y,
+                    z: center.z,
+                    ease: "power2.inOut",
+                    onUpdate: () => {
+                        this.controls.update();
+                    }
+                });
+
+                console.log(`🎯 Focused on ${zoneData.shortName}`);
+            }
+
+            toggleLabels() {
+                this.showLabels = !this.showLabels;
+                
+                this.labels.forEach(label => {
+                    label.visible = this.showLabels;
+                });
+                
+                console.log(`🏷️ Labels: ${this.showLabels ? 'ON' : 'OFF'}`);
+            }
+
+            togglePanel() {
+                this.panelCollapsed = !this.panelCollapsed;
+                const panel = document.getElementById('campusZonesPanel');
+                panel.classList.toggle('collapsed', this.panelCollapsed);
+                
+                console.log(`📋 Panel: ${this.panelCollapsed ? 'COLLAPSED' : 'EXPANDED'}`);
+            }
+
+            toggleHelp() {
+                const helpOverlay = document.getElementById('helpOverlay');
+                helpOverlay.classList.toggle('show');
+            }
+
+            toggleAutoRotate() {
+                this.controls.autoRotate = !this.controls.autoRotate;
+                const btn = document.querySelector('[data-action="auto-rotate"]');
+                if (btn) btn.classList.toggle('active', this.controls.autoRotate);
+                
+                console.log(`🔄 Auto-rotate: ${this.controls.autoRotate ? 'ON' : 'OFF'}`);
+            }
+
+            resetView() {
+                this.setCameraView('overview');
+                this.updatePhaseVisibility('phase1');
+                
+                // Reset phase buttons
+                document.querySelectorAll('.phase-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector('[data-phase="phase1"]')?.classList.add('active');
+                
+                console.log('🔄 View reset to overview');
+            }
+
+            setCameraView(view) {
+                const position = this.viewPositions[view];
+                if (!position) return;
+                
+                console.log(`📷 Moving to ${view} view`);
+                
+                gsap.to(this.camera.position, {
+                    duration: 3.0,
+                    x: position.x,
+                    y: position.y,
+                    z: position.z,
+                    ease: "power2.inOut"
+                });
+                
+                gsap.to(this.controls.target, {
+                    duration: 3.0,
+                    x: position.target.x,
+                    y: position.target.y,
+                    z: position.target.z,
+                    ease: "power2.inOut",
+                    onUpdate: () => {
+                        this.controls.update();
+                    }
+                });
+                
+                // Update button states
+                document.querySelectorAll('[data-view]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-view="${view}"]`)?.classList.add('active');
+            }
+
+            updatePhaseVisibility(phase) {
+                const phaseData = this.phases[phase];
+                if (!phaseData) return;
+                
+                this.currentPhase = phase;
+                console.log(`🔄 Phase: ${phaseData.description}`);
+                
+                this.zones.forEach((zoneGroup, zoneId) => {
+                    const shouldShow = phaseData.zones.includes(zoneId);
+                    const targetOpacity = shouldShow ? 1.0 : 0.15;
+                    
+                    zoneGroup.children.forEach(building => {
+                        gsap.to(building.userData.material, {
+                            duration: 2.0,
+                            opacity: targetOpacity,
+                            ease: "power2.inOut"
+                        });
+                        
+                        if (shouldShow) {
+                            gsap.to(building.scale, {
+                                duration: 2.0,
+                                x: 1,
+                                y: 1,
+                                z: 1,
+                                ease: "back.out(1.7)"
+                            });
+                        } else {
+                            gsap.to(building.scale, {
+                                duration: 2.0,
+                                x: 0.9,
+                                y: 0.9,
+                                z: 0.9,
+                                ease: "power2.inOut"
+                            });
+                        }
+                    });
+                });
+            }
+
+            toggleDayNight() {
+                this.isNightMode = !this.isNightMode;
+                
+                // Find lights in scene
+                const ambientLight = this.scene.children.find(child => child.type === 'AmbientLight');
+                const directionalLight = this.scene.children.find(child => child.type === 'DirectionalLight');
+
+                if (this.isNightMode) {
+                    gsap.to(ambientLight, { duration: 2, intensity: 0.3 });
+                    gsap.to(directionalLight, { duration: 2, intensity: 0.4 });
+                    gsap.to(this.scene.background, { duration: 2, r: 0.1, g: 0.1, b: 0.3 });
+                    gsap.to(this.scene.fog.color, { duration: 2, r: 0.1, g: 0.1, b: 0.3 });
+                } else {
+                    gsap.to(ambientLight, { duration: 2, intensity: 0.6 });
+                    gsap.to(directionalLight, { duration: 2, intensity: 1.2 });
+                    gsap.to(this.scene.background, { duration: 2, r: 0.53, g: 0.81, b: 0.92 });
+                    gsap.to(this.scene.fog.color, { duration: 2, r: 0.53, g: 0.81, b: 0.92 });
+                }
+                
+                console.log(`${this.isNightMode ? '🌙' : '☀️'} ${this.isNightMode ? 'Night' : 'Day'} mode`);
+            }
+
+            updateFPS() {
+                this.frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - this.lastTime >= 1000) {
+                    this.fps = Math.round((this.frameCount * 1000) / (currentTime - this.lastTime));
+                    this.frameCount = 0;
+                    this.lastTime = currentTime;
+                    
+                    const indicator = document.getElementById('performanceIndicator');
+                    if (indicator) {
+                        indicator.textContent = `${this.fps} FPS | Enhanced`;
+                        indicator.style.color = this.fps >= 30 ? '#10b981' : '#f59e0b';
+                    }
+                }
+            }
+
+            updateLabels() {
+                // Update label billboard effect and LOD
+                this.labels.forEach(label => {
+                    if (!label.visible || !this.showLabels) return;
+                    
+                    // Billboard effect - always face camera
+                    label.lookAt(this.camera.position);
+                    
+                    // Level of Detail based on distance
+                    const distance = this.camera.position.distanceTo(label.position);
+                    const building = label.userData.building;
+                    
+                    // Calculate scale based on distance
+                    const baseScale = label.userData.baseScale;
+                    const scaleFactor = Math.max(0.3, Math.min(1.5, 100 / distance));
+                    label.scale.setScalar(baseScale * scaleFactor);
+                    
+                    // Fade based on distance
+                    const maxDistance = label.userData.maxDistance;
+                    const minDistance = label.userData.minDistance;
+                    
+                    let opacity = 1.0;
+                    if (distance > maxDistance) {
+                        opacity = Math.max(0, 1 - (distance - maxDistance) / 50);
+                    } else if (distance < minDistance) {
+                        opacity = Math.max(0, distance / minDistance);
+                    }
+                    
+                    label.material.opacity = opacity;
+                });
+            }
+
+            startAnimation() {
+                const animate = () => {
+                    this.animationId = requestAnimationFrame(animate);
+                    
+                    this.updateFPS();
+                    this.updateLabels(); // Update labels every frame
+                    this.controls.update();
+                    this.renderer.render(this.scene, this.camera);
+                };
+                
+                animate();
+                console.log('🎬 Enhanced animation started');
+            }
+
+            handleResize() {
+                const container = document.getElementById('threejs-container');
+                if (!container || !this.camera || !this.renderer) return;
+                
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+            }
+
+            hideLoading() {
+                const overlay = document.getElementById('loadingOverlay');
+                if (overlay) {
+                    gsap.to(overlay, {
+                        duration: 1.5,
+                        opacity: 0,
+                        onComplete: () => {
+                            overlay.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        }
+
+        // Initialize Enhanced AI Campus
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🧠 Starting Enhanced AI Research Campus...');
+            const enhancedCampus = new EnhancedAICampus3D();
+            window.enhancedCampus = enhancedCampus; // For debugging
+            await enhancedCampus.init();
+        });
+    </script>
+</body>
+</html>

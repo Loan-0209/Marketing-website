@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Plan Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .pass { background: #d4edda; color: #155724; }
+        .fail { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Master Plan File Structure Test</h1>
+    
+    <div id="test-results"></div>
+    
+    <script>
+        const tests = [
+            {
+                name: 'CSS File Loading',
+                test: () => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'css/master-plan.css';
+                    document.head.appendChild(link);
+                    return new Promise((resolve) => {
+                        link.onload = () => resolve(true);
+                        link.onerror = () => resolve(false);
+                        setTimeout(() => resolve(false), 2000);
+                    });
+                }
+            },
+            {
+                name: '3D JavaScript Loading',
+                test: () => {
+                    return new Promise((resolve) => {
+                        const script = document.createElement('script');
+                        script.src = 'js/master-plan-3d.js';
+                        script.onload = () => {
+                            resolve(typeof window.MasterPlan3D === 'function');
+                        };
+                        script.onerror = () => resolve(false);
+                        document.head.appendChild(script);
+                        setTimeout(() => resolve(false), 2000);
+                    });
+                }
+            },
+            {
+                name: 'UI JavaScript Loading',
+                test: () => {
+                    return new Promise((resolve) => {
+                        const script = document.createElement('script');
+                        script.src = 'js/master-plan-ui.js';
+                        script.onload = () => {
+                            resolve(typeof window.MasterPlanUI === 'function');
+                        };
+                        script.onerror = () => resolve(false);
+                        document.head.appendChild(script);
+                        setTimeout(() => resolve(false), 2000);
+                    });
+                }
+            }
+        ];
+
+        async function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            
+            for (const test of tests) {
+                try {
+                    const result = await test.test();
+                    const status = result ? 'PASS' : 'FAIL';
+                    const className = result ? 'pass' : 'fail';
+                    
+                    resultsDiv.innerHTML += `
+                        <div class="test-status ${className}">
+                            ${test.name}: ${status}
+                        </div>
+                    `;
+                } catch (error) {
+                    resultsDiv.innerHTML += `
+                        <div class="test-status fail">
+                            ${test.name}: FAIL (${error.message})
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

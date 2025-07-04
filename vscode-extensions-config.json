@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-json"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.remote-repositories",
+    "ms-vscode.remote-server",
+    "github.copilot"
+  ]
+}

@@ -10,9 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <!-- Custom Scripts -->
-    <script src="force-render-loop.js"></script>
-    <script src="diagnostic-model-loader.js"></script>
     
     <style>
         /* Reset CSS */
@@ -258,7 +255,18 @@
         <p>📱 Vuốt màn hình để điều khiển trên thiết bị di động</p>
     </div>
     
-    <!-- Custom Script -->
-    <script src="ai-campus-3d.js"></script>
+    <!-- Placeholder for JavaScript (will be added later) -->
+    <script>
+        // Đây chỉ là cấu trúc HTML và CSS cơ bản
+        // JavaScript logic sẽ được thêm vào sau
+        
+        // Giả lập việc tải xong để ẩn loading screen sau 2 giây
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 500);
+        }, 2000);
+    </script>
 </body>
 </html>

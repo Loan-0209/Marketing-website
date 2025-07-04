@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibrant Dark Blue Glass City</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            color: #1E3A8A;
+            padding: 40px;
+            border-radius: 20px;
+            border: 3px solid #1E90FF;
+            box-shadow: 0 15px 40px rgba(30, 144, 255, 0.3);
+        }
+
+        .vibrant-spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(30, 144, 255, 0.2);
+            border-top: 5px solid #1E90FF;
+            border-radius: 50%;
+            animation: vibrantSpin 1s linear infinite;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .vibrant-spinner::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(70, 130, 180, 0.3);
+            border-top: 4px solid #4682B4;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: vibrantSpin 0.7s linear infinite reverse;
+        }
+
+        @keyframes vibrantSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #1E3A8A;
+            font-size: 22px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="vibrant-city-canvas"></canvas>
+        
+        <div id="loading">
+            <div class="vibrant-spinner"></div>
+            <h2>Creating Vibrant Architecture...</h2>
+            <p>Building modern structures with bold, dark blue glass</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class VibrantDarkBlueCity {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.buildings = [];
+                
+                this.vibrantGlassSettings = {
+                    baseColor: 0x1E90FF,     // Deep vibrant blue
+                    secondaryColor: 0x4682B4, // Steel blue for variation
+                    accentColor: 0x0066CC,    // Darker blue for depth
+                    transparency: 0.35,       // 65% visible
+                    metalness: 0.3,
+                    roughness: 0.05,
+                    ior: 1.6,
+                    reflectivity: 0.9,
+                    saturation: 1.5          // Enhanced saturation
+                };
+                
+                this.time = 0;
+                this.init();
+            }
+
+            init() {
+                this.setupScene();
+                this.setupEnhancedLighting();
+                this.setupCamera();
+                this.setupRenderer();
+                this.setupControls();
+                this.createCleanEnvironment();
+                this.generateVibrantBlueCityDistrict();
+                this.animate();
+                this.hideLoading();
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                // Clean, neutral background that makes blue buildings pop
+                this.scene.background = new THREE.Color(0xF5F5F5);
+                this.scene.fog = new THREE.Fog(0xF5F5F5, 200, 1200);
+            }
+
+            setupEnhancedLighting() {
+                // Enhanced ambient lighting for vibrant colors
+                this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.7);
+                this.scene.add(this.ambientLight);
+
+                // Primary directional light optimized for dark blue glass
+                this.directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.6);
+                this.directionalLight.position.set(150, 250, 150);
+                this.directionalLight.castShadow = true;
+                this.directionalLight.shadow.mapSize.width = 4096;
+                this.directionalLight.shadow.mapSize.height = 4096;
+                this.directionalLight.shadow.camera.near = 1;
+                this.directionalLight.shadow.camera.far = 800;
+                this.directionalLight.shadow.camera.left = -300;
+                this.directionalLight.shadow.camera.right = 300;
+                this.directionalLight.shadow.camera.top = 300;
+                this.directionalLight.shadow.camera.bottom = -300;
+                this.directionalLight.shadow.bias = -0.0001;
+                this.scene.add(this.directionalLight);
+
+                // Secondary lights to enhance glass color vibrancy
+                const blueEnhancementLight = new THREE.DirectionalLight(0x4682B4, 0.6);
+                blueEnhancementLight.position.set(-100, 150, -100);
+                this.scene.add(blueEnhancementLight);
+
+                const contrastLight = new THREE.DirectionalLight(0xE6F3FF, 0.4);
+                contrastLight.position.set(0, 120, -200);
+                this.scene.add(contrastLight);
+
+                // Rim lighting for building edge definition
+                const rimLight = new THREE.DirectionalLight(0xFFFFFF, 0.3);
+                rimLight.position.set(200, 80, 0);
+                this.scene.add(rimLight);
+            }
+
+            setupCamera() {
+                this.camera = new THREE.PerspectiveCamera(
+                    65,
+                    window.innerWidth / window.innerHeight,
+                    1,
+                    3000
+                );
+                this.camera.position.set(220, 120, 220);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            setupRenderer() {
+                const canvas = document.getElementById('vibrant-city-canvas');
+                this.renderer = new THREE.WebGLRenderer({ 
+                    canvas: canvas, 
+                    antialias: true,
+                    alpha: true,
+                    powerPreference: "high-performance"
+                });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.outputEncoding = THREE.sRGBEncoding;
+                this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                this.renderer.toneMappingExposure = 1.2;
+                this.renderer.physicallyCorrectLights = true;
+            }
+
+            setupControls() {
+                this.mouseDown = false;
+                this.mouseX = 0;
+                this.mouseY = 0;
+                this.cameraRotationX = 0;
+                this.cameraRotationY = 0;
+                this.cameraDistance = 300;
+
+                const canvas = this.renderer.domElement;
+                
+                canvas.addEventListener('mousedown', (e) => {
+                    this.mouseDown = true;
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    if (!this.mouseDown) return;
+                    
+                    const deltaX = e.clientX - this.mouseX;
+                    const deltaY = e.clientY - this.mouseY;
+                    
+                    this.cameraRotationY += deltaX * 0.007;
+                    this.cameraRotationX += deltaY * 0.007;
+                    this.cameraRotationX = Math.max(-Math.PI/2.2, Math.min(Math.PI/2.2, this.cameraRotationX));
+                    
+                    this.updateCameraPosition();
+                    
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                });
+
+                canvas.addEventListener('mouseup', () => {
+                    this.mouseDown = false;
+                });
+
+                canvas.addEventListener('wheel', (e) => {
+                    this.cameraDistance += e.deltaY * 0.4;
+                    this.cameraDistance = Math.max(100, Math.min(600, this.cameraDistance));
+                    this.updateCameraPosition();
+                });
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            updateCameraPosition() {
+                const x = Math.cos(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                const y = Math.sin(this.cameraRotationX) * this.cameraDistance + 70;
+                const z = Math.sin(this.cameraRotationY) * Math.cos(this.cameraRotationX) * this.cameraDistance;
+                
+                this.camera.position.set(x, y, z);
+                this.camera.lookAt(0, 25, 0);
+            }
+
+            createVibrantDarkBlueGlass(variation = 0, gradient = false) {
+                let baseColor = this.vibrantGlassSettings.baseColor;
+                
+                // Color variations for different building types
+                switch(variation) {
+                    case 1:
+                        baseColor = this.vibrantGlassSettings.secondaryColor;
+                        break;
+                    case 2:
+                        baseColor = this.vibrantGlassSettings.accentColor;
+                        break;
+                    case 3:
+                        baseColor = 0x0080FF; // Bright electric blue
+                        break;
+                    case 4:
+                        baseColor = 0x2E86AB; // Dark cyan blue
+                        break;
+                }
+                
+                const material = new THREE.MeshPhysicalMaterial({
+                    color: baseColor,
+                    metalness: this.vibrantGlassSettings.metalness,
+                    roughness: this.vibrantGlassSettings.roughness,
+                    transmission: 1 - this.vibrantGlassSettings.transparency,
+                    transparent: true,
+                    opacity: this.vibrantGlassSettings.transparency + 0.15,
+                    ior: this.vibrantGlassSettings.ior,
+                    reflectivity: this.vibrantGlassSettings.reflectivity,
+                    clearcoat: 0.4,
+                    clearcoatRoughness: 0.05,
+                    side: THREE.DoubleSide,
+                    envMapIntensity: 1.2
+                });
+
+                // Add gradient effect for premium buildings
+                if (gradient) {
+                    material.emissive = new THREE.Color(baseColor).multiplyScalar(0.1);
+                }
+
+                return material;
+            }
+
+            createCleanEnvironment() {
+                // Minimalist ground design
+                const groundGeometry = new THREE.PlaneGeometry(600, 600);
+                const groundMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0xF8F8F8 // Very light gray for maximum contrast
+                });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                this.scene.add(ground);
+
+                this.createMinimalInfrastructure();
+                this.createSubtleLandscaping();
+            }
+
+            createMinimalInfrastructure() {
+                // Clean, minimal road system
+                const roadMaterial = new THREE.MeshLambertMaterial({ color: 0xD0D0D0 });
+                
+                // Main roads with clean lines
+                for (let i = -5; i <= 5; i++) {
+                    if (i === 0) continue;
+                    
+                    const roadGeometry = new THREE.PlaneGeometry(600, 12);
+                    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(0, 0.02, i * 80);
+                    this.scene.add(road);
+                }
+
+                for (let i = -5; i <= 5; i++) {
+                    if (i === 0) continue;
+                    
+                    const roadGeometry = new THREE.PlaneGeometry(12, 600);
+                    const road = new THREE.Mesh(roadGeometry, roadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(i * 80, 0.02, 0);
+                    this.scene.add(road);
+                }
+
+                // Premium sidewalks
+                const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0xEAEAEA });
+                for (let x = -5; x <= 5; x++) {
+                    for (let z = -5; z <= 5; z++) {
+                        if (x === 0 && z === 0) continue;
+                        
+                        const sidewalkGeometry = new THREE.PlaneGeometry(56, 56);
+                        const sidewalk = new THREE.Mesh(sidewalkGeometry, sidewalkMaterial);
+                        sidewalk.rotation.x = -Math.PI / 2;
+                        sidewalk.position.set(x * 80, 0.05, z * 80);
+                        this.scene.add(sidewalk);
+                    }
+                }
+            }
+
+            createSubtleLandscaping() {
+                // Minimal, clean tree placement
+                for (let i = 0; i < 40; i++) {
+                    const tree = this.createMinimalTree();
+                    let x, z;
+                    do {
+                        x = (Math.random() - 0.5) * 500;
+                        z = (Math.random() - 0.5) * 500;
+                    } while (this.isInBuildingZone(x, z) || this.isOnRoad(x, z));
+                    
+                    tree.position.set(x, 0, z);
+                    this.scene.add(tree);
+                }
+            }
+
+            createMinimalTree() {
+                const treeGroup = new THREE.Group();
+                
+                // Clean, modern tree design
+                const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.7, 6);
+                const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 3;
+                trunk.castShadow = true;
+                treeGroup.add(trunk);
+                
+                const foliageGeometry = new THREE.SphereGeometry(3, 12, 8);
+                const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+                foliage.position.y = 7.5;
+                foliage.castShadow = true;
+                treeGroup.add(foliage);
+                
+                return treeGroup;
+            }
+
+            isInBuildingZone(x, z) {
+                // Premium building zone detection
+                const buildingPositions = [
+                    {x: -160, z: -160}, {x: 160, z: -160}, {x: 160, z: 160}, {x: -160, z: 160},
+                    {x: -80, z: -160}, {x: 80, z: -160}, {x: 160, z: -80}, {x: 160, z: 80},
+                    {x: 80, z: 160}, {x: -80, z: 160}, {x: -160, z: 80}, {x: -160, z: -80},
+                    {x: 0, z: 0}, {x: -80, z: 0}, {x: 80, z: 0}, {x: 0, z: -80}, {x: 0, z: 80}
+                ];
+                
+                return buildingPositions.some(pos => {
+                    const dist = Math.sqrt((x - pos.x) ** 2 + (z - pos.z) ** 2);
+                    return dist < 30;
+                });
+            }
+
+            isOnRoad(x, z) {
+                const roadWidth = 12;
+                const blockSize = 80;
+                
+                const xMod = Math.abs(x % blockSize);
+                const zMod = Math.abs(z % blockSize);
+                
+                return (xMod < roadWidth || xMod > blockSize - roadWidth) ||
+                       (zMod < roadWidth || zMod > blockSize - roadWidth);
+            }
+
+            generateVibrantBlueCityDistrict() {
+                const buildingConfigs = [
+                    // Premier dark blue glass towers
+                    { x: -160, z: -160, type: 'vibrant_office_tower', height: 60, variation: 0 },
+                    { x: 160, z: -160, type: 'vibrant_residential_tower', height: 48, variation: 1 },
+                    { x: 160, z: 160, type: 'vibrant_corporate_hq', height: 70, variation: 2 },
+                    { x: -160, z: 160, type: 'vibrant_tech_campus', height: 40, variation: 3 },
+                    
+                    // Mid-rise vibrant buildings
+                    { x: -80, z: -160, type: 'vibrant_mixed_use', height: 32, variation: 1 },
+                    { x: 80, z: -160, type: 'vibrant_innovation_hub', height: 36, variation: 2 },
+                    { x: 160, z: -80, type: 'vibrant_office_complex', height: 28, variation: 0 },
+                    { x: 160, z: 80, type: 'vibrant_research_center', height: 35, variation: 3 },
+                    { x: 80, z: 160, type: 'vibrant_startup_tower', height: 30, variation: 1 },
+                    { x: -80, z: 160, type: 'vibrant_data_center', height: 22, variation: 4 },
+                    { x: -160, z: 80, type: 'vibrant_conference_center', height: 26, variation: 2 },
+                    { x: -160, z: -80, type: 'vibrant_medical_complex', height: 33, variation: 0 },
+                    
+                    // Central district signature buildings
+                    { x: 0, z: 0, type: 'vibrant_ai_headquarters', height: 75, variation: 0 },
+                    { x: -80, z: 0, type: 'vibrant_smart_building', height: 42, variation: 3 },
+                    { x: 80, z: 0, type: 'vibrant_innovation_tower', height: 45, variation: 1 },
+                    { x: 0, z: -80, type: 'vibrant_tech_tower', height: 40, variation: 2 },
+                    { x: 0, z: 80, type: 'vibrant_future_center', height: 38, variation: 4 }
+                ];
+
+                buildingConfigs.forEach(config => {
+                    const building = this.createVibrantBlueBuilding(
+                        config.type, 
+                        config.x, 
+                        config.z, 
+                        config.height, 
+                        config.variation
+                    );
+                    this.buildings.push(building);
+                    this.scene.add(building.group);
+                });
+            }
+
+            createVibrantBlueBuilding(type, x, z, targetHeight, variation) {
+                const building = {
+                    group: new THREE.Group(),
+                    type: type,
+                    position: { x, z },
+                    height: targetHeight,
+                    floors: Math.floor(targetHeight / 4),
+                    components: [],
+                    glassComponents: [],
+                    variation: variation
+                };
+
+                building.group.position.set(x, 0, z);
+
+                switch(type) {
+                    case 'vibrant_office_tower':
+                        this.createVibrantOfficeTower(building);
+                        break;
+                    case 'vibrant_residential_tower':
+                        this.createVibrantResidentialTower(building);
+                        break;
+                    case 'vibrant_corporate_hq':
+                        this.createVibrantCorporateHQ(building);
+                        break;
+                    case 'vibrant_tech_campus':
+                        this.createVibrantTechCampus(building);
+                        break;
+                    case 'vibrant_ai_headquarters':
+                        this.createVibrantAIHeadquarters(building);
+                        break;
+                    default:
+                        this.createVibrantGenericBuilding(building);
+                        break;
+                }
+
+                return building;
+            }
+
+            createVibrantOfficeTower(building) {
+                const width = 16;
+                const depth = 16;
+                const height = building.height;
+                const variation = building.variation;
+
+                // White concrete base for contrast
+                const baseHeight = height * 0.12;
+                const baseGeometry = new THREE.BoxGeometry(width, baseHeight, depth);
+                const baseMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xFFFFFF,
+                    shininess: 80
+                });
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.y = baseHeight / 2;
+                base.castShadow = true;
+                base.receiveShadow = true;
+                building.group.add(base);
+                building.components.push(base);
+
+                // Vibrant dark blue glass tower
+                const towerHeight = height - baseHeight;
+                const towerGeometry = new THREE.BoxGeometry(width * 0.96, towerHeight, depth * 0.96);
+                const glassMaterial = this.createVibrantDarkBlueGlass(variation, true);
+                const tower = new THREE.Mesh(towerGeometry, glassMaterial);
+                tower.position.y = baseHeight + towerHeight / 2;
+                tower.castShadow = true;
+                tower.receiveShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+                building.glassComponents.push(tower);
+
+                this.addVibrantGlassWindows(building, width, depth, baseHeight, towerHeight, variation);
+                this.addVibrantGlassLobby(building, width, depth, baseHeight, false, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            createVibrantResidentialTower(building) {
+                const width = 14;
+                const depth = 18;
+                const height = building.height;
+                const variation = building.variation;
+
+                // Light gray concrete structure
+                const towerGeometry = new THREE.BoxGeometry(width, height, depth);
+                const concreteMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xE8E8E8,
+                    shininess: 50
+                });
+                const tower = new THREE.Mesh(towerGeometry, concreteMaterial);
+                tower.position.y = height / 2;
+                tower.castShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+
+                // Vibrant blue glass balcony sections
+                for (let floor = 3; floor < building.floors; floor += 3) {
+                    const balconyHeight = floor * 4;
+                    this.addVibrantBlueBalcony(building, width, depth, balconyHeight, variation);
+                }
+
+                this.addVibrantGlassWindows(building, width, depth, 0, height, variation);
+                this.addVibrantGlassLobby(building, width, depth, 0, false, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            createVibrantCorporateHQ(building) {
+                const width = 20;
+                const depth = 20;
+                const height = building.height;
+                const variation = building.variation;
+
+                // Multi-tier design with increasing glass prominence
+                const tier1Height = height * 0.25;
+                const tier2Height = height * 0.35;
+                const tier3Height = height * 0.4;
+
+                // Bottom tier - white concrete
+                const tier1Geometry = new THREE.BoxGeometry(width, tier1Height, depth);
+                const tier1Material = new THREE.MeshPhongMaterial({
+                    color: 0xF5F5F5,
+                    shininess: 90
+                });
+                const tier1 = new THREE.Mesh(tier1Geometry, tier1Material);
+                tier1.position.y = tier1Height / 2;
+                tier1.castShadow = true;
+                building.group.add(tier1);
+                building.components.push(tier1);
+
+                // Middle tier - vibrant blue glass dominant
+                const tier2Geometry = new THREE.BoxGeometry(width * 0.88, tier2Height, depth * 0.88);
+                const tier2Material = this.createVibrantDarkBlueGlass(variation, true);
+                const tier2 = new THREE.Mesh(tier2Geometry, tier2Material);
+                tier2.position.y = tier1Height + tier2Height / 2;
+                tier2.castShadow = true;
+                building.group.add(tier2);
+                building.components.push(tier2);
+                building.glassComponents.push(tier2);
+
+                // Top tier - premium vibrant glass
+                const tier3Geometry = new THREE.BoxGeometry(width * 0.75, tier3Height, depth * 0.75);
+                const tier3Material = this.createVibrantDarkBlueGlass((variation + 1) % 5, true);
+                const tier3 = new THREE.Mesh(tier3Geometry, tier3Material);
+                tier3.position.y = tier1Height + tier2Height + tier3Height / 2;
+                tier3.castShadow = true;
+                building.group.add(tier3);
+                building.components.push(tier3);
+                building.glassComponents.push(tier3);
+
+                this.addVibrantGlassWindows(building, width, depth, 0, tier1Height, variation);
+                this.addVibrantGlassLobby(building, width, depth, 0, true, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            createVibrantTechCampus(building) {
+                const width = 26;
+                const depth = 20;
+                const height = building.height;
+                const variation = building.variation;
+
+                // Low-rise campus with extensive vibrant glass
+                const campusGeometry = new THREE.BoxGeometry(width, height, depth);
+                const glassMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                const campus = new THREE.Mesh(campusGeometry, glassMaterial);
+                campus.position.y = height / 2;
+                campus.castShadow = true;
+                building.group.add(campus);
+                building.components.push(campus);
+                building.glassComponents.push(campus);
+
+                this.addVibrantGlassWindows(building, width, depth, 0, height, variation);
+                this.addVibrantGlassLobby(building, width, depth, 0, true, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            createVibrantAIHeadquarters(building) {
+                const width = 22;
+                const depth = 22;
+                const height = building.height;
+                const variation = building.variation;
+
+                // Distinctive cylindrical design with vibrant blue glass
+                const mainGeometry = new THREE.CylinderGeometry(width/2.1, width/1.9, height, 20);
+                const glassMaterial = this.createVibrantDarkBlueGlass(0, true); // Primary blue
+                const main = new THREE.Mesh(mainGeometry, glassMaterial);
+                main.position.y = height / 2;
+                main.castShadow = true;
+                building.group.add(main);
+                building.components.push(main);
+                building.glassComponents.push(main);
+
+                this.addVibrantHexagonalElements(building, width, height, variation);
+                this.addVibrantGlassLobby(building, width, depth, 0, true, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            createVibrantGenericBuilding(building) {
+                const width = 12 + Math.random() * 10;
+                const depth = 12 + Math.random() * 10;
+                const height = building.height;
+                const variation = building.variation;
+
+                // Base structure
+                const baseHeight = height * 0.15;
+                const baseGeometry = new THREE.BoxGeometry(width, baseHeight, depth);
+                const baseMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xF0F0F0,
+                    shininess: 60
+                });
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+                base.position.y = baseHeight / 2;
+                base.castShadow = true;
+                building.group.add(base);
+                building.components.push(base);
+
+                // Vibrant blue glass upper section
+                const towerHeight = height - baseHeight;
+                const towerGeometry = new THREE.BoxGeometry(width * 0.92, towerHeight, depth * 0.92);
+                const glassMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                const tower = new THREE.Mesh(towerGeometry, glassMaterial);
+                tower.position.y = baseHeight + towerHeight / 2;
+                tower.castShadow = true;
+                building.group.add(tower);
+                building.components.push(tower);
+                building.glassComponents.push(tower);
+
+                this.addVibrantGlassWindows(building, width, depth, 0, height, variation);
+                this.addVibrantGlassLobby(building, width, depth, 0, false, variation);
+                this.addVibrantAIElements(building, width, depth, height, variation);
+                this.addVibrantRooftopFeatures(building, width, depth, height, variation);
+            }
+
+            addVibrantGlassWindows(building, width, depth, startHeight, totalHeight, variation) {
+                const floorHeight = 4;
+                const floors = Math.floor(totalHeight / floorHeight);
+                
+                for (let floor = 0; floor < floors; floor++) {
+                    const y = startHeight + floor * floorHeight + floorHeight / 2;
+                    
+                    this.addVibrantWindowRow(building, width, depth, y, 'front', variation);
+                    this.addVibrantWindowRow(building, width, depth, y, 'back', variation);
+                    this.addVibrantWindowRow(building, width, depth, y, 'left', variation);
+                    this.addVibrantWindowRow(building, width, depth, y, 'right', variation);
+                }
+            }
+
+            addVibrantWindowRow(building, width, depth, y, side, variation) {
+                const windowWidth = 1.6;
+                const windowHeight = 3.2;
+                const spacing = 2;
+                
+                let sideWidth, rotation, offsetX, offsetZ;
+                
+                switch(side) {
+                    case 'front':
+                        sideWidth = width;
+                        rotation = 0;
+                        offsetX = 0;
+                        offsetZ = depth / 2 + 0.03;
+                        break;
+                    case 'back':
+                        sideWidth = width;
+                        rotation = Math.PI;
+                        offsetX = 0;
+                        offsetZ = -depth / 2 - 0.03;
+                        break;
+                    case 'left':
+                        sideWidth = depth;
+                        rotation = Math.PI / 2;
+                        offsetX = -width / 2 - 0.03;
+                        offsetZ = 0;
+                        break;
+                    case 'right':
+                        sideWidth = depth;
+                        rotation = -Math.PI / 2;
+                        offsetX = width / 2 + 0.03;
+                        offsetZ = 0;
+                        break;
+                }
+                
+                const windowCount = Math.floor(sideWidth / spacing);
+                
+                for (let i = 0; i < windowCount; i++) {
+                    const windowGeometry = new THREE.PlaneGeometry(windowWidth, windowHeight);
+                    const windowMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                    
+                    const window = new THREE.Mesh(windowGeometry, windowMaterial);
+                    const x = offsetX + (side === 'left' || side === 'right' ? 0 : (i - windowCount/2) * spacing);
+                    const z = offsetZ + (side === 'front' || side === 'back' ? 0 : (i - windowCount/2) * spacing);
+                    
+                    window.position.set(x, y, z);
+                    window.rotation.y = rotation;
+                    building.group.add(window);
+                    building.components.push(window);
+                    building.glassComponents.push(window);
+                }
+            }
+
+            addVibrantGlassLobby(building, width, depth, baseHeight, premium, variation) {
+                const lobbyHeight = premium ? 12 : 9;
+                const lobbyWidth = width * 0.88;
+                const lobbyDepth = depth * 0.88;
+                
+                // Vibrant blue glass lobby walls
+                const lobbyGeometry = new THREE.BoxGeometry(lobbyWidth, lobbyHeight, lobbyDepth);
+                const lobbyMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                lobbyMaterial.opacity = 0.25; // More transparent for lobby
+                
+                const lobby = new THREE.Mesh(lobbyGeometry, lobbyMaterial);
+                lobby.position.y = baseHeight + lobbyHeight / 2;
+                building.group.add(lobby);
+                building.components.push(lobby);
+                building.glassComponents.push(lobby);
+                
+                this.addVibrantLobbyInterior(building, lobbyWidth, lobbyDepth, baseHeight, lobbyHeight, premium, variation);
+            }
+
+            addVibrantLobbyInterior(building, width, depth, baseHeight, height, premium, variation) {
+                // Reception desk with modern design
+                const deskGeometry = new THREE.BoxGeometry(width * 0.4, 1.6, 1.2);
+                const deskMaterial = new THREE.MeshPhongMaterial({ 
+                    color: premium ? 0x1E90FF : 0x4682B4,
+                    shininess: 100
+                });
+                const desk = new THREE.Mesh(deskGeometry, deskMaterial);
+                desk.position.set(0, baseHeight + 0.8, -depth * 0.3);
+                building.group.add(desk);
+                building.components.push(desk);
+                
+                // Modern seating with blue accents
+                for (let i = 0; i < 8; i++) {
+                    const chairGeometry = new THREE.BoxGeometry(0.8, 1, 0.8);
+                    const chairMaterial = new THREE.MeshPhongMaterial({ 
+                        color: premium ? 0x1E90FF : 0x87CEEB,
+                        shininess: 70
+                    });
+                    const chair = new THREE.Mesh(chairGeometry, chairMaterial);
+                    const angle = (i / 8) * Math.PI * 2;
+                    chair.position.set(
+                        Math.cos(angle) * width * 0.28,
+                        baseHeight + 0.5,
+                        depth * 0.3 + Math.sin(angle) * depth * 0.18
+                    );
+                    building.group.add(chair);
+                    building.components.push(chair);
+                }
+
+                // Premium lighting fixtures
+                for (let i = 0; i < 6; i++) {
+                    const lightGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.15);
+                    const lightMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0xFFFFFF,
+                        emissive: 0x666666
+                    });
+                    const light = new THREE.Mesh(lightGeometry, lightMaterial);
+                    light.position.set(
+                        (i % 3 - 1) * width * 0.3,
+                        baseHeight + height - 0.3,
+                        (Math.floor(i / 3) - 0.5) * depth * 0.4
+                    );
+                    building.group.add(light);
+                    building.components.push(light);
+                }
+            }
+
+            addVibrantBlueBalcony(building, width, depth, height, variation) {
+                const balconyGeometry = new THREE.BoxGeometry(width + 2, 0.4, 3);
+                const balconyMaterial = new THREE.MeshPhongMaterial({ color: 0xE0E0E0 });
+                const balcony = new THREE.Mesh(balconyGeometry, balconyMaterial);
+                balcony.position.set(0, height, depth / 2 + 1.5);
+                balcony.castShadow = true;
+                building.group.add(balcony);
+                building.components.push(balcony);
+                
+                // Vibrant blue glass railing
+                const railingGeometry = new THREE.BoxGeometry(width + 2, 1.4, 0.12);
+                const railingMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                const railing = new THREE.Mesh(railingGeometry, railingMaterial);
+                railing.position.set(0, height + 0.7, depth / 2 + 2.9);
+                building.group.add(railing);
+                building.components.push(railing);
+                building.glassComponents.push(railing);
+                
+                // Modern planters
+                for (let i = 0; i < 5; i++) {
+                    const planterGeometry = new THREE.BoxGeometry(0.9, 0.5, 0.9);
+                    const planterMaterial = new THREE.MeshPhongMaterial({ color: 0x8B4513 });
+                    const planter = new THREE.Mesh(planterGeometry, planterMaterial);
+                    planter.position.set(
+                        (i - 2) * (width / 5),
+                        height + 0.45,
+                        depth / 2 + 1.2
+                    );
+                    building.group.add(planter);
+                    building.components.push(planter);
+                    
+                    const plantGeometry = new THREE.SphereGeometry(0.5, 8, 6);
+                    const plantMaterial = new THREE.MeshLambertMaterial({ color: 0x32CD32 });
+                    const plant = new THREE.Mesh(plantGeometry, plantMaterial);
+                    plant.position.set(
+                        (i - 2) * (width / 5),
+                        height + 0.8,
+                        depth / 2 + 1.2
+                    );
+                    building.group.add(plant);
+                    building.components.push(plant);
+                }
+            }
+
+            addVibrantAIElements(building, width, depth, height, variation) {
+                // Vibrant blue LED strips
+                this.addVibrantLEDStrips(building, width, depth, height, variation);
+                
+                // Digital displays with vibrant blue integration
+                this.addVibrantDigitalDisplays(building, width, depth, height, variation);
+                
+                // Communication arrays with blue accents
+                this.addVibrantCommunicationArray(building, width, depth, height, variation);
+            }
+
+            addVibrantLEDStrips(building, width, depth, height, variation) {
+                const ledColors = [0x1E90FF, 0x4682B4, 0x0066CC, 0x0080FF, 0x2E86AB];
+                const ledMaterial = new THREE.MeshBasicMaterial({
+                    color: ledColors[variation],
+                    emissive: ledColors[variation],
+                    emissiveIntensity: 0.3,
+                    transparent: true,
+                    opacity: 0.95
+                });
+                
+                const corners = [
+                    { x: width/2, z: depth/2 },
+                    { x: -width/2, z: depth/2 },
+                    { x: width/2, z: -depth/2 },
+                    { x: -width/2, z: -depth/2 }
+                ];
+                
+                corners.forEach(corner => {
+                    const ledGeometry = new THREE.CylinderGeometry(0.1, 0.1, height * 0.9);
+                    const led = new THREE.Mesh(ledGeometry, ledMaterial);
+                    led.position.set(corner.x, height * 0.45, corner.z);
+                    building.group.add(led);
+                    building.components.push(led);
+                });
+            }
+
+            addVibrantDigitalDisplays(building, width, depth, height, variation) {
+                const displayColors = [0x1E90FF, 0x4682B4, 0x0066CC, 0x0080FF, 0x2E86AB];
+                const displayGeometry = new THREE.PlaneGeometry(width * 0.8, 6);
+                const displayMaterial = new THREE.MeshBasicMaterial({
+                    color: displayColors[variation],
+                    emissive: displayColors[variation],
+                    emissiveIntensity: 0.2,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                const display = new THREE.Mesh(displayGeometry, displayMaterial);
+                display.position.set(0, height * 0.3, depth / 2 + 0.04);
+                building.group.add(display);
+                building.components.push(display);
+            }
+
+            addVibrantCommunicationArray(building, width, depth, height, variation) {
+                const arrayColors = [0x1E90FF, 0x4682B4, 0x0066CC, 0x0080FF, 0x2E86AB];
+                const arrayMaterial = new THREE.MeshPhongMaterial({
+                    color: arrayColors[variation],
+                    shininess: 120,
+                    emissive: arrayColors[variation],
+                    emissiveIntensity: 0.1
+                });
+                
+                for (let i = 0; i < 5; i++) {
+                    const arrayGeometry = new THREE.CylinderGeometry(0.7, 1, 4);
+                    const array = new THREE.Mesh(arrayGeometry, arrayMaterial);
+                    array.position.set(
+                        (i - 2) * 3,
+                        height + 2,
+                        0
+                    );
+                    building.group.add(array);
+                    building.components.push(array);
+                }
+            }
+
+            addVibrantHexagonalElements(building, width, height, variation) {
+                const hexColors = [0x1E90FF, 0x4682B4, 0x0066CC, 0x0080FF, 0x2E86AB];
+                const hexGeometry = new THREE.CylinderGeometry(1.2, 1.2, 0.2, 6);
+                const hexMaterial = this.createVibrantDarkBlueGlass(variation, false);
+                
+                const rows = Math.floor(height / 12);
+                const cols = Math.floor(width / 5);
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        if (Math.random() > 0.5) {
+                            const hex = new THREE.Mesh(hexGeometry, hexMaterial);
+                            hex.position.set(
+                                (col - cols/2) * 5,
+                                row * 12 + 6,
+                                width / 2 + 0.1
+                            );
+                            hex.rotation.z = Math.PI / 2;
+                            building.group.add(hex);
+                            building.components.push(hex);
+                            building.glassComponents.push(hex);
+                        }
+                    }
+                }
+            }
+
+            addVibrantRooftopFeatures(building, width, depth, height, variation) {
+                // Vibrant blue-tinted solar panels
+                this.addVibrantSolarPanels(building, width, depth, height, variation);
+                
+                // Modern rooftop gardens
+                this.addVibrantRooftopGarden(building, width, depth, height, variation);
+                
+                // Building systems with blue accents
+                this.addVibrantBuildingSystems(building, width, depth, height, variation);
+            }
+
+            addVibrantSolarPanels(building, width, depth, height, variation) {
+                const panelColors = [0x1E3A8A, 0x2563EB, 0x1D4ED8, 0x2563EB, 0x3730A3];
+                const panelWidth = 2.5;
+                const panelDepth = 1.4;
+                const rows = Math.floor((width - 2) / panelWidth);
+                const cols = Math.floor((depth - 2) / panelDepth);
+                
+                const panelMaterial = new THREE.MeshPhongMaterial({
+                    color: panelColors[variation],
+                    shininess: 140,
+                    emissive: panelColors[variation],
+                    emissiveIntensity: 0.05
+                });
+                
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        if ((row + col) % 4 === 0) {
+                            const panelGeometry = new THREE.BoxGeometry(panelWidth * 0.96, 0.15, panelDepth * 0.96);
+                            const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+                            panel.position.set(
+                                (row - rows/2) * panelWidth,
+                                height + 0.3,
+                                (col - cols/2) * panelDepth
+                            );
+                            building.group.add(panel);
+                            building.components.push(panel);
+                        }
+                    }
+                }
+            }
+
+            addVibrantRooftopGarden(building, width, depth, height, variation) {
+                const gardenSize = Math.min(width, depth) * 0.45;
+                const gardenGeometry = new THREE.CylinderGeometry(gardenSize, gardenSize, 0.8, 6);
+                const gardenMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                
+                for (let i = 0; i < 4; i++) {
+                    const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                    const angle = (i / 4) * Math.PI * 2;
+                    garden.position.set(
+                        Math.cos(angle) * width * 0.3,
+                        height + 0.5,
+                        Math.sin(angle) * depth * 0.3
+                    );
+                    building.group.add(garden);
+                    building.components.push(garden);
+                }
+            }
+
+            addVibrantBuildingSystems(building, width, depth, height, variation) {
+                const systemColors = [0x1E90FF, 0x4682B4, 0x0066CC, 0x0080FF, 0x2E86AB];
+                const hvacMaterial = new THREE.MeshPhongMaterial({ 
+                    color: systemColors[variation],
+                    shininess: 80
+                });
+                
+                for (let i = 0; i < 4; i++) {
+                    const hvacGeometry = new THREE.BoxGeometry(3, 2, 4);
+                    const hvac = new THREE.Mesh(hvacGeometry, hvacMaterial);
+                    hvac.position.set(
+                        (i % 2 - 0.5) * width * 0.6,
+                        height + 1,
+                        (Math.floor(i / 2) - 0.5) * depth * 0.6
+                    );
+                    building.group.add(hvac);
+                    building.components.push(hvac);
+                }
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                this.time = performance.now() * 0.001;
+
+                // Enhanced LED and display animations
+                this.buildings.forEach(building => {
+                    building.components.forEach(component => {
+                        if (component.material && component.material.emissive) {
+                            const pulse = Math.sin(this.time * 3) * 0.2 + 0.8;
+                            component.material.emissiveIntensity = pulse * 0.3;
+                        }
+                    });
+                });
+
+                // Gentle camera auto-rotation for better viewing angles
+                if (!this.mouseDown) {
+                    this.cameraRotationY += 0.0006;
+                    this.updateCameraPosition();
+                }
+
+                this.renderer.render(this.scene, this.camera);
+            }
+
+            hideLoading() {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 2500);
+            }
+        }
+
+        // Initialize the vibrant dark blue city
+        window.addEventListener('load', () => {
+            new VibrantDarkBlueCity();
+        });
+    </script>
+</body>
+</html>

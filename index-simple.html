@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Khu Công Nghệ Cao AI | 3D Campus Visualization</title>
+    
+    <!-- Three.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- Custom Loaders -->
+    <script src="diagnostic-model-loader.js"></script>
+    <script src="force-render-loop.js"></script>
+    
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+        }
+        canvas { 
+            display: block; 
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 400px;
+            max-height: 400px;
+            overflow: auto;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        .success { color: #4CAF50; }
+        .warning { color: #FFC107; }
+        .error { color: #F44336; }
+        
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(30, 58, 138, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            color: #fbbf24;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="#" class="logo">🚀 HEART</a>
+        <div class="nav-links">
+            <a href="#" class="nav-link" id="toggleWireframe">Bật/Tắt Wireframe</a>
+            <a href="#" class="nav-link" id="toggleSolid">Chuyển sang SOLID</a>
+            <a href="#" class="nav-link" id="toggleReflections">Bật/Tắt Phản chiếu</a>
+        </div>
+    </div>
+    
+    <div id="info">Khởi tạo mô hình 3D HEART Technology Park...</div>
+    
+    <script>
+        // Debug log function
+        function log(message, type = 'info') {
+            const infoDiv = document.getElementById('info');
+            const classType = type === 'error' ? 'error' : (type === 'warning' ? 'warning' : 'success');
+            infoDiv.innerHTML += `<div class="${classType}">${message}</div>`;
+            infoDiv.scrollTop = infoDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        // Main variables
+        let scene, camera, renderer, controls, modelLoader;
+        let cubeCamera, cubeRenderTarget;
+        let reflectionsEnabled = true;
+        
+        // Initialize Three.js scene
+        function init() {
+            log('Khởi tạo cảnh 3D...', 'info');
+            
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Light blue sky
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(20, 20, 20);
+            
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+            
+            // Add orbit controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(10, 20, 10);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            // Add ground
+            const groundGeometry = new THREE.PlaneGeometry(100, 100);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x333333,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Add grid helper
+            const gridHelper = new THREE.GridHelper(100, 100);
+            scene.add(gridHelper);
+            
+            // Initialize diagnostic model loader
+            modelLoader = new DiagnosticModelLoader(scene);
+            log('DiagnosticModelLoader đã khởi tạo', 'success');
+            
+            // Add event listeners
+            window.addEventListener('resize', onWindowResize);
+            
+            // Start animation loop
+            animate();
+            
+            // Load models
+            loadModels();
+        }
+        
+        // Load models with our diagnostic loader
+        async function loadModels() {
+            log('Bắt đầu tải các mô hình...', 'info');
+            
+            // Define building positions - sử dụng cơ chế fallback của DiagnosticModelLoader
+            const buildingPositions = [
+                // Tòa nhà trung tâm - sử dụng mô hình có sẵn
+                {url: 'models/building1.gltf', position: {x: 0, y: 0, z: 0}, options: {scale: 2.0, name: 'building_center'}},
+                
+                // Các tòa nhà kính cobalt blue - sử dụng cơ chế fallback
+                {url: 'models/nonexistent_building1.gltf', position: {x: 10, y: 0, z: 0}, options: {color: 0x0047AB, name: 'blue_glass_building_1', type: 'building', scale: 1.5}},
+                {url: 'models/nonexistent_building2.gltf', position: {x: -10, y: 0, z: 0}, options: {color: 0x0047AB, name: 'blue_glass_building_2', type: 'building', scale: 2.0}}
+            ];
+            
+            try {
+                // Load all models
+                for (const building of buildingPositions) {
+                    try {
+                        await modelLoader.loadWithFallback(
+                            building.url, 
+                            building.position.x, 
+                            building.position.y, 
+                            building.position.z,
+                            building.options
+                        );
+                        log(`Đã tải mô hình: ${building.url}`, 'success');
+                    } catch (error) {
+                        log(`Lỗi khi tải mô hình ${building.url}: ${error.message}`, 'error');
+                    }
+                }
+                
+                log('Tất cả các mô hình đã được tải xong!', 'success');
+            } catch (error) {
+                log(`Lỗi khi tải mô hình: ${error.message}`, 'error');
+            }
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        // Initialize the scene
+        init();
+        
+        // Event listeners for UI controls
+        document.getElementById('toggleWireframe').addEventListener('click', function(e) {
+            e.preventDefault();
+            scene.traverse(function(object) {
+                if (object.isMesh && object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            mat.wireframe = !mat.wireframe;
+                        });
+                    } else {
+                        object.material.wireframe = !object.material.wireframe;
+                    }
+                }
+            });
+            log('Đã chuyển đổi chế độ wireframe', 'success');
+        });
+        
+        document.getElementById('toggleSolid').addEventListener('click', function(e) {
+            e.preventDefault();
+            scene.traverse(function(object) {
+                if (object.isMesh && object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            mat.transparent = false;
+                            mat.opacity = 1.0;
+                            mat.color.setHex(0x0047AB); // Cobalt blue
+                            mat.needsUpdate = true;
+                        });
+                    } else {
+                        object.material.transparent = false;
+                        object.material.opacity = 1.0;
+                        object.material.color.setHex(0x0047AB); // Cobalt blue
+                        object.material.needsUpdate = true;
+                    }
+                }
+            });
+            log('Đã chuyển sang chế độ SOLID', 'success');
+        });
+        
+        document.getElementById('toggleReflections').addEventListener('click', function(e) {
+            e.preventDefault();
+            reflectionsEnabled = !reflectionsEnabled;
+            
+            if (!reflectionsEnabled) {
+                // Remove environment maps
+                scene.traverse((object) => {
+                    if (object.isMesh && object.material && object.material.envMap) {
+                        object.material.envMap = null;
+                        object.material.needsUpdate = true;
+                    }
+                });
+                log('Đã tắt phản chiếu môi trường', 'warning');
+            } else {
+                log('Đã bật phản chiếu môi trường', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+/* GLOBAL HEADER OVERLAP FIX - STRONGER SELECTORS - v2 */
+
+/* OPTIMAL Universal page content spacing */
+body main,
+body .main-content,
+body .page-content,
+body .container,
+body .content-wrapper,
+body .page-wrapper,
+html body main,
+html body .main-content {
+    padding-top: 100px !important; /* Sweet spot - no overlap + clean spacing */
+    margin-top: 0 !important;
+    min-height: calc(100vh - 100px) !important;
+    box-sizing: border-box !important;
+}
+
+/* SUPER STRONG page titles */
+body h1,
+body .page-title,
+body .section-title,
+body h1.title,
+body .hero-title,
+body .masthead h1,
+html body h1 {
+    margin-top: 20px !important;
+    padding-top: 0 !important;
+}
+
+/* Ensure header stays consistent */
+.navbar,
+.header {
+    position: fixed !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+    height: 80px;
+    box-sizing: border-box;
+}
+
+/* Mobile responsive spacing */
+@media (max-width: 768px) {
+    body main,
+    body .main-content,
+    body .page-content,
+    body .container,
+    body .content-wrapper,
+    body .page-wrapper {
+        padding-top: 110px !important; /* Slightly more for mobile header */
+    }
+}
+
+/* Special cases for specific layouts */
+.hero-section {
+    margin-top: -100px !important; /* Hero can overlap if needed */
+    padding-top: 180px !important; /* But content starts below header */
+}
+
+/* Full-width sections */
+.full-width-section {
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    width: 100vw !important;
+}
+
+/* Fix any overflow issues */
+body {
+    overflow-x: hidden;
+}

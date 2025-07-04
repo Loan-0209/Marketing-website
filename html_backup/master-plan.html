@@ -1,0 +1,3619 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Campus 3D - HEART Technology Park - Smart City</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="HEART AI Campus - Interactive 3D visualization with advanced controls and real-time performance monitoring">
+    <meta name="keywords" content="HEART, AI Campus, 3D visualization, interactive, technology park">
+    <meta name="author" content="HEART Technology Park">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Professional Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 16px 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand-text {
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 12px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 12px 24px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: #fbbf24;
+            color: #1e3a8a;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+        }
+
+        /* Main Container */
+        .main-container {
+            position: relative;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 3D Viewer Container */
+        .viewer-container {
+            position: relative;
+            flex: 1;
+            background: #000;
+        }
+
+        #threejs-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+            min-width: 200px;
+        }
+
+        .control-panel h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group-title {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .control-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .control-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .control-btn:hover {
+            background: #f8f9fa;
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-color: #ffd700;
+            color: #1e3c72;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .control-btn.toggle-on {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        /* Performance Stats Panel */
+        .stats-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+            min-width: 180px;
+        }
+
+        .stats-panel h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 14px;
+            color: #1e3c72;
+            font-weight: bold;
+        }
+
+        .performance-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .fps-good { background: #10b981; }
+        .fps-okay { background: #f59e0b; }
+        .fps-poor { background: #ef4444; }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.6s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .log-output {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+
+        .log-entry {
+            margin: 2px 0;
+            padding: 2px 0;
+        }
+
+        .log-success { color: #10b981; }
+        .log-warning { color: #f59e0b; }
+        .log-error { color: #ef4444; }
+        .log-info { color: #3b82f6; }
+
+        /* Fallback Canvas */
+        .fallback-canvas {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #87ceeb 0%, #98fb98 100%);
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                height: auto;
+                min-height: 80px;
+                padding: 12px 16px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .control-panel,
+            .stats-panel {
+                position: relative;
+                margin: 10px;
+                width: auto;
+            }
+
+            .main-container {
+                height: auto;
+                min-height: calc(100vh - 120px);
+                margin-top: 120px;
+            }
+
+            .viewer-container {
+                height: 60vh;
+                min-height: 400px;
+            }
+        }
+    </style>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- AI Campus Scripts -->
+    <script src="model-loader.js"></script>
+    <script src="realistic-city-features.js"></script>
+    <script src="realistic-city-core.js"></script>
+    <script src="ai-campus-integration.js"></script>
+    
+    <!-- Cache Clearer Utility -->
+    <script src="cache-clearer.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="brand">
+                🚀 <span class="brand-text">HEART AI Campus</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About</a></li>
+                    <li><a href="master-plan.html" class="nav-link active">AI Campus</a></li>
+                    <li><a href="index.html#facilities" class="nav-link">Facilities</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- 3D Viewer Container -->
+        <div class="viewer-container">
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <h3>Initializing AI Campus 3D Visualization</h3>
+                    <div class="log-output" id="logOutput">
+                        <div class="log-entry log-info">Starting initialization...</div>
+                    </div>
+                    <div id="loadingActions" style="margin-top: 20px;">
+                        <!-- Action buttons will be added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h3>🎮 Controls</h3>
+                
+                <div class="control-group">
+                    <div class="control-group-title">View Modes</div>
+                    <div class="control-buttons">
+                        <button class="control-btn active" data-action="view" data-view="overview">Overview</button>
+                        <button class="control-btn" data-action="view" data-view="aerial">Aerial</button>
+                        <button class="control-btn" data-action="view" data-view="ground">Ground</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-group-title">Scene Controls</div>
+                    <div class="control-buttons">
+                        <button class="control-btn" data-action="toggle" data-feature="autoRotate">Auto Rotate</button>
+                        <button class="control-btn" data-action="toggle" data-feature="labels">Labels</button>
+                        <button class="control-btn" data-action="toggle" data-feature="wireframe">Wireframe</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-group-title">Debug</div>
+                    <div class="control-buttons">
+                        <button class="control-btn" data-action="retry">Retry 3D</button>
+                        <button class="control-btn" data-action="fallback">2D Mode</button>
+                        <button class="control-btn" data-action="reset">Reset</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Stats Panel -->
+            <div class="stats-panel">
+                <h3>📊 Performance</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Status</span>
+                    <span class="stat-value" id="status-indicator">Initializing</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">FPS</span>
+                    <span class="stat-value">
+                        <span class="performance-indicator fps-good"></span>
+                        <span id="fps-counter">--</span>
+                    </span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Objects</span>
+                    <span class="stat-value" id="objects-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Triangles</span>
+                    <span class="stat-value" id="triangles-count">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Mode</span>
+                    <span class="stat-value" id="render-mode">WebGL</span>
+                </div>
+            </div>
+
+            <!-- Three.js Container -->
+            <div id="threejs-container" class="realistic-city-container"></div>
+            
+            <!-- Fallback 2D Canvas -->
+            <canvas id="fallback-canvas" class="fallback-canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Core 3D Visualization System -->
+    <script>
+        // Global logging system
+        window.CampusLogger = {
+            logs: [],
+            outputElement: null,
+
+            init() {
+                this.outputElement = document.getElementById('logOutput');
+            },
+
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = { timestamp, message, type };
+                this.logs.push(logEntry);
+                
+                console.log(`[${timestamp}] ${message}`);
+                
+                if (this.outputElement) {
+                    const logDiv = document.createElement('div');
+                    logDiv.className = `log-entry log-${type}`;
+                    logDiv.innerHTML = `[${timestamp}] ${message}`;
+                    this.outputElement.appendChild(logDiv);
+                    this.outputElement.scrollTop = this.outputElement.scrollHeight;
+                }
+            },
+
+            success(message) { this.log(message, 'success'); },
+            warning(message) { this.log(message, 'warning'); },
+            error(message) { this.log(message, 'error'); },
+            info(message) { this.log(message, 'info'); }
+        };
+
+        // Bulletproof Three.js Loader
+        class ThreeJSLoader {
+            constructor() {
+                this.cdnSources = [
+                    'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+                    'https://unpkg.com/three@0.128.0/build/three.min.js',
+                    'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'
+                ];
+                this.controlsSources = [
+                    'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js',
+                    'https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js',
+                    'https://threejs.org/examples/js/controls/OrbitControls.js'
+                ];
+                this.currentCDNIndex = 0;
+                this.currentControlsIndex = 0;
+            }
+
+            async loadThreeJS() {
+                CampusLogger.info('Loading Three.js library...');
+                
+                for (let i = 0; i < this.cdnSources.length; i++) {
+                    try {
+                        CampusLogger.info(`Trying CDN ${i + 1}/${this.cdnSources.length}: ${this.cdnSources[i].split('/')[2]}`);
+                        await this.loadScript(this.cdnSources[i]);
+                        
+                        if (typeof THREE !== 'undefined') {
+                            CampusLogger.success(`Three.js loaded successfully from ${this.cdnSources[i].split('/')[2]}`);
+                            CampusLogger.info(`Three.js version: r${THREE.REVISION}`);
+                            return true;
+                        }
+                    } catch (error) {
+                        CampusLogger.warning(`CDN ${i + 1} failed: ${error.message}`);
+                    }
+                }
+                
+                throw new Error('All Three.js CDN sources failed');
+            }
+
+            async loadOrbitControls() {
+                CampusLogger.info('Loading OrbitControls...');
+                
+                for (let i = 0; i < this.controlsSources.length; i++) {
+                    try {
+                        CampusLogger.info(`Trying controls CDN ${i + 1}/${this.controlsSources.length}`);
+                        await this.loadScript(this.controlsSources[i]);
+                        
+                        if (typeof THREE !== 'undefined' && THREE.OrbitControls) {
+                            CampusLogger.success('OrbitControls loaded successfully');
+                            return true;
+                        }
+                    } catch (error) {
+                        CampusLogger.warning(`Controls CDN ${i + 1} failed: ${error.message}`);
+                    }
+                }
+                
+                CampusLogger.warning('OrbitControls failed to load, continuing without camera controls');
+                return false;
+            }
+
+            loadScript(src) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+                    document.head.appendChild(script);
+                });
+            }
+        }
+
+        // WebGL Detection and Compatibility
+        class WebGLDetector {
+            static detect() {
+                CampusLogger.info('Checking WebGL compatibility...');
+                
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    
+                    if (!gl) {
+                        CampusLogger.error('WebGL not available');
+                        return { supported: false, reason: 'WebGL context not available' };
+                    }
+
+                    // Get WebGL info
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown';
+                    const vendor = debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown';
+                    
+                    CampusLogger.success('WebGL is supported');
+                    CampusLogger.info(`GPU: ${renderer}`);
+                    CampusLogger.info(`Vendor: ${vendor}`);
+                    
+                    return { 
+                        supported: true, 
+                        context: gl,
+                        renderer,
+                        vendor
+                    };
+                } catch (error) {
+                    CampusLogger.error(`WebGL detection failed: ${error.message}`);
+                    return { supported: false, reason: error.message };
+                }
+            }
+
+            static getCapabilities(gl) {
+                if (!gl) return {};
+                
+                return {
+                    maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+                    maxVertexAttributes: gl.getParameter(gl.MAX_VERTEX_ATTRIBS),
+                    maxVaryingVectors: gl.getParameter(gl.MAX_VARYING_VECTORS),
+                    maxFragmentUniforms: gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS)
+                };
+            }
+        }
+
+        // Detailed 3D Campus Scene Builder
+        class DetailedCampusScene {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.buildings = [];
+                this.roads = [];
+                this.trees = [];
+                this.furniture = [];
+                this.animationId = null;
+                this.isRunning = false;
+                this.autoRotate = false;
+                this.showLabels = true;
+                this.isDayMode = true;
+                this.wireframeMode = false;
+                this.currentView = 'overview';
+            }
+
+            async init() {
+                try {
+                    CampusLogger.info('Creating 3D scene...');
+                    
+                    // Get container
+                    const container = document.getElementById('threejs-container');
+                    if (!container) {
+                        throw new Error('3D container not found');
+                    }
+
+                    // Create scene
+                    this.scene = new THREE.Scene();
+                    this.scene.background = new THREE.Color(0x87ceeb);
+                    CampusLogger.success('Scene created');
+
+                    // Create camera
+                    const aspect = container.clientWidth / container.clientHeight;
+                    this.camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+                    this.camera.position.set(100, 50, 100);
+                    this.camera.lookAt(0, 0, 0);
+                    CampusLogger.success('Camera created');
+
+                    // Create renderer with enhanced settings
+                    this.renderer = new THREE.WebGLRenderer({ 
+                        antialias: true,
+                        alpha: true,
+                        powerPreference: "high-performance"
+                    });
+                    this.renderer.setSize(container.clientWidth, container.clientHeight);
+                    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    
+                    // Enable realistic rendering features
+                    this.renderer.shadowMap.enabled = true;
+                    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                    this.renderer.toneMappingExposure = 1.0;
+                    this.renderer.outputEncoding = THREE.sRGBEncoding;
+                    this.renderer.physicallyCorrectLights = true;
+                    
+                    // Set beautiful waterfront sky background
+                    this.scene.background = new THREE.Color(0xE6F3FF); // Soft blue-white sky
+                    this.scene.fog = new THREE.Fog(0xE6F3FF, 500, 2000); // Distant soft fog
+                    
+                    container.appendChild(this.renderer.domElement);
+                    CampusLogger.success('Enhanced photorealistic renderer created');
+
+                    // Add controls if available
+                    if (typeof THREE !== 'undefined' && THREE.OrbitControls) {
+                        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                        this.controls.enableDamping = true;
+                        this.controls.dampingFactor = 0.05;
+                        CampusLogger.success('Orbit controls initialized');
+                    }
+
+                    // Create basic lighting with error handling
+                    try {
+                        this.addLighting();
+                        CampusLogger.success('Lighting system initialized');
+                    } catch (lightingError) {
+                        CampusLogger.warning(`Lighting error: ${lightingError.message}`);
+                        this.addBasicLighting(); // Fallback
+                    }
+                    
+                    // Create futuristic waterfront campus
+                    try {
+                        this.createFuturisticCampus();
+                    } catch (campusError) {
+                        CampusLogger.warning(`Campus creation error: ${campusError.message}`);
+                        this.createFallbackCampus(); // Fallback
+                    }
+                    
+                    // Start render loop
+                    this.startRenderLoop();
+                    
+                    CampusLogger.success('3D scene initialization complete');
+                    return true;
+
+                } catch (error) {
+                    CampusLogger.error(`3D scene initialization failed: ${error.message}`);
+                    throw error;
+                }
+            }
+
+            addLighting() {
+                // Golden hour ambient lighting
+                const ambientLight = new THREE.AmbientLight(0xFFE4B5, 0.5); // Soft golden
+                this.scene.add(ambientLight);
+
+                // Golden hour sun light
+                const sunLight = new THREE.DirectionalLight(0xFFD700, 1.5); // Golden sunlight
+                sunLight.position.set(200, 300, 100); // Low angle for golden hour
+                sunLight.castShadow = true;
+                
+                // Enhanced shadow properties for quality
+                sunLight.shadow.mapSize.width = 4096;
+                sunLight.shadow.mapSize.height = 4096;
+                sunLight.shadow.camera.near = 0.5;
+                sunLight.shadow.camera.far = 1000;
+                sunLight.shadow.camera.left = -400;
+                sunLight.shadow.camera.right = 400;
+                sunLight.shadow.camera.top = 400;
+                sunLight.shadow.camera.bottom = -400;
+                sunLight.shadow.bias = -0.0001;
+                
+                this.scene.add(sunLight);
+
+                // Soft sky lighting (hemisphere)
+                const skyLight = new THREE.HemisphereLight(0xE6F3FF, 0x4A90E2, 0.8); // Sky to ocean gradient
+                skyLight.position.set(0, 500, 0);
+                this.scene.add(skyLight);
+
+                // Ocean reflection light
+                const oceanLight = new THREE.DirectionalLight(0x87CEEB, 0.3); // Soft blue reflection
+                oceanLight.position.set(0, -50, 0);
+                oceanLight.target.position.set(0, 0, 0);
+                this.scene.add(oceanLight);
+                this.scene.add(oceanLight.target);
+
+                // Add atmospheric lighting with error handling
+                try {
+                    this.addAtmosphericLighting();
+                } catch (error) {
+                    CampusLogger.warning(`Atmospheric lighting failed: ${error.message}`);
+                }
+
+                CampusLogger.success('Golden hour waterfront lighting system added');
+            }
+
+            addAtmosphericLighting() {
+                // Volumetric atmospheric lighting
+                const atmosphericGeometry = new THREE.SphereGeometry(800, 32, 32);
+                const atmosphericMaterial = new THREE.ShaderMaterial({
+                    transparent: true,
+                    opacity: 0.1,
+                    side: THREE.BackSide,
+                    uniforms: {
+                        time: { value: 0.0 },
+                        color: { value: new THREE.Color(0xE6F3FF) }
+                    },
+                    vertexShader: `
+                        varying vec3 vWorldPosition;
+                        void main() {
+                            vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+                            vWorldPosition = worldPosition.xyz;
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
+                    `,
+                    fragmentShader: `
+                        uniform float time;
+                        uniform vec3 color;
+                        varying vec3 vWorldPosition;
+                        void main() {
+                            float distance = length(vWorldPosition);
+                            float alpha = 1.0 - (distance / 800.0);
+                            alpha = pow(alpha, 2.0) * 0.3;
+                            gl_FragColor = vec4(color, alpha);
+                        }
+                    `
+                });
+                
+                const atmosphericSphere = new THREE.Mesh(atmosphericGeometry, atmosphericMaterial);
+                this.scene.add(atmosphericSphere);
+
+                // Add subtle particle effects for atmosphere
+                const particleCount = 200;
+                const particleGeometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                
+                for (let i = 0; i < particleCount * 3; i += 3) {
+                    positions[i] = (Math.random() - 0.5) * 1000;
+                    positions[i + 1] = Math.random() * 200 + 50;
+                    positions[i + 2] = (Math.random() - 0.5) * 1000;
+                }
+                
+                particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                
+                const particleMaterial = new THREE.PointsMaterial({
+                    color: 0xFFFFFF,
+                    size: 2,
+                    transparent: true,
+                    opacity: 0.6,
+                    sizeAttenuation: true
+                });
+                
+                const particles = new THREE.Points(particleGeometry, particleMaterial);
+                this.scene.add(particles);
+
+                CampusLogger.success('Atmospheric lighting and effects added');
+            }
+
+            addCampusLighting() {
+                // Street and building lights
+                const lightPositions = [
+                    [0, 15, 70], [0, 15, -70], [70, 15, 0], [-70, 15, 0],
+                    [50, 8, 50], [-50, 8, 50], [50, 8, -50], [-50, 8, -50]
+                ];
+                
+                lightPositions.forEach(pos => {
+                    const pointLight = new THREE.PointLight(0xffd700, 0.8, 30);
+                    pointLight.position.set(pos[0], pos[1], pos[2]);
+                    pointLight.castShadow = true;
+                    pointLight.shadow.mapSize.width = 512;
+                    pointLight.shadow.mapSize.height = 512;
+                    this.scene.add(pointLight);
+                });
+            }
+
+            addBasicLighting() {
+                // Simple fallback lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(100, 100, 50);
+                this.scene.add(directionalLight);
+                
+                CampusLogger.success('Basic fallback lighting added');
+            }
+
+            createFallbackCampus() {
+                // Simple fallback campus
+                const geometry = new THREE.BoxGeometry(20, 40, 20);
+                const material = new THREE.MeshBasicMaterial({ color: 0x0099ff });
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(0, 20, 0);
+                this.scene.add(building);
+                
+                CampusLogger.success('Fallback campus created');
+            }
+
+            createFuturisticCampus() {
+                CampusLogger.info('Creating futuristic waterfront AI campus...');
+                
+                // Create ocean environment first
+                this.createOceanEnvironment();
+                
+                // Create main campus island
+                this.createMainIsland();
+                
+                // Create iconic twin towers first
+                this.createTwinTowers();
+                
+                // Create futuristic buildings with pastel colors
+                this.createPastelBuildings();
+                
+                // Create floating walkways and bridges
+                this.createFloatingWalkways();
+                
+                // Create marina and waterfront facilities
+                this.createMarina();
+                
+                // Create tropical vegetation
+                this.createTropicalVegetation();
+                
+                // Create environmental elements
+                this.createEnvironmentalElements();
+                
+                CampusLogger.success(`Created futuristic campus: ${this.buildings.length} buildings with ocean setting`);
+            }
+
+            createOceanEnvironment() {
+                CampusLogger.info('Creating crystal blue ocean...');
+                
+                // Create large ocean plane
+                const oceanGeometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
+                const oceanMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x4A90E2, // Crystal blue
+                    transparent: true, 
+                    opacity: 0.8,
+                    metalness: 0.1,
+                    roughness: 0.1,
+                    side: THREE.DoubleSide
+                });
+                
+                const ocean = new THREE.Mesh(oceanGeometry, oceanMaterial);
+                ocean.rotation.x = -Math.PI / 2;
+                ocean.position.y = -5; // Below campus level
+                ocean.receiveShadow = true;
+                this.scene.add(ocean);
+                
+                // Add gentle wave animation
+                this.animateOcean(ocean);
+                
+                // Create distant islands
+                this.createDistantIslands();
+            }
+
+            createMainIsland() {
+                CampusLogger.info('Creating main campus island...');
+                
+                // Create island base
+                const islandGeometry = new THREE.CylinderGeometry(300, 350, 10, 32);
+                const islandMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xF5F5DC, // Cream/sand color
+                    metalness: 0.0, 
+                    roughness: 0.9 
+                });
+                
+                const island = new THREE.Mesh(islandGeometry, islandMaterial);
+                island.position.y = -2.5;
+                island.receiveShadow = true;
+                this.scene.add(island);
+                
+                // Add beach areas around the island
+                this.createBeachAreas();
+            }
+
+            createDistantIslands() {
+                const islandPositions = [
+                    [800, -4, 600], [-800, -4, 600], [600, -4, -800], 
+                    [-600, -4, -800], [1000, -4, 0], [-1000, -4, 0]
+                ];
+                
+                islandPositions.forEach(pos => {
+                    const size = 50 + Math.random() * 100;
+                    const islandGeometry = new THREE.CylinderGeometry(size, size * 1.2, 8, 16);
+                    const islandMaterial = new THREE.MeshStandardMaterial({ 
+                        color: 0xE6E6FA, // Light lavender for distant islands
+                        metalness: 0.0, 
+                        roughness: 0.8 
+                    });
+                    
+                    const distantIsland = new THREE.Mesh(islandGeometry, islandMaterial);
+                    distantIsland.position.set(pos[0], pos[1], pos[2]);
+                    distantIsland.receiveShadow = true;
+                    this.scene.add(distantIsland);
+                });
+            }
+
+            createTwinTowers() {
+                CampusLogger.info('Creating iconic twin spiral towers...');
+                
+                // Twin Tower 1 - Soft Mint Green
+                this.createSpiralTower({
+                    position: [-80, 0, 0],
+                    color: 0xB8E6B8, // Soft mint green
+                    height: 200, // 45 stories
+                    radius: 25,
+                    spiralRotation: Math.PI * 4,
+                    name: 'Innovation Tower'
+                });
+                
+                // Twin Tower 2 - Pastel Blue-Green
+                this.createSpiralTower({
+                    position: [80, 0, 0],
+                    color: 0xA8E6CF, // Pastel blue-green
+                    height: 180, // 40 stories
+                    radius: 22,
+                    spiralRotation: -Math.PI * 4,
+                    name: 'Research Tower'
+                });
+                
+                // Create connecting bridges between towers
+                this.createTowerBridges();
+                
+                CampusLogger.success('Twin spiral towers created');
+            }
+
+            createSpiralTower(config) {
+                const { position, color, height, radius, spiralRotation, name } = config;
+                
+                // Create tower structure with spiral design
+                const towerGroup = new THREE.Group();
+                
+                // Main tower body (multiple segments for spiral effect)
+                const segments = 20;
+                const segmentHeight = height / segments;
+                
+                for (let i = 0; i < segments; i++) {
+                    const segmentGeometry = new THREE.CylinderGeometry(
+                        radius - (i * 0.3), // Tapering effect
+                        radius - (i * 0.2),
+                        segmentHeight,
+                        8
+                    );
+                    
+                    const segmentMaterial = new THREE.MeshStandardMaterial({
+                        color: color,
+                        metalness: 0.3,
+                        roughness: 0.2,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    
+                    const segment = new THREE.Mesh(segmentGeometry, segmentMaterial);
+                    segment.position.y = (i * segmentHeight) + (segmentHeight / 2);
+                    
+                    // Add spiral rotation
+                    const rotationY = (spiralRotation / segments) * i;
+                    segment.rotation.y = rotationY;
+                    
+                    // Add slight spiral offset
+                    const spiralOffset = Math.sin(rotationY) * 2;
+                    segment.position.x = spiralOffset;
+                    segment.position.z = Math.cos(rotationY) * 2;
+                    
+                    segment.castShadow = true;
+                    segment.receiveShadow = true;
+                    towerGroup.add(segment);
+                }
+                
+                // Add glass curtain walls
+                this.addGlassCurtainWalls(towerGroup, height, radius, color);
+                
+                // Add distinctive top structure
+                this.addTowerTop(towerGroup, height, radius, color);
+                
+                // Position the complete tower
+                towerGroup.position.set(position[0], position[1], position[2]);
+                this.scene.add(towerGroup);
+                this.buildings.push({ group: towerGroup, name: name, type: 'tower' });
+            }
+
+            addGlassCurtainWalls(towerGroup, height, radius, baseColor) {
+                // Create glass panels around the tower
+                const panelCount = 8;
+                const panelHeight = height * 0.8;
+                
+                for (let i = 0; i < panelCount; i++) {
+                    const angle = (Math.PI * 2 / panelCount) * i;
+                    const panelGeometry = new THREE.PlaneGeometry(radius * 0.8, panelHeight);
+                    const panelMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xE6F3FF, // Light blue glass
+                        transparent: true,
+                        opacity: 0.3,
+                        metalness: 0.8,
+                        roughness: 0.1
+                    });
+                    
+                    const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+                    panel.position.x = Math.cos(angle) * (radius + 1);
+                    panel.position.z = Math.sin(angle) * (radius + 1);
+                    panel.position.y = panelHeight / 2;
+                    panel.rotation.y = angle + Math.PI / 2;
+                    
+                    towerGroup.add(panel);
+                }
+            }
+
+            addTowerTop(towerGroup, height, radius, color) {
+                // Create curved wave top structure
+                const topGeometry = new THREE.SphereGeometry(radius * 0.8, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+                const topMaterial = new THREE.MeshStandardMaterial({
+                    color: color,
+                    metalness: 0.6,
+                    roughness: 0.1,
+                    transparent: true,
+                    opacity: 0.95
+                });
+                
+                const topStructure = new THREE.Mesh(topGeometry, topMaterial);
+                topStructure.position.y = height + 10;
+                topStructure.castShadow = true;
+                topStructure.receiveShadow = true;
+                towerGroup.add(topStructure);
+                
+                // Add crown lighting
+                const crownLight = new THREE.PointLight(color, 2, 100);
+                crownLight.position.y = height + 15;
+                towerGroup.add(crownLight);
+            }
+
+            createTowerBridges() {
+                // Create connecting bridges at multiple levels
+                const bridgeHeights = [60, 120, 160];
+                
+                bridgeHeights.forEach(height => {
+                    const bridgeGeometry = new THREE.BoxGeometry(160, 3, 8);
+                    const bridgeMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xF0F0F0, // Light silver
+                        metalness: 0.7,
+                        roughness: 0.2,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    
+                    const bridge = new THREE.Mesh(bridgeGeometry, bridgeMaterial);
+                    bridge.position.set(0, height, 0);
+                    bridge.castShadow = true;
+                    bridge.receiveShadow = true;
+                    this.scene.add(bridge);
+                    
+                    // Add glass railings
+                    this.addBridgeRailings(bridge, height);
+                });
+            }
+
+            addBridgeRailings(bridge, height) {
+                const railingGeometry = new THREE.BoxGeometry(160, 8, 0.5);
+                const railingMaterial = new THREE.MeshStandardMaterial({
+                    color: 0xE6F3FF,
+                    transparent: true,
+                    opacity: 0.4,
+                    metalness: 0.8,
+                    roughness: 0.1
+                });
+                
+                // North railing
+                const railingNorth = new THREE.Mesh(railingGeometry, railingMaterial);
+                railingNorth.position.set(0, height + 4, 4);
+                this.scene.add(railingNorth);
+                
+                // South railing
+                const railingSouth = new THREE.Mesh(railingGeometry, railingMaterial);
+                railingSouth.position.set(0, height + 4, -4);
+                this.scene.add(railingSouth);
+            }
+
+            createPastelBuildings() {
+                CampusLogger.info('Creating pastel-colored campus buildings...');
+                
+                // Define building configurations with pastel colors
+                const buildingConfigs = [
+                    // Academic buildings - Soft mint green
+                    { pos: [-120, 0, 80], size: [30, 25, 30], color: 0xB8E6B8, name: 'Computer Science', type: 'academic' },
+                    { pos: [120, 0, 80], size: [25, 30, 25], color: 0xB8E6B8, name: 'AI Research Lab', type: 'academic' },
+                    { pos: [-120, 0, -80], size: [35, 20, 35], color: 0xB8E6B8, name: 'Engineering Hall', type: 'academic' },
+                    
+                    // Student centers - Pastel coral
+                    { pos: [0, 0, 120], size: [40, 15, 25], color: 0xFFB3BA, name: 'Student Union', type: 'student' },
+                    { pos: [60, 0, -120], size: [30, 18, 30], color: 0xFFB3BA, name: 'Activity Center', type: 'student' },
+                    
+                    // Library - Light lavender
+                    { pos: [-60, 0, -120], size: [45, 22, 35], color: 0xE6E6FA, name: 'Digital Library', type: 'library' },
+                    
+                    // Recreation - Soft yellow
+                    { pos: [150, 0, 0], size: [25, 12, 40], color: 0xFFFACD, name: 'Sports Complex', type: 'recreation' },
+                    { pos: [-150, 0, 0], size: [30, 15, 35], color: 0xFFFACD, name: 'Wellness Center', type: 'recreation' },
+                    
+                    // Residential - Pastel pink
+                    { pos: [0, 0, -160], size: [60, 35, 20], color: 0xF8BBD9, name: 'Residence Hall A', type: 'residential' },
+                    { pos: [80, 0, 40], size: [25, 30, 25], color: 0xF8BBD9, name: 'Graduate Housing', type: 'residential' },
+                    
+                    // Administrative - Cream white
+                    { pos: [-80, 0, 40], size: [20, 25, 20], color: 0xF5F5DC, name: 'Admin Building', type: 'admin' }
+                ];
+                
+                buildingConfigs.forEach(config => {
+                    this.createModernBuilding(config);
+                });
+                
+                CampusLogger.success(`Created ${buildingConfigs.length} pastel-colored buildings`);
+            }
+
+            createModernBuilding(config) {
+                const { pos, size, color, name, type } = config;
+                
+                const buildingGroup = new THREE.Group();
+                
+                // Main building structure
+                const mainGeometry = new THREE.BoxGeometry(size[0], size[1], size[2]);
+                const mainMaterial = new THREE.MeshStandardMaterial({
+                    color: color,
+                    metalness: 0.2,
+                    roughness: 0.3,
+                    transparent: true,
+                    opacity: 0.95
+                });
+                
+                const mainBuilding = new THREE.Mesh(mainGeometry, mainMaterial);
+                mainBuilding.position.y = size[1] / 2;
+                mainBuilding.castShadow = true;
+                mainBuilding.receiveShadow = true;
+                buildingGroup.add(mainBuilding);
+                
+                // Add modern architectural details
+                this.addModernDetails(buildingGroup, size, color);
+                
+                // Add rooftop garden
+                this.addRooftopGarden(buildingGroup, size);
+                
+                // Position the building
+                buildingGroup.position.set(pos[0], pos[1], pos[2]);
+                this.scene.add(buildingGroup);
+                this.buildings.push({ group: buildingGroup, name: name, type: type });
+            }
+
+            addModernDetails(buildingGroup, size, color) {
+                // Add glass facade panels
+                const facadeCount = 6;
+                for (let i = 0; i < facadeCount; i++ ) {
+                    const panelGeometry = new THREE.PlaneGeometry(size[0] * 0.8, size[1] * 0.9);
+                    const panelMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xE6F3FF,
+                        transparent: true,
+                        opacity: 0.3,
+                        metalness: 0.8,
+                        roughness: 0.1
+                    });
+                    
+                    const panel = new THREE.Mesh(panelGeometry, panelMaterial);
+                    if (i < 2) {
+                        panel.position.x = i === 0 ? -(size[0]/2 + 0.5) : (size[0]/2 + 0.5);
+                        panel.position.y = size[1] / 2;
+                        panel.rotation.y = i === 0 ? Math.PI/2 : -Math.PI/2;
+                    } else if (i < 4) {
+                        panel.position.z = i === 2 ? -(size[2]/2 + 0.5) : (size[2]/2 + 0.5);
+                        panel.position.y = size[1] / 2;
+                        panel.rotation.y = i === 2 ? 0 : Math.PI;
+                    }
+                    buildingGroup.add(panel);
+                }
+                
+                // Add cantilever structure
+                if (size[1] > 20) {
+                    const cantileverGeometry = new THREE.BoxGeometry(size[0] * 1.2, 3, size[2] * 0.6);
+                    const cantileverMaterial = new THREE.MeshStandardMaterial({
+                        color: color,
+                        metalness: 0.4,
+                        roughness: 0.2,
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    
+                    const cantilever = new THREE.Mesh(cantileverGeometry, cantileverMaterial);
+                    cantilever.position.y = size[1] * 0.7;
+                    cantilever.castShadow = true;
+                    buildingGroup.add(cantilever);
+                }
+            }
+
+            addRooftopGarden(buildingGroup, size) {
+                // Create rooftop garden base
+                const gardenGeometry = new THREE.BoxGeometry(size[0] * 0.8, 1, size[2] * 0.8);
+                const gardenMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x90EE90, // Light green
+                    metalness: 0.0,
+                    roughness: 0.9
+                });
+                
+                const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                garden.position.y = size[1] + 0.5;
+                buildingGroup.add(garden);
+                
+                // Add small trees/plants on rooftop
+                for (let i = 0; i < 3; i++) {
+                    const treeGeometry = new THREE.ConeGeometry(1, 3, 8);
+                    const treeMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22 });
+                    const tree = new THREE.Mesh(treeGeometry, treeMaterial);
+                    tree.position.set(
+                        (Math.random() - 0.5) * size[0] * 0.6,
+                        size[1] + 2.5,
+                        (Math.random() - 0.5) * size[2] * 0.6
+                    );
+                    buildingGroup.add(tree);
+                }
+            }
+
+            createFloatingWalkways() {
+                CampusLogger.info('Creating floating walkways...');
+                
+                const walkwayMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xF0F0F0, // Light silver
+                    metalness: 0.8, 
+                    roughness: 0.2,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                
+                // Connect buildings with elegant curved walkways
+                const walkwayPaths = [
+                    { start: [-80, 30, 0], end: [80, 30, 0] }, // Twin tower connection
+                    { start: [-120, 15, 80], end: [-80, 60, 0] }, // Academic to Tower 1
+                    { start: [120, 20, 80], end: [80, 60, 0] },   // Academic to Tower 2
+                    { start: [0, 10, 120], end: [0, 80, 0] },     // Student Union to towers
+                    { start: [-60, 15, -120], end: [-80, 90, 0] }, // Library to Tower 1
+                ];
+                
+                walkwayPaths.forEach(path => {
+                    this.createCurvedWalkway(path.start, path.end, walkwayMaterial);
+                });
+            }
+
+            createCurvedWalkway(start, end, material) {
+                // Create curved walkway using spline
+                const midpoint = [
+                    (start[0] + end[0]) / 2,
+                    Math.max(start[1], end[1]) + 10, // Arch higher
+                    (start[2] + end[2]) / 2
+                ];
+                
+                const curve = new THREE.QuadraticBezierCurve3(
+                    new THREE.Vector3(start[0], start[1], start[2]),
+                    new THREE.Vector3(midpoint[0], midpoint[1], midpoint[2]),
+                    new THREE.Vector3(end[0], end[1], end[2])
+                );
+                
+                const tubeGeometry = new THREE.TubeGeometry(curve, 20, 2, 8, false);
+                const walkway = new THREE.Mesh(tubeGeometry, material);
+                walkway.castShadow = true;
+                walkway.receiveShadow = true;
+                this.scene.add(walkway);
+                this.roads.push(walkway);
+            }
+
+            createMarina() {
+                CampusLogger.info('Creating marina facilities...');
+                
+                // Create marina dock
+                const dockGeometry = new THREE.BoxGeometry(80, 2, 15);
+                const dockMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x8B4513, // Wood brown
+                    metalness: 0.1, 
+                    roughness: 0.8 
+                });
+                
+                const dock = new THREE.Mesh(dockGeometry, dockMaterial);
+                dock.position.set(0, -1, 250);
+                dock.castShadow = true;
+                dock.receiveShadow = true;
+                this.scene.add(dock);
+                
+                // Add boats and yachts
+                this.addBoatsAndYachts();
+                
+                // Add floating research labs
+                this.addFloatingResearchLabs();
+                
+                // Add marina facilities
+                this.addMarinaFacilities();
+            }
+
+            addFloatingResearchLabs() {
+                CampusLogger.info('Creating floating research laboratories...');
+                
+                const labPositions = [
+                    [200, 5, 150], [-200, 5, 150], [180, 5, -120], [-180, 5, -120]
+                ];
+                
+                labPositions.forEach((pos, index) => {
+                    const labGroup = new THREE.Group();
+                    
+                    // Main lab structure
+                    const labGeometry = new THREE.BoxGeometry(40, 12, 35);
+                    const labMaterial = new THREE.MeshStandardMaterial({
+                        color: index % 2 === 0 ? 0xE6E6FA : 0xB8E6B8, // Lavender or mint
+                        metalness: 0.4,
+                        roughness: 0.2,
+                        transparent: true,
+                        opacity: 0.95
+                    });
+                    
+                    const lab = new THREE.Mesh(labGeometry, labMaterial);
+                    lab.position.y = 6;
+                    lab.castShadow = true;
+                    lab.receiveShadow = true;
+                    labGroup.add(lab);
+                    
+                    // Floating platform
+                    const platformGeometry = new THREE.CylinderGeometry(30, 35, 3, 8);
+                    const platformMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xF5F5DC, // Cream
+                        metalness: 0.1,
+                        roughness: 0.7
+                    });
+                    
+                    const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                    platform.position.y = -1;
+                    platform.castShadow = true;
+                    platform.receiveShadow = true;
+                    labGroup.add(platform);
+                    
+                    // Glass observation deck
+                    const deckGeometry = new THREE.CylinderGeometry(15, 15, 8, 8);
+                    const deckMaterial = new THREE.MeshStandardMaterial({
+                        color: 0xE6F3FF,
+                        transparent: true,
+                        opacity: 0.4,
+                        metalness: 0.8,
+                        roughness: 0.1
+                    });
+                    
+                    const deck = new THREE.Mesh(deckGeometry, deckMaterial);
+                    deck.position.y = 16;
+                    labGroup.add(deck);
+                    
+                    // Position the lab
+                    labGroup.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(labGroup);
+                    this.buildings.push({ group: labGroup, name: `Floating Lab ${index + 1}`, type: 'research' });
+                });
+            }
+
+            addBoatsAndYachts() {
+                const boatPositions = [
+                    [20, -3, 260], [-20, -3, 260], [40, -3, 270], 
+                    [-40, -3, 270], [0, -3, 280], [60, -3, 250]
+                ];
+                
+                boatPositions.forEach((pos, index) => {
+                    const boatGeometry = new THREE.BoxGeometry(12, 4, 25);
+                    const boatMaterial = new THREE.MeshStandardMaterial({ 
+                        color: index % 2 === 0 ? 0xFFFFFF : 0xF8BBD9, // White or pastel pink
+                        metalness: 0.7, 
+                        roughness: 0.3 
+                    });
+                    
+                    const boat = new THREE.Mesh(boatGeometry, boatMaterial);
+                    boat.position.set(pos[0], pos[1], pos[2]);
+                    boat.castShadow = true;
+                    this.scene.add(boat);
+                    this.furniture.push(boat);
+                });
+            }
+
+            createTropicalVegetation() {
+                CampusLogger.info('Creating lush tropical vegetation...');
+                
+                // Palm trees around the campus
+                const palmPositions = [
+                    [50, 0, 50], [-50, 0, 50], [50, 0, -50], [-50, 0, -50],
+                    [100, 0, 30], [-100, 0, 30], [30, 0, 100], [-30, 0, 100],
+                    [0, 0, 180], [0, 0, -180], [180, 0, 0], [-180, 0, 0]
+                ];
+                
+                palmPositions.forEach(pos => {
+                    this.createPalmTree(pos);
+                });
+                
+                // Circular green spaces
+                this.createCircularGardens();
+                
+                // Tropical flower beds
+                this.createFlowerBeds();
+                
+                CampusLogger.success(`Created ${palmPositions.length} palm trees and gardens`);
+            }
+
+            createPalmTree(position) {
+                const treeGroup = new THREE.Group();
+                
+                // Palm trunk
+                const trunkGeometry = new THREE.CylinderGeometry(1, 1.5, 15, 8);
+                const trunkMaterial = new THREE.MeshStandardMaterial({
+                    color: 0x8B4513, // Brown
+                    metalness: 0.0,
+                    roughness: 0.9
+                });
+                
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 7.5;
+                trunk.castShadow = true;
+                treeGroup.add(trunk);
+                
+                // Palm fronds
+                const frondCount = 8;
+                for (let i = 0; i < frondCount; i++) {
+                    const angle = (Math.PI * 2 / frondCount) * i;
+                    const frondGeometry = new THREE.ConeGeometry(0.5, 8, 4);
+                    const frondMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x228B22, // Forest green
+                        metalness: 0.0,
+                        roughness: 0.8
+                    });
+                    
+                    const frond = new THREE.Mesh(frondGeometry, frondMaterial);
+                    frond.position.set(
+                        Math.cos(angle) * 3,
+                        16,
+                        Math.sin(angle) * 3
+                    );
+                    frond.rotation.z = angle;
+                    frond.rotation.x = Math.PI / 6; // Slight droop
+                    frond.castShadow = true;
+                    treeGroup.add(frond);
+                }
+                
+                treeGroup.position.set(position[0], position[1], position[2]);
+                this.scene.add(treeGroup);
+                this.trees.push(treeGroup);
+            }
+
+            createCircularGardens() {
+                const gardenPositions = [
+                    [0, 0, 50], [0, 0, -50], [70, 0, 0], [-70, 0, 0]
+                ];
+                
+                gardenPositions.forEach(pos => {
+                    const gardenGeometry = new THREE.CylinderGeometry(15, 15, 1, 16);
+                    const gardenMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x90EE90, // Light green
+                        metalness: 0.0,
+                        roughness: 0.9
+                    });
+                    
+                    const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                    garden.position.set(pos[0], pos[1] + 0.5, pos[2]);
+                    garden.receiveShadow = true;
+                    this.scene.add(garden);
+                    
+                    // Add colorful flowers
+                    for (let i = 0; i < 8; i++) {
+                        const flowerGeometry = new THREE.SphereGeometry(0.5, 8, 6);
+                        const flowerColors = [0xFF69B4, 0xFFB3BA, 0xE6E6FA, 0xFFFACD];
+                        const flowerMaterial = new THREE.MeshStandardMaterial({
+                            color: flowerColors[Math.floor(Math.random() * flowerColors.length)],
+                            metalness: 0.0,
+                            roughness: 0.8
+                        });
+                        
+                        const flower = new THREE.Mesh(flowerGeometry, flowerMaterial);
+                        const angle = (Math.PI * 2 / 8) * i;
+                        flower.position.set(
+                            pos[0] + Math.cos(angle) * (5 + Math.random() * 8),
+                            pos[1] + 1,
+                            pos[2] + Math.sin(angle) * (5 + Math.random() * 8)
+                        );
+                        this.scene.add(flower);
+                    }
+                });
+            }
+
+            createFlowerBeds() {
+                // Decorative flower beds around buildings
+                const bedPositions = [
+                    [40, 0, 40], [-40, 0, 40], [40, 0, -40], [-40, 0, -40],
+                    [0, 0, 80], [0, 0, -80], [80, 0, 0], [-80, 0, 0]
+                ];
+                
+                bedPositions.forEach(pos => {
+                    const bedGeometry = new THREE.BoxGeometry(8, 0.5, 3);
+                    const bedMaterial = new THREE.MeshStandardMaterial({
+                        color: 0x8B4513, // Soil brown
+                        metalness: 0.0,
+                        roughness: 1.0
+                    });
+                    
+                    const bed = new THREE.Mesh(bedGeometry, bedMaterial);
+                    bed.position.set(pos[0], pos[1] + 0.25, pos[2]);
+                    bed.receiveShadow = true;
+                    this.scene.add(bed);
+                    
+                    // Add small colorful plants
+                    for (let i = 0; i < 4; i++) {
+                        const plantGeometry = new THREE.ConeGeometry(0.3, 1, 6);
+                        const plantMaterial = new THREE.MeshStandardMaterial({
+                            color: [0xFF69B4, 0xFFB3BA, 0xE6E6FA][Math.floor(Math.random() * 3)],
+                            metalness: 0.0,
+                            roughness: 0.8
+                        });
+                        
+                        const plant = new THREE.Mesh(plantGeometry, plantMaterial);
+                        plant.position.set(
+                            pos[0] + (Math.random() - 0.5) * 6,
+                            pos[1] + 1,
+                            pos[2] + (Math.random() - 0.5) * 2
+                        );
+                        this.scene.add(plant);
+                    }
+                });
+            }
+
+            createDetailedBuildings() {
+                const buildingConfigs = [
+                    // ICONIC TWIN TOWERS - Centerpiece of the campus
+                    { 
+                        pos: [-80, 0, 0], 
+                        type: 'twin-tower-1',
+                        size: [30, 180, 30], // 40+ story tower
+                        color: 0xB8E6B8, // Soft mint green
+                        name: 'Innovation Tower',
+                        floors: 45,
+                        hasBalconies: false,
+                        roofType: 'futuristic-spire',
+                        isTower: true,
+                        towerType: 'spiral'
+                    },
+                    { 
+                        pos: [80, 0, 0], 
+                        type: 'twin-tower-2',
+                        size: [30, 200, 30], // 50 story tower
+                        color: 0xA8E6CF, // Pastel blue-green
+                        name: 'Research Tower',
+                        floors: 50,
+                        hasBalconies: false,
+                        roofType: 'futuristic-spire',
+                        isTower: true,
+                        towerType: 'spiral'
+                    },
+                    
+                    // ACADEMIC BUILDINGS - Soft mint green
+                    { 
+                        pos: [0, 0, -80], 
+                        type: 'academic',
+                        size: [35, 25, 25], 
+                        color: 0xB8E6B8, // Soft mint green
+                        name: 'Academic Center',
+                        floors: 3,
+                        hasBalconies: true,
+                        roofType: 'rooftop-garden'
+                    },
+                    
+                    // STUDENT CENTERS - Pastel coral
+                    { 
+                        pos: [40, 0, -100], 
+                        type: 'student-center',
+                        size: [28, 20, 25], 
+                        color: 0xFFB3BA, // Pastel coral
+                        name: 'Student Union',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'rooftop-garden'
+                    },
+                    { 
+                        pos: [-40, 0, -100], 
+                        type: 'student-center',
+                        size: [25, 18, 22], 
+                        color: 0xFFB3BA, // Pastel coral
+                        name: 'Student Services',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'rooftop-garden'
+                    },
+                    
+                    // LIBRARY AND STUDY AREAS - Light lavender
+                    { 
+                        pos: [-120, 0, -60], 
+                        type: 'library',
+                        size: [35, 30, 30], 
+                        color: 0xE6E6FA, // Light lavender
+                        name: 'Digital Library',
+                        floors: 3,
+                        hasBalconies: true,
+                        roofType: 'glass-dome'
+                    },
+                    { 
+                        pos: [120, 0, -60], 
+                        type: 'study',
+                        size: [25, 22, 25], 
+                        color: 0xE6E6FA, // Light lavender
+                        name: 'Study Commons',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'rooftop-garden'
+                    },
+                    
+                    // RECREATIONAL FACILITIES - Soft yellow
+                    { 
+                        pos: [0, 0, 120], 
+                        type: 'recreation',
+                        size: [40, 20, 30], 
+                        color: 0xFFFACD, // Soft yellow
+                        name: 'Recreation Complex',
+                        floors: 2,
+                        hasBalconies: false,
+                        roofType: 'curved-glass'
+                    },
+                    { 
+                        pos: [60, 0, 100], 
+                        type: 'sports',
+                        size: [35, 18, 25], 
+                        color: 0xFFFACD, // Soft yellow
+                        name: 'Sports Center',
+                        floors: 2,
+                        hasBalconies: false,
+                        roofType: 'modern'
+                    },
+                    
+                    // FLOATING RESIDENTIAL VILLAS - Pastel pink
+                    { 
+                        pos: [-150, 0, 80], 
+                        type: 'floating-villa',
+                        size: [20, 15, 15], 
+                        color: 0xF8BBD9, // Pastel pink
+                        name: 'Villa Complex A',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'modern',
+                        isFloating: true
+                    },
+                    { 
+                        pos: [150, 0, 80], 
+                        type: 'floating-villa',
+                        size: [20, 15, 15], 
+                        color: 0xF8BBD9, // Pastel pink
+                        name: 'Villa Complex B',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'modern',
+                        isFloating: true
+                    },
+                    { 
+                        pos: [-150, 0, -80], 
+                        type: 'floating-villa',
+                        size: [18, 12, 18], 
+                        color: 0xF8BBD9, // Pastel pink
+                        name: 'Villa Complex C',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'modern',
+                        isFloating: true
+                    },
+                    { 
+                        pos: [150, 0, -80], 
+                        type: 'floating-villa',
+                        size: [18, 12, 18], 
+                        color: 0xF8BBD9, // Pastel pink
+                        name: 'Villa Complex D',
+                        floors: 2,
+                        hasBalconies: true,
+                        roofType: 'modern',
+                        isFloating: true
+                    },
+                    
+                    // ADMINISTRATIVE BUILDINGS - Cream white
+                    { 
+                        pos: [0, 0, -160], 
+                        type: 'admin',
+                        size: [30, 25, 20], 
+                        color: 0xF5F5DC, // Cream white
+                        name: 'Administration',
+                        floors: 3,
+                        hasBalconies: true,
+                        roofType: 'modern'
+                    },
+                    
+                    // FLOATING RESEARCH LABS
+                    { 
+                        pos: [-200, 0, 0], 
+                        type: 'floating-lab',
+                        size: [25, 20, 20], 
+                        color: 0xB8E6B8, // Soft mint green
+                        name: 'Marine Research Lab',
+                        floors: 2,
+                        hasBalconies: false,
+                        roofType: 'glass-dome',
+                        isFloating: true
+                    },
+                    { 
+                        pos: [200, 0, 0], 
+                        type: 'floating-lab',
+                        size: [25, 20, 20], 
+                        color: 0xA8E6CF, // Pastel blue-green
+                        name: 'Ocean Tech Lab',
+                        floors: 2,
+                        hasBalconies: false,
+                        roofType: 'glass-dome',
+                        isFloating: true
+                    }
+                ];
+
+                buildingConfigs.forEach((config) => {
+                    try {
+                        const buildingGroup = this.createArchitecturalBuilding(config);
+                        this.scene.add(buildingGroup);
+                        this.buildings.push(buildingGroup);
+                    } catch (error) {
+                        CampusLogger.warning(`Failed to create building ${config.name}: ${error.message}`);
+                    }
+                });
+            }
+
+            createArchitecturalBuilding(config) {
+                const group = new THREE.Group();
+                group.userData = { name: config.name, type: config.type };
+                
+                // Create futuristic materials with pastel colors
+                const materials = this.createFuturisticMaterials(config);
+                
+                // Handle different building types
+                if (config.isTower) {
+                    this.createTowerStructure(group, config, materials);
+                } else if (config.isFloating) {
+                    this.createFloatingStructure(group, config, materials);
+                } else {
+                    this.createModernBuilding(group, config, materials);
+                }
+                
+                // Add connecting bridges for towers
+                if (config.type.includes('twin-tower')) {
+                    this.addTowerBridges(group, config);
+                }
+                
+                // Add rooftop gardens for most buildings
+                if (config.roofType === 'rooftop-garden') {
+                    this.addRooftopGarden(group, config);
+                }
+                
+                // Position the entire building
+                group.position.set(config.pos[0], 0, config.pos[2]);
+                
+                return group;
+            }
+
+            createTowerStructure(group, config, materials) {
+                // Create spiral tower with twisted geometry
+                const segments = config.floors;
+                const twistAmount = Math.PI * 2; // Full rotation over tower height
+                
+                for (let i = 0; i < segments; i++) {
+                    const floorHeight = config.size[1] / segments;
+                    const y = i * floorHeight + floorHeight / 2;
+                    const rotation = (i / segments) * twistAmount;
+                    
+                    // Each floor gets slightly smaller towards the top
+                    const scale = 1 - (i / segments) * 0.3;
+                    const floorGeometry = new THREE.BoxGeometry(
+                        config.size[0] * scale, 
+                        floorHeight * 0.9, 
+                        config.size[2] * scale
+                    );
+                    
+                    const floor = new THREE.Mesh(floorGeometry, materials.main);
+                    floor.position.y = y;
+                    floor.rotation.y = rotation;
+                    floor.castShadow = true;
+                    floor.receiveShadow = true;
+                    group.add(floor);
+                    
+                    // Add glass curtain walls
+                    this.addCurtainWall(group, config, y, floorHeight, scale, rotation, materials);
+                }
+                
+                // Add tower spire
+                this.addTowerSpire(group, config, materials);
+                
+                // Add external glass elevators
+                this.addGlassElevators(group, config, materials);
+            }
+
+            createFloatingStructure(group, config, materials) {
+                // Create main floating platform
+                const platformGeometry = new THREE.CylinderGeometry(
+                    config.size[0] * 0.8, config.size[0], 2, 16
+                );
+                const platformMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xF5F5DC, 
+                    metalness: 0.1, 
+                    roughness: 0.8 
+                });
+                const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+                platform.position.y = -1;
+                platform.castShadow = true;
+                platform.receiveShadow = true;
+                group.add(platform);
+                
+                // Create main building on platform
+                this.createModernBuilding(group, config, materials);
+                
+                // Add floating support pillars
+                this.addFloatingSupports(group, config);
+            }
+
+            createModernBuilding(group, config, materials) {
+                // Main building with curved edges
+                const mainGeometry = new THREE.BoxGeometry(config.size[0], config.size[1], config.size[2]);
+                
+                // Add buffer geometry for curved edges
+                const mainBuilding = new THREE.Mesh(mainGeometry, materials.main);
+                mainBuilding.position.y = config.size[1] / 2;
+                mainBuilding.castShadow = true;
+                mainBuilding.receiveShadow = true;
+                group.add(mainBuilding);
+                
+                // Add modern architectural details
+                this.addModernFacade(group, config, materials);
+                this.addPanoramicWindows(group, config, materials);
+                this.addModernEntrance(group, config, materials);
+                
+                // Add balconies with modern railings
+                if (config.hasBalconies) {
+                    this.addFuturisticBalconies(group, config, materials);
+                }
+            }
+
+            createFuturisticMaterials(config) {
+                const materials = {};
+                
+                // Main building material with pastel colors and modern finish
+                materials.main = new THREE.MeshStandardMaterial({ 
+                    color: config.color,
+                    metalness: 0.2,
+                    roughness: 0.4,
+                    transparent: false,
+                    envMapIntensity: 0.8
+                });
+                
+                // Accent material - slightly darker version of main color
+                const accentColor = new THREE.Color(config.color).multiplyScalar(0.8);
+                materials.accent = new THREE.MeshStandardMaterial({ 
+                    color: accentColor.getHex(),
+                    metalness: 0.4, 
+                    roughness: 0.3 
+                });
+                
+                // Ultra-modern glass with subtle tinting
+                materials.glass = new THREE.MeshStandardMaterial({ 
+                    color: 0xE8F4FD, // Very light blue-white
+                    transparent: true, 
+                    opacity: 0.15,
+                    metalness: 0.95,
+                    roughness: 0.05,
+                    envMapIntensity: 1.0
+                });
+                
+                // Futuristic frame material
+                materials.frame = new THREE.MeshStandardMaterial({ 
+                    color: 0xF0F0F0, // Light silver
+                    metalness: 0.9, 
+                    roughness: 0.1,
+                    envMapIntensity: 1.2
+                });
+                
+                // Garden materials
+                materials.greenery = new THREE.MeshStandardMaterial({ 
+                    color: 0x7FB069, // Soft natural green
+                    metalness: 0.0, 
+                    roughness: 0.9 
+                });
+                
+                // Water material for floating structures
+                materials.water = new THREE.MeshStandardMaterial({ 
+                    color: 0x4A90E2, // Crystal blue
+                    transparent: true, 
+                    opacity: 0.8,
+                    metalness: 0.1,
+                    roughness: 0.1
+                });
+                
+                return materials;
+            }
+
+            addCurtainWall(group, config, y, floorHeight, scale, rotation, materials) {
+                // Create floor-to-ceiling glass curtain wall
+                const wallThickness = 0.1;
+                const wallGeometry = new THREE.BoxGeometry(
+                    config.size[0] * scale + wallThickness, 
+                    floorHeight, 
+                    config.size[2] * scale + wallThickness
+                );
+                
+                const curtainWall = new THREE.Mesh(wallGeometry, materials.glass);
+                curtainWall.position.y = y;
+                curtainWall.rotation.y = rotation;
+                group.add(curtainWall);
+                
+                // Add window frames
+                this.addWindowFrames(group, config, y, floorHeight, scale, rotation, materials);
+            }
+
+            addTowerSpire(group, config, materials) {
+                const spireHeight = 30;
+                const spireGeometry = new THREE.ConeGeometry(5, spireHeight, 8);
+                const spireMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xF0F0F0, 
+                    metalness: 0.9, 
+                    roughness: 0.1 
+                });
+                
+                const spire = new THREE.Mesh(spireGeometry, spireMaterial);
+                spire.position.y = config.size[1] + spireHeight / 2;
+                spire.castShadow = true;
+                group.add(spire);
+                
+                // Add antenna/communications equipment
+                const antennaGeometry = new THREE.CylinderGeometry(0.2, 0.2, 10, 8);
+                const antenna = new THREE.Mesh(antennaGeometry, spireMaterial);
+                antenna.position.y = config.size[1] + spireHeight + 5;
+                antenna.castShadow = true;
+                group.add(antenna);
+            }
+
+            addGlassElevators(group, config, materials) {
+                // Add external glass elevators on tower sides
+                const elevatorPositions = [
+                    [config.size[0] / 2 + 5, 0],
+                    [-config.size[0] / 2 - 5, 0],
+                    [0, config.size[2] / 2 + 5],
+                    [0, -config.size[2] / 2 - 5]
+                ];
+                
+                elevatorPositions.forEach(pos => {
+                    const elevatorGeometry = new THREE.BoxGeometry(4, config.size[1], 4);
+                    const elevator = new THREE.Mesh(elevatorGeometry, materials.glass);
+                    elevator.position.set(pos[0], config.size[1] / 2, pos[1]);
+                    elevator.castShadow = true;
+                    group.add(elevator);
+                    
+                    // Add elevator shaft frame
+                    const frameGeometry = new THREE.BoxGeometry(4.2, config.size[1], 4.2);
+                    const frame = new THREE.Mesh(frameGeometry, materials.frame);
+                    frame.position.set(pos[0], config.size[1] / 2, pos[1]);
+                    frame.castShadow = true;
+                    group.add(frame);
+                });
+            }
+
+            addFloatingSupports(group, config) {
+                // Add pillars that extend down into the water
+                const supportMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xBDC3C7, 
+                    metalness: 0.3, 
+                    roughness: 0.6 
+                });
+                
+                const supportPositions = [
+                    [config.size[0] / 3, 0, config.size[2] / 3],
+                    [-config.size[0] / 3, 0, config.size[2] / 3],
+                    [config.size[0] / 3, 0, -config.size[2] / 3],
+                    [-config.size[0] / 3, 0, -config.size[2] / 3]
+                ];
+                
+                supportPositions.forEach(pos => {
+                    const supportGeometry = new THREE.CylinderGeometry(1, 1.5, 15, 8);
+                    const support = new THREE.Mesh(supportGeometry, supportMaterial);
+                    support.position.set(pos[0], -7.5, pos[2]);
+                    support.castShadow = true;
+                    support.receiveShadow = true;
+                    group.add(support);
+                });
+            }
+
+            addTowerBridges(group, config) {
+                // Add connecting bridges between twin towers at multiple levels
+                if (config.type === 'twin-tower-1') {
+                    const bridgeHeights = [60, 120, 160]; // Different levels
+                    
+                    bridgeHeights.forEach(height => {
+                        const bridgeGeometry = new THREE.BoxGeometry(160, 3, 8); // Spans between towers
+                        const bridgeMaterial = new THREE.MeshStandardMaterial({ 
+                            color: 0xF0F0F0, 
+                            metalness: 0.8, 
+                            roughness: 0.2,
+                            transparent: true,
+                            opacity: 0.9
+                        });
+                        
+                        const bridge = new THREE.Mesh(bridgeGeometry, bridgeMaterial);
+                        bridge.position.set(80, height, 0); // Positioned between towers
+                        bridge.castShadow = true;
+                        bridge.receiveShadow = true;
+                        this.scene.add(bridge); // Add directly to scene so it appears between towers
+                    });
+                }
+            }
+
+            addRooftopGarden(group, config) {
+                // Create lush rooftop garden
+                const gardenHeight = 2;
+                const gardenGeometry = new THREE.BoxGeometry(
+                    config.size[0] * 0.8, 
+                    gardenHeight, 
+                    config.size[2] * 0.8
+                );
+                
+                const gardenMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x7FB069, // Soft green
+                    metalness: 0.0, 
+                    roughness: 0.9 
+                });
+                
+                const garden = new THREE.Mesh(gardenGeometry, gardenMaterial);
+                garden.position.y = config.size[1] + gardenHeight / 2;
+                garden.castShadow = true;
+                garden.receiveShadow = true;
+                group.add(garden);
+                
+                // Add small trees on rooftop
+                this.addRooftopTrees(group, config);
+            }
+
+            addRooftopTrees(group, config) {
+                const treePositions = [
+                    [config.size[0] * 0.2, 0, config.size[2] * 0.2],
+                    [-config.size[0] * 0.2, 0, config.size[2] * 0.2],
+                    [config.size[0] * 0.2, 0, -config.size[2] * 0.2],
+                    [-config.size[0] * 0.2, 0, -config.size[2] * 0.2]
+                ];
+                
+                treePositions.forEach(pos => {
+                    // Small palm tree for rooftop
+                    const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 6, 8);
+                    const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, metalness: 0.0, roughness: 0.9 });
+                    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                    trunk.position.set(pos[0], config.size[1] + 5, pos[2]);
+                    trunk.castShadow = true;
+                    group.add(trunk);
+                    
+                    // Palm fronds
+                    const frondMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22, metalness: 0.0, roughness: 0.8 });
+                    for (let i = 0; i < 6; i++) {
+                        const frondGeometry = new THREE.ConeGeometry(0.1, 4, 4);
+                        const frond = new THREE.Mesh(frondGeometry, frondMaterial);
+                        frond.position.set(pos[0], config.size[1] + 8, pos[2]);
+                        frond.rotation.z = (i / 6) * Math.PI * 2;
+                        frond.rotation.x = Math.PI / 6;
+                        frond.castShadow = true;
+                        group.add(frond);
+                    }
+                });
+            }
+
+            addRealisticFacade(group, config, materials) {
+                const floorHeight = config.size[1] / config.floors;
+                
+                // Add floor separators with realistic concrete bands
+                for (let i = 1; i < config.floors; i++) {
+                    const separatorGeometry = new THREE.BoxGeometry(
+                        config.size[0] + 0.5, 0.3, config.size[2] + 0.5
+                    );
+                    
+                    const separator = new THREE.Mesh(separatorGeometry, materials.concrete);
+                    separator.position.y = i * floorHeight;
+                    separator.castShadow = true;
+                    separator.receiveShadow = true;
+                    group.add(separator);
+                }
+                
+                // Add corner columns/pillars
+                const pillarGeometry = new THREE.BoxGeometry(1.5, config.size[1], 1.5);
+                const corners = [
+                    [config.size[0]/2, config.size[1]/2, config.size[2]/2],
+                    [-config.size[0]/2, config.size[1]/2, config.size[2]/2],
+                    [config.size[0]/2, config.size[1]/2, -config.size[2]/2],
+                    [-config.size[0]/2, config.size[1]/2, -config.size[2]/2]
+                ];
+                
+                corners.forEach(pos => {
+                    const pillar = new THREE.Mesh(pillarGeometry, materials.accent);
+                    pillar.position.set(pos[0], pos[1], pos[2]);
+                    pillar.castShadow = true;
+                    pillar.receiveShadow = true;
+                    group.add(pillar);
+                });
+                
+                // Add base foundation
+                const baseGeometry = new THREE.BoxGeometry(
+                    config.size[0] + 2, 1, config.size[2] + 2
+                );
+                const base = new THREE.Mesh(baseGeometry, materials.concrete);
+                base.position.y = 0.5;
+                base.receiveShadow = true;
+                group.add(base);
+            }
+
+            addDetailedWindows(group, config, materials) {
+                const windowWidth = 2.5;
+                const windowHeight = 2.0;
+                const windowSpacing = 3.5;
+                const floorHeight = config.size[1] / config.floors;
+                
+                // Create window frame material
+                const frameMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x34495e, 
+                    metalness: 0.7, 
+                    roughness: 0.3 
+                });
+                
+                // Windows on each face
+                for (let floor = 0; floor < config.floors; floor++) {
+                    const y = (floor + 0.5) * floorHeight;
+                    
+                    // Front and back faces
+                    for (let side = 0; side < 2; side++) {
+                        const z = side === 0 ? config.size[2] / 2 + 0.15 : -config.size[2] / 2 - 0.15;
+                        const windowCount = Math.floor(config.size[0] / windowSpacing);
+                        const startX = -(windowCount - 1) * windowSpacing / 2;
+                        
+                        for (let i = 0; i < windowCount; i++) {
+                            const x = startX + i * windowSpacing;
+                            
+                            // Window frame
+                            const frameGeometry = new THREE.BoxGeometry(windowWidth + 0.2, windowHeight + 0.2, 0.2);
+                            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+                            frame.position.set(x, y, z);
+                            frame.castShadow = true;
+                            group.add(frame);
+                            
+                            // Glass pane
+                            const glassGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, 0.05);
+                            const glass = new THREE.Mesh(glassGeometry, materials.glass);
+                            glass.position.set(x, y, z + (side === 0 ? 0.1 : -0.1));
+                            group.add(glass);
+                            
+                            // Window dividers
+                            const dividerMaterial = new THREE.MeshStandardMaterial({ color: 0x2c3e50, metalness: 0.8, roughness: 0.2 });
+                            
+                            // Vertical divider
+                            const vDividerGeometry = new THREE.BoxGeometry(0.05, windowHeight, 0.1);
+                            const vDivider = new THREE.Mesh(vDividerGeometry, dividerMaterial);
+                            vDivider.position.set(x, y, z + (side === 0 ? 0.12 : -0.12));
+                            group.add(vDivider);
+                            
+                            // Horizontal divider
+                            const hDividerGeometry = new THREE.BoxGeometry(windowWidth, 0.05, 0.1);
+                            const hDivider = new THREE.Mesh(hDividerGeometry, dividerMaterial);
+                            hDivider.position.set(x, y, z + (side === 0 ? 0.12 : -0.12));
+                            group.add(hDivider);
+                        }
+                    }
+                    
+                    // Left and right faces
+                    for (let side = 0; side < 2; side++) {
+                        const x = side === 0 ? config.size[0] / 2 + 0.15 : -config.size[0] / 2 - 0.15;
+                        const windowCount = Math.floor(config.size[2] / windowSpacing);
+                        const startZ = -(windowCount - 1) * windowSpacing / 2;
+                        
+                        for (let i = 0; i < windowCount; i++) {
+                            const z = startZ + i * windowSpacing;
+                            
+                            // Window frame
+                            const frameGeometry = new THREE.BoxGeometry(0.2, windowHeight + 0.2, windowWidth + 0.2);
+                            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+                            frame.position.set(x, y, z);
+                            frame.castShadow = true;
+                            group.add(frame);
+                            
+                            // Glass pane
+                            const glassGeometry = new THREE.BoxGeometry(0.05, windowHeight, windowWidth);
+                            const glass = new THREE.Mesh(glassGeometry, materials.glass);
+                            glass.position.set(x + (side === 0 ? 0.1 : -0.1), y, z);
+                            group.add(glass);
+                        }
+                    }
+                }
+            }
+
+            addEntranceDoors(group, config, materials) {
+                const doorWidth = 3;
+                const doorHeight = 4;
+                const doorMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x8b4513, 
+                    metalness: 0.1, 
+                    roughness: 0.8 
+                });
+                
+                // Main entrance (front face)
+                const entranceZ = config.size[2] / 2 + 0.1;
+                
+                // Door frame
+                const frameGeometry = new THREE.BoxGeometry(doorWidth + 0.5, doorHeight + 0.5, 0.3);
+                const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x34495e, metalness: 0.5, roughness: 0.4 });
+                const doorFrame = new THREE.Mesh(frameGeometry, frameMaterial);
+                doorFrame.position.set(0, doorHeight / 2 + 0.25, entranceZ);
+                doorFrame.castShadow = true;
+                group.add(doorFrame);
+                
+                // Door
+                const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, 0.2);
+                const door = new THREE.Mesh(doorGeometry, doorMaterial);
+                door.position.set(0, doorHeight / 2, entranceZ + 0.1);
+                door.castShadow = true;
+                group.add(door);
+                
+                // Door handles
+                const handleMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.1 });
+                const handleGeometry = new THREE.SphereGeometry(0.1, 8, 6);
+                const handle1 = new THREE.Mesh(handleGeometry, handleMaterial);
+                const handle2 = new THREE.Mesh(handleGeometry, handleMaterial);
+                handle1.position.set(-1, doorHeight / 2, entranceZ + 0.2);
+                handle2.position.set(1, doorHeight / 2, entranceZ + 0.2);
+                group.add(handle1);
+                group.add(handle2);
+                
+                // Entrance canopy
+                const canopyGeometry = new THREE.BoxGeometry(doorWidth + 2, 0.3, 2);
+                const canopy = new THREE.Mesh(canopyGeometry, materials.concrete);
+                canopy.position.set(0, doorHeight + 1, entranceZ + 1);
+                canopy.castShadow = true;
+                group.add(canopy);
+                
+                // Steps
+                for (let i = 0; i < 3; i++) {
+                    const stepGeometry = new THREE.BoxGeometry(doorWidth + 1, 0.2, 0.5);
+                    const step = new THREE.Mesh(stepGeometry, materials.concrete);
+                    step.position.set(0, i * 0.2 + 0.1, entranceZ + 0.5 + i * 0.5);
+                    step.receiveShadow = true;
+                    group.add(step);
+                }
+            }
+
+            addRealisticRoof(group, config, materials) {
+                const roofY = config.size[1] + 1;
+                const roofMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x2c3e50, 
+                    metalness: 0.6, 
+                    roughness: 0.3 
+                });
+                
+                switch (config.roofType) {
+                    case 'dome':
+                        const domeGeometry = new THREE.SphereGeometry(config.size[0] / 3, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2);
+                        const dome = new THREE.Mesh(domeGeometry, roofMaterial);
+                        dome.position.y = roofY;
+                        dome.castShadow = true;
+                        group.add(dome);
+                        break;
+                        
+                    case 'glass':
+                        const glassGeometry = new THREE.BoxGeometry(config.size[0], 4, config.size[2]);
+                        const glassRoof = new THREE.Mesh(glassGeometry, materials.glass);
+                        glassRoof.position.y = roofY;
+                        group.add(glassRoof);
+                        
+                        // Glass roof frame
+                        const frameGeometry = new THREE.BoxGeometry(config.size[0] + 0.5, 0.3, config.size[2] + 0.5);
+                        const frame = new THREE.Mesh(frameGeometry, materials.metal);
+                        frame.position.y = roofY + 2;
+                        frame.castShadow = true;
+                        group.add(frame);
+                        break;
+                        
+                    case 'curved':
+                        const curvedGeometry = new THREE.CylinderGeometry(config.size[0] / 2, config.size[0] / 2, 3, 16, 1, false, 0, Math.PI);
+                        const curvedRoof = new THREE.Mesh(curvedGeometry, roofMaterial);
+                        curvedRoof.position.y = roofY;
+                        curvedRoof.rotation.z = Math.PI / 2;
+                        curvedRoof.castShadow = true;
+                        group.add(curvedRoof);
+                        break;
+                        
+                    default: // 'modern' or 'flat'
+                        const modernGeometry = new THREE.BoxGeometry(config.size[0], 2, config.size[2]);
+                        const modernRoof = new THREE.Mesh(modernGeometry, roofMaterial);
+                        modernRoof.position.y = roofY;
+                        modernRoof.castShadow = true;
+                        group.add(modernRoof);
+                        
+                        // Add rooftop equipment
+                        this.addRooftopEquipment(group, config, roofY + 1);
+                        break;
+                }
+            }
+
+            addRealisticBalconies(group, config, materials) {
+                const balconyMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xbdc3c7, 
+                    metalness: 0.2, 
+                    roughness: 0.6 
+                });
+                const railingMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x34495e, 
+                    metalness: 0.8, 
+                    roughness: 0.2 
+                });
+                
+                const floorHeight = config.size[1] / config.floors;
+                
+                for (let floor = 1; floor < config.floors; floor++) {
+                    const y = floor * floorHeight;
+                    
+                    // Front balconies
+                    const balconyGeometry = new THREE.BoxGeometry(config.size[0] * 0.8, 0.3, 2.5);
+                    const balcony = new THREE.Mesh(balconyGeometry, balconyMaterial);
+                    balcony.position.set(0, y, config.size[2] / 2 + 1.2);
+                    balcony.castShadow = true;
+                    balcony.receiveShadow = true;
+                    group.add(balcony);
+                    
+                    // Balcony railings with posts
+                    const railingHeight = 1.2;
+                    
+                    // Main railing
+                    const railingGeometry = new THREE.BoxGeometry(config.size[0] * 0.8, railingHeight, 0.1);
+                    const railing = new THREE.Mesh(railingGeometry, railingMaterial);
+                    railing.position.set(0, y + railingHeight / 2, config.size[2] / 2 + 2.4);
+                    railing.castShadow = true;
+                    group.add(railing);
+                    
+                    // Railing posts
+                    const postGeometry = new THREE.BoxGeometry(0.1, railingHeight, 0.1);
+                    const postCount = Math.floor(config.size[0] * 0.8 / 3);
+                    for (let i = 0; i <= postCount; i++) {
+                        const post = new THREE.Mesh(postGeometry, railingMaterial);
+                        const postX = -(config.size[0] * 0.8) / 2 + (i / postCount) * (config.size[0] * 0.8);
+                        post.position.set(postX, y + railingHeight / 2, config.size[2] / 2 + 2.4);
+                        post.castShadow = true;
+                        group.add(post);
+                    }
+                }
+            }
+
+            addBuildingSignage(group, config) {
+                // Add building name sign
+                const signMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x2c3e50, 
+                    metalness: 0.1, 
+                    roughness: 0.8 
+                });
+                
+                const signGeometry = new THREE.BoxGeometry(config.size[0] * 0.6, 2, 0.2);
+                const sign = new THREE.Mesh(signGeometry, signMaterial);
+                sign.position.set(0, 8, config.size[2] / 2 + 0.2);
+                sign.castShadow = true;
+                group.add(sign);
+                
+                // Add institutional logo placeholder
+                const logoMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xffd700, 
+                    metalness: 0.8, 
+                    roughness: 0.2 
+                });
+                const logoGeometry = new THREE.BoxGeometry(1.5, 1.5, 0.1);
+                const logo = new THREE.Mesh(logoGeometry, logoMaterial);
+                logo.position.set(config.size[0] * 0.3, 6, config.size[2] / 2 + 0.15);
+                group.add(logo);
+            }
+
+            addRooftopEquipment(group, config, roofY) {
+                const equipmentMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x7f8c8d, 
+                    metalness: 0.7, 
+                    roughness: 0.3 
+                });
+                
+                // HVAC units
+                const hvacGeometry = new THREE.BoxGeometry(3, 1.5, 2);
+                for (let i = 0; i < 2; i++) {
+                    const hvac = new THREE.Mesh(hvacGeometry, equipmentMaterial);
+                    hvac.position.set(
+                        (i - 0.5) * config.size[0] * 0.3,
+                        roofY,
+                        (Math.random() - 0.5) * config.size[2] * 0.5
+                    );
+                    hvac.castShadow = true;
+                    group.add(hvac);
+                }
+                
+                // Satellite dishes
+                const dishGeometry = new THREE.CylinderGeometry(1, 1, 0.1, 16);
+                const dish = new THREE.Mesh(dishGeometry, equipmentMaterial);
+                dish.position.set(
+                    config.size[0] * 0.2,
+                    roofY + 0.5,
+                    -config.size[2] * 0.2
+                );
+                dish.rotation.x = Math.PI / 6;
+                dish.castShadow = true;
+                group.add(dish);
+            }
+
+            addLandscapingAroundBuilding(group, config) {
+                // Add landscaping elements around the building
+                const grassMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x27ae60, 
+                    metalness: 0.0, 
+                    roughness: 0.9 
+                });
+                
+                // Grass patches around building
+                const patchPositions = [
+                    [config.size[0] / 2 + 3, 0, 0],
+                    [-config.size[0] / 2 - 3, 0, 0],
+                    [0, 0, config.size[2] / 2 + 5],
+                    [0, 0, -config.size[2] / 2 - 3]
+                ];
+                
+                patchPositions.forEach(pos => {
+                    const patchGeometry = new THREE.CircleGeometry(4, 8);
+                    const patch = new THREE.Mesh(patchGeometry, grassMaterial);
+                    patch.rotation.x = -Math.PI / 2;
+                    patch.position.set(pos[0], pos[1] + 0.01, pos[2]);
+                    patch.receiveShadow = true;
+                    group.add(patch);
+                });
+            }
+
+            createRoadNetwork() {
+                CampusLogger.info('Creating photorealistic road network...');
+                
+                const roadMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x2c3e50,
+                    roughness: 0.8,
+                    metalness: 0.0
+                });
+                const linesMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xffffff,
+                    roughness: 0.7,
+                    metalness: 0.0
+                });
+                
+                // Main roads
+                const roads = [
+                    // Horizontal roads
+                    { pos: [0, 0.1, 0], size: [200, 0.2, 8], type: 'main' },
+                    { pos: [0, 0.1, 120], size: [180, 0.2, 6], type: 'secondary' },
+                    { pos: [0, 0.1, -120], size: [180, 0.2, 6], type: 'secondary' },
+                    
+                    // Vertical roads
+                    { pos: [0, 0.1, 0], size: [8, 0.2, 200], type: 'main' },
+                    { pos: [120, 0.1, 0], size: [6, 0.2, 180], type: 'secondary' },
+                    { pos: [-120, 0.1, 0], size: [6, 0.2, 180], type: 'secondary' },
+                    
+                    // Connecting roads
+                    { pos: [60, 0.1, 60], size: [80, 0.2, 4], type: 'tertiary' },
+                    { pos: [-60, 0.1, 60], size: [80, 0.2, 4], type: 'tertiary' },
+                    { pos: [60, 0.1, -60], size: [80, 0.2, 4], type: 'tertiary' },
+                    { pos: [-60, 0.1, -60], size: [80, 0.2, 4], type: 'tertiary' }
+                ];
+                
+                roads.forEach(road => {
+                    // Create road surface
+                    const roadGeometry = new THREE.BoxGeometry(road.size[0], road.size[1], road.size[2]);
+                    const roadMesh = new THREE.Mesh(roadGeometry, roadMaterial);
+                    roadMesh.position.set(road.pos[0], road.pos[1], road.pos[2]);
+                    roadMesh.receiveShadow = true;
+                    this.scene.add(roadMesh);
+                    this.roads.push(roadMesh);
+                    
+                    // Add road markings for main roads
+                    if (road.type === 'main') {
+                        this.addRoadMarkings(road);
+                    }
+                    
+                    // Add sidewalks
+                    this.addSidewalks(road);
+                });
+                
+                // Add pedestrian walkways
+                this.addWalkingPaths();
+                
+                CampusLogger.success(`Created ${this.roads.length} road segments with sidewalks and walkways`);
+            }
+
+            addSidewalks(road) {
+                const sidewalkMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xbdc3c7,
+                    roughness: 0.7,
+                    metalness: 0.0
+                });
+                
+                if (road.size[0] > road.size[2]) { // Horizontal road
+                    // North sidewalk
+                    const northSidewalk = new THREE.BoxGeometry(road.size[0], 0.15, 2);
+                    const northMesh = new THREE.Mesh(northSidewalk, sidewalkMaterial);
+                    northMesh.position.set(road.pos[0], 0.075, road.pos[2] + road.size[2]/2 + 1);
+                    northMesh.receiveShadow = true;
+                    this.scene.add(northMesh);
+                    this.roads.push(northMesh);
+                    
+                    // South sidewalk
+                    const southMesh = new THREE.Mesh(northSidewalk, sidewalkMaterial);
+                    southMesh.position.set(road.pos[0], 0.075, road.pos[2] - road.size[2]/2 - 1);
+                    southMesh.receiveShadow = true;
+                    this.scene.add(southMesh);
+                    this.roads.push(southMesh);
+                } else { // Vertical road
+                    // East sidewalk
+                    const eastSidewalk = new THREE.BoxGeometry(2, 0.15, road.size[2]);
+                    const eastMesh = new THREE.Mesh(eastSidewalk, sidewalkMaterial);
+                    eastMesh.position.set(road.pos[0] + road.size[0]/2 + 1, 0.075, road.pos[2]);
+                    eastMesh.receiveShadow = true;
+                    this.scene.add(eastMesh);
+                    this.roads.push(eastMesh);
+                    
+                    // West sidewalk
+                    const westMesh = new THREE.Mesh(eastSidewalk, sidewalkMaterial);
+                    westMesh.position.set(road.pos[0] - road.size[0]/2 - 1, 0.075, road.pos[2]);
+                    westMesh.receiveShadow = true;
+                    this.scene.add(westMesh);
+                    this.roads.push(westMesh);
+                }
+            }
+
+            addWalkingPaths() {
+                const pathMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x95a5a6,
+                    roughness: 0.6,
+                    metalness: 0.0
+                });
+                
+                // Diagonal pathways connecting buildings
+                const pathways = [
+                    { start: [30, 30], end: [-30, -30], width: 1.5 },
+                    { start: [-30, 30], end: [30, -30], width: 1.5 },
+                    { start: [60, 0], end: [0, 60], width: 1.2 },
+                    { start: [-60, 0], end: [0, -60], width: 1.2 },
+                    { start: [0, 90], end: [90, 0], width: 1.0 },
+                    { start: [0, -90], end: [-90, 0], width: 1.0 }
+                ];
+                
+                pathways.forEach(pathway => {
+                    const length = Math.sqrt(
+                        Math.pow(pathway.end[0] - pathway.start[0], 2) + 
+                        Math.pow(pathway.end[1] - pathway.start[1], 2)
+                    );
+                    
+                    const pathGeometry = new THREE.BoxGeometry(pathway.width, 0.1, length);
+                    const path = new THREE.Mesh(pathGeometry, pathMaterial);
+                    
+                    // Position path at midpoint
+                    path.position.set(
+                        (pathway.start[0] + pathway.end[0]) / 2,
+                        0.05,
+                        (pathway.start[1] + pathway.end[1]) / 2
+                    );
+                    
+                    // Rotate path to align with direction
+                    const angle = Math.atan2(
+                        pathway.end[1] - pathway.start[1],
+                        pathway.end[0] - pathway.start[0]
+                    );
+                    path.rotation.y = angle - Math.PI / 2;
+                    
+                    path.receiveShadow = true;
+                    this.scene.add(path);
+                    this.roads.push(path);
+                });
+            }
+
+            addRoadMarkings(road) {
+                const linesMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xffffff,
+                    roughness: 0.7,
+                    metalness: 0.0
+                });
+                
+                if (road.size[0] > road.size[2]) { // Horizontal road
+                    // Center line
+                    const centerLineGeometry = new THREE.BoxGeometry(road.size[0] * 0.8, 0.05, 0.2);
+                    const centerLine = new THREE.Mesh(centerLineGeometry, linesMaterial);
+                    centerLine.position.set(road.pos[0], 0.3, road.pos[2]);
+                    this.scene.add(centerLine);
+                    this.roads.push(centerLine);
+                } else { // Vertical road
+                    // Center line
+                    const centerLineGeometry = new THREE.BoxGeometry(0.2, 0.05, road.size[2] * 0.8);
+                    const centerLine = new THREE.Mesh(centerLineGeometry, linesMaterial);
+                    centerLine.position.set(road.pos[0], 0.3, road.pos[2]);
+                    this.scene.add(centerLine);
+                    this.roads.push(centerLine);
+                }
+            }
+
+            createVegetation() {
+                CampusLogger.info('Creating vegetation and landscaping...');
+                
+                // Tree configurations
+                const treePositions = [
+                    // Around buildings
+                    [25, 0, 25], [-25, 0, 25], [25, 0, -25], [-25, 0, -25],
+                    [85, 0, 25], [-85, 0, 25], [85, 0, -25], [-85, 0, -25],
+                    [25, 0, 85], [-25, 0, 85], [25, 0, -85], [-25, 0, -85],
+                    
+                    // Along roads
+                    [15, 0, 0], [-15, 0, 0], [0, 0, 15], [0, 0, -15],
+                    [45, 0, 45], [-45, 0, 45], [45, 0, -45], [-45, 0, -45],
+                    [75, 0, 0], [-75, 0, 0], [0, 0, 75], [0, 0, -75],
+                    
+                    // Random scattered trees
+                    [110, 0, 35], [-110, 0, 35], [35, 0, 110], [-35, 0, 110],
+                    [130, 0, -20], [-130, 0, -20], [20, 0, 130], [-20, 0, 130],
+                    [95, 0, 80], [-95, 0, 80], [80, 0, 95], [-80, 0, 95]
+                ];
+                
+                treePositions.forEach(pos => {
+                    const tree = this.createTree(pos[0], pos[1], pos[2]);
+                    this.scene.add(tree);
+                    this.trees.push(tree);
+                });
+                
+                // Create grass areas
+                this.createGrassAreas();
+                
+                CampusLogger.success(`Created ${this.trees.length} trees and landscaping`);
+            }
+
+            createTree(x, y, z) {
+                const treeGroup = new THREE.Group();
+                
+                // Realistic tree trunk with texture variation
+                const trunkGeometry = new THREE.CylinderGeometry(0.6, 1.2, 12, 12);
+                const trunkMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x8b4513,
+                    roughness: 0.9,
+                    metalness: 0.0 
+                });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.y = 6;
+                trunk.castShadow = true;
+                trunk.receiveShadow = true;
+                treeGroup.add(trunk);
+                
+                // Tree branches
+                const branchMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x654321,
+                    roughness: 0.8,
+                    metalness: 0.0 
+                });
+                
+                for (let i = 0; i < 5; i++) {
+                    const branchGeometry = new THREE.CylinderGeometry(0.1, 0.3, 4, 6);
+                    const branch = new THREE.Mesh(branchGeometry, branchMaterial);
+                    branch.position.set(
+                        (Math.random() - 0.5) * 4,
+                        8 + Math.random() * 4,
+                        (Math.random() - 0.5) * 4
+                    );
+                    branch.rotation.z = (Math.random() - 0.5) * Math.PI / 2;
+                    branch.castShadow = true;
+                    treeGroup.add(branch);
+                }
+                
+                // Realistic foliage with varied colors for different seasons
+                const foliageColors = [0x228b22, 0x32cd32, 0x90ee90, 0x006400];
+                const foliageMaterial = new THREE.MeshStandardMaterial({ 
+                    color: foliageColors[Math.floor(Math.random() * foliageColors.length)],
+                    roughness: 0.8,
+                    metalness: 0.0
+                });
+                
+                // Main canopy
+                const canopyGeometry = new THREE.SphereGeometry(5 + Math.random() * 2, 12, 8);
+                const canopy = new THREE.Mesh(canopyGeometry, foliageMaterial);
+                canopy.position.y = 12;
+                canopy.scale.y = 0.8; // Slightly flatten for realism
+                canopy.castShadow = true;
+                canopy.receiveShadow = true;
+                treeGroup.add(canopy);
+                
+                // Additional smaller foliage clusters
+                for (let i = 0; i < 3; i++) {
+                    const smallFoliageGeometry = new THREE.SphereGeometry(2 + Math.random(), 8, 6);
+                    const smallFoliage = new THREE.Mesh(smallFoliageGeometry, foliageMaterial);
+                    smallFoliage.position.set(
+                        (Math.random() - 0.5) * 6,
+                        9 + Math.random() * 4,
+                        (Math.random() - 0.5) * 6
+                    );
+                    smallFoliage.castShadow = true;
+                    treeGroup.add(smallFoliage);
+                }
+                
+                treeGroup.position.set(x, y, z);
+                return treeGroup;
+            }
+
+            createGrassAreas() {
+                const grassMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x2ecc71,
+                    roughness: 0.9,
+                    metalness: 0.0
+                });
+                
+                // Realistic lawn areas with varied grass colors
+                const lawnAreas = [
+                    { pos: [30, 0, 30], size: [45, 0.2, 45], type: 'quad' },
+                    { pos: [-30, 0, 30], size: [45, 0.2, 45], type: 'garden' },
+                    { pos: [30, 0, -30], size: [45, 0.2, 45], type: 'lawn' },
+                    { pos: [-30, 0, -30], size: [45, 0.2, 45], type: 'courtyard' },
+                    { pos: [0, 0, 150], size: [80, 0.2, 50], type: 'field' },
+                    { pos: [0, 0, -150], size: [80, 0.2, 50], type: 'park' },
+                    { pos: [150, 0, 0], size: [50, 0.2, 80], type: 'recreation' },
+                    { pos: [-150, 0, 0], size: [50, 0.2, 80], type: 'commons' }
+                ];
+                
+                lawnAreas.forEach(area => {
+                    // Create organic shaped grass areas instead of boxes
+                    const grassGeometry = new THREE.CylinderGeometry(
+                        area.size[0] / 2, area.size[0] / 2, area.size[1], 16
+                    );
+                    const grass = new THREE.Mesh(grassGeometry, grassMaterial);
+                    grass.position.set(area.pos[0], area.pos[1], area.pos[2]);
+                    grass.receiveShadow = true;
+                    this.scene.add(grass);
+                    
+                    // Add decorative flower beds
+                    if (area.type === 'garden' || area.type === 'courtyard') {
+                        this.addFlowerBeds(area.pos[0], area.pos[2]);
+                    }
+                    
+                    // Add sports facilities
+                    if (area.type === 'recreation') {
+                        this.addSportsFacilities(area.pos[0], area.pos[2]);
+                    }
+                });
+            }
+
+            addFlowerBeds(centerX, centerZ) {
+                const flowerColors = [0xff6b6b, 0xfeca57, 0x48cae4, 0x9b59b6, 0xe17055];
+                
+                for (let i = 0; i < 5; i++) {
+                    const flowerMaterial = new THREE.MeshStandardMaterial({
+                        color: flowerColors[i % flowerColors.length],
+                        roughness: 0.6,
+                        metalness: 0.0
+                    });
+                    
+                    const flowerGeometry = new THREE.SphereGeometry(0.3, 6, 4);
+                    const flower = new THREE.Mesh(flowerGeometry, flowerMaterial);
+                    flower.position.set(
+                        centerX + (Math.random() - 0.5) * 20,
+                        0.3,
+                        centerZ + (Math.random() - 0.5) * 20
+                    );
+                    flower.castShadow = true;
+                    this.scene.add(flower);
+                }
+            }
+
+            addSportsFacilities(centerX, centerZ) {
+                // Basketball court
+                this.createBasketballCourt(centerX + 20, centerZ);
+                
+                // Tennis court
+                this.createTennisCourt(centerX - 20, centerZ);
+                
+                // Central plaza
+                this.createCentralPlaza(centerX, centerZ + 30);
+            }
+
+            createBasketballCourt(x, z) {
+                // Court surface
+                const courtMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x8b4513,
+                    roughness: 0.7,
+                    metalness: 0.0
+                });
+                
+                const courtGeometry = new THREE.BoxGeometry(15, 0.1, 28);
+                const court = new THREE.Mesh(courtGeometry, courtMaterial);
+                court.position.set(x, 0.05, z);
+                court.receiveShadow = true;
+                this.scene.add(court);
+                
+                // Court lines
+                const lineMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                
+                // Center line
+                const centerLineGeometry = new THREE.BoxGeometry(0.1, 0.02, 28);
+                const centerLine = new THREE.Mesh(centerLineGeometry, lineMaterial);
+                centerLine.position.set(x, 0.1, z);
+                this.scene.add(centerLine);
+                
+                // Basketball hoops
+                const hoopMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xff6b35,
+                    metalness: 0.7,
+                    roughness: 0.3
+                });
+                
+                for (let side of [-1, 1]) {
+                    // Hoop post
+                    const postGeometry = new THREE.CylinderGeometry(0.2, 0.2, 8, 8);
+                    const post = new THREE.Mesh(postGeometry, hoopMaterial);
+                    post.position.set(x, 4, z + side * 14);
+                    post.castShadow = true;
+                    this.scene.add(post);
+                    
+                    // Hoop rim
+                    const rimGeometry = new THREE.TorusGeometry(1, 0.1, 8, 16);
+                    const rim = new THREE.Mesh(rimGeometry, hoopMaterial);
+                    rim.position.set(x, 7, z + side * 12);
+                    rim.rotation.x = Math.PI / 2;
+                    rim.castShadow = true;
+                    this.scene.add(rim);
+                }
+                
+                this.furniture.push(court);
+            }
+
+            createTennisCourt(x, z) {
+                // Court surface
+                const courtMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x2ecc71,
+                    roughness: 0.8,
+                    metalness: 0.0
+                });
+                
+                const courtGeometry = new THREE.BoxGeometry(11, 0.1, 24);
+                const court = new THREE.Mesh(courtGeometry, courtMaterial);
+                court.position.set(x, 0.05, z);
+                court.receiveShadow = true;
+                this.scene.add(court);
+                
+                // Tennis net
+                const netMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const netGeometry = new THREE.BoxGeometry(11, 1, 0.1);
+                const net = new THREE.Mesh(netGeometry, netMaterial);
+                net.position.set(x, 0.5, z);
+                this.scene.add(net);
+                
+                this.furniture.push(court);
+            }
+
+            createCentralPlaza(x, z) {
+                // Plaza surface with decorative pattern
+                const plazaMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0xbdc3c7,
+                    roughness: 0.6,
+                    metalness: 0.1
+                });
+                
+                const plazaGeometry = new THREE.CylinderGeometry(20, 20, 0.2, 16);
+                const plaza = new THREE.Mesh(plazaGeometry, plazaMaterial);
+                plaza.position.set(x, 0.1, z);
+                plaza.receiveShadow = true;
+                this.scene.add(plaza);
+                
+                // Central fountain
+                const fountainMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x3498db,
+                    roughness: 0.2,
+                    metalness: 0.1
+                });
+                
+                const fountainGeometry = new THREE.CylinderGeometry(3, 4, 1, 16);
+                const fountain = new THREE.Mesh(fountainGeometry, fountainMaterial);
+                fountain.position.set(x, 0.5, z);
+                fountain.castShadow = true;
+                fountain.receiveShadow = true;
+                this.scene.add(fountain);
+                
+                // Fountain water effect
+                const waterMaterial = new THREE.MeshStandardMaterial({ 
+                    color: 0x3498db,
+                    transparent: true,
+                    opacity: 0.7,
+                    roughness: 0.0,
+                    metalness: 0.0
+                });
+                
+                const waterGeometry = new THREE.CylinderGeometry(2.8, 2.8, 0.1, 16);
+                const water = new THREE.Mesh(waterGeometry, waterMaterial);
+                water.position.set(x, 1.05, z);
+                this.scene.add(water);
+                
+                this.furniture.push(plaza, fountain);
+            }
+
+            createCampusFurniture() {
+                CampusLogger.info('Creating campus furniture...');
+                
+                // Street lights
+                this.createStreetLights();
+                
+                // Benches
+                this.createBenches();
+                
+                // Parking areas
+                this.createParkingAreas();
+                
+                CampusLogger.success('Campus furniture created');
+            }
+
+            createStreetLights() {
+                const lightPositions = [
+                    [20, 0, 20], [-20, 0, 20], [20, 0, -20], [-20, 0, -20],
+                    [60, 0, 20], [-60, 0, 20], [60, 0, -20], [-60, 0, -20],
+                    [20, 0, 60], [-20, 0, 60], [20, 0, -60], [-20, 0, -60],
+                    [100, 0, 0], [-100, 0, 0], [0, 0, 100], [0, 0, -100]
+                ];
+                
+                lightPositions.forEach(pos => {
+                    const lightGroup = new THREE.Group();
+                    
+                    // Light pole
+                    const poleGeometry = new THREE.CylinderGeometry(0.3, 0.3, 12, 8);
+                    const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+                    const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                    pole.position.y = 6;
+                    lightGroup.add(pole);
+                    
+                    // Light fixture
+                    const fixtureGeometry = new THREE.SphereGeometry(1, 8, 6);
+                    const fixtureMaterial = new THREE.MeshLambertMaterial({ 
+                        color: 0xffffff,
+                        emissive: 0x222222
+                    });
+                    const fixture = new THREE.Mesh(fixtureGeometry, fixtureMaterial);
+                    fixture.position.y = 11;
+                    lightGroup.add(fixture);
+                    
+                    lightGroup.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(lightGroup);
+                    this.furniture.push(lightGroup);
+                });
+            }
+
+            createBenches() {
+                const benchPositions = [
+                    [15, 0, 15], [-15, 0, 15], [15, 0, -15], [-15, 0, -15],
+                    [40, 0, 40], [-40, 0, 40], [40, 0, -40], [-40, 0, -40]
+                ];
+                
+                benchPositions.forEach(pos => {
+                    const benchGroup = new THREE.Group();
+                    
+                    // Bench seat
+                    const seatGeometry = new THREE.BoxGeometry(4, 0.3, 1);
+                    const benchMaterial = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+                    const seat = new THREE.Mesh(seatGeometry, benchMaterial);
+                    seat.position.y = 1;
+                    benchGroup.add(seat);
+                    
+                    // Bench back
+                    const backGeometry = new THREE.BoxGeometry(4, 1.5, 0.2);
+                    const back = new THREE.Mesh(backGeometry, benchMaterial);
+                    back.position.set(0, 1.5, -0.4);
+                    benchGroup.add(back);
+                    
+                    // Bench legs
+                    for (let i = 0; i < 2; i++) {
+                        const legGeometry = new THREE.BoxGeometry(0.2, 1, 0.8);
+                        const leg = new THREE.Mesh(legGeometry, benchMaterial);
+                        leg.position.set(i === 0 ? -1.5 : 1.5, 0.5, 0);
+                        benchGroup.add(leg);
+                    }
+                    
+                    benchGroup.position.set(pos[0], pos[1], pos[2]);
+                    this.scene.add(benchGroup);
+                    this.furniture.push(benchGroup);
+                });
+            }
+
+            createParkingAreas() {
+                const parkingMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                const lineMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+                
+                const parkingAreas = [
+                    { pos: [140, 0, 80], size: [30, 0.1, 60] },
+                    { pos: [-140, 0, 80], size: [30, 0.1, 60] },
+                    { pos: [80, 0, 140], size: [60, 0.1, 30] },
+                    { pos: [-80, 0, 140], size: [60, 0.1, 30] }
+                ];
+                
+                parkingAreas.forEach(area => {
+                    // Parking surface
+                    const parkingGeometry = new THREE.BoxGeometry(area.size[0], area.size[1], area.size[2]);
+                    const parking = new THREE.Mesh(parkingGeometry, parkingMaterial);
+                    parking.position.set(area.pos[0], area.pos[1], area.pos[2]);
+                    this.scene.add(parking);
+                    this.furniture.push(parking);
+                    
+                    // Parking lines
+                    const lineCount = area.size[0] > area.size[2] ? 
+                        Math.floor(area.size[0] / 5) : Math.floor(area.size[2] / 5);
+                    
+                    for (let i = 1; i < lineCount; i++) {
+                        const lineGeometry = area.size[0] > area.size[2] ?
+                            new THREE.BoxGeometry(0.1, 0.05, area.size[2]) :
+                            new THREE.BoxGeometry(area.size[0], 0.05, 0.1);
+                        
+                        const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                        
+                        if (area.size[0] > area.size[2]) {
+                            line.position.set(
+                                area.pos[0] - area.size[0]/2 + i * 5,
+                                0.2,
+                                area.pos[2]
+                            );
+                        } else {
+                            line.position.set(
+                                area.pos[0],
+                                0.2,
+                                area.pos[2] - area.size[2]/2 + i * 5
+                            );
+                        }
+                        
+                        this.scene.add(line);
+                        this.furniture.push(line);
+                    }
+                });
+            }
+
+            startRenderLoop() {
+                this.isRunning = true;
+                let frameCount = 0;
+                let lastTime = performance.now();
+
+                const animate = () => {
+                    if (!this.isRunning) return;
+
+                    this.animationId = requestAnimationFrame(animate);
+
+                    // Update controls
+                    if (this.controls) {
+                        this.controls.update();
+                    }
+
+                    // Render scene
+                    if (this.renderer && this.scene && this.camera) {
+                        this.renderer.render(this.scene, this.camera);
+                    }
+
+                    // Update stats
+                    frameCount++;
+                    const currentTime = performance.now();
+                    if (currentTime - lastTime >= 1000) {
+                        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                        this.updateStats(fps);
+                        frameCount = 0;
+                        lastTime = currentTime;
+                    }
+                };
+
+                animate();
+                CampusLogger.success('Render loop started');
+            }
+
+            updateStats(fps) {
+                // Calculate total objects and triangles for detailed campus
+                const totalObjects = this.buildings.length + this.roads.length + this.trees.length + this.furniture.length;
+                
+                // Estimate triangles: buildings have much more detail now
+                let totalTriangles = 0;
+                totalTriangles += this.buildings.length * 2500; // Complex buildings with windows, balconies, roofs
+                totalTriangles += this.roads.length * 12; // Road segments
+                totalTriangles += this.trees.length * 400; // Trees with multiple spheres and cylinders
+                totalTriangles += this.furniture.length * 100; // Street lights, benches, etc.
+                
+                document.getElementById('fps-counter').textContent = fps;
+                document.getElementById('objects-count').textContent = totalObjects;
+                document.getElementById('triangles-count').textContent = totalTriangles.toLocaleString();
+                document.getElementById('status-indicator').textContent = '3D Active';
+                
+                const indicator = document.querySelector('.performance-indicator');
+                indicator.className = 'performance-indicator ' + 
+                    (fps >= 50 ? 'fps-good' : fps >= 30 ? 'fps-okay' : 'fps-poor');
+            }
+
+            dispose() {
+                this.isRunning = false;
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+                if (this.renderer) {
+                    this.renderer.dispose();
+                }
+                CampusLogger.info('3D scene disposed');
+            }
+
+            // Control Methods for UI interaction
+            toggleAutoRotate() {
+                this.autoRotate = !this.autoRotate;
+                if (this.controls) {
+                    this.controls.autoRotate = this.autoRotate;
+                }
+                CampusLogger.info(`Auto-rotate ${this.autoRotate ? 'enabled' : 'disabled'}`);
+            }
+
+            toggleLabels() {
+                this.showLabels = !this.showLabels;
+                // Toggle visibility of building labels
+                this.buildings.forEach(building => {
+                    // Labels would be implemented as sprite text objects
+                    // For now, we'll just log the action
+                });
+                CampusLogger.info(`Labels ${this.showLabels ? 'shown' : 'hidden'}`);
+            }
+
+            toggleDayNight() {
+                this.isDayMode = !this.isDayMode;
+                
+                if (this.isDayMode) {
+                    // Day mode lighting
+                    this.scene.background = new THREE.Color(0x87ceeb);
+                    this.scene.children.forEach(child => {
+                        if (child.type === 'AmbientLight') {
+                            child.intensity = 0.6;
+                        } else if (child.type === 'DirectionalLight') {
+                            child.intensity = 0.8;
+                            child.color.setHex(0xffffff);
+                        }
+                    });
+                } else {
+                    // Night mode lighting
+                    this.scene.background = new THREE.Color(0x1a1a2e);
+                    this.scene.children.forEach(child => {
+                        if (child.type === 'AmbientLight') {
+                            child.intensity = 0.2;
+                        } else if (child.type === 'DirectionalLight') {
+                            child.intensity = 0.3;
+                            child.color.setHex(0x4169e1);
+                        }
+                    });
+                    
+                    // Make windows glow at night
+                    this.buildings.forEach(building => {
+                        building.children.forEach(child => {
+                            if (child.material && child.material.emissive) {
+                                child.material.emissive.setHex(0x004488);
+                            }
+                        });
+                    });
+                }
+                
+                CampusLogger.info(`Switched to ${this.isDayMode ? 'day' : 'night'} mode`);
+            }
+
+            toggleWireframe() {
+                this.wireframeMode = !this.wireframeMode;
+                
+                // Toggle wireframe on all building materials
+                this.buildings.forEach(building => {
+                    building.children.forEach(child => {
+                        if (child.material && child.material.wireframe !== undefined) {
+                            child.material.wireframe = this.wireframeMode;
+                        }
+                    });
+                });
+                
+                CampusLogger.info(`Wireframe mode ${this.wireframeMode ? 'enabled' : 'disabled'}`);
+            }
+
+            setView(viewName) {
+                if (this.viewPositions[viewName] && this.camera) {
+                    const pos = this.viewPositions[viewName];
+                    this.camera.position.set(pos.x, pos.y, pos.z);
+                    this.camera.lookAt(0, 0, 0);
+                    this.currentView = viewName;
+                    CampusLogger.info(`Switched to ${pos.name} view`);
+                }
+            }
+
+            // View position configurations
+            get viewPositions() {
+                return {
+                    overview: { x: 200, y: 150, z: 200, name: 'Overview' },
+                    aerial: { x: 0, y: 300, z: 0, name: 'Aerial View' },
+                    ground: { x: 120, y: 20, z: 80, name: 'Ground Level' },
+                    campus: { x: 150, y: 100, z: 150, name: 'Campus View' }
+                };
+            }
+        }
+
+        // 2D Canvas Fallback
+        class Canvas2DFallback {
+            constructor() {
+                this.canvas = null;
+                this.ctx = null;
+                this.animationId = null;
+            }
+
+            init() {
+                CampusLogger.info('Initializing 2D canvas fallback...');
+                
+                this.canvas = document.getElementById('fallback-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                
+                // Set canvas size
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = this.canvas.offsetHeight;
+                
+                this.draw();
+                CampusLogger.success('2D canvas fallback initialized');
+            }
+
+            draw() {
+                const ctx = this.ctx;
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw background
+                const gradient = ctx.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(0, '#87ceeb');
+                gradient.addColorStop(1, '#98fb98');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw campus layout
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const scale = Math.min(width, height) / 400;
+
+                const buildings = [
+                    { pos: [0, 0], size: [15, 15], color: '#ffffff', name: 'Admin' },
+                    { pos: [40, -40], size: [20, 20], color: '#00dddd', name: 'AI Research' },
+                    { pos: [-40, -40], size: [18, 18], color: '#ffdd00', name: 'Innovation' },
+                    { pos: [40, 40], size: [22, 20], color: '#ff66cc', name: 'Conference' },
+                    { pos: [-40, 40], size: [18, 18], color: '#ff00ff', name: 'Residential' },
+                    { pos: [0, 60], size: [25, 15], color: '#44aa44', name: 'Transport' }
+                ];
+
+                buildings.forEach(building => {
+                    const x = centerX + building.pos[0] * scale;
+                    const y = centerY + building.pos[1] * scale;
+                    const w = building.size[0] * scale;
+                    const h = building.size[1] * scale;
+
+                    // Draw building
+                    ctx.fillStyle = building.color;
+                    ctx.fillRect(x - w/2, y - h/2, w, h);
+                    
+                    // Draw border
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x - w/2, y - h/2, w, h);
+
+                    // Draw label
+                    ctx.fillStyle = '#333';
+                    ctx.font = `${12 * scale}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.fillText(building.name, x, y + h/2 + 15 * scale);
+                });
+
+                // Draw title
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('HEART AI Campus - 2D View', centerX, 40);
+            }
+
+            show() {
+                this.canvas.style.display = 'block';
+                document.getElementById('threejs-container').style.display = 'none';
+                document.getElementById('render-mode').textContent = '2D Canvas';
+                document.getElementById('status-indicator').textContent = '2D Active';
+            }
+        }
+
+        // Main Application Controller
+        class CampusVisualizationApp {
+            constructor() {
+                this.loader = new ThreeJSLoader();
+                this.scene3D = new DetailedCampusScene();
+                this.canvas2D = new Canvas2DFallback();
+                this.retryCount = 0;
+                this.maxRetries = 3;
+                this.mode = 'loading'; // loading, 3d, 2d, error
+            }
+
+            async init() {
+                CampusLogger.init();
+                CampusLogger.info('🚀 Initializing HEART AI Campus Visualization');
+                
+                try {
+                    // Step 1: Check WebGL
+                    const webglResult = WebGLDetector.detect();
+                    if (!webglResult.supported) {
+                        throw new Error(`WebGL not supported: ${webglResult.reason}`);
+                    }
+
+                    // Step 2: Load Three.js
+                    await this.loader.loadThreeJS();
+                    
+                    // Step 3: Load OrbitControls (optional)
+                    await this.loader.loadOrbitControls();
+                    
+                    // Step 4: Initialize 3D scene
+                    await this.scene3D.init();
+                    
+                    // Success!
+                    this.mode = '3d';
+                    this.hideLoading();
+                    this.setupEventListeners();
+                    
+                } catch (error) {
+                    CampusLogger.error(`Initialization failed: ${error.message}`);
+                    await this.handleFailure(error);
+                }
+            }
+
+            async handleFailure(error) {
+                this.retryCount++;
+                
+                if (this.retryCount <= this.maxRetries) {
+                    this.showRetryOption();
+                } else {
+                    CampusLogger.warning('3D initialization failed, falling back to 2D');
+                    this.fallbackTo2D();
+                }
+            }
+
+            fallbackTo2D() {
+                try {
+                    this.canvas2D.init();
+                    this.canvas2D.show();
+                    this.mode = '2d';
+                    this.hideLoading();
+                    this.setupEventListeners();
+                } catch (error) {
+                    CampusLogger.error('2D fallback also failed');
+                    this.showStaticFallback();
+                }
+            }
+
+            showRetryOption() {
+                const actions = document.getElementById('loadingActions');
+                actions.innerHTML = `
+                    <button onclick="app.retry()" style="padding: 10px 20px; margin: 5px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Retry 3D (${this.retryCount}/${this.maxRetries})
+                    </button>
+                    <button onclick="app.fallbackTo2D()" style="padding: 10px 20px; margin: 5px; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Use 2D Mode
+                    </button>
+                `;
+            }
+
+            showStaticFallback() {
+                const container = document.getElementById('threejs-container');
+                container.innerHTML = `
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100%; background: linear-gradient(135deg, #87ceeb 0%, #98fb98 100%); color: #1e3a8a; text-align: center;">
+                        <div>
+                            <h2>🏢 HEART AI Campus</h2>
+                            <p>Interactive visualization temporarily unavailable</p>
+                            <p>Campus features: AI Research, Innovation Hub, Conference Center, Residential Area</p>
+                        </div>
+                    </div>
+                `;
+                this.mode = 'static';
+                this.hideLoading();
+                document.getElementById('render-mode').textContent = 'Static';
+                document.getElementById('status-indicator').textContent = 'Static View';
+            }
+
+            retry() {
+                CampusLogger.info(`🔄 Retry attempt ${this.retryCount}/${this.maxRetries}`);
+                
+                // Clean up previous attempt
+                if (this.scene3D) {
+                    this.scene3D.dispose();
+                    this.scene3D = new SimpleCampusScene();
+                }
+                
+                // Show loading again
+                document.getElementById('loadingOverlay').style.display = 'flex';
+                document.getElementById('loadingActions').innerHTML = '';
+                
+                // Try again
+                setTimeout(() => this.init(), 500);
+            }
+
+            hideLoading() {
+                const overlay = document.getElementById('loadingOverlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 600);
+            }
+
+            setupEventListeners() {
+                document.querySelectorAll('.control-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.handleControlClick(e));
+                });
+
+                window.addEventListener('resize', () => this.handleResize());
+            }
+
+            handleControlClick(e) {
+                const action = e.target.dataset.action;
+                
+                if (this.mode === '3d' && this.scene3D) {
+                    switch(action) {
+                        case 'auto-rotate':
+                            this.scene3D.toggleAutoRotate();
+                            e.target.classList.toggle('active');
+                            break;
+                        case 'labels':
+                            this.scene3D.toggleLabels();
+                            e.target.classList.toggle('active');
+                            break;
+                        case 'day-night':
+                            this.scene3D.toggleDayNight();
+                            e.target.classList.toggle('active');
+                            e.target.textContent = this.scene3D.isDayMode ? '🌙' : '☀️';
+                            break;
+                        case 'wireframe':
+                            this.scene3D.toggleWireframe();
+                            e.target.classList.toggle('active');
+                            break;
+                        case 'view-overview':
+                            this.scene3D.setView('overview');
+                            this.updateViewButtons('overview');
+                            break;
+                        case 'view-aerial':
+                            this.scene3D.setView('aerial');
+                            this.updateViewButtons('aerial');
+                            break;
+                        case 'view-ground':
+                            this.scene3D.setView('ground');
+                            this.updateViewButtons('ground');
+                            break;
+                        case 'view-campus':
+                            this.scene3D.setView('campus');
+                            this.updateViewButtons('campus');
+                            break;
+                    }
+                }
+                
+                // Global controls
+                switch(action) {
+                    case 'retry':
+                        this.retry();
+                        break;
+                    case 'fallback':
+                        this.fallbackTo2D();
+                        break;
+                    case 'reset':
+                        location.reload();
+                        break;
+                }
+            }
+
+            updateViewButtons(activeView) {
+                document.querySelectorAll('[data-action^="view-"]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const activeBtn = document.querySelector(`[data-action="view-${activeView}"]`);
+                if (activeBtn) {
+                    activeBtn.classList.add('active');
+                }
+            }
+
+            handleResize() {
+                if (this.mode === '3d' && this.scene3D.renderer) {
+                    const container = document.getElementById('threejs-container');
+                    this.scene3D.camera.aspect = container.clientWidth / container.clientHeight;
+                    this.scene3D.camera.updateProjectionMatrix();
+                    this.scene3D.renderer.setSize(container.clientWidth, container.clientHeight);
+                } else if (this.mode === '2d') {
+                    this.canvas2D.canvas.width = this.canvas2D.canvas.offsetWidth;
+                    this.canvas2D.canvas.height = this.canvas2D.canvas.offsetHeight;
+                    this.canvas2D.draw();
+                }
+            }
+        }
+
+        // Global app instance
+        let app;
+        let cityConnector;
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Khởi tạo ứng dụng chính
+            app = new CampusVisualizationApp();
+            await app.init();
+            
+            // Khởi tạo và kết nối RealisticModernCity
+            try {
+                cityConnector = new RealisticCityConnector();
+                const result = await cityConnector.init(app);
+                
+                if (result.success) {
+                    // Kết nối với ứng dụng chính
+                    cityConnector.connectToApp(app);
+                    console.log('RealisticModernCity integrated successfully');
+                    
+                    // Cập nhật UI để hiển thị tích hợp thành công
+                    document.getElementById('loadingStatus').textContent = 'Tích hợp Smart City thành công!';
+                    setTimeout(() => {
+                        document.getElementById('loadingOverlay').style.display = 'none';
+                    }, 1000);
+                } else {
+                    console.error('Failed to integrate RealisticModernCity:', result.error);
+                    document.getElementById('loadingStatus').textContent = 'Lỗi tích hợp: ' + result.error;
+                    document.getElementById('loadingActions').innerHTML = '<button class="control-btn" onclick="location.reload()">Thử lại</button>';
+                }
+            } catch (error) {
+                console.error('Error during RealisticModernCity integration:', error);
+                document.getElementById('loadingStatus').textContent = 'Lỗi tích hợp: ' + error.message;
+                document.getElementById('loadingActions').innerHTML = '<button class="control-btn" onclick="location.reload()">Thử lại</button>';
+            }
+            
+            // Xử lý sự kiện resize
+            window.addEventListener('resize', () => {
+                if (cityConnector) {
+                    cityConnector.handleResize();
+                }
+            });
+        });
+
+        // Expose for debugging
+        window.app = app;
+        window.cityConnector = cityConnector;
+    </script>
+</body>
+</html>

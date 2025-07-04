@@ -1,0 +1,97 @@
+/**
+ * AI Campus Integration Module
+ * This module integrates the RealisticModernCity class from realistic-modern-city.html
+ * into the HEART AI Campus website.
+ */
+
+class RealisticCityIntegration {
+    constructor(containerId) {
+        this.containerId = containerId;
+        this.city = null;
+        this.initialized = false;
+    }
+
+    /**
+     * Initialize the realistic city scene
+     */
+    async init() {
+        try {
+            // Create a new instance of RealisticModernCity
+            this.city = new RealisticModernCity(this.containerId);
+            
+            // Ensure wireframe is off by default
+            this.city.ensureWireframeOff();
+            
+            // Return success
+            this.initialized = true;
+            return { success: true };
+        } catch (error) {
+            console.error("Failed to initialize realistic city:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    /**
+     * Resize handler for the city scene
+     */
+    handleResize() {
+        if (this.city && this.initialized) {
+            this.city.handleResize();
+        }
+    }
+
+    /**
+     * Toggle wireframe mode
+     */
+    toggleWireframe() {
+        if (this.city && this.initialized) {
+            this.city.toggleWireframe();
+        }
+    }
+
+    /**
+     * Update time of day
+     * @param {string} timeOfDay - 'morning', 'noon', 'evening', or 'night'
+     */
+    updateTimeOfDay(timeOfDay) {
+        if (this.city && this.initialized) {
+            this.city.timeOfDay = timeOfDay;
+            this.city.updateTimeOfDay();
+        }
+    }
+
+    /**
+     * Dispose of all resources
+     */
+    dispose() {
+        if (this.city && this.initialized) {
+            // Clean up resources
+            if (this.city.renderer) {
+                this.city.renderer.dispose();
+            }
+            if (this.city.scene) {
+                this.disposeScene(this.city.scene);
+            }
+            this.city = null;
+            this.initialized = false;
+        }
+    }
+
+    /**
+     * Helper to dispose of scene objects
+     */
+    disposeScene(scene) {
+        scene.traverse((object) => {
+            if (object.geometry) {
+                object.geometry.dispose();
+            }
+            if (object.material) {
+                if (Array.isArray(object.material)) {
+                    object.material.forEach(material => material.dispose());
+                } else {
+                    object.material.dispose();
+                }
+            }
+        });
+    }
+}

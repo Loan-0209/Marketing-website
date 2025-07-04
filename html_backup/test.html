@@ -1,0 +1,66 @@
+<\!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .status {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success { border-left: 5px solid #10b981; }
+        .info { border-left: 5px solid #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Server Status Test</h1>
+    
+    <div class="status success">
+        <h3>✅ Server Working</h3>
+        <p>If you can see this page, the localhost server is running correctly.</p>
+    </div>
+    
+    <div class="status info">
+        <h3>📋 Links</h3>
+        <p><a href="master-plan.html" style="color: #fbbf24; text-decoration: none;">🏢 AI Campus 3D Visualization</a></p>
+        <p><a href="index.html" style="color: #fbbf24; text-decoration: none;">🏠 Main Page</a></p>
+    </div>
+    
+    <div class="status info">
+        <h3>🔧 Debug Info</h3>
+        <p>Current URL: <span id="current-url"></span></p>
+        <p>Server Port: 8002</p>
+        <p>File Size: 105,949 bytes</p>
+    </div>
+    
+    <script>
+        document.getElementById('current-url').textContent = window.location.href;
+        
+        // Test master-plan.html accessibility
+        fetch('master-plan.html')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ master-plan.html is accessible');
+                } else {
+                    console.error('❌ master-plan.html returned:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('❌ Failed to fetch master-plan.html:', error);
+            });
+    </script>
+</body>
+</html>
+EOF < /dev/null
