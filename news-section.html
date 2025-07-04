@@ -1,0 +1,17 @@
+    <!-- News Section -->
+    <section id="news" class="section">
+        <div class="container">
+            <div class="news-header">
+                <h2 class="section-title">Latest News & Updates</h2>
+                <button class="add-news-btn" id="addNewsBtn" onclick="newsManager.showNewsForm()">+ Add News</button>
+            </div>
+            
+            <!-- News will be dynamically loaded here -->
+            <div class="news-grid" id="newsGrid">
+                <div style="text-align: center; grid-column: 1/-1; padding: 2rem;">
+                    <div class="loader"></div>
+                    <p>Loading news...</p>
+                </div>
+            </div>
+        </div>
+    </section>

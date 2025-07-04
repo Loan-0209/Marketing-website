@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/uploads:/app/uploads
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/heart_db
+      - JWT_SECRET=heart_super_secret_jwt_key_2024_very_secure_random_string
+      - JWT_EXPIRE=30d
+      - FRONTEND_URL=http://localhost:3000
+      - EMAIL_FROM=noreply@heart.com
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USER=your_email@gmail.com
+      - EMAIL_PASS=your_app_password
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./backend/scripts:/docker-entrypoint-initdb.d
+    environment:
+      - MONGO_INITDB_DATABASE=heart_db
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:

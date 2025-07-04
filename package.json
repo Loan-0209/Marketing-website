@@ -1,0 +1,53 @@
+{
+  "name": "heart-technology-website",
+  "version": "1.0.0",
+  "description": "HEART - Future of Technology Website - Vietnam's advanced AI technology park",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --host=localhost --open=/",
+    "dev": "live-server --port=3000 --host=localhost --open=/",
+    "serve": "live-server --port=8080 --host=0.0.0.0 --open=/",
+    "build": "echo 'Static website - no build process required'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d . --src '**/*' --dest ."
+  },
+  "keywords": [
+    "vietnam",
+    "technology",
+    "ai",
+    "artificial-intelligence",
+    "smart-city",
+    "tech-park",
+    "innovation",
+    "website",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "HEART Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^5.0.0",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thuyloan0209/heart-technology-website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/heart-technology-website/issues"
+  },
+  "homepage": "https://thuyloan0209.github.io/heart-technology-website",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}

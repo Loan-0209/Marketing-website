@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test News Loading</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body style="padding: 2rem;">
+    <h1>Testing News Loading Function</h1>
+    
+    <button onclick="createSampleNews()">Create Sample News</button>
+    <button onclick="loadNewsFromStorage()">Load News</button>
+    <button onclick="clearNews()">Clear News</button>
+    
+    <div style="margin: 2rem 0;">
+        <h2>News Grid:</h2>
+        <div class="news-grid" id="newsGrid">
+            <div style="text-align: center; padding: 2rem;">
+                <p>No news loaded yet</p>
+            </div>
+        </div>
+        
+        <div id="noNewsMessage" style="display: none; text-align: center; padding: 3rem;">
+            <h3 style="color: var(--gray);">No News Articles Yet</h3>
+            <p style="color: var(--gray);">Click "Create Sample News" to add some articles!</p>
+        </div>
+    </div>
+
+    <script>
+        // Same news loading function as in main site
+        function loadNewsFromStorage() {
+            console.log('Loading news from storage...');
+            
+            // Check both localStorage keys for compatibility
+            let articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            
+            // If no articles in new format, check old format
+            if (articles.length === 0) {
+                const oldNews = JSON.parse(localStorage.getItem('heart_news') || '[]');
+                if (oldNews.length > 0) {
+                    // Convert old format to new format
+                    articles = oldNews.map(item => ({
+                        id: item.id.toString(),
+                        title: item.title,
+                        summary: item.excerpt,
+                        content: item.content,
+                        category: item.category,
+                        author: item.author,
+                        icon: item.icon,
+                        tags: item.tags || [],
+                        createdAt: new Date(item.date).toISOString(),
+                        updatedAt: new Date().toISOString(),
+                        status: item.status
+                    }));
+                    // Save in new format
+                    localStorage.setItem('heart-news', JSON.stringify(articles));
+                }
+            }
+            
+            const newsGrid = document.getElementById('newsGrid');
+            const noNewsMessage = document.getElementById('noNewsMessage');
+            
+            console.log('Found articles:', articles.length);
+            
+            if (articles.length === 0) {
+                newsGrid.style.display = 'none';
+                noNewsMessage.style.display = 'block';
+                return;
+            }
+            
+            newsGrid.style.display = 'grid';
+            noNewsMessage.style.display = 'none';
+            
+            // Only show published articles
+            const publishedArticles = articles.filter(article => article.status === 'published');
+            console.log('Published articles:', publishedArticles.length);
+            
+            newsGrid.innerHTML = publishedArticles.slice(0, 6).map(article => {
+                const publishedDate = new Date(article.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="news-card" style="animation: fadeInUp 0.6s ease-out;">
+                        <div class="news-image">${article.icon}</div>
+                        <div class="news-content">
+                            <div class="news-title">${article.title}</div>
+                            <div class="news-date">${publishedDate}</div>
+                            <div class="news-excerpt">${article.summary}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <a href="#" class="read-more" onclick="alert('Article: ${article.title}')">Read more →</a>
+                                <div style="color: var(--gray); font-size: 0.9rem;">
+                                    <span>${article.category}</span>
+                                    ${article.tags && article.tags.length > 0 ? ` • ${article.tags.slice(0, 2).join(', ')}` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log('News loaded successfully!');
+        }
+        
+        function createSampleNews() {
+            const sampleArticles = [
+                {
+                    id: "1",
+                    title: "HEART Technology Park Launches",
+                    summary: "Vietnam's most ambitious AI and technology hub officially begins Phase 1 development.",
+                    content: "Detailed content here...",
+                    category: "Development",
+                    author: "HEART Team",
+                    icon: "🚀",
+                    tags: ["development", "launch"],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: "published"
+                },
+                {
+                    id: "2",
+                    title: "MIT Partnership Announced",
+                    summary: "Strategic collaboration with MIT's AI laboratory brings world-class research to Vietnam.",
+                    content: "Detailed content here...",
+                    category: "Partnership",
+                    author: "HEART Research",
+                    icon: "🤝",
+                    tags: ["partnership", "MIT"],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: "published"
+                }
+            ];
+            
+            localStorage.setItem('heart-news', JSON.stringify(sampleArticles));
+            console.log('Sample news created!');
+            alert('Sample news articles created! Click "Load News" to see them.');
+        }
+        
+        function clearNews() {
+            localStorage.removeItem('heart-news');
+            localStorage.removeItem('heart_news');
+            console.log('News cleared!');
+            alert('News cleared!');
+            loadNewsFromStorage();
+        }
+        
+        // Load news when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNewsFromStorage();
+        });
+    </script>
+</body>
+</html>

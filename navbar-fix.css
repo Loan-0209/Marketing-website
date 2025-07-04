@@ -1,0 +1,29 @@
+/* Quick navbar fix styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+    background: rgba(30, 58, 138, 0.95);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background: rgba(30, 58, 138, 0.98);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    padding-top: 80px;
+}
+
+.hero {
+    margin-top: -80px;
+    padding-top: 80px;
+}
+
+.section {
+    margin-top: -80px;
+    padding-top: 120px;
+}

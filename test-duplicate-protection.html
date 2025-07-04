@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Duplicate Protection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Duplicate Protection Test Suite</h1>
+    <div id="results"></div>
+    
+    <h2>Manual Tests</h2>
+    <button onclick="testDuplicateAPI()">Test Duplicate API Call</button>
+    <button onclick="testRapidSubmissions()">Test Rapid Submissions</button>
+    <button onclick="checkCurrentArticles()">Check Current Articles</button>
+    
+    <script src="js/api.js"></script>
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+        }
+        
+        async function testDuplicateAPI() {
+            addResult('🧪 Testing duplicate title protection...', 'info');
+            
+            try {
+                // First, try to create an article with existing title
+                const duplicateData = {
+                    title: 'HEART Officially Launches Phase 1 Development', // This should already exist
+                    excerpt: 'This is a test duplicate article',
+                    content: 'This should fail due to duplicate title',
+                    category: 'general'
+                };
+                
+                const response = await api.createNews(duplicateData);
+                addResult('❌ FAIL: Duplicate article was created (should have been blocked)', 'error');
+                
+            } catch (error) {
+                if (error.message && error.message.includes('title already exists')) {
+                    addResult('✅ SUCCESS: Duplicate title correctly blocked by backend', 'success');
+                } else {
+                    addResult(`⚠️ UNEXPECTED ERROR: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        async function testRapidSubmissions() {
+            addResult('🚀 Testing rapid submission protection...', 'info');
+            
+            const testTitle = `Test Article ${Date.now()}`;
+            const testData = {
+                title: testTitle,
+                excerpt: 'This is a test article for rapid submission',
+                content: 'Testing rapid submission protection',
+                category: 'general'
+            };
+            
+            try {
+                // Simulate rapid submissions
+                const promises = [
+                    api.createNews(testData),
+                    api.createNews(testData),
+                    api.createNews(testData)
+                ];
+                
+                const results = await Promise.allSettled(promises);
+                const successes = results.filter(r => r.status === 'fulfilled').length;
+                const failures = results.filter(r => r.status === 'rejected').length;
+                
+                if (successes === 1 && failures === 2) {
+                    addResult('✅ SUCCESS: Only 1 article created, 2 duplicates blocked', 'success');
+                } else {
+                    addResult(`⚠️ PARTIAL: ${successes} created, ${failures} blocked`, 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ ERROR during rapid submission test: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkCurrentArticles() {
+            addResult('📊 Checking current articles...', 'info');
+            
+            try {
+                const response = await api.getNews();
+                const articles = response.data.news;
+                const titles = articles.map(a => a.title);
+                const uniqueTitles = [...new Set(titles)];
+                
+                addResult(`Found ${articles.length} articles with ${uniqueTitles.length} unique titles`, 'info');
+                
+                if (articles.length === uniqueTitles.length) {
+                    addResult('✅ SUCCESS: No duplicate titles found', 'success');
+                } else {
+                    addResult(`❌ FAIL: Found ${articles.length - uniqueTitles.length} duplicate titles`, 'error');
+                    
+                    // Show duplicates
+                    const duplicates = titles.filter((title, index) => titles.indexOf(title) !== index);
+                    addResult(`Duplicate titles: ${duplicates.join(', ')}`, 'error');
+                }
+                
+            } catch (error) {
+                addResult(`❌ ERROR checking articles: ${error.message}`, 'error');
+            }
+        }
+        
+        // Run initial check
+        checkCurrentArticles();
+    </script>
+</body>
+</html>

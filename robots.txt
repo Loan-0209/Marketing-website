@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://thuyloan0209.github.io/heart-technology-website/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Block access to admin and backend files
+Disallow: /admin/
+Disallow: /backend/
+Disallow: /node_modules/
+Disallow: /*.log$
+Disallow: /package*.json
+Disallow: /.*
+
+# Allow important pages
+Allow: /index.html
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /data/

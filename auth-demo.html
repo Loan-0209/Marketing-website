@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Authentication Demo</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/auth-simple.js"></script>
+    <style>
+        body {
+            padding: 2rem;
+            background: var(--light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .demo-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 15px;
+        }
+
+        .status-display {
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+
+        .status-logged-out {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-logged-in {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border: 2px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .user-info {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .form-demo {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid var(--primary-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .btn-demo {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--light-blue);
+        }
+
+        .btn-secondary {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+        }
+
+        .btn-secondary:hover {
+            background: #fcd34d;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .test-results {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .demo-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.2rem;
+        }
+
+        .badge-admin {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .badge-user {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🔐 HEART Authentication System Demo</h1>
+        <p>Test the authentication system with localStorage-based backend simulation.</p>
+
+        <!-- Authentication Status -->
+        <div class="demo-section">
+            <h2>📊 Authentication Status</h2>
+            <div id="authStatus" class="status-display status-logged-out">
+                ❌ Not Authenticated
+            </div>
+            <div id="userInfo" class="user-info" style="display: none;">
+                <!-- User info will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="demo-section">
+            <h2>🔑 Login Form</h2>
+            <div class="form-demo">
+                <div class="form-group">
+                    <label for="username">Username or Email:</label>
+                    <input type="text" id="username" class="form-control" value="admin" placeholder="Enter username or email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" class="form-control" value="heart2024" placeholder="Enter password">
+                </div>
+                <button class="btn-demo btn-primary" onclick="testLogin()">🔓 Login</button>
+                <button class="btn-demo btn-danger" onclick="testLogout()">🔒 Logout</button>
+            </div>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="demo-section">
+            <h2>🎯 Demo Credentials</h2>
+            <div style="background: var(--light-yellow); padding: 1rem; border-radius: 10px; border-left: 4px solid var(--primary-yellow);">
+                <strong>Admin Account:</strong><br>
+                Username: <code>admin</code><br>
+                Password: <code>heart2024</code><br>
+                <span class="demo-badge badge-admin">ADMIN ROLE</span>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="demo-section">
+            <h2>🧪 Test Results</h2>
+            <button class="btn-demo btn-secondary" onclick="runAllTests()">🔄 Run All Tests</button>
+            <button class="btn-demo btn-secondary" onclick="clearResults()">🗑️ Clear Results</button>
+            <div id="testResults" class="test-results">
+                Click "Run All Tests" to start testing...
+            </div>
+        </div>
+
+        <!-- Storage Info -->
+        <div class="demo-section">
+            <h2>💾 Storage Information</h2>
+            <button class="btn-demo btn-secondary" onclick="showStorageInfo()">📋 Show Storage Data</button>
+            <button class="btn-demo btn-danger" onclick="clearStorage()">🗑️ Clear All Storage</button>
+            <div id="storageInfo" class="test-results">
+                Click "Show Storage Data" to view localStorage content...
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="demo-section">
+            <h2>⚡ Quick Actions</h2>
+            <a href="index.html" class="btn-demo btn-primary">🏠 Go to Main Site</a>
+            <a href="admin-panel.html" class="btn-demo btn-secondary">🛠️ Open Admin Panel</a>
+            <a href="post-news.html" class="btn-demo btn-secondary">📝 Create News</a>
+        </div>
+    </div>
+
+    <script>
+        // Update authentication status display
+        function updateAuthStatus() {
+            const authStatus = document.getElementById('authStatus');
+            const userInfo = document.getElementById('userInfo');
+            
+            if (simpleAuth.isAuthenticated()) {
+                const user = simpleAuth.getUser();
+                authStatus.className = 'status-display status-logged-in';
+                authStatus.innerHTML = '✅ Authenticated';
+                
+                userInfo.style.display = 'block';
+                userInfo.innerHTML = `
+                    <h4>👤 User Information:</h4>
+                    <strong>Username:</strong> ${user.username}<br>
+                    <strong>Email:</strong> ${user.email}<br>
+                    <strong>Name:</strong> ${user.fullName}<br>
+                    <strong>Role:</strong> <span class="demo-badge badge-admin">${user.role.toUpperCase()}</span><br>
+                    <strong>Can Manage News:</strong> ${simpleAuth.canManageNews() ? '✅ Yes' : '❌ No'}
+                `;
+            } else {
+                authStatus.className = 'status-display status-logged-out';
+                authStatus.innerHTML = '❌ Not Authenticated';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        // Test login function
+        async function testLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                logResult('🔄 Attempting login...');
+                const response = await simpleAuth.login(username, password);
+                
+                if (response.success) {
+                    logResult('✅ Login successful!');
+                    logResult(`👤 Welcome ${response.data.user.fullName}`);
+                    Toast.success('Login successful!');
+                } else {
+                    logResult('❌ Login failed');
+                    Toast.error('Login failed');
+                }
+            } catch (error) {
+                logResult(`❌ Login error: ${error.message}`);
+                Toast.error(error.message);
+            }
+            
+            updateAuthStatus();
+        }
+
+        // Test logout function
+        async function testLogout() {
+            try {
+                logResult('🔄 Attempting logout...');
+                const response = await simpleAuth.logout();
+                
+                if (response.success) {
+                    logResult('✅ Logout successful!');
+                    Toast.info('Logout successful!');
+                } else {
+                    logResult('❌ Logout failed');
+                    Toast.error('Logout failed');
+                }
+            } catch (error) {
+                logResult(`❌ Logout error: ${error.message}`);
+                Toast.error(error.message);
+            }
+            
+            updateAuthStatus();
+        }
+
+        // Log test results
+        function logResult(message) {
+            const results = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `[${timestamp}] ${message}\n`;
+            results.scrollTop = results.scrollHeight;
+        }
+
+        // Run all tests
+        async function runAllTests() {
+            clearResults();
+            logResult('🧪 Starting authentication tests...');
+            
+            // Test 1: Check initial state
+            logResult(`📊 Initial auth state: ${simpleAuth.isAuthenticated() ? 'Authenticated' : 'Not authenticated'}`);
+            
+            // Test 2: Login with wrong credentials
+            try {
+                logResult('🔍 Testing invalid credentials...');
+                await simpleAuth.login('admin', 'wrongpassword');
+            } catch (error) {
+                logResult(`✅ Invalid credentials correctly rejected: ${error.message}`);
+            }
+            
+            // Test 3: Login with correct credentials
+            try {
+                logResult('🔍 Testing valid credentials...');
+                const response = await simpleAuth.login('admin', 'heart2024');
+                logResult(`✅ Valid login successful: ${response.data.user.username}`);
+            } catch (error) {
+                logResult(`❌ Valid login failed: ${error.message}`);
+            }
+            
+            // Test 4: Check authenticated state
+            logResult(`📊 Post-login auth state: ${simpleAuth.isAuthenticated() ? 'Authenticated' : 'Not authenticated'}`);
+            
+            // Test 5: Test getMe function
+            try {
+                const meResponse = await simpleAuth.getMe();
+                logResult(`✅ getMe() successful: ${meResponse.data.user.username}`);
+            } catch (error) {
+                logResult(`❌ getMe() failed: ${error.message}`);
+            }
+            
+            // Test 6: Check admin privileges
+            logResult(`🛠️ Admin privileges: ${simpleAuth.canManageNews() ? 'Yes' : 'No'}`);
+            
+            // Test 7: Logout
+            try {
+                await simpleAuth.logout();
+                logResult('✅ Logout successful');
+            } catch (error) {
+                logResult(`❌ Logout failed: ${error.message}`);
+            }
+            
+            // Test 8: Check final state
+            logResult(`📊 Final auth state: ${simpleAuth.isAuthenticated() ? 'Authenticated' : 'Not authenticated'}`);
+            
+            logResult('🏁 All tests completed!');
+            updateAuthStatus();
+        }
+
+        // Show storage information
+        function showStorageInfo() {
+            const storageInfo = document.getElementById('storageInfo');
+            const users = localStorage.getItem('heart_users');
+            const currentUser = localStorage.getItem('heart_current_user');
+            const token = localStorage.getItem('heart_auth_token');
+            const news = localStorage.getItem('heart-news');
+            
+            storageInfo.innerHTML = `
+📦 LocalStorage Contents:
+
+🔑 heart_users: ${users ? 'Present' : 'Not found'}
+👤 heart_current_user: ${currentUser ? 'Present' : 'Not found'}
+🎫 heart_auth_token: ${token ? 'Present' : 'Not found'}
+📰 heart-news: ${news ? 'Present' : 'Not found'}
+
+📋 Users Data:
+${users ? JSON.stringify(JSON.parse(users), null, 2) : 'No users found'}
+
+👤 Current User:
+${currentUser ? JSON.stringify(JSON.parse(currentUser), null, 2) : 'No current user'}
+            `;
+        }
+
+        // Clear storage
+        function clearStorage() {
+            if (confirm('Are you sure you want to clear all localStorage data?')) {
+                localStorage.clear();
+                Toast.warning('All storage data cleared!');
+                updateAuthStatus();
+                logResult('🗑️ All localStorage data cleared');
+            }
+        }
+
+        // Clear test results
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthStatus();
+            logResult('🚀 Authentication demo initialized');
+        });
+    </script>
+</body>
+</html>

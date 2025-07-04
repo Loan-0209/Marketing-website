@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add News Article - HEART Technology Park</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            padding-top: 80px;
+            background: var(--light-gray);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: var(--error);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-control:hover {
+            border-color: var(--primary-yellow);
+        }
+
+        .form-control.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .content-textarea {
+            min-height: 200px;
+        }
+
+        .char-count {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .char-count.warning {
+            color: var(--warning);
+        }
+
+        .char-count.error {
+            color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .image-upload {
+            border: 2px dashed var(--light-gray);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary-blue);
+            background: rgba(30, 58, 138, 0.05);
+        }
+
+        .image-upload.dragover {
+            border-color: var(--primary-yellow);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .success-message {
+            background: var(--success);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-section {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .preview-card {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-top: 4px solid var(--primary-yellow);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-yellow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--white);
+        }
+
+        .preview-content {
+            padding: 1.5rem;
+        }
+
+        .preview-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .preview-excerpt {
+            color: var(--dark-blue);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 2rem 1rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">← Back to Main Site</a></li>
+                <li><a href="index.html#news" class="nav-link">View News</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>📰 Add News Article</h1>
+            <p>Share the latest updates from HEART Technology Park</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                ✅ Article published successfully! <a href="index.html#news" style="color: white; text-decoration: underline;">View on main site</a>
+            </div>
+
+            <form id="newsForm" novalidate>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="title">Article Title <span class="required">*</span></label>
+                        <input type="text" id="title" name="title" class="form-control" required maxlength="100" placeholder="Enter article title">
+                        <div class="char-count" id="titleCount">0/100 characters</div>
+                        <div class="error-message" id="titleError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" class="form-control">
+                            <option value="general">General</option>
+                            <option value="technology">Technology</option>
+                            <option value="investment">Investment</option>
+                            <option value="facilities">Facilities</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="research">Research & Development</option>
+                            <option value="events">Events</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author Name</label>
+                    <input type="text" id="author" name="author" class="form-control" placeholder="Enter author name (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="summary">Article Summary <span class="required">*</span></label>
+                    <textarea id="summary" name="summary" class="form-control" required maxlength="300" placeholder="Brief summary of the article (will appear on news cards)"></textarea>
+                    <div class="char-count" id="summaryCount">0/300 characters</div>
+                    <div class="error-message" id="summaryError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Article Content <span class="required">*</span></label>
+                    <textarea id="content" name="content" class="form-control content-textarea" required minlength="50" placeholder="Write the full article content here..."></textarea>
+                    <div class="char-count" id="contentCount">0 characters (minimum 50)</div>
+                    <div class="error-message" id="contentError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Featured Image</label>
+                    <div class="image-upload" id="imageUpload">
+                        <div class="upload-icon">📸</div>
+                        <p><strong>Click to upload</strong> or drag and drop</p>
+                        <p style="font-size: 0.9rem; color: var(--gray);">JPG, PNG, WebP (max 5MB)</p>
+                        <input type="file" id="image" name="image" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="error-message" id="imageError"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="showPreview()">👁️ Preview</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">💾 Save Draft</button>
+                    <button type="submit" class="btn btn-primary">🚀 Publish Article</button>
+                </div>
+            </form>
+
+            <!-- Preview Section -->
+            <div class="preview-section" id="previewSection">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary-blue);">📋 Article Preview</h3>
+                <div class="preview-card">
+                    <div class="preview-image" id="previewImage">📰</div>
+                    <div class="preview-content">
+                        <div class="preview-title" id="previewTitle">Article Title</div>
+                        <div class="preview-date" id="previewDate">Today</div>
+                        <div class="preview-excerpt" id="previewExcerpt">Article summary will appear here...</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button type="button" class="btn btn-outline" onclick="hidePreview()">← Back to Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class NewsFormManager {
+            constructor() {
+                this.form = document.getElementById('newsForm');
+                this.setupEventListeners();
+                this.setupCharacterCounts();
+                this.setupImageUpload();
+                this.loadDraft();
+            }
+
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Real-time validation
+                ['title', 'summary', 'content'].forEach(field => {
+                    document.getElementById(field).addEventListener('blur', () => this.validateField(field));
+                    document.getElementById(field).addEventListener('input', () => this.clearError(field));
+                });
+            }
+
+            setupCharacterCounts() {
+                const fields = [
+                    { id: 'title', max: 100, countId: 'titleCount' },
+                    { id: 'summary', max: 300, countId: 'summaryCount' },
+                    { id: 'content', min: 50, countId: 'contentCount' }
+                ];
+
+                fields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    const counter = document.getElementById(field.countId);
+                    
+                    input.addEventListener('input', () => {
+                        const length = input.value.length;
+                        
+                        if (field.max) {
+                            counter.textContent = `${length}/${field.max} characters`;
+                            if (length > field.max * 0.9) {
+                                counter.className = 'char-count warning';
+                            } else if (length > field.max) {
+                                counter.className = 'char-count error';
+                            } else {
+                                counter.className = 'char-count';
+                            }
+                        } else if (field.min) {
+                            counter.textContent = `${length} characters (minimum ${field.min})`;
+                            if (length < field.min) {
+                                counter.className = 'char-count error';
+                            } else {
+                                counter.className = 'char-count';
+                            }
+                        }
+                    });
+                });
+            }
+
+            setupImageUpload() {
+                const imageUpload = document.getElementById('imageUpload');
+                const imageInput = document.getElementById('image');
+
+                imageUpload.addEventListener('click', () => imageInput.click());
+                
+                imageUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    imageUpload.classList.add('dragover');
+                });
+                
+                imageUpload.addEventListener('dragleave', () => {
+                    imageUpload.classList.remove('dragover');
+                });
+                
+                imageUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    imageUpload.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleImageUpload(files[0]);
+                    }
+                });
+
+                imageInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleImageUpload(e.target.files[0]);
+                    }
+                });
+            }
+
+            handleImageUpload(file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showError('image', 'File size must be less than 5MB');
+                    return;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    this.showError('image', 'Please select a valid image file');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageUpload = document.getElementById('imageUpload');
+                    imageUpload.innerHTML = `
+                        <img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 10px;">
+                        <p style="margin-top: 1rem; color: var(--success);">✅ Image uploaded successfully</p>
+                    `;
+                    this.clearError('image');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            validateField(fieldName) {
+                const field = document.getElementById(fieldName);
+                const value = field.value.trim();
+                let isValid = true;
+
+                switch (fieldName) {
+                    case 'title':
+                        if (!value) {
+                            this.showError(fieldName, 'Title is required');
+                            isValid = false;
+                        } else if (value.length > 100) {
+                            this.showError(fieldName, 'Title must be 100 characters or less');
+                            isValid = false;
+                        }
+                        break;
+                    
+                    case 'summary':
+                        if (!value) {
+                            this.showError(fieldName, 'Summary is required');
+                            isValid = false;
+                        } else if (value.length > 300) {
+                            this.showError(fieldName, 'Summary must be 300 characters or less');
+                            isValid = false;
+                        }
+                        break;
+                    
+                    case 'content':
+                        if (!value) {
+                            this.showError(fieldName, 'Content is required');
+                            isValid = false;
+                        } else if (value.length < 50) {
+                            this.showError(fieldName, 'Content must be at least 50 characters');
+                            isValid = false;
+                        }
+                        break;
+                }
+
+                if (isValid) {
+                    this.clearError(fieldName);
+                }
+                
+                return isValid;
+            }
+
+            validateForm() {
+                const fields = ['title', 'summary', 'content'];
+                let isValid = true;
+
+                fields.forEach(field => {
+                    if (!this.validateField(field)) {
+                        isValid = false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            showError(fieldName, message) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(fieldName + 'Error');
+                
+                field.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+
+            clearError(fieldName) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(fieldName + 'Error');
+                
+                field.classList.remove('error');
+                errorElement.style.display = 'none';
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    this.showToast('Please fix the errors before submitting', 'error');
+                    return;
+                }
+
+                const formData = new FormData(this.form);
+                const article = {
+                    id: Date.now().toString(),
+                    title: formData.get('title').trim(),
+                    summary: formData.get('summary').trim(),
+                    content: formData.get('content').trim(),
+                    category: formData.get('category'),
+                    author: formData.get('author').trim() || 'HEART Team',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: 'published'
+                };
+
+                this.saveArticle(article);
+            }
+
+            saveArticle(article) {
+                try {
+                    const existingArticles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+                    existingArticles.unshift(article);
+                    localStorage.setItem('heart-news', JSON.stringify(existingArticles));
+                    
+                    this.showSuccessMessage();
+                    this.clearForm();
+                    this.clearDraft();
+                    
+                } catch (error) {
+                    console.error('Error saving article:', error);
+                    this.showToast('Error saving article. Please try again.', 'error');
+                }
+            }
+
+            showSuccessMessage() {
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 10000);
+            }
+
+            saveDraft() {
+                const formData = new FormData(this.form);
+                const draft = {
+                    title: formData.get('title'),
+                    summary: formData.get('summary'),
+                    content: formData.get('content'),
+                    category: formData.get('category'),
+                    author: formData.get('author'),
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem('heart-news-draft', JSON.stringify(draft));
+                this.showToast('Draft saved successfully!', 'success');
+            }
+
+            loadDraft() {
+                const draft = JSON.parse(localStorage.getItem('heart-news-draft') || '{}');
+                if (draft.title) {
+                    Object.keys(draft).forEach(key => {
+                        if (key !== 'timestamp') {
+                            const field = document.getElementById(key);
+                            if (field) field.value = draft[key];
+                        }
+                    });
+                    
+                    // Trigger character count updates
+                    ['title', 'summary', 'content'].forEach(field => {
+                        document.getElementById(field).dispatchEvent(new Event('input'));
+                    });
+                }
+            }
+
+            clearDraft() {
+                localStorage.removeItem('heart-news-draft');
+            }
+
+            clearForm() {
+                this.form.reset();
+                
+                // Reset image upload
+                const imageUpload = document.getElementById('imageUpload');
+                imageUpload.innerHTML = `
+                    <div class="upload-icon">📸</div>
+                    <p><strong>Click to upload</strong> or drag and drop</p>
+                    <p style="font-size: 0.9rem; color: var(--gray);">JPG, PNG, WebP (max 5MB)</p>
+                `;
+                
+                // Reset character counts
+                document.getElementById('titleCount').textContent = '0/100 characters';
+                document.getElementById('summaryCount').textContent = '0/300 characters';
+                document.getElementById('contentCount').textContent = '0 characters (minimum 50)';
+                
+                // Clear all errors
+                ['title', 'summary', 'content', 'image'].forEach(field => {
+                    this.clearError(field);
+                });
+            }
+
+            showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10001;
+                    max-width: 400px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                    animation: slideInRight 0.3s ease-out;
+                    background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : 'var(--info)'};
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Global functions for buttons
+        function showPreview() {
+            const title = document.getElementById('title').value || 'Article Title';
+            const summary = document.getElementById('summary').value || 'Article summary will appear here...';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewExcerpt').textContent = summary;
+            document.getElementById('previewDate').textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('previewSection').style.display = 'block';
+            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hidePreview() {
+            document.getElementById('previewSection').style.display = 'none';
+        }
+
+        function saveDraft() {
+            newsFormManager.saveDraft();
+        }
+
+        // Initialize when DOM is loaded
+        let newsFormManager;
+        document.addEventListener('DOMContentLoaded', function() {
+            newsFormManager = new NewsFormManager();
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

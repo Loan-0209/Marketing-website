@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Sample News</title>
+</head>
+<body>
+    <h1>Adding Sample News Articles...</h1>
+    <div id="status"></div>
+
+    <script>
+        // Create sample news articles
+        const sampleArticles = [
+            {
+                id: "1",
+                title: "HEART Technology Park Officially Launches Phase 1",
+                summary: "We are excited to announce the official groundbreaking ceremony for Phase 1 of HEART technology park. This milestone marks the beginning of Vietnam's most ambitious AI and technology hub.",
+                content: "We are excited to announce the official groundbreaking ceremony for Phase 1 of HEART technology park. This milestone marks the beginning of Vietnam's most ambitious AI and technology hub.\n\nThe ceremony was attended by government officials, international investors, and technology leaders from across the region. Phase 1 will include state-of-the-art research facilities, smart office buildings, and advanced data centers.\n\nWith an investment of $600M, Phase 1 is expected to create 5,000 high-tech jobs and attract 50 innovative companies to establish their operations in Vietnam.",
+                category: "Development",
+                author: "HEART Development Team",
+                icon: "🚀",
+                tags: ["development", "phase1", "announcement"],
+                createdAt: "2024-12-15T10:00:00.000Z",
+                updatedAt: "2024-12-15T10:00:00.000Z",
+                status: "published"
+            },
+            {
+                id: "2", 
+                title: "Strategic Partnership with MIT Announced",
+                summary: "HEART has formed a groundbreaking partnership with MIT's Computer Science and Artificial Intelligence Laboratory (CSAIL) to advance AI research and education in Southeast Asia.",
+                content: "HEART has formed a groundbreaking partnership with MIT's Computer Science and Artificial Intelligence Laboratory (CSAIL) to advance AI research and education in Southeast Asia.\n\nThis collaboration will bring world-class AI research and educational programs to Vietnam. The partnership includes:\n\n• Joint research initiatives in machine learning and robotics\n• Student and faculty exchange programs\n• Access to MIT's cutting-edge research facilities\n• Collaborative development of AI solutions for emerging markets\n\nThis partnership represents a major step forward in establishing Vietnam as a leader in AI innovation and education.",
+                category: "Partnership",
+                author: "HEART Research Division",
+                icon: "🤝",
+                tags: ["partnership", "MIT", "AI", "education"],
+                createdAt: "2024-12-10T14:30:00.000Z",
+                updatedAt: "2024-12-10T14:30:00.000Z",
+                status: "published"
+            },
+            {
+                id: "3",
+                title: "$500M Series A Funding Successfully Raised",
+                summary: "Leading international investors including Sequoia Capital, Andreessen Horowitz, and GIC have invested $500M to accelerate HEART's development timeline.",
+                content: "Leading international investors including Sequoia Capital, Andreessen Horowitz, and GIC have invested $500M to accelerate HEART's development timeline.\n\nThis funding will support:\n\n• Infrastructure development and smart city technologies\n• Talent acquisition and retention programs\n• Advanced research and development initiatives\n• International partnership expansion\n• Sustainability and green technology integration\n\nThe investment demonstrates strong confidence in Vietnam's potential to become a major technology hub in Southeast Asia. With this funding, HEART can accelerate its timeline and expand its scope to create an even more comprehensive technology ecosystem.",
+                category: "Investment",
+                author: "HEART Investment Team",
+                icon: "💰",
+                tags: ["funding", "investment", "series-a"],
+                createdAt: "2024-12-05T09:15:00.000Z",
+                updatedAt: "2024-12-05T09:15:00.000Z",
+                status: "published"
+            }
+        ];
+
+        // Save to localStorage
+        localStorage.setItem('heart-news', JSON.stringify(sampleArticles));
+        
+        document.getElementById('status').innerHTML = `
+            <p style="color: green; font-weight: bold;">✅ Sample news articles created successfully!</p>
+            <p>Created ${sampleArticles.length} sample articles:</p>
+            <ul>
+                ${sampleArticles.map(article => `<li>${article.title}</li>`).join('')}
+            </ul>
+            <p><a href="index.html#news">View News Section</a></p>
+        `;
+        
+        console.log('Sample news articles saved to localStorage');
+    </script>
+</body>
+</html>

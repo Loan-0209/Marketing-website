@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug localStorage</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; }
+        .article { border: 1px solid #ccc; margin: 1rem 0; padding: 1rem; }
+        .has-image { background: #e8f5e8; }
+        .no-image { background: #ffe8e8; }
+        .undefined-image { background: #fff3cd; }
+        pre { background: #f5f5f5; padding: 1rem; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug localStorage Articles</h1>
+    <button onclick="analyzeData()">📊 Analyze Articles</button>
+    <button onclick="clearStorage()">🗑️ Clear Storage</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function analyzeData() {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const results = document.getElementById('results');
+            
+            let html = `<h2>Total Articles: ${articles.length}</h2>`;
+            
+            let withImages = 0;
+            let withoutImages = 0;
+            let undefinedImages = 0;
+            
+            articles.forEach((article, index) => {
+                let cssClass = '';
+                let imageStatus = '';
+                
+                if (article.image === undefined) {
+                    undefinedImages++;
+                    cssClass = 'undefined-image';
+                    imageStatus = '❓ UNDEFINED';
+                } else if (article.image === null) {
+                    withoutImages++;
+                    cssClass = 'no-image';
+                    imageStatus = '❌ NULL';
+                } else if (article.image) {
+                    withImages++;
+                    cssClass = 'has-image';
+                    imageStatus = `✅ HAS IMAGE (${article.image.length} chars)`;
+                } else {
+                    cssClass = 'no-image';
+                    imageStatus = '❌ FALSY';
+                }
+                
+                html += `
+                    <div class="article ${cssClass}">
+                        <h3>Article ${index + 1}: ${article.title}</h3>
+                        <p><strong>ID:</strong> ${article.id}</p>
+                        <p><strong>Image Status:</strong> ${imageStatus}</p>
+                        <p><strong>Icon:</strong> ${article.icon}</p>
+                        <p><strong>Created:</strong> ${article.createdAt}</p>
+                        ${article.image ? `
+                            <p><strong>Image Preview:</strong> ${article.image.substring(0, 100)}...</p>
+                            <img src="${article.image}" style="max-width: 200px; max-height: 150px; border: 1px solid #ccc;" />
+                        ` : ''}
+                        <details>
+                            <summary>Raw Data</summary>
+                            <pre>${JSON.stringify(article, null, 2)}</pre>
+                        </details>
+                    </div>
+                `;
+            });
+            
+            html = `
+                <div style="background: #f0f8ff; padding: 1rem; margin: 1rem 0;">
+                    <h3>📊 Summary</h3>
+                    <p>✅ Articles with images: ${withImages}</p>
+                    <p>❌ Articles without images: ${withoutImages}</p>
+                    <p>❓ Articles with undefined images: ${undefinedImages}</p>
+                </div>
+            ` + html;
+            
+            results.innerHTML = html;
+        }
+        
+        function clearStorage() {
+            if (confirm('Are you sure you want to clear all articles?')) {
+                localStorage.removeItem('heart-news');
+                localStorage.removeItem('heart_news');
+                alert('Storage cleared!');
+                document.getElementById('results').innerHTML = '';
+            }
+        }
+        
+        // Auto-analyze on load
+        window.addEventListener('load', analyzeData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Future of Technology</title>
+    <link rel="stylesheet" href="navbar-fix.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/news-manager.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --light-blue: #3b82f6;
+            --primary-yellow: #fbbf24;
+            --light-yellow: #fef3c7;
+            --dark-blue: #1e2148;
+            --white: #ffffff;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-blue);
+            overflow-x: hidden;
+            padding-top: 80px; /* Add padding to prevent content being hidden behind fixed navbar */
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 138, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-yellow);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            margin-top: -80px; /* Offset the body padding-top */
+            padding-top: 80px; /* Maintain proper spacing for content */
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%23fbbf24" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="40" r="1.5" fill="%23fbbf24" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle><circle cx="40" cy="80" r="1" fill="%23fbbf24" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            background: var(--primary-yellow);
+            color: var(--primary-blue);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            margin-top: -80px; /* Offset the body padding-top */
+            padding-top: 80px; /* Maintain proper spacing for content */
+            padding: 8rem 0 5rem 0; /* Extra top padding to account for fixed navbar */
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 100px;
+            height: 4px;
+            background: var(--primary-yellow);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* About Us */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, var(--light-blue), var(--primary-yellow));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--white);
+        }
+
+        /* Master Plan */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-yellow);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 0 2rem;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-yellow);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid var(--primary-blue);
+        }
+
+        /* Facilities */
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .facility-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 5px solid var(--primary-yellow);
+        }
+
+        .facility-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .facility-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: var(--white);
+        }
+
+        /* Investment */
+        .investment-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-yellow);
+        }
+
+        /* Technology */
+        .tech-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin: 3rem 0;
+        }
+
+        .tech-item {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .tech-item h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* Contact */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row !important;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .news-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--primary-yellow);
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .close {
+            color: var(--gray);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--primary-blue);
+        }
+
+        /* News Styles */
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .add-news-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: none;
+        }
+
+        .add-news-btn:hover {
+            background: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .news-card {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--primary-yellow);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-yellow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-excerpt {
+            color: var(--dark-blue);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .read-more {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .read-more:hover {
+            color: var(--light-blue);
+        }
+
+        .admin-panel {
+            display: none;
+            background: var(--light-yellow);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .admin-panel h3 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="#hero" class="nav-link active" onclick="showSection('hero')">Home</a></li>
+                <li><a href="#about" class="nav-link" onclick="showSection('about')">About Us</a></li>
+                <li><a href="#masterplan" class="nav-link" onclick="showSection('masterplan')">Master Plan</a></li>
+                <li><a href="#facilities" class="nav-link" onclick="showSection('facilities')">Facilities</a></li>
+                <li><a href="#investment" class="nav-link" onclick="showSection('investment')">Investment</a></li>
+                <li><a href="#technology" class="nav-link" onclick="showSection('technology')">Technology</a></li>
+                <li><a href="#news" class="nav-link" onclick="showSection('news')">News</a></li>
+                <li><a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a></li>
+                <li><a href="#" class="nav-link" onclick="showLogin()" style="background: var(--primary-yellow); color: var(--primary-blue); border-radius: 0; margin-left: 1rem;">Login</a></li>
+                <li><a href="#" class="nav-link" onclick="adminDashboard.showDashboard()" style="border-radius: 0; margin-left: 0.5rem; display: none;" id="dashboardBtn">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to HEART</h1>
+            <p>Where future technology and innovation converge. Discover Vietnam's most advanced technology park with a complete AI ecosystem, spanning 2,000 hectares of cutting-edge infrastructure.</p>
+            <a href="#about" class="cta-button" onclick="showSection('about')">Explore Now</a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Vision</h3>
+                    <p>HEART is Vietnam's pioneering high-tech park, designed to become the leading center for artificial intelligence research, development, and application in the region. By 2035, we aim to be recognized as Southeast Asia's premier AI innovation hub.</p>
+                    
+                    <h3>Mission</h3>
+                    <p>We are committed to creating a comprehensive technology ecosystem where businesses, researchers, and investors can collaborate to develop advanced AI solutions, contributing to national digital transformation. Our mission extends to fostering innovation, nurturing talent, and driving sustainable economic growth.</p>
+                    
+                    <h3>Core Values</h3>
+                    <p>Innovation, sustainability, collaboration, and human development are the core values that guide all our activities. We believe in ethical AI development, environmental responsibility, and creating meaningful impact for society.</p>
+                    
+                    <h3>Our Team</h3>
+                    <p>Led by internationally recognized experts in AI and technology development, our team brings together over 200 professionals from top universities and leading tech companies worldwide. We maintain partnerships with MIT, Stanford, and leading Asian technology institutes.</p>
+                    
+                    <h3>Achievements</h3>
+                    <p>Since our establishment, HEART has filed over 150 patents, published 300+ research papers, and successfully incubated 50+ startups. We've received recognition from the World Economic Forum and the UN for our sustainable technology initiatives.</p>
+                </div>
+                <div class="about-image">
+                    🏢
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Master Plan Section -->
+    <section id="masterplan" class="section">
+        <div class="container">
+            <h2 class="section-title">Master Plan</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 1 (2025-2027): Foundation</h3>
+                        <p>Building core infrastructure, data centers, and the first smart office buildings. Establishing AI research areas and laboratories. Investment: $600M. Expected outcomes: 5,000 jobs, 50 companies, basic infrastructure completion.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 2 (2027-2030): Expansion</h3>
+                        <p>Expanding high-tech manufacturing areas, building training centers and smart residential areas for employees and families. Investment: $800M. Expected outcomes: 15,000 additional jobs, 150 companies, residential and education facilities.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 3 (2030-2035): Completion</h3>
+                        <p>Completing the ecosystem with commercial, entertainment, and social facilities. Becoming the leading AI center in the region. Investment: $600M. Expected outcomes: 50,000 total jobs, 500 companies, full smart city infrastructure.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 4rem; text-align: center;">
+                <h3>Development Highlights</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div style="padding: 1.5rem; background: var(--light-yellow); border-radius: 10px;">
+                        <h4>2,000 Hectares</h4>
+                        <p>Total development area</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--light-yellow); border-radius: 10px;">
+                        <h4>Smart Infrastructure</h4>
+                        <p>5G, IoT, AI-powered systems</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--light-yellow); border-radius: 10px;">
+                        <h4>Green Certification</h4>
+                        <p>LEED Platinum standard</p>
+                    </div>
+                    <div style="padding: 1.5rem; background: var(--light-yellow); border-radius: 10px;">
+                        <h4>Transportation Hub</h4>
+                        <p>Metro, expressway connectivity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section id="facilities" class="section">
+        <div class="container">
+            <h2 class="section-title">Facilities & Infrastructure</h2>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-icon">🖥️</div>
+                    <h3>Data Center</h3>
+                    <p>Modern data center system with 50MW capacity, ensuring big data processing for AI applications.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🔬</div>
+                    <h3>AI Laboratory</h3>
+                    <p>Laboratories equipped with advanced equipment for machine learning and deep learning research.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🏢</div>
+                    <h3>Smart Offices</h3>
+                    <p>Modern workspace with IoT technology, creating optimal working environment for tech companies.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🎓</div>
+                    <h3>Training Center</h3>
+                    <p>Specialized AI and high-tech training facility with international expert team.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🌱</div>
+                    <h3>Green Areas</h3>
+                    <p>30% of area dedicated to greenery and parks, creating sustainable and friendly working environment.</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">🚗</div>
+                    <h3>Smart Transportation</h3>
+                    <p>Automated transportation system with electric vehicles and AI-controlled smart roads.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Section -->
+    <section id="investment" class="section">
+        <div class="container">
+            <h2 class="section-title">Investment Opportunities</h2>
+            <div class="investment-stats">
+                <div class="stat-card">
+                    <div class="stat-number">$2B</div>
+                    <h3>Total Investment</h3>
+                    <p>Total investment of $2 billion over 10 years</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500</div>
+                    <h3>Companies</h3>
+                    <p>Expected to attract 500 high-tech companies</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">50K</div>
+                    <h3>Jobs Created</h3>
+                    <p>Creating 50,000 high-quality jobs</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15%</div>
+                    <h3>Expected ROI</h3>
+                    <p>Expected annual return rate of 15%</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3>Attractive Investment Packages</h3>
+                <p style="font-size: 1.1rem; margin: 1rem 0;">
+                    We offer flexible investment packages from equity investment, 
+                    industrial land purchase to project development partnerships. 
+                    Contact us for detailed consultation on suitable investment opportunities.
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 3rem 0;">
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">🏢 Office Space Investment</h4>
+                        <p><strong>Starting from:</strong> $500K</p>
+                        <p><strong>ROI:</strong> 12-15% annually</p>
+                        <p><strong>Benefits:</strong> Premium location, smart building features, high-tech tenants</p>
+                    </div>
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">🏭 Industrial Land</h4>
+                        <p><strong>Starting from:</strong> $2M</p>
+                        <p><strong>ROI:</strong> 15-18% annually</p>
+                        <p><strong>Benefits:</strong> Manufacturing facilities, logistics support, skilled workforce</p>
+                    </div>
+                    <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 5px solid var(--primary-yellow);">
+                        <h4 style="color: var(--primary-blue); margin-bottom: 1rem;">📈 Equity Partnership</h4>
+                        <p><strong>Starting from:</strong> $10M</p>
+                        <p><strong>ROI:</strong> 18-25% annually</p>
+                        <p><strong>Benefits:</strong> Strategic partnerships, technology access, market expansion</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 3rem;">
+                    <h3>Government Incentives</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">💰</div>
+                            <h4>Tax Holidays</h4>
+                            <p>10-15 years corporate tax exemption</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🚛</div>
+                            <h4>Import Duty Exemption</h4>
+                            <p>0% duty on machinery and equipment</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🎓</div>
+                            <h4>Workforce Support</h4>
+                            <p>Government-subsidized training programs</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; color: var(--primary-yellow); margin-bottom: 0.5rem;">🌐</div>
+                            <h4>Fast-track Permits</h4>
+                            <p>Streamlined licensing and approvals</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="section">
+        <div class="container">
+            <h2 class="section-title">Advanced Technology</h2>
+            <div class="tech-showcase">
+                <div class="tech-item">
+                    <h3>🤖 Artificial Intelligence</h3>
+                    <p>AI research center with advanced machine learning and deep learning algorithms, serving automation and intelligent data analysis. Our AI Lab features 500+ GPUs, quantum-enhanced computing, and partnerships with global tech giants for cutting-edge research.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>☁️ Cloud Computing</h3>
+                    <p>Powerful cloud infrastructure with flexible scalability, ensuring high performance for complex computing applications. Features include multi-cloud architecture, edge computing nodes, and 99.99% uptime guarantee with disaster recovery capabilities.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🌐 IoT & Smart City</h3>
+                    <p>Comprehensive IoT system connecting all devices in the high-tech park, creating a true smart city with intelligent management. Over 100,000 sensors monitor everything from air quality to traffic flow, optimizing resource usage and enhancing quality of life.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🔐 Blockchain & Security</h3>
+                    <p>Blockchain technology ensuring data security and transactions, along with advanced cybersecurity systems protecting the entire infrastructure. Features quantum-resistant encryption, zero-trust architecture, and compliance with international security standards.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🚀 Quantum Computing</h3>
+                    <p>Investment in quantum computing research for complex problems, laying the foundation for future technology. Our quantum lab houses 3 quantum computers with 50+ qubits, focusing on optimization, cryptography, and drug discovery applications.</p>
+                </div>
+                <div class="tech-item">
+                    <h3>🔋 Green Technology</h3>
+                    <p>100% renewable energy from solar and wind power, combined with smart energy-saving technology. Features include 200MW solar farm, advanced battery storage, smart grid management, and carbon-negative operations by 2030.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 4rem;">
+                <h3 style="text-align: center; color: var(--primary-blue); margin-bottom: 2rem;">Technology Partnerships</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏛️ Academic Partners</h4>
+                        <p>MIT, Stanford, NUS, VinUni</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏢 Industry Partners</h4>
+                        <p>Google, Microsoft, NVIDIA, AWS</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🏛️ Government Partners</h4>
+                        <p>Ministry of Science & Technology</p>
+                    </div>
+                    <div style="text-align: center; padding: 1.5rem; background: var(--light-gray); border-radius: 10px;">
+                        <h4>🌍 International</h4>
+                        <p>UN AI for Good, IEEE, ISO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news" class="section">
+        <div class="container">
+            <div class="news-header">
+                <h2 class="section-title">Latest News & Updates</h2>
+                <a href="admin/post-news.html" class="add-news-btn" id="adminLink" style="display: none; text-decoration: none;">📝 Admin Panel</a>
+            </div>
+            
+            <!-- News will be dynamically loaded here -->
+            <div class="news-grid" id="newsGrid">
+                <div style="text-align: center; grid-column: 1/-1; padding: 2rem;">
+                    <div class="loader"></div>
+                    <p>Loading news...</p>
+                </div>
+            </div>
+            
+            <!-- No news message -->
+            <div id="noNewsMessage" style="display: none; text-align: center; padding: 3rem;">
+                <h3 style="color: var(--gray); margin-bottom: 1rem;">📰 No News Articles Yet</h3>
+                <p style="color: var(--gray); margin-bottom: 2rem;">Be the first to share exciting updates from HEART Technology Park!</p>
+                <a href="admin/post-news.html" class="cta-button">Create First Article</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="interest">Interested In</label>
+                        <select id="interest" name="interest" style="width: 100%; padding: 1rem; border: 2px solid var(--light-gray); border-radius: 10px;">
+                            <option value="">Select your interest</option>
+                            <option value="investment">Investment</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="office">Office Rental</option>
+                            <option value="technology">Technology Transfer</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell us more about your needs..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                
+                <div style="margin-top: 3rem; text-align: center;">
+                    <h3>Contact Information</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                        <div>
+                            <h4>🏢 Main Office</h4>
+                            <p><strong>📍 Address:</strong> Ho Chi Minh City High-tech Park, District 9, Ho Chi Minh City</p>
+                            <p><strong>📞 Phone:</strong> +84 28 1234 5678</p>
+                            <p><strong>📠 Fax:</strong> +84 28 1234 5679</p>
+                        </div>
+                        <div>
+                            <h4>💼 Business Development</h4>
+                            <p><strong>📞 Hotline:</strong> +84 28 1234 5680</p>
+                            <p><strong>✉️ Email:</strong> business@heart.com</p>
+                            <p><strong>👤 Director:</strong> Mr. John Smith</p>
+                        </div>
+                        <div>
+                            <h4>🔬 Research & Innovation</h4>
+                            <p><strong>📞 Direct:</strong> +84 28 1234 5681</p>
+                            <p><strong>✉️ Email:</strong> research@heart.com</p>
+                            <p><strong>👤 Director:</strong> Dr. Sarah Johnson</p>
+                        </div>
+                        <div>
+                            <h4>💰 Investment Relations</h4>
+                            <p><strong>📞 Direct:</strong> +84 28 1234 5682</p>
+                            <p><strong>✉️ Email:</strong> investors@heart.com</p>
+                            <p><strong>👤 Director:</strong> Ms. Lisa Chen</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem;">
+                        <h3>Office Hours & Additional Info</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🕐</div>
+                                <h4>Business Hours</h4>
+                                <p>Mon-Fri: 8:00 AM - 6:00 PM<br>
+                                Saturday: 8:00 AM - 12:00 PM<br>
+                                Sunday: Closed</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+                                <h4>Website & Social</h4>
+                                <p><strong>Web:</strong> www.heart.com<br>
+                                <strong>LinkedIn:</strong> /company/heart-ai<br>
+                                <strong>Twitter:</strong> @HeartAI_VN</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚗</div>
+                                <h4>Getting Here</h4>
+                                <p>Metro Line 1: High-tech Park Station<br>
+                                Highway: 15 mins from District 1<br>
+                                Airport: 45 mins from Tan Son Nhat</p>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📚</div>
+                                <h4>Resources</h4>
+                                <p>Investment Brochure<br>
+                                Technical Specifications<br>
+                                Virtual Tour Available</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="hideLogin()">&times;</span>
+            <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem; text-align: center;">Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+            <div style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">
+                Demo credentials:<br>
+                Username: <strong>admin</strong><br>
+                Password: <strong>heart2024</strong>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        // Navigation
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section, .hero');
+            sections.forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.classList.add('active');
+                
+                // If showing news section, load news
+                if (sectionId === 'news') {
+                    setTimeout(() => {
+                        loadNewsFromStorage();
+                    }, 100);
+                }
+            }
+            
+            // Update navigation - exclude login button from active state
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                if (!link.onclick || link.onclick.toString().indexOf('showLogin') === -1) {
+                    link.classList.remove('active');
+                }
+            });
+            
+            const activeLink = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your interest! We will contact you as soon as possible.');
+            this.reset();
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        // Login functionality
+        let isLoggedIn = false;
+
+        function showLogin() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function hideLogin() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function showAddNewsForm() {
+            document.getElementById('adminPanel').style.display = 'block';
+        }
+
+        function hideAddNewsForm() {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('newsForm').reset();
+        }
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple authentication (in real app, this would be server-side)
+            if (username === 'admin' && password === 'heart2024') {
+                isLoggedIn = true;
+                hideLogin();
+                
+                // Show admin link
+                const adminLink = document.getElementById('adminLink');
+                if (adminLink) {
+                    adminLink.style.display = 'block';
+                }
+                
+                // Update login button to logout
+                const loginBtn = document.querySelector('[onclick="showLogin()"]');
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = logout;
+                loginBtn.style.background = 'var(--gray)';
+                
+                alert('Login successful! You can now manage news articles.');
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        function logout() {
+            isLoggedIn = false;
+            
+            // Hide admin link
+            const adminLink = document.getElementById('adminLink');
+            if (adminLink) {
+                adminLink.style.display = 'none';
+            }
+            
+            // Update logout button back to login
+            const logoutBtn = document.querySelector('[onclick="logout()"]');
+            if (logoutBtn) {
+                logoutBtn.textContent = 'Login';
+                logoutBtn.onclick = showLogin;
+                logoutBtn.style.background = 'var(--primary-yellow)';
+            }
+            
+            alert('You have been logged out.');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target === modal) {
+                hideLogin();
+            }
+        }
+
+        // Smooth animations on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.facility-card, .tech-item, .stat-card');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+        }
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.facility-card, .tech-item, .stat-card');
+            elements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'all 0.6s ease';
+            });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll(); // Initial check
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(30, 58, 138, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(30, 58, 138, 0.95)';
+            }
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+    </script>
+
+    <!-- API Client -->
+    <script src="js/api.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/dashboard.js"></script>
+    
+    <!-- Enhanced Frontend Logic -->
+    <script>
+        let currentNewsPage = 1;
+        let totalNewsPages = 1;
+        let isLoadingNews = false;
+
+        async function loadNewsFromAPI() {
+            if (isLoadingNews) return;
+            
+            isLoadingNews = true;
+            try {
+                const response = await api.getNews({
+                    page: currentNewsPage,
+                    limit: 6,
+                    status: 'published'
+                });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+                if (response.success) {
+                    const newsGrid = document.getElementById('newsGrid');
+                    const { news, pagination } = response.data;
+                    
+                    if (currentNewsPage === 1) {
+                        newsGrid.innerHTML = '';
+                    }
+
+                    news.forEach(article => {
+                        const newsCard = createNewsCard(article);
+                        newsGrid.appendChild(newsCard);
+                    });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+                    totalNewsPages = pagination.totalPages;
+                    
+                    if (pagination.hasNext) {
+                        if (!document.getElementById('loadMoreBtn')) {
+                            const loadMoreBtn = document.createElement('button');
+                            loadMoreBtn.id = 'loadMoreBtn';
+                            loadMoreBtn.textContent = 'Load More News';
+                            loadMoreBtn.className = 'cta-button';
+                            loadMoreBtn.style.margin = '2rem auto';
+                            loadMoreBtn.style.display = 'block';
+                            loadMoreBtn.onclick = loadMoreNews;
+                            newsGrid.parentNode.appendChild(loadMoreBtn);
+                        }
+                    } else {
+                        const loadMoreBtn = document.getElementById('loadMoreBtn');
+                        if (loadMoreBtn) {
+                            loadMoreBtn.remove();
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading news:', error);
+                Toast.error('Failed to load news articles');
+            } finally {
+                isLoadingNews = false;
+            }
+        }
+
+        function createNewsCard(article) {
+            const newsCard = document.createElement('div');
+            newsCard.className = 'news-card';
+            
+            const publishedDate = new Date(article.publishedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+
+            newsCard.innerHTML = `
+                <div class="news-image">${article.icon}</div>
+                <div class="news-content">
+                    <div class="news-title">${article.title}</div>
+                    <div class="news-date">${publishedDate}</div>
+                    <div class="news-excerpt">${article.excerpt}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                        <a href="#" class="read-more" onclick="showNewsDetail('${article._id}')">Read more →</a>
+                        <div style="display: flex; gap: 1rem; color: var(--gray); font-size: 0.9rem;">
+                            <span>👁 ${article.views || 0}</span>
+                            <span style="cursor: pointer;" onclick="likeArticle('${article._id}', this)">❤️ ${article.likes || 0}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return newsCard;
+        }
+
+        async function loadMoreNews() {
+            currentNewsPage++;
+            await loadNewsFromAPI();
+        }
+
+        async function likeArticle(articleId, element) {
+            try {
+                await api.likeNews(articleId);
+                const currentLikes = parseInt(element.textContent.split(' ')[1]);
+                element.textContent = `❤️ ${currentLikes + 1}`;
+                Toast.success('Article liked!');
+            } catch (error) {
+                console.error('Error liking article:', error);
+                Toast.error('Failed to like article');
+            }
+        }
+
+        async function showNewsDetail(articleId) {
+            try {
+                const response = await api.getNewsById(articleId);
+                if (response.success) {
+                    const article = response.data.news;
+                    
+                    const modal = document.createElement('div');
+                    modal.className = 'modal';
+                    modal.style.display = 'block';
+                    
+                    modal.innerHTML = `
+                        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                            <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                            <div style="padding: 1rem;">
+                                <div style="text-align: center; font-size: 3rem; margin-bottom: 1rem;">${article.icon}</div>
+                                <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">${article.title}</h2>
+                                <div style="color: var(--gray); margin-bottom: 1rem;">
+                                    Published on ${new Date(article.publishedAt).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })}
+                                    ${article.author ? ` by ${article.author.firstName} ${article.author.lastName}` : ''}
+                                </div>
+                                <div style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem;">
+                                    ${article.content || article.excerpt}
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--light-gray);">
+                                    <div style="display: flex; gap: 1rem; color: var(--gray);">
+                                        <span>👁 ${article.views || 0} views</span>
+                                        <span>❤️ ${article.likes || 0} likes</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        ${article.tags ? article.tags.map(tag => `<span style="background: var(--light-blue); color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">${tag}</span>`).join('') : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modal);
+                }
+            } catch (error) {
+                console.error('Error loading article details:', error);
+                Toast.error('Failed to load article details');
+            }
+        }
+
+        async function enhancedLogin(username, password) {
+            try {
+                const response = await api.login(username, password);
+                
+                if (response.success) {
+                    isLoggedIn = true;
+                    hideLogin();
+                    updateUIForLoggedInUser();
+                    Toast.success(`Welcome back, ${response.data.user.firstName || response.data.user.username}!`);
+                    
+                    await loadNewsFromAPI();
+                } else {
+                    Toast.error(response.message || 'Login failed');
+                }
+                
+                return response.success;
+            } catch (error) {
+                console.error('Login error:', error);
+                Toast.error(error.message || 'Login failed');
+                return false;
+            }
+        }
+
+        function updateUIForLoggedInUser() {
+            const addNewsBtn = document.getElementById('addNewsBtn');
+            const loginBtn = document.querySelector('[onclick="showLogin()"]');
+            const dashboardBtn = document.getElementById('dashboardBtn');
+            
+            if (api.canManageNews()) {
+                if (addNewsBtn) {
+                    addNewsBtn.style.display = 'block';
+                }
+                if (dashboardBtn) {
+                    dashboardBtn.style.display = 'block';
+                }
+            }
+            
+            if (loginBtn) {
+                loginBtn.textContent = `Logout (${api.user.username})`;
+                loginBtn.onclick = enhancedLogout;
+                loginBtn.style.background = 'var(--gray)';
+            }
+        }
+
+        async function enhancedLogout() {
+            try {
+                await api.logout();
+                isLoggedIn = false;
+                
+                const addNewsBtn = document.getElementById('addNewsBtn');
+                const logoutBtn = document.querySelector('[onclick="enhancedLogout()"]');
+                const dashboardBtn = document.getElementById('dashboardBtn');
+                
+                if (addNewsBtn) {
+                    addNewsBtn.style.display = 'none';
+                }
+                
+                if (dashboardBtn) {
+                    dashboardBtn.style.display = 'none';
+                }
+                
+                hideAddNewsForm();
+                
+                if (logoutBtn) {
+                    logoutBtn.textContent = 'Login';
+                    logoutBtn.onclick = showLogin;
+                    logoutBtn.style.background = 'var(--primary-yellow)';
+                }
+                
+                Toast.info('You have been logged out');
+                
+                currentNewsPage = 1;
+                await loadNewsFromAPI();
+            } catch (error) {
+                console.error('Logout error:', error);
+                Toast.error('Logout failed');
+            }
+        }
+
+        async function submitNewsForm(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('newsTitle').value;
+            const excerpt = document.getElementById('newsExcerpt').value;
+            const icon = document.getElementById('newsIcon').value || '📰';
+            
+            try {
+                const response = await api.createNews({
+                    title,
+                    excerpt,
+                    icon,
+                    status: 'published',
+                    category: 'general'
+                });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+                
+                if (response.success) {
+                    hideAddNewsForm();
+                    Toast.success('News article published successfully!');
+                    
+                    currentNewsPage = 1;
+                    await loadNewsFromAPI();
+                }
+            } catch (error) {
+                console.error('Error creating news:', error);
+                Toast.error(error.message || 'Failed to publish news article');
+            }
+        }
+
+        async function enhancedContactSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const contactData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                company: formData.get('company'),
+                interest: formData.get('interest'),
+                message: formData.get('message')
+            };
+            
+            try {
+                const response = await api.submitContact(contactData);
+                
+                if (response.success) {
+                    event.target.reset();
+                    Toast.success('Thank you for your interest! We will contact you soon.');
+                }
+            } catch (error) {
+                console.error('Contact submission error:', error);
+                Toast.error(error.message || 'Failed to submit contact form');
+            }
+        }
+
+        function checkAuthStatus() {
+            if (api.isAuthenticated()) {
+                isLoggedIn = true;
+                updateUIForLoggedInUser();
+            }
+        }
+
+        window.addEventListener('load', function() {
+            checkAuthStatus();
+            
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                loadNewsFromAPI();
+            }, 1500);
+            
+            const newsForm = document.getElementById('newsForm');
+            if (newsForm) {
+                newsForm.onsubmit = submitNewsForm;
+            }
+            
+            const contactForm = document.querySelector('#contact form');
+            if (contactForm) {
+                contactForm.onsubmit = enhancedContactSubmit;
+            }
+            
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.onsubmit = async function(e) {
+                    e.preventDefault();
+                    const username = document.getElementById('username').value;
+                    const password = document.getElementById('password').value;
+                    await enhancedLogin(username, password);
+                };
+            }
+        });
+
+        // Enhanced navbar scroll effect
+        function handleNavbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Add scroll listener for navbar
+        window.addEventListener('scroll', handleNavbarScroll);
+        
+        // Initial call
+        handleNavbarScroll();
+    </script>
+    <script src="js/news-manager.js"></script>
+    <script>
+        // News loading functionality - unified system
+        function loadNewsFromStorage() {
+            // Check both localStorage keys for compatibility
+            let articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            
+            // If no articles in new format, check old format
+            if (articles.length === 0) {
+                const oldNews = JSON.parse(localStorage.getItem('heart_news') || '[]');
+                if (oldNews.length > 0) {
+                    // Convert old format to new format
+                    articles = oldNews.map(item => ({
+                        id: item.id.toString(),
+                        title: item.title,
+                        summary: item.excerpt,
+                        content: item.content,
+                        category: item.category,
+                        author: item.author,
+                        icon: item.icon,
+                        tags: item.tags || [],
+                        createdAt: new Date(item.date).toISOString(),
+                        updatedAt: new Date().toISOString(),
+                        status: item.status
+                    }));
+                    // Save in new format
+                    localStorage.setItem('heart-news', JSON.stringify(articles));
+                }
+            }
+            
+            const newsGrid = document.getElementById('newsGrid');
+            const noNewsMessage = document.getElementById('noNewsMessage');
+            
+            if (articles.length === 0) {
+                newsGrid.style.display = 'none';
+                noNewsMessage.style.display = 'block';
+                return;
+            }
+            
+            newsGrid.style.display = 'grid';
+            noNewsMessage.style.display = 'none';
+            
+            // Only show published articles
+            const publishedArticles = articles.filter(article => article.status === 'published');
+            
+            newsGrid.innerHTML = publishedArticles.slice(0, 6).map(article => {
+                const publishedDate = new Date(article.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                return `
+                    <div class="news-card" style="animation: fadeInUp 0.6s ease-out;">
+                        <div class="news-image">${article.icon}</div>
+                        <div class="news-content">
+                            <div class="news-title">${article.title}</div>
+                            <div class="news-date">${publishedDate}</div>
+                            <div class="news-excerpt">${article.summary}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <a href="#" class="read-more" onclick="showNewsDetail('${article.id}')">Read more →</a>
+                                <div style="color: var(--gray); font-size: 0.9rem;">
+                                    <span>${article.category}</span>
+                                    ${article.tags && article.tags.length > 0 ? ` • ${article.tags.slice(0, 2).join(', ')}` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function showNewsDetail(articleId) {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const article = articles.find(a => a.id === articleId);
+            
+            if (!article) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                    <div class="modal-header">
+                        <h2>${article.icon} ${article.title}</h2>
+                        <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div style="color: var(--gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                            📅 ${new Date(article.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                            ${article.author ? ` • ✍️ ${article.author}` : ''}
+                            • 📂 ${article.category}
+                        </div>
+                        <div style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; white-space: pre-line;">
+                            ${article.content}
+                        </div>
+                        ${article.tags && article.tags.length > 0 ? `
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--light-gray);">
+                                ${article.tags.map(tag => `<span style="background: var(--light-blue); color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Initialize news loading when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load news immediately when page loads
+            loadNewsFromStorage();
+            
+            // Also load when News section becomes active
+            const newsSection = document.getElementById('news');
+            if (newsSection) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            if (newsSection.classList.contains('active')) {
+                                loadNewsFromStorage();
+                            }
+                        }
+                    });
+                });
+                observer.observe(newsSection, { attributes: true });
+            }
+        });
+        
+        // Refresh news when returning from admin panel
+        window.addEventListener('focus', function() {
+            loadNewsFromStorage();
+        });
+        
+        // Add storage event listener to refresh news when localStorage changes
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'heart-news') {
+                loadNewsFromStorage();
+            }
+        });
+        
+        // Update login/logout functions to work with news manager
+        function originalLogin() {
+            // Your existing login code here
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'heart2024') {
+                isLoggedIn = true;
+                hideLogin();
+                newsManager.setAdminStatus(true);
+                
+                // Update login button to logout
+                const loginBtn = document.querySelector('[onclick="showLogin()"]');
+                loginBtn.textContent = 'Logout';
+                loginBtn.onclick = originalLogout;
+                loginBtn.style.background = 'var(--gray)';
+                
+                newsManager.showToast('Login successful! You can now manage news articles.', 'success');
+            } else {
+                newsManager.showToast('Invalid credentials. Please try again.', 'error');
+            }
+        }
+        
+        function originalLogout() {
+            isLoggedIn = false;
+            newsManager.setAdminStatus(false);
+            
+            // Update logout button back to login
+            const logoutBtn = document.querySelector('[onclick="originalLogout()"]');
+            logoutBtn.textContent = 'Login';
+            logoutBtn.onclick = showLogin;
+            logoutBtn.style.background = 'var(--primary-yellow)';
+            
+            newsManager.showToast('You have been logged out.', 'info');
+        }
+    </script>
+</body>
+</html>

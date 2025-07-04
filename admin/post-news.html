@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - News Administration</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/news-manager.css">
+    <style>
+        body {
+            padding-top: 80px;
+            background: var(--light-gray);
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .admin-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .news-form-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .char-count {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--light-gray);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-blue);
+            background: rgba(30, 58, 138, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary-yellow);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            min-height: 50px;
+            padding: 0.5rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            background: var(--white);
+            cursor: text;
+        }
+
+        .tag {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tag-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .preview-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .preview-card {
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-top: 4px solid var(--primary-yellow);
+            max-width: 400px;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-yellow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .preview-content {
+            padding: 1.5rem;
+        }
+
+        .preview-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .preview-excerpt {
+            color: var(--dark-blue);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .validation-error {
+            border-color: var(--error) !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .news-list {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .news-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-item-content {
+            flex: 1;
+        }
+
+        .news-item-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .news-item-meta {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .news-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-container {
+                padding: 0 1rem;
+            }
+            
+            .news-form-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .news-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">← Back to Main Site</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('form')">Add News</a></li>
+                <li><a href="#" class="nav-link" onclick="showSection('manage')">Manage News</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <h1>📰 News Administration</h1>
+        <p>Create and manage news articles for HEART Technology Park</p>
+    </div>
+
+    <div class="admin-container">
+        <!-- News Form Section -->
+        <div id="formSection" class="section active">
+            <div class="news-form-container">
+                <h2>✍️ Create New Article</h2>
+                <form id="newsForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Article Title *</label>
+                            <input type="text" id="title" name="title" required maxlength="100">
+                            <div class="char-count">0/100 characters</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category">
+                                <option value="general">General</option>
+                                <option value="technology">Technology</option>
+                                <option value="investment">Investment</option>
+                                <option value="facilities">Facilities</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="research">Research</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="author">Author Name</label>
+                            <input type="text" id="author" name="author" placeholder="Enter author name">
+                        </div>
+                        <div class="form-group">
+                            <label for="icon">Article Icon</label>
+                            <input type="text" id="icon" name="icon" placeholder="📰" value="📰">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="summary">Summary *</label>
+                        <textarea id="summary" name="summary" required maxlength="300" placeholder="Brief summary of the article (max 300 characters)"></textarea>
+                        <div class="char-count">0/300 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Full Content *</label>
+                        <textarea id="content" name="content" required minlength="100" placeholder="Write the full article content here..."></textarea>
+                        <div class="char-count">0 characters (minimum 100)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Tags</label>
+                        <div class="tags-input" id="tagsInput">
+                            <input type="text" class="tag-input" placeholder="Press Enter to add tags">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Featured Image</label>
+                        <div class="file-upload-area" id="fileUpload">
+                            <div class="file-upload-icon">📸</div>
+                            <p>Click to upload or drag & drop an image</p>
+                            <p style="font-size: 0.9rem; color: var(--gray);">JPG, PNG, WebP (max 5MB)</p>
+                            <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" onclick="previewArticle()">👁️ Preview</button>
+                        <button type="button" class="btn btn-secondary" onclick="saveDraft()">💾 Save Draft</button>
+                        <button type="submit" class="btn btn-primary">🚀 Publish Article</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div id="previewSection" class="section">
+            <div class="preview-container">
+                <h2>👁️ Article Preview</h2>
+                <div class="preview-card" id="previewCard">
+                    <div class="preview-image" id="previewImage">📰</div>
+                    <div class="preview-content">
+                        <div class="preview-title" id="previewTitle">Article Title</div>
+                        <div class="preview-date" id="previewDate">Today</div>
+                        <div class="preview-excerpt" id="previewExcerpt">Article summary will appear here...</div>
+                        <div id="previewTags"></div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <button class="btn btn-outline" onclick="showSection('form')">← Back to Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage News Section -->
+        <div id="manageSection" class="section">
+            <div class="news-list">
+                <h2>📋 Manage Articles</h2>
+                <div id="newsList">
+                    <p style="text-align: center; color: var(--gray); padding: 2rem;">No articles found. Create your first article!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the news posting system
+        class NewsManager {
+            constructor() {
+                this.articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+                this.tags = [];
+                this.currentEditId = null;
+                this.uploadedImageData = null; // Add image data storage
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadArticles();
+                this.setupCharacterCounts();
+                this.setupTagsInput();
+                this.setupFileUpload();
+            }
+
+            setupEventListeners() {
+                document.getElementById('newsForm').addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Real-time preview updates
+                ['title', 'summary', 'icon'].forEach(field => {
+                    document.getElementById(field).addEventListener('input', () => this.updatePreview());
+                });
+            }
+
+            setupCharacterCounts() {
+                const fields = [
+                    { id: 'title', max: 100 },
+                    { id: 'summary', max: 300 },
+                    { id: 'content', min: 100 }
+                ];
+
+                fields.forEach(field => {
+                    const input = document.getElementById(field.id);
+                    const counter = input.parentNode.querySelector('.char-count');
+                    
+                    input.addEventListener('input', () => {
+                        const length = input.value.length;
+                        if (field.max) {
+                            counter.textContent = `${length}/${field.max} characters`;
+                            counter.style.color = length > field.max ? 'var(--error)' : 'var(--gray)';
+                        } else if (field.min) {
+                            counter.textContent = `${length} characters (minimum ${field.min})`;
+                            counter.style.color = length < field.min ? 'var(--error)' : 'var(--gray)';
+                        }
+                    });
+                });
+            }
+
+            setupTagsInput() {
+                const tagsInput = document.getElementById('tagsInput');
+                const tagInput = tagsInput.querySelector('.tag-input');
+
+                tagInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && tagInput.value.trim()) {
+                        e.preventDefault();
+                        this.addTag(tagInput.value.trim());
+                        tagInput.value = '';
+                    }
+                });
+
+                tagsInput.addEventListener('click', () => tagInput.focus());
+            }
+
+            setupFileUpload() {
+                const fileUpload = document.getElementById('fileUpload');
+                const fileInput = document.getElementById('imageInput');
+
+                fileUpload.addEventListener('click', () => fileInput.click());
+                fileUpload.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.add('dragover');
+                });
+                fileUpload.addEventListener('dragleave', () => {
+                    fileUpload.classList.remove('dragover');
+                });
+                fileUpload.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    fileUpload.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleImageUpload(files[0]);
+                    }
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleImageUpload(e.target.files[0]);
+                    }
+                });
+            }
+
+            addTag(tagText) {
+                if (!this.tags.includes(tagText) && this.tags.length < 5) {
+                    this.tags.push(tagText);
+                    this.renderTags();
+                }
+            }
+
+            removeTag(tagText) {
+                this.tags = this.tags.filter(tag => tag !== tagText);
+                this.renderTags();
+            }
+
+            renderTags() {
+                const tagsInput = document.getElementById('tagsInput');
+                const tagInput = tagsInput.querySelector('.tag-input');
+                
+                // Remove existing tags
+                tagsInput.querySelectorAll('.tag').forEach(tag => tag.remove());
+                
+                // Add current tags
+                this.tags.forEach(tagText => {
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    tag.innerHTML = `
+                        ${tagText}
+                        <span class="tag-remove" onclick="newsManager.removeTag('${tagText}')">&times;</span>
+                    `;
+                    tagsInput.insertBefore(tag, tagInput);
+                });
+            }
+
+            handleImageUpload(file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showToast('File size must be less than 5MB', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Store image data
+                    this.uploadedImageData = e.target.result;
+                    
+                    // Update UI
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.borderRadius = '10px';
+                    
+                    const fileUpload = document.getElementById('fileUpload');
+                    fileUpload.innerHTML = '';
+                    fileUpload.appendChild(img);
+                    fileUpload.classList.add('has-image');
+                    
+                    // Success message
+                    this.showToast('Image uploaded successfully!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            validateForm() {
+                const title = document.getElementById('title').value.trim();
+                const summary = document.getElementById('summary').value.trim();
+                const content = document.getElementById('content').value.trim();
+                
+                let isValid = true;
+                
+                // Clear previous errors
+                document.querySelectorAll('.validation-error').forEach(el => {
+                    el.classList.remove('validation-error');
+                });
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.remove();
+                });
+
+                if (!title || title.length > 100) {
+                    this.showFieldError('title', 'Title is required and must be less than 100 characters');
+                    isValid = false;
+                }
+
+                if (!summary || summary.length > 300) {
+                    this.showFieldError('summary', 'Summary is required and must be less than 300 characters');
+                    isValid = false;
+                }
+
+                if (!content || content.length < 100) {
+                    this.showFieldError('content', 'Content is required and must be at least 100 characters');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            showFieldError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                field.classList.add('validation-error');
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                field.parentNode.appendChild(errorDiv);
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    this.showToast('Please fix the errors before submitting', 'error');
+                    return;
+                }
+
+                const formData = new FormData(e.target);
+                const article = {
+                    id: this.currentEditId || Date.now().toString(),
+                    title: formData.get('title'),
+                    summary: formData.get('summary'),
+                    content: formData.get('content'),
+                    category: formData.get('category'),
+                    author: formData.get('author') || 'HEART Team',
+                    icon: formData.get('icon') || '📰',
+                    image: this.uploadedImageData, // Add image data
+                    tags: [...this.tags],
+                    createdAt: this.currentEditId ? this.articles.find(a => a.id === this.currentEditId).createdAt : new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    status: 'published'
+                };
+
+                if (this.currentEditId) {
+                    const index = this.articles.findIndex(a => a.id === this.currentEditId);
+                    this.articles[index] = article;
+                    this.showToast('Article updated successfully!', 'success');
+                } else {
+                    this.articles.unshift(article);
+                    this.showToast('Article published successfully!', 'success');
+                }
+
+                this.saveToStorage();
+                this.resetForm();
+                this.loadArticles();
+                showSection('manage');
+            }
+
+            saveDraft() {
+                const formData = new FormData(document.getElementById('newsForm'));
+                const draft = {
+                    title: formData.get('title'),
+                    summary: formData.get('summary'),
+                    content: formData.get('content'),
+                    category: formData.get('category'),
+                    author: formData.get('author'),
+                    icon: formData.get('icon'),
+                    tags: [...this.tags]
+                };
+                
+                localStorage.setItem('heart-news-draft', JSON.stringify(draft));
+                this.showToast('Draft saved successfully!', 'info');
+            }
+
+            loadDraft() {
+                const draft = JSON.parse(localStorage.getItem('heart-news-draft') || '{}');
+                if (draft.title) {
+                    Object.keys(draft).forEach(key => {
+                        if (key === 'tags') {
+                            this.tags = draft[key] || [];
+                            this.renderTags();
+                        } else {
+                            const field = document.getElementById(key);
+                            if (field) field.value = draft[key];
+                        }
+                    });
+                    this.showToast('Draft loaded!', 'info');
+                }
+            }
+
+            resetForm() {
+                document.getElementById('newsForm').reset();
+                this.tags = [];
+                this.renderTags();
+                this.currentEditId = null;
+                this.uploadedImageData = null; // Reset image data
+                localStorage.removeItem('heart-news-draft');
+                
+                // Reset file upload UI
+                const fileUpload = document.getElementById('fileUpload');
+                fileUpload.innerHTML = `
+                    <div class="file-upload-icon">📸</div>
+                    <p>Click to upload or drag & drop an image</p>
+                    <p style="font-size: 0.9rem; color: var(--gray);">JPG, PNG, WebP (max 5MB)</p>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                `;
+                fileUpload.classList.remove('has-image');
+            }
+
+            updatePreview() {
+                const title = document.getElementById('title').value || 'Article Title';
+                const summary = document.getElementById('summary').value || 'Article summary will appear here...';
+                const icon = document.getElementById('icon').value || '📰';
+                
+                document.getElementById('previewTitle').textContent = title;
+                document.getElementById('previewExcerpt').textContent = summary;
+                document.getElementById('previewImage').textContent = icon;
+                document.getElementById('previewDate').textContent = new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                // Update tags
+                const previewTags = document.getElementById('previewTags');
+                previewTags.innerHTML = this.tags.map(tag => 
+                    `<span style="background: var(--primary-blue); color: white; padding: 0.2rem 0.6rem; border-radius: 10px; font-size: 0.8rem; margin-right: 0.5rem;">${tag}</span>`
+                ).join('');
+            }
+
+            loadArticles() {
+                const newsList = document.getElementById('newsList');
+                
+                if (this.articles.length === 0) {
+                    newsList.innerHTML = '<p style="text-align: center; color: var(--gray); padding: 2rem;">No articles found. Create your first article!</p>';
+                    return;
+                }
+
+                newsList.innerHTML = this.articles.map(article => `
+                    <div class="news-item">
+                        <div class="news-item-content">
+                            <div class="news-item-title">${article.icon} ${article.title}</div>
+                            <div class="news-item-meta">
+                                ${article.category} • ${article.author} • ${new Date(article.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <div class="news-item-actions">
+                            <button class="btn btn-small btn-outline" onclick="newsManager.editArticle('${article.id}')">Edit</button>
+                            <button class="btn btn-small btn-secondary" onclick="newsManager.deleteArticle('${article.id}')">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            editArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                this.currentEditId = id;
+                
+                // Populate form
+                document.getElementById('title').value = article.title;
+                document.getElementById('summary').value = article.summary;
+                document.getElementById('content').value = article.content;
+                document.getElementById('category').value = article.category;
+                document.getElementById('author').value = article.author;
+                document.getElementById('icon').value = article.icon;
+                
+                this.tags = article.tags || [];
+                this.renderTags();
+                
+                showSection('form');
+                this.showToast('Article loaded for editing', 'info');
+            }
+
+            deleteArticle(id) {
+                if (confirm('Are you sure you want to delete this article?')) {
+                    this.articles = this.articles.filter(a => a.id !== id);
+                    this.saveToStorage();
+                    this.loadArticles();
+                    this.showToast('Article deleted successfully', 'success');
+                }
+            }
+
+            saveToStorage() {
+                localStorage.setItem('heart-news', JSON.stringify(this.articles));
+            }
+
+            showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Section management
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionName + 'Section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Update nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            if (sectionName !== 'preview') {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Global functions
+        function previewArticle() {
+            newsManager.updatePreview();
+            showSection('preview');
+        }
+
+        function saveDraft() {
+            newsManager.saveDraft();
+        }
+
+        // Initialize
+        let newsManager;
+        document.addEventListener('DOMContentLoaded', function() {
+            newsManager = new NewsManager();
+            
+            // Load draft if exists
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('loadDraft') === 'true') {
+                newsManager.loadDraft();
+            }
+        });
+
+        // Add CSS for sections
+        document.addEventListener('DOMContentLoaded', function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .section {
+                    display: none;
+                }
+                .section.active {
+                    display: block;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

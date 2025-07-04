@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Manager Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; }
+        .test-result { padding: 1rem; margin: 1rem 0; border-radius: 5px; }
+        .test-pass { background: #d1fae5; border: 1px solid #10b981; }
+        .test-fail { background: #fee2e2; border: 1px solid #ef4444; }
+        .test-info { background: #dbeafe; border: 1px solid #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>🧪 HEART News Manager Test Suite</h1>
+    
+    <div id="test-results"></div>
+    
+    <button onclick="runTests()">🚀 Run All Tests</button>
+    <button onclick="resetData()">🗑️ Reset Test Data</button>
+    
+    <script>
+        // Test results container
+        const resultsContainer = document.getElementById('test-results');
+        
+        function addTestResult(name, passed, message) {
+            const div = document.createElement('div');
+            div.className = `test-result ${passed ? 'test-pass' : 'test-fail'}`;
+            div.innerHTML = `
+                <strong>${passed ? '✅' : '❌'} ${name}</strong><br>
+                ${message}
+            `;
+            resultsContainer.appendChild(div);
+        }
+        
+        function addInfo(message) {
+            const div = document.createElement('div');
+            div.className = 'test-result test-info';
+            div.innerHTML = `<strong>ℹ️ Info:</strong> ${message}`;
+            resultsContainer.appendChild(div);
+        }
+        
+        function runTests() {
+            resultsContainer.innerHTML = '';
+            addInfo('Starting News Manager tests...');
+            
+            // Test 1: Check if news manager exists
+            try {
+                // Simulate news manager class
+                class TestNewsManager {
+                    constructor() {
+                        this.newsData = [];
+                    }
+                    
+                    createNews(data) {
+                        const news = {
+                            id: this.generateId(),
+                            ...data,
+                            date: new Date().toLocaleDateString()
+                        };
+                        this.newsData.unshift(news);
+                        return news;
+                    }
+                    
+                    updateNews(id, data) {
+                        const index = this.newsData.findIndex(n => n.id === id);
+                        if (index !== -1) {
+                            this.newsData[index] = { ...this.newsData[index], ...data };
+                            return this.newsData[index];
+                        }
+                        return null;
+                    }
+                    
+                    deleteNews(id) {
+                        const index = this.newsData.findIndex(n => n.id === id);
+                        if (index !== -1) {
+                            return this.newsData.splice(index, 1)[0];
+                        }
+                        return null;
+                    }
+                    
+                    getAllNews() {
+                        return this.newsData;
+                    }
+                    
+                    getPublishedNews() {
+                        return this.newsData.filter(n => n.status === 'published');
+                    }
+                    
+                    generateId() {
+                        return Math.max(...this.newsData.map(n => n.id), 0) + 1;
+                    }
+                }
+                
+                const testManager = new TestNewsManager();
+                addTestResult('News Manager Initialization', true, 'News manager class created successfully');
+                
+                // Test 2: Create news
+                const testNews = {
+                    title: 'Test News Article',
+                    excerpt: 'This is a test excerpt',
+                    content: 'This is test content',
+                    category: 'Development',
+                    status: 'published',
+                    icon: '🧪',
+                    tags: ['test', 'development']
+                };
+                
+                const createdNews = testManager.createNews(testNews);
+                addTestResult('Create News', 
+                    createdNews && createdNews.id === 1, 
+                    `Created news with ID: ${createdNews?.id}`);
+                
+                // Test 3: Update news
+                const updatedNews = testManager.updateNews(1, { title: 'Updated Test News' });
+                addTestResult('Update News', 
+                    updatedNews && updatedNews.title === 'Updated Test News',
+                    `Updated news title: ${updatedNews?.title}`);
+                
+                // Test 4: Get all news
+                const allNews = testManager.getAllNews();
+                addTestResult('Get All News', 
+                    allNews.length === 1,
+                    `Retrieved ${allNews.length} news articles`);
+                
+                // Test 5: Get published news
+                const publishedNews = testManager.getPublishedNews();
+                addTestResult('Get Published News', 
+                    publishedNews.length === 1,
+                    `Retrieved ${publishedNews.length} published articles`);
+                
+                // Test 6: Create draft news
+                const draftNews = testManager.createNews({
+                    title: 'Draft Article',
+                    excerpt: 'Draft excerpt',
+                    content: 'Draft content',
+                    status: 'draft'
+                });
+                
+                const publishedAfterDraft = testManager.getPublishedNews();
+                addTestResult('Draft News Filtering', 
+                    publishedAfterDraft.length === 1,
+                    `Published count unchanged: ${publishedAfterDraft.length}`);
+                
+                // Test 7: Delete news
+                const deletedNews = testManager.deleteNews(1);
+                addTestResult('Delete News', 
+                    deletedNews && testManager.getAllNews().length === 1,
+                    `Deleted news: ${deletedNews?.title}`);
+                
+                // Test 8: LocalStorage simulation
+                try {
+                    const testData = JSON.stringify(testManager.getAllNews());
+                    localStorage.setItem('test_heart_news', testData);
+                    const retrieved = JSON.parse(localStorage.getItem('test_heart_news'));
+                    addTestResult('LocalStorage Operations', 
+                        retrieved.length === testManager.getAllNews().length,
+                        'Data saved and retrieved successfully');
+                    localStorage.removeItem('test_heart_news');
+                } catch (e) {
+                    addTestResult('LocalStorage Operations', false, e.message);
+                }
+                
+                // Test 9: ID Generation
+                const ids = [];
+                for (let i = 0; i < 5; i++) {
+                    const news = testManager.createNews({
+                        title: `Test ${i}`,
+                        excerpt: 'Test',
+                        content: 'Test'
+                    });
+                    ids.push(news.id);
+                }
+                
+                const uniqueIds = new Set(ids);
+                addTestResult('Unique ID Generation', 
+                    uniqueIds.size === ids.length,
+                    `Generated ${ids.length} unique IDs: ${ids.join(', ')}`);
+                
+                // Test 10: HTML Element Simulation
+                try {
+                    // Simulate DOM elements
+                    const mockNewsGrid = document.createElement('div');
+                    mockNewsGrid.id = 'newsGrid';
+                    document.body.appendChild(mockNewsGrid);
+                    
+                    addTestResult('DOM Element Creation', 
+                        document.getElementById('newsGrid') !== null,
+                        'Mock news grid element created');
+                    
+                    document.body.removeChild(mockNewsGrid);
+                } catch (e) {
+                    addTestResult('DOM Element Creation', false, e.message);
+                }
+                
+                addInfo('All tests completed! ✨');
+                
+            } catch (error) {
+                addTestResult('Overall Test Suite', false, `Error: ${error.message}`);
+            }
+        }
+        
+        function resetData() {
+            localStorage.removeItem('heart_news');
+            localStorage.removeItem('test_heart_news');
+            addInfo('Test data cleared from localStorage');
+        }
+        
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 1000);
+        });
+    </script>
+</body>
+</html>

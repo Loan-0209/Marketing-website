@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 IMAGE ERROR DEBUG - Red X Fix</title>
+    <style>
+        body { font-family: 'Courier New', monospace; padding: 20px; background: #f8f9fa; }
+        .debug-container { max-width: 1200px; margin: 0 auto; }
+        .article-debug { border: 3px solid #333; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; }
+        .error { border-color: #dc3545; background: #f8d7da; }
+        .warning { border-color: #ffc107; background: #fff3cd; }
+        .success { border-color: #28a745; background: #d4edda; }
+        .article-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #333; }
+        .debug-info { background: #f8f9fa; padding: 15px; margin: 10px 0; border-left: 4px solid #007bff; }
+        .error-text { color: #dc3545; font-weight: bold; }
+        .success-text { color: #28a745; font-weight: bold; }
+        .warning-text { color: #ffc107; font-weight: bold; }
+        .image-test { max-width: 300px; max-height: 200px; border: 2px solid #333; margin: 10px 0; }
+        .fix-button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .fix-button:hover { background: #0056b3; }
+        .fix-button.danger { background: #dc3545; }
+        .fix-button.success { background: #28a745; }
+        pre { background: #f1f3f4; padding: 10px; overflow-x: auto; font-size: 12px; max-height: 200px; }
+        .status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+        .status-loading { background: #ffc107; }
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🚨 IMAGE ERROR DEBUG - Red X Fix Tool</h1>
+        
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h3>🎯 OBJECTIVE: Fix Red X Image Loading Errors</h3>
+            <p><strong>Problem:</strong> 2 articles showing red X instead of images ❌</p>
+            <p><strong>Goal:</strong> All articles display proper images, NO red X errors</p>
+            <p><strong>Method:</strong> Test image URLs, fix broken paths, add error handling</p>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <button onclick="startImageErrorDebug()" class="fix-button danger" style="font-size: 16px; padding: 15px 30px;">
+                🚨 START IMAGE ERROR DEBUG
+            </button>
+            <button onclick="testAllImageURLs()" class="fix-button" style="font-size: 16px; padding: 15px 30px;">
+                🔍 TEST ALL IMAGE URLs
+            </button>
+            <button onclick="fixBrokenImages()" class="fix-button success" style="font-size: 16px; padding: 15px 30px;">
+                🔧 FIX BROKEN IMAGES
+            </button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Enhanced fallback images with higher quality
+        const FALLBACK_IMAGES = {
+            'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InRlY2hHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA3YmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwNTZiMztzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCN0ZWNoR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💻</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">TECHNOLOGY</text></svg>',
+            'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJ1c0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyOGE3NDU7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTk2NjMzO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2J1c0dyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💼</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">BUSINESS</text></svg>',
+            'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Imlubm9HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZjMTA3O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2Y1OTUwMjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNpbm5vR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💡</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INNOVATION</text></svg>',
+            'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImludkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyMGM5OTc7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTU5OTg4O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2ludkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INVESTMENT</text></svg>',
+            'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InBhcnRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmY0MmMxO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzUyMzNhYjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNwYXJ0R3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+🤝</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">PARTNERSHIP</text></svg>',
+            'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdlbkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2Yzc1N2Q7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDk1MDU3O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2dlbkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj📰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">NEWS</text></svg>'
+        };
+
+        let imageTestResults = {};
+
+        function startImageErrorDebug() {
+            console.clear();
+            console.log('🚨 ===== IMAGE ERROR DEBUG START =====');
+            
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const results = document.getElementById('results');
+            
+            if (articles.length === 0) {
+                results.innerHTML = '<div class="error">❌ NO ARTICLES FOUND IN LOCALSTORAGE!</div>';
+                return;
+            }
+            
+            let html = `<h2>🔍 IMAGE ERROR ANALYSIS: ${articles.length} Articles</h2>`;
+            let errorCount = 0;
+            let successCount = 0;
+            
+            // Test each article's image
+            articles.forEach((article, index) => {
+                const articleNumber = index + 1;
+                let cssClass = 'warning';
+                let imageStatus = 'Testing...';
+                
+                // Initial analysis
+                if (!article.image || article.image === null || article.image === '') {
+                    cssClass = 'error';
+                    imageStatus = '❌ NO IMAGE URL';
+                    errorCount++;
+                } else if (typeof article.image === 'string' && article.image.length > 10) {
+                    cssClass = 'warning';
+                    imageStatus = `⏳ TESTING URL (${article.image.length} chars)`;
+                } else {
+                    cssClass = 'error';
+                    imageStatus = '❌ INVALID IMAGE DATA';
+                    errorCount++;
+                }
+                
+                html += `
+                    <div class="article-debug ${cssClass}" id="article-${article.id}">
+                        <div class="article-title">
+                            <span class="status-indicator status-loading" id="status-${article.id}"></span>
+                            📄 Article ${articleNumber}: ${article.title}
+                        </div>
+                        
+                        <div class="debug-info">
+                            <strong>🔍 Debug Information:</strong><br>
+                            • <strong>ID:</strong> ${article.id}<br>
+                            • <strong>Category:</strong> ${article.category || 'undefined'}<br>
+                            • <strong>Image Status:</strong> <span id="image-status-${article.id}">${imageStatus}</span><br>
+                            • <strong>Created:</strong> ${article.createdAt}<br>
+                        </div>
+                        
+                        <div id="image-test-${article.id}">
+                            ${article.image && typeof article.image === 'string' && article.image.length > 10 ? `
+                                <div>
+                                    <strong>🖼️ Image Test:</strong><br>
+                                    <img src="${article.image}" class="image-test" alt="Testing Image" 
+                                         onload="handleImageLoad('${article.id}', true)"
+                                         onerror="handleImageError('${article.id}', '${article.image.substring(0, 100)}')"
+                                         id="test-img-${article.id}">
+                                    <br><strong>URL:</strong> ${article.image.substring(0, 100)}...
+                                </div>
+                            ` : `
+                                <div class="error-text">
+                                    <strong>❌ NO VALID IMAGE URL TO TEST</strong>
+                                </div>
+                            `}
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <button onclick="fixSingleArticleImage('${article.id}')" class="fix-button success">
+                                🔧 Fix This Article
+                            </button>
+                            <button onclick="testSingleImageURL('${article.id}')" class="fix-button">
+                                🔍 Retest Image
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Console logging for debugging
+                console.log(`📄 Article ${articleNumber}: "${article.title}"`);
+                console.log(`   🔍 Image Status: ${imageStatus}`);
+                console.log(`   📦 Image URL:`, article.image);
+                console.log('---');
+            });
+            
+            results.innerHTML = html;
+            
+            // Auto-test all images after a short delay
+            setTimeout(() => {
+                console.log('🔍 Auto-testing all image URLs...');
+            }, 1000);
+        }
+
+        function handleImageLoad(articleId, success) {
+            const statusIndicator = document.getElementById(`status-${articleId}`);
+            const imageStatus = document.getElementById(`image-status-${articleId}`);
+            const articleDiv = document.getElementById(`article-${articleId}`);
+            
+            if (success) {
+                statusIndicator.className = 'status-indicator status-success';
+                imageStatus.innerHTML = '<span class="success-text">✅ IMAGE LOADED SUCCESSFULLY</span>';
+                articleDiv.className = 'article-debug success';
+                imageTestResults[articleId] = 'success';
+                console.log(`✅ Image loaded successfully for article: ${articleId}`);
+            }
+        }
+
+        function handleImageError(articleId, imageUrl) {
+            const statusIndicator = document.getElementById(`status-${articleId}`);
+            const imageStatus = document.getElementById(`image-status-${articleId}`);
+            const articleDiv = document.getElementById(`article-${articleId}`);
+            
+            statusIndicator.className = 'status-indicator status-error';
+            imageStatus.innerHTML = '<span class="error-text">❌ IMAGE FAILED TO LOAD (RED X ERROR)</span>';
+            articleDiv.className = 'article-debug error';
+            imageTestResults[articleId] = 'error';
+            
+            console.error(`❌ IMAGE LOADING ERROR for article: ${articleId}`);
+            console.error(`   URL: ${imageUrl}`);
+            console.error(`   This will show as RED X in browser`);
+            
+            // Try to fetch the URL to get more details
+            if (imageUrl && imageUrl.startsWith('http')) {
+                fetch(imageUrl)
+                    .then(response => {
+                        console.error(`   HTTP Status: ${response.status} ${response.statusText}`);
+                        imageStatus.innerHTML += `<br><span class="error-text">HTTP Status: ${response.status}</span>`;
+                    })
+                    .catch(error => {
+                        console.error(`   Network Error: ${error.message}`);
+                        imageStatus.innerHTML += `<br><span class="error-text">Network Error: ${error.message}</span>`;
+                    });
+            }
+        }
+
+        function testAllImageURLs() {
+            console.log('🔍 Testing all image URLs manually...');
+            
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            
+            articles.forEach(article => {
+                if (article.image && typeof article.image === 'string' && article.image.length > 10) {
+                    console.log(`Testing image for: ${article.title}`);
+                    console.log(`URL: ${article.image}`);
+                    
+                    // Test with fetch
+                    fetch(article.image)
+                        .then(response => {
+                            if (response.ok) {
+                                console.log(`✅ ${article.title}: Image accessible (Status: ${response.status})`);
+                            } else {
+                                console.error(`❌ ${article.title}: Image not accessible (Status: ${response.status})`);
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`❌ ${article.title}: Network error - ${error.message}`);
+                        });
+                }
+            });
+        }
+
+        function fixSingleArticleImage(articleId) {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const articleIndex = articles.findIndex(a => a.id === articleId);
+            
+            if (articleIndex === -1) {
+                alert('❌ Article not found!');
+                return;
+            }
+            
+            const article = articles[articleIndex];
+            const category = (article.category || 'general').toLowerCase();
+            const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+            
+            // Replace broken image with fallback
+            articles[articleIndex].image = fallbackImage;
+            localStorage.setItem('heart-news', JSON.stringify(articles));
+            
+            alert(`✅ Fixed article: "${article.title}"\\nReplaced broken image with ${category} fallback`);
+            
+            // Refresh the debug display
+            startImageErrorDebug();
+        }
+
+        function fixBrokenImages() {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            let fixedCount = 0;
+            
+            articles.forEach((article, index) => {
+                // Fix articles that have errors or no images
+                if (!article.image || article.image === null || article.image === '' || 
+                    imageTestResults[article.id] === 'error') {
+                    
+                    const category = (article.category || 'general').toLowerCase();
+                    const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                    
+                    articles[index].image = fallbackImage;
+                    fixedCount++;
+                    
+                    console.log(`🔧 Fixed broken image for: "${article.title}" with ${category} fallback`);
+                }
+            });
+            
+            if (fixedCount > 0) {
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                alert(`✅ Fixed ${fixedCount} articles with broken images!\\nAll red X errors should be resolved.`);
+                startImageErrorDebug(); // Refresh analysis
+            } else {
+                alert('ℹ️ No broken images found to fix.');
+            }
+        }
+
+        function testSingleImageURL(articleId) {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const article = articles.find(a => a.id === articleId);
+            
+            if (!article || !article.image) {
+                alert('❌ No image URL to test!');
+                return;
+            }
+            
+            console.log(`🔍 Testing image for: ${article.title}`);
+            console.log(`URL: ${article.image}`);
+            
+            // Create a test image element
+            const testImg = document.createElement('img');
+            testImg.onload = () => {
+                console.log(`✅ Image loads successfully!`);
+                handleImageLoad(articleId, true);
+            };
+            testImg.onerror = () => {
+                console.error(`❌ Image failed to load - will show RED X`);
+                handleImageError(articleId, article.image);
+            };
+            testImg.src = article.image;
+        }
+
+        // Auto-run on page load
+        window.addEventListener('load', () => {
+            console.log('🚨 Image Error Debug Tool loaded');
+            console.log('Click "START IMAGE ERROR DEBUG" to analyze all articles');
+        });
+    </script>
+</body>
+</html>

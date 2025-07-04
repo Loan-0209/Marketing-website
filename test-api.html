@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Testing API Connection</h1>
+    <div id="result"></div>
+    
+    <script src="js/api.js"></script>
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            try {
+                console.log('Testing API...');
+                const response = await api.getNews();
+                console.log('API Response:', response);
+                
+                if (response && response.data && response.data.news) {
+                    resultDiv.innerHTML = `
+                        <h2>SUCCESS: Found ${response.data.news.length} articles</h2>
+                        <ul>
+                            ${response.data.news.map(article => `<li>${article.title}</li>`).join('')}
+                        </ul>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<h2>API returned empty or invalid data</h2>';
+                }
+            } catch (error) {
+                console.error('API Error:', error);
+                resultDiv.innerHTML = `<h2>API ERROR: ${error.message}</h2>`;
+            }
+        }
+        
+        // Test immediately when page loads
+        testAPI();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HEART News Management</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        body {
+            padding-top: 80px;
+            background: var(--light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-actions {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--white);
+            min-width: 150px;
+        }
+
+        .bulk-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .bulk-actions.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .selected-count {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .data-table {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .table-stats {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .articles-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .articles-table th,
+        .articles-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .articles-table th {
+            background: var(--light-gray);
+            font-weight: 600;
+            color: var(--primary-blue);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .articles-table tbody tr:hover {
+            background: rgba(30, 58, 138, 0.05);
+        }
+
+        .article-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .article-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .article-summary {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-published {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .status-draft {
+            background: rgba(251, 191, 36, 0.1);
+            color: var(--warning);
+        }
+
+        .category-tag {
+            background: var(--light-blue);
+            color: var(--white);
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--light-blue);
+        }
+
+        .btn-edit:hover {
+            background: var(--light-blue);
+            color: var(--white);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .btn-delete:hover {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-view {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        .btn-view:hover {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 0 0 15px 15px;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .pagination-btn.active {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .close {
+            color: var(--white);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+            color: var(--primary-yellow);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 10001;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--error); }
+        .toast.warning { background: var(--warning); }
+        .toast.info { background: var(--info); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOutRight {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 0 1rem;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-filters {
+                justify-content: center;
+            }
+
+            .search-box {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .articles-table {
+                font-size: 0.9rem;
+            }
+
+            .articles-table th,
+            .articles-table td {
+                padding: 0.5rem;
+            }
+
+            .article-title,
+            .article-summary {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">🚀 HEART</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">← Back to Main Site</a></li>
+                <li><a href="post-news.html" class="nav-link">📝 Add News</a></li>
+                <li><a href="admin-panel.html" class="nav-link active">🛠️ Admin Panel</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container text-center">
+            <h1>🛠️ News Management Panel</h1>
+            <p>Comprehensive admin dashboard for managing HEART news articles</p>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <!-- Admin Actions -->
+        <div class="admin-actions">
+            <div class="action-bar">
+                <div class="search-filters">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search articles by title, content, or author...">
+                    </div>
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="general">General</option>
+                        <option value="technology">Technology</option>
+                        <option value="investment">Investment</option>
+                        <option value="facilities">Facilities</option>
+                        <option value="partnership">Partnership</option>
+                        <option value="research">Research</option>
+                        <option value="events">Events</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+                
+                <div class="bulk-actions hidden" id="bulkActions">
+                    <span class="selected-count" id="selectedCount">0 selected</span>
+                    <button class="btn btn-secondary" onclick="bulkEdit()">📝 Bulk Edit</button>
+                    <button class="btn btn-outline" onclick="bulkDelete()">🗑️ Delete Selected</button>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="window.location.href='post-news.html'">➕ Add New Article</button>
+                    <button class="btn btn-secondary" onclick="exportData()">📤 Export Data</button>
+                    <button class="btn btn-outline" onclick="importData()">📥 Import Data</button>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <span style="color: var(--gray); font-size: 0.9rem;">Items per page:</span>
+                    <select class="filter-select" id="itemsPerPage" onchange="changeItemsPerPage()">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="data-table">
+            <div class="table-header">
+                <div class="table-title">📰 News Articles</div>
+                <div class="table-stats" id="tableStats">Total: 0 articles</div>
+            </div>
+            
+            <div class="table-container">
+                <table class="articles-table">
+                    <thead>
+                        <tr>
+                            <th width="40">
+                                <input type="checkbox" class="article-checkbox" id="selectAll" onchange="toggleSelectAll()">
+                            </th>
+                            <th width="50">Icon</th>
+                            <th>Title</th>
+                            <th>Summary</th>
+                            <th width="120">Category</th>
+                            <th width="100">Author</th>
+                            <th width="100">Status</th>
+                            <th width="120">Created</th>
+                            <th width="120">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articlesTableBody">
+                        <!-- Articles will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Edit Article</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editArticleId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editTitle">Title *</label>
+                            <input type="text" id="editTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCategory">Category</label>
+                            <select id="editCategory" class="form-control">
+                                <option value="general">General</option>
+                                <option value="technology">Technology</option>
+                                <option value="investment">Investment</option>
+                                <option value="facilities">Facilities</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="research">Research</option>
+                                <option value="events">Events</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAuthor">Author</label>
+                            <input type="text" id="editAuthor" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="editStatus">Status</label>
+                            <select id="editStatus" class="form-control">
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editIcon">Icon</label>
+                        <input type="text" id="editIcon" class="form-control" placeholder="📰">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editSummary">Summary *</label>
+                        <textarea id="editSummary" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editContent">Content *</label>
+                        <textarea id="editContent" class="form-control" rows="6" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="editTags">Tags (comma separated)</label>
+                        <input type="text" id="editTags" class="form-control" placeholder="technology, ai, innovation">
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem;">
+                        <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
+
+    <script>
+        class NewsAdminPanel {
+            constructor() {
+                this.articles = [];
+                this.filteredArticles = [];
+                this.currentPage = 1;
+                this.itemsPerPage = 25;
+                this.selectedArticles = new Set();
+                
+                this.init();
+            }
+
+            init() {
+                this.loadArticles();
+                this.setupEventListeners();
+                this.renderTable();
+            }
+
+            loadArticles() {
+                // Load from both possible localStorage keys for compatibility
+                let articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+                
+                if (articles.length === 0) {
+                    const oldNews = JSON.parse(localStorage.getItem('heart_news') || '[]');
+                    if (oldNews.length > 0) {
+                        articles = oldNews.map(item => ({
+                            id: item.id.toString(),
+                            title: item.title,
+                            summary: item.excerpt,
+                            content: item.content,
+                            category: item.category,
+                            author: item.author,
+                            icon: item.icon,
+                            tags: item.tags || [],
+                            createdAt: new Date(item.date).toISOString(),
+                            updatedAt: new Date().toISOString(),
+                            status: item.status
+                        }));
+                        this.saveArticles(articles);
+                    }
+                }
+                
+                this.articles = articles;
+                this.filteredArticles = [...articles];
+            }
+
+            saveArticles(articles = this.articles) {
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                this.articles = articles;
+            }
+
+            setupEventListeners() {
+                // Search functionality
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.handleSearch(e.target.value);
+                });
+
+                // Filter functionality
+                document.getElementById('categoryFilter').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+
+                document.getElementById('statusFilter').addEventListener('change', () => {
+                    this.applyFilters();
+                });
+
+                // Edit form submission
+                document.getElementById('editForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.saveEdit();
+                });
+
+                // Close modal when clicking outside
+                window.addEventListener('click', (e) => {
+                    const modal = document.getElementById('editModal');
+                    if (e.target === modal) {
+                        this.closeEditModal();
+                    }
+                });
+            }
+
+            handleSearch(query) {
+                const searchTerm = query.toLowerCase().trim();
+                
+                if (!searchTerm) {
+                    this.applyFilters();
+                    return;
+                }
+
+                this.filteredArticles = this.articles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) ||
+                    article.summary.toLowerCase().includes(searchTerm) ||
+                    article.content.toLowerCase().includes(searchTerm) ||
+                    article.author.toLowerCase().includes(searchTerm) ||
+                    article.category.toLowerCase().includes(searchTerm) ||
+                    (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
+                );
+
+                this.currentPage = 1;
+                this.renderTable();
+            }
+
+            applyFilters() {
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+
+                this.filteredArticles = this.articles.filter(article => {
+                    const matchesCategory = !categoryFilter || article.category === categoryFilter;
+                    const matchesStatus = !statusFilter || article.status === statusFilter;
+                    const matchesSearch = !searchTerm || 
+                        article.title.toLowerCase().includes(searchTerm) ||
+                        article.summary.toLowerCase().includes(searchTerm) ||
+                        article.content.toLowerCase().includes(searchTerm) ||
+                        article.author.toLowerCase().includes(searchTerm);
+
+                    return matchesCategory && matchesStatus && matchesSearch;
+                });
+
+                this.currentPage = 1;
+                this.renderTable();
+            }
+
+            renderTable() {
+                const tbody = document.getElementById('articlesTableBody');
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                const endIndex = startIndex + this.itemsPerPage;
+                const pageArticles = this.filteredArticles.slice(startIndex, endIndex);
+
+                if (pageArticles.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="empty-state">
+                                <div class="empty-icon">📰</div>
+                                <h3>No articles found</h3>
+                                <p>Try adjusting your search or filter criteria</p>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    tbody.innerHTML = pageArticles.map(article => this.createTableRow(article)).join('');
+                }
+
+                this.updateTableStats();
+                this.renderPagination();
+                this.updateBulkActions();
+            }
+
+            createTableRow(article) {
+                const createdDate = new Date(article.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                return `
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="article-checkbox" value="${article.id}" onchange="adminPanel.toggleArticleSelection('${article.id}')">
+                        </td>
+                        <td style="font-size: 1.5rem; text-align: center;">${article.icon}</td>
+                        <td>
+                            <div class="article-title" title="${article.title}">${article.title}</div>
+                        </td>
+                        <td>
+                            <div class="article-summary" title="${article.summary}">${article.summary}</div>
+                        </td>
+                        <td>
+                            <span class="category-tag">${article.category}</span>
+                        </td>
+                        <td>${article.author}</td>
+                        <td>
+                            <span class="status-badge status-${article.status}">${article.status}</span>
+                        </td>
+                        <td>${createdDate}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-icon btn-view" onclick="adminPanel.viewArticle('${article.id}')" title="View">👁️</button>
+                                <button class="btn-icon btn-edit" onclick="adminPanel.editArticle('${article.id}')" title="Edit">✏️</button>
+                                <button class="btn-icon btn-delete" onclick="adminPanel.deleteArticle('${article.id}')" title="Delete">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            updateTableStats() {
+                const stats = document.getElementById('tableStats');
+                const total = this.filteredArticles.length;
+                const published = this.filteredArticles.filter(a => a.status === 'published').length;
+                const drafts = this.filteredArticles.filter(a => a.status === 'draft').length;
+                
+                stats.textContent = `Total: ${total} articles (${published} published, ${drafts} drafts)`;
+            }
+
+            renderPagination() {
+                const pagination = document.getElementById('pagination');
+                const totalPages = Math.ceil(this.filteredArticles.length / this.itemsPerPage);
+                
+                if (totalPages <= 1) {
+                    pagination.innerHTML = '';
+                    return;
+                }
+
+                let paginationHTML = `
+                    <button class="pagination-btn" ${this.currentPage === 1 ? 'disabled' : ''} onclick="adminPanel.goToPage(${this.currentPage - 1})">
+                        ← Previous
+                    </button>
+                `;
+
+                const startPage = Math.max(1, this.currentPage - 2);
+                const endPage = Math.min(totalPages, this.currentPage + 2);
+
+                if (startPage > 1) {
+                    paginationHTML += `<button class="pagination-btn" onclick="adminPanel.goToPage(1)">1</button>`;
+                    if (startPage > 2) {
+                        paginationHTML += `<span>...</span>`;
+                    }
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    paginationHTML += `
+                        <button class="pagination-btn ${i === this.currentPage ? 'active' : ''}" onclick="adminPanel.goToPage(${i})">
+                            ${i}
+                        </button>
+                    `;
+                }
+
+                if (endPage < totalPages) {
+                    if (endPage < totalPages - 1) {
+                        paginationHTML += `<span>...</span>`;
+                    }
+                    paginationHTML += `<button class="pagination-btn" onclick="adminPanel.goToPage(${totalPages})">${totalPages}</button>`;
+                }
+
+                paginationHTML += `
+                    <button class="pagination-btn" ${this.currentPage === totalPages ? 'disabled' : ''} onclick="adminPanel.goToPage(${this.currentPage + 1})">
+                        Next →
+                    </button>
+                `;
+
+                const startItem = (this.currentPage - 1) * this.itemsPerPage + 1;
+                const endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredArticles.length);
+                
+                paginationHTML += `
+                    <div class="pagination-info">
+                        Showing ${startItem}-${endItem} of ${this.filteredArticles.length} articles
+                    </div>
+                `;
+
+                pagination.innerHTML = paginationHTML;
+            }
+
+            goToPage(page) {
+                const totalPages = Math.ceil(this.filteredArticles.length / this.itemsPerPage);
+                if (page >= 1 && page <= totalPages) {
+                    this.currentPage = page;
+                    this.renderTable();
+                }
+            }
+
+            toggleSelectAll() {
+                const selectAll = document.getElementById('selectAll');
+                const checkboxes = document.querySelectorAll('.article-checkbox[value]');
+                
+                if (selectAll.checked) {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = true;
+                        this.selectedArticles.add(checkbox.value);
+                    });
+                } else {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = false;
+                        this.selectedArticles.delete(checkbox.value);
+                    });
+                }
+                
+                this.updateBulkActions();
+            }
+
+            toggleArticleSelection(articleId) {
+                const checkbox = document.querySelector(`input[value="${articleId}"]`);
+                
+                if (checkbox.checked) {
+                    this.selectedArticles.add(articleId);
+                } else {
+                    this.selectedArticles.delete(articleId);
+                }
+                
+                this.updateBulkActions();
+                this.updateSelectAllState();
+            }
+
+            updateSelectAllState() {
+                const selectAll = document.getElementById('selectAll');
+                const checkboxes = document.querySelectorAll('.article-checkbox[value]');
+                const checkedBoxes = document.querySelectorAll('.article-checkbox[value]:checked');
+                
+                selectAll.checked = checkboxes.length > 0 && checkboxes.length === checkedBoxes.length;
+                selectAll.indeterminate = checkedBoxes.length > 0 && checkboxes.length !== checkedBoxes.length;
+            }
+
+            updateBulkActions() {
+                const bulkActions = document.getElementById('bulkActions');
+                const selectedCount = document.getElementById('selectedCount');
+                const count = this.selectedArticles.size;
+                
+                if (count > 0) {
+                    bulkActions.classList.remove('hidden');
+                    selectedCount.textContent = `${count} selected`;
+                } else {
+                    bulkActions.classList.add('hidden');
+                }
+            }
+
+            viewArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                // Create and show article detail modal
+                const modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.style.display = 'block';
+                
+                modal.innerHTML = `
+                    <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+                        <div class="modal-header">
+                            <h2>${article.icon} ${article.title}</h2>
+                            <span class="close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; font-size: 0.9rem; color: var(--gray);">
+                                <div><strong>Category:</strong> ${article.category}</div>
+                                <div><strong>Status:</strong> <span class="status-badge status-${article.status}">${article.status}</span></div>
+                                <div><strong>Author:</strong> ${article.author}</div>
+                                <div><strong>Created:</strong> ${new Date(article.createdAt).toLocaleDateString()}</div>
+                            </div>
+                            <div style="margin-bottom: 2rem;">
+                                <h4>Summary:</h4>
+                                <p style="background: var(--light-gray); padding: 1rem; border-radius: 10px; margin-top: 0.5rem;">${article.summary}</p>
+                            </div>
+                            <div style="margin-bottom: 2rem;">
+                                <h4>Content:</h4>
+                                <div style="background: var(--light-gray); padding: 1rem; border-radius: 10px; margin-top: 0.5rem; white-space: pre-line; line-height: 1.6;">${article.content}</div>
+                            </div>
+                            ${article.tags && article.tags.length > 0 ? `
+                                <div>
+                                    <h4>Tags:</h4>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                                        ${article.tags.map(tag => `<span class="category-tag">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
+            }
+
+            editArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                // Populate edit form
+                document.getElementById('editArticleId').value = article.id;
+                document.getElementById('editTitle').value = article.title;
+                document.getElementById('editSummary').value = article.summary;
+                document.getElementById('editContent').value = article.content;
+                document.getElementById('editCategory').value = article.category;
+                document.getElementById('editAuthor').value = article.author;
+                document.getElementById('editStatus').value = article.status;
+                document.getElementById('editIcon').value = article.icon;
+                document.getElementById('editTags').value = article.tags ? article.tags.join(', ') : '';
+
+                // Show modal
+                document.getElementById('editModal').style.display = 'block';
+            }
+
+            saveEdit() {
+                const id = document.getElementById('editArticleId').value;
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                // Update article
+                article.title = document.getElementById('editTitle').value;
+                article.summary = document.getElementById('editSummary').value;
+                article.content = document.getElementById('editContent').value;
+                article.category = document.getElementById('editCategory').value;
+                article.author = document.getElementById('editAuthor').value;
+                article.status = document.getElementById('editStatus').value;
+                article.icon = document.getElementById('editIcon').value;
+                article.tags = document.getElementById('editTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                article.updatedAt = new Date().toISOString();
+
+                this.saveArticles();
+                this.filteredArticles = [...this.articles];
+                this.applyFilters();
+                this.closeEditModal();
+                
+                this.showToast('Article updated successfully!', 'success');
+            }
+
+            closeEditModal() {
+                document.getElementById('editModal').style.display = 'none';
+            }
+
+            deleteArticle(id) {
+                const article = this.articles.find(a => a.id === id);
+                if (!article) return;
+
+                if (confirm(`Are you sure you want to delete "${article.title}"?`)) {
+                    this.articles = this.articles.filter(a => a.id !== id);
+                    this.saveArticles();
+                    this.filteredArticles = [...this.articles];
+                    this.applyFilters();
+                    this.selectedArticles.delete(id);
+                    
+                    this.showToast('Article deleted successfully!', 'success');
+                }
+            }
+
+            bulkDelete() {
+                if (this.selectedArticles.size === 0) return;
+
+                if (confirm(`Are you sure you want to delete ${this.selectedArticles.size} selected articles?`)) {
+                    this.articles = this.articles.filter(article => !this.selectedArticles.has(article.id));
+                    this.saveArticles();
+                    this.filteredArticles = [...this.articles];
+                    this.selectedArticles.clear();
+                    this.applyFilters();
+                    
+                    this.showToast(`${this.selectedArticles.size} articles deleted successfully!`, 'success');
+                }
+            }
+
+            bulkEdit() {
+                if (this.selectedArticles.size === 0) return;
+                
+                const newStatus = prompt('Change status to (published/draft):');
+                if (!newStatus || !['published', 'draft'].includes(newStatus)) return;
+
+                this.articles.forEach(article => {
+                    if (this.selectedArticles.has(article.id)) {
+                        article.status = newStatus;
+                        article.updatedAt = new Date().toISOString();
+                    }
+                });
+
+                this.saveArticles();
+                this.filteredArticles = [...this.articles];
+                this.selectedArticles.clear();
+                this.applyFilters();
+                
+                this.showToast(`Bulk update completed!`, 'success');
+            }
+
+            changeItemsPerPage() {
+                this.itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+                this.currentPage = 1;
+                this.renderTable();
+            }
+
+            exportData() {
+                const dataStr = JSON.stringify(this.articles, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `heart-news-export-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                
+                this.showToast('Data exported successfully!', 'success');
+            }
+
+            importData() {
+                document.getElementById('importFile').click();
+            }
+
+            handleImport(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (Array.isArray(importedData)) {
+                            this.articles = importedData;
+                            this.saveArticles();
+                            this.filteredArticles = [...this.articles];
+                            this.applyFilters();
+                            this.showToast('Data imported successfully!', 'success');
+                        } else {
+                            throw new Error('Invalid data format');
+                        }
+                    } catch (error) {
+                        this.showToast('Failed to import data. Please check the file format.', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            }
+
+            showToast(message, type = 'info') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Global functions for HTML onclick handlers
+        let adminPanel;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            adminPanel = new NewsAdminPanel();
+        });
+
+        function toggleSelectAll() {
+            adminPanel.toggleSelectAll();
+        }
+
+        function bulkDelete() {
+            adminPanel.bulkDelete();
+        }
+
+        function bulkEdit() {
+            adminPanel.bulkEdit();
+        }
+
+        function exportData() {
+            adminPanel.exportData();
+        }
+
+        function importData() {
+            adminPanel.importData();
+        }
+
+        function handleImport(event) {
+            adminPanel.handleImport(event);
+        }
+
+        function changeItemsPerPage() {
+            adminPanel.changeItemsPerPage();
+        }
+
+        function closeEditModal() {
+            adminPanel.closeEditModal();
+        }
+    </script>
+</body>
+</html>

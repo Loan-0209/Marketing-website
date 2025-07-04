@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 CRITICAL DEBUG - Text Instead of Image</title>
+    <style>
+        body { font-family: 'Courier New', monospace; padding: 20px; background: #f8f9fa; }
+        .critical { border: 4px solid #dc3545; background: #f8d7da; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .article { border: 2px solid #333; margin: 15px 0; padding: 15px; background: white; border-radius: 5px; }
+        .has-image { border-color: #28a745; background: #d4edda; }
+        .text-issue { border-color: #dc3545; background: #f8d7da; }
+        .normal { border-color: #007bff; background: #d1ecf1; }
+        .fix-button { background: #dc3545; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; font-size: 16px; }
+        .fix-button:hover { background: #c82333; }
+        pre { background: #f1f3f4; padding: 10px; overflow-x: auto; font-size: 12px; max-height: 300px; }
+        img { max-width: 200px; max-height: 150px; border: 2px solid #333; margin: 10px 0; }
+        .highlight { background: yellow; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="critical">
+        <h1>🚨 CRITICAL ISSUE: 'TECHNOLOGY Article Image' Text Instead of Image</h1>
+        <p><strong>Problem:</strong> Article 'Viet Nam HighTech Park' shows text instead of actual image</p>
+        <p><strong>Goal:</strong> Fix rendering to show actual <img> tag, not placeholder text</p>
+    </div>
+    
+    <button onclick="debugCriticalIssue()" class="fix-button">🚨 DEBUG CRITICAL ISSUE</button>
+    <button onclick="fixTextPlaceholderIssue()" class="fix-button">🔧 FIX TEXT PLACEHOLDER ISSUE</button>
+    
+    <div id="results"></div>
+
+    <script>
+        function debugCriticalIssue() {
+            console.clear();
+            console.log('🚨 ===== CRITICAL DEBUG: Text Instead of Image =====');
+            
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const results = document.getElementById('results');
+            
+            if (articles.length === 0) {
+                results.innerHTML = '<div class="critical">❌ NO ARTICLES FOUND!</div>';
+                return;
+            }
+            
+            let html = `<h2>🔍 CRITICAL ANALYSIS: Looking for Text Placeholder Issues</h2>`;
+            
+            // Sort by creation date (newest first)
+            const sortedArticles = articles.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            let criticalIssues = [];
+            
+            sortedArticles.forEach((article, index) => {
+                const articleNumber = index + 1;
+                let cssClass = 'normal';
+                let issueStatus = '';
+                let imageData = '';
+                
+                console.log(`\\n📄 Article ${articleNumber}: "${article.title}"`);
+                console.log(`   🔍 Image field type:`, typeof article.image);
+                console.log(`   📦 Image data:`, article.image);
+                
+                // Check for text placeholder issues
+                if (article.image && typeof article.image === 'string') {
+                    if (article.image.includes('Article Image') || 
+                        article.image.includes('TECHNOLOGY') || 
+                        article.image.includes('BUSINESS') ||
+                        article.image === article.category + ' Article Image') {
+                        
+                        cssClass = 'text-issue';
+                        issueStatus = '🚨 CRITICAL: Shows TEXT instead of IMAGE!';
+                        criticalIssues.push(article);
+                        imageData = `<span class="highlight">PROBLEMATIC TEXT: "${article.image}"</span>`;
+                        
+                        console.error(`🚨 CRITICAL ISSUE FOUND!`);
+                        console.error(`   Article: ${article.title}`);
+                        console.error(`   Shows text: "${article.image}"`);
+                        console.error(`   Should show: <img> tag`);
+                        
+                    } else if (article.image.startsWith('data:image/')) {
+                        cssClass = 'has-image';
+                        issueStatus = '✅ Has valid image data';
+                        imageData = `Valid base64 image (${article.image.length} chars)`;
+                    } else if (article.image.startsWith('http')) {
+                        cssClass = 'has-image';
+                        issueStatus = '✅ Has image URL';
+                        imageData = `URL: ${article.image}`;
+                    } else {
+                        cssClass = 'text-issue';
+                        issueStatus = '❓ Unknown image format';
+                        imageData = `Unknown: "${article.image}"`;
+                    }
+                } else {
+                    cssClass = 'text-issue';
+                    issueStatus = '❌ No image data';
+                    imageData = 'No image field';
+                }
+                
+                html += `
+                    <div class="article ${cssClass}">
+                        <h3>📄 Article ${articleNumber}: ${article.title}</h3>
+                        <p><strong>📊 Status:</strong> ${issueStatus}</p>
+                        <p><strong>🆔 ID:</strong> ${article.id}</p>
+                        <p><strong>📂 Category:</strong> ${article.category || 'undefined'}</p>
+                        <p><strong>🖼️ Image Data:</strong> ${imageData}</p>
+                        
+                        ${article.image && article.image.startsWith('data:image/') ? `
+                            <div>
+                                <strong>📸 Image Preview:</strong><br>
+                                <img src="${article.image}" alt="Preview" />
+                            </div>
+                        ` : ''}
+                        
+                        <details>
+                            <summary>🔍 Full Article Object</summary>
+                            <pre>${JSON.stringify(article, null, 2)}</pre>
+                        </details>
+                        
+                        ${cssClass === 'text-issue' ? `
+                            <button onclick="fixSingleArticle('${article.id}')" class="fix-button">
+                                🔧 Fix This Article
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            // Summary of critical issues
+            if (criticalIssues.length > 0) {
+                html = `
+                    <div class="critical">
+                        <h2>🚨 CRITICAL ISSUES FOUND: ${criticalIssues.length} articles</h2>
+                        <p>The following articles are showing TEXT instead of IMAGES:</p>
+                        <ul>
+                            ${criticalIssues.map(article => 
+                                `<li><strong>${article.title}</strong> - Shows: "${article.image}"</li>`
+                            ).join('')}
+                        </ul>
+                        <button onclick="fixAllTextPlaceholders()" class="fix-button">
+                            🔧 FIX ALL TEXT PLACEHOLDERS
+                        </button>
+                    </div>
+                ` + html;
+            }
+            
+            results.innerHTML = html;
+            
+            console.log(`\\n📊 SUMMARY:`);
+            console.log(`   🚨 Critical issues: ${criticalIssues.length}`);
+            console.log(`   📄 Total articles: ${articles.length}`);
+        }
+        
+        function fixSingleArticle(articleId) {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const articleIndex = articles.findIndex(a => a.id === articleId);
+            
+            if (articleIndex === -1) {
+                alert('❌ Article not found!');
+                return;
+            }
+            
+            const article = articles[articleIndex];
+            
+            // Enhanced fallback images
+            const FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InRlY2hHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA3YmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwNTZiMztzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCN0ZWNoR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💻</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">TECHNOLOGY</text></svg>',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJ1c0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyOGE3NDU7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTk2NjMzO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2J1c0dyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💼</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">BUSINESS</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Imlubm9HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZjMTA3O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2Y1OTUwMjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNpbm5vR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💡</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INNOVATION</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImludkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyMGM5OTc7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTU5OTg4O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2ludkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INVESTMENT</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InBhcnRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmY0MmMxO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzUyMzNhYjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNwYXJ0R3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+🤝</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">PARTNERSHIP</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdlbkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2Yzc1N2Q7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDk1MDU3O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2dlbkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj📰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">NEWS</text></svg>'
+            };
+            
+            const category = (article.category || 'general').toLowerCase();
+            const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+            
+            // Replace text placeholder with actual image data
+            articles[articleIndex].image = fallbackImage;
+            localStorage.setItem('heart-news', JSON.stringify(articles));
+            
+            alert(`✅ Fixed article: "${article.title}"\\nReplaced text placeholder with actual image!`);
+            debugCriticalIssue(); // Refresh analysis
+        }
+        
+        function fixAllTextPlaceholders() {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            let fixedCount = 0;
+            
+            const FALLBACK_IMAGES = {
+                'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InRlY2hHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA3YmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzAwNTZiMztzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCN0ZWNoR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💻</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">TECHNOLOGY</text></svg>',
+                'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJ1c0dyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyOGE3NDU7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTk2NjMzO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2J1c0dyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💼</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">BUSINESS</text></svg>',
+                'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9Imlubm9HcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZjMTA3O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2Y1OTUwMjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNpbm5vR3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+💡</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INNOVATION</text></svg>',
+                'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImludkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMyMGM5OTc7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMTU5OTg4O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2ludkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj💰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">INVESTMENT</text></svg>',
+                'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9InBhcnRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNmY0MmMxO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzUyMzNhYjtzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0idXJsKCNwYXJ0R3JhZCkiLz48dGV4dCB4PSI1MCUiIHk9IjQwJSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+🤝</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">PARTNERSHIP</text></svg>',
+                'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdlbkdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2Yzc1N2Q7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDk1MDU3O3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2dlbkdyYWQpIi8+PHRleHQgeD0iNTAlIiB5PSI0MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPj📰</text><text x="50%" y="70%" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">NEWS</text></svg>'
+            };
+            
+            articles.forEach((article, index) => {
+                // Check if article has text placeholder instead of image
+                if (article.image && typeof article.image === 'string' &&
+                    (article.image.includes('Article Image') || 
+                     article.image.includes('TECHNOLOGY') || 
+                     article.image.includes('BUSINESS') ||
+                     article.image === article.category + ' Article Image')) {
+                    
+                    const category = (article.category || 'general').toLowerCase();
+                    const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                    
+                    articles[index].image = fallbackImage;
+                    fixedCount++;
+                    
+                    console.log(`🔧 Fixed text placeholder for: "${article.title}"`);
+                }
+            });
+            
+            if (fixedCount > 0) {
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                alert(`✅ Fixed ${fixedCount} articles with text placeholders!\\nAll articles now show actual images instead of text.`);
+                debugCriticalIssue(); // Refresh analysis
+            } else {
+                alert('ℹ️ No text placeholder issues found.');
+            }
+        }
+        
+        function fixTextPlaceholderIssue() {
+            fixAllTextPlaceholders();
+        }
+        
+        // Auto-run on page load
+        window.addEventListener('load', () => {
+            console.log('🚨 Critical Image Debug Tool loaded');
+            console.log('Click "DEBUG CRITICAL ISSUE" to find text placeholder problems');
+        });
+    </script>
+</body>
+</html>

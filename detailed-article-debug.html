@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Detailed Article Debug</title>
+    <style>
+        body { font-family: 'Courier New', monospace; padding: 20px; background: #f8f9fa; }
+        .article-debug { border: 3px solid #333; margin: 20px 0; padding: 20px; background: white; border-radius: 8px; }
+        .has-image { border-color: #28a745; background: #d4edda; }
+        .no-image { border-color: #dc3545; background: #f8d7da; }
+        .undefined-image { border-color: #ffc107; background: #fff3cd; }
+        .article-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+        .debug-info { background: #f8f9fa; padding: 10px; margin: 10px 0; border-left: 4px solid #007bff; }
+        .image-preview { max-width: 200px; max-height: 150px; border: 2px solid #333; margin: 10px 0; }
+        .error { color: #dc3545; font-weight: bold; }
+        .success { color: #28a745; font-weight: bold; }
+        .warning { color: #ffc107; font-weight: bold; }
+        pre { background: #f1f3f4; padding: 10px; overflow-x: auto; font-size: 12px; }
+        .fix-button { background: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .fix-button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 DETAILED ARTICLE DEBUG ANALYSIS</h1>
+    
+    <div style="margin: 20px 0; padding: 15px; background: #e3f2fd; border-radius: 8px;">
+        <h3>🎯 OBJECTIVE: Fix inconsistent image display</h3>
+        <p><strong>Problem:</strong> Some articles show images ✅, others show newspaper icon ❌</p>
+        <p><strong>Goal:</strong> ALL articles must display images, no newspaper icons allowed</p>
+    </div>
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <button onclick="analyzeAllArticles()" class="fix-button" style="background: #dc3545; font-size: 16px; padding: 15px 30px;">
+            🚨 ANALYZE ALL ARTICLES
+        </button>
+        <button onclick="fixAllArticles()" class="fix-button" style="background: #28a745; font-size: 16px; padding: 15px 30px;">
+            🔧 FIX ALL ISSUES
+        </button>
+        <button onclick="addFallbackImages()" class="fix-button" style="background: #6f42c1; font-size: 16px; padding: 15px 30px;">
+            🎨 ADD FALLBACK IMAGES
+        </button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        // Fallback images by category
+        const FALLBACK_IMAGES = {
+            'technology': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwN2JmZiIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💻</text></svg>',
+            'business': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzI4YTc0NSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💼</text></svg>',
+            'innovation': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmYzEwNyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💡</text></svg>',
+            'investment': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzIwYzk5NyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+💰</text></svg>',
+            'partnership': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZmNDJjMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+🤝</text></svg>',
+            'general': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzZjNzU3ZCIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+📰</text></svg>'
+        };
+        
+        function analyzeAllArticles() {
+            console.clear();
+            console.log('🔍 ===== DETAILED ARTICLE ANALYSIS START =====');
+            
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const results = document.getElementById('results');
+            
+            if (articles.length === 0) {
+                results.innerHTML = '<div class="error">❌ NO ARTICLES FOUND IN LOCALSTORAGE!</div>';
+                return;
+            }
+            
+            // Sort by creation date (newest first)
+            const sortedArticles = articles.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            let html = `<h2>📊 ANALYSIS RESULTS: ${articles.length} Articles Found</h2>`;
+            let hasImageCount = 0;
+            let noImageCount = 0;
+            let undefinedImageCount = 0;
+            
+            sortedArticles.forEach((article, index) => {
+                const articleNumber = index + 1;
+                let cssClass = '';
+                let imageStatus = '';
+                let debugInfo = '';
+                let fixAction = '';
+                
+                // Deep analysis of image field
+                if (article.image === undefined) {
+                    undefinedImageCount++;
+                    cssClass = 'undefined-image';
+                    imageStatus = '❓ UNDEFINED';
+                    debugInfo = 'Image field is completely missing from article object';
+                    fixAction = 'ADD NULL IMAGE FIELD';
+                } else if (article.image === null) {
+                    noImageCount++;
+                    cssClass = 'no-image';
+                    imageStatus = '❌ NULL';
+                    debugInfo = 'Image field exists but is null - needs fallback image';
+                    fixAction = 'ADD FALLBACK IMAGE';
+                } else if (article.image === '') {
+                    noImageCount++;
+                    cssClass = 'no-image';
+                    imageStatus = '❌ EMPTY STRING';
+                    debugInfo = 'Image field is empty string - needs fallback image';
+                    fixAction = 'ADD FALLBACK IMAGE';
+                } else if (typeof article.image === 'string' && article.image.length > 0) {
+                    hasImageCount++;
+                    cssClass = 'has-image';
+                    imageStatus = `✅ HAS IMAGE (${article.image.length} chars)`;
+                    debugInfo = 'Image field contains valid base64 data';
+                    fixAction = 'NO ACTION NEEDED';
+                } else {
+                    noImageCount++;
+                    cssClass = 'no-image';
+                    imageStatus = '❌ INVALID TYPE';
+                    debugInfo = `Image field type: ${typeof article.image}, value: ${article.image}`;
+                    fixAction = 'REPLACE WITH FALLBACK';
+                }
+                
+                html += `
+                    <div class="article-debug ${cssClass}">
+                        <div class="article-title">📄 Article ${articleNumber}: ${article.title}</div>
+                        
+                        <div class="debug-info">
+                            <strong>🔍 Debug Information:</strong><br>
+                            • <strong>ID:</strong> ${article.id}<br>
+                            • <strong>Category:</strong> ${article.category || 'undefined'}<br>
+                            • <strong>Icon:</strong> ${article.icon || 'undefined'}<br>
+                            • <strong>Image Status:</strong> <span class="${cssClass === 'has-image' ? 'success' : 'error'}">${imageStatus}</span><br>
+                            • <strong>Created:</strong> ${article.createdAt}<br>
+                            • <strong>Analysis:</strong> ${debugInfo}<br>
+                            • <strong>Required Action:</strong> <span class="${cssClass === 'has-image' ? 'success' : 'warning'}">${fixAction}</span>
+                        </div>
+                        
+                        ${article.image && typeof article.image === 'string' && article.image.length > 10 ? `
+                            <div>
+                                <strong>🖼️ Image Preview:</strong><br>
+                                <img src="${article.image}" class="image-preview" alt="Article Image" 
+                                     onload="console.log('✅ Image loaded for article ${articleNumber}')"
+                                     onerror="console.error('❌ Image failed to load for article ${articleNumber}')">
+                                <br><strong>Data:</strong> ${article.image.substring(0, 80)}...
+                            </div>
+                        ` : `
+                            <div class="error">
+                                <strong>❌ NO VALID IMAGE DATA</strong><br>
+                                Will show: ${article.icon || '📰'} (fallback icon)
+                            </div>
+                        `}
+                        
+                        <details style="margin-top: 15px;">
+                            <summary style="cursor: pointer; font-weight: bold;">📋 Full Article Data</summary>
+                            <pre>${JSON.stringify(article, null, 2)}</pre>
+                        </details>
+                        
+                        <div style="margin-top: 10px;">
+                            <button onclick="fixSingleArticle('${article.id}')" class="fix-button">
+                                🔧 Fix This Article
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Console logging for each article
+                console.log(`📄 Article ${articleNumber}: "${article.title}"`);
+                console.log(`   📊 Image Status: ${imageStatus}`);
+                console.log(`   🔍 Debug: ${debugInfo}`);
+                console.log(`   🛠️ Action: ${fixAction}`);
+                console.log(`   📦 Full Object:`, article);
+                console.log('---');
+            });
+            
+            // Summary
+            const summary = `
+                <div style="background: #e9ecef; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <h3>📊 SUMMARY</h3>
+                    <p><strong>✅ Articles with valid images:</strong> ${hasImageCount}</p>
+                    <p><strong>❌ Articles without images:</strong> ${noImageCount}</p>
+                    <p><strong>❓ Articles with undefined images:</strong> ${undefinedImageCount}</p>
+                    <p><strong>🎯 Total articles needing fixes:</strong> ${noImageCount + undefinedImageCount}</p>
+                </div>
+            `;
+            
+            results.innerHTML = summary + html;
+            
+            console.log('📊 SUMMARY:');
+            console.log(`   ✅ With images: ${hasImageCount}`);
+            console.log(`   ❌ Without images: ${noImageCount}`);
+            console.log(`   ❓ Undefined images: ${undefinedImageCount}`);
+            console.log('🔍 ===== ANALYSIS COMPLETE =====');
+        }
+        
+        function fixSingleArticle(articleId) {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            const articleIndex = articles.findIndex(a => a.id === articleId);
+            
+            if (articleIndex === -1) {
+                alert('❌ Article not found!');
+                return;
+            }
+            
+            const article = articles[articleIndex];
+            const category = (article.category || 'general').toLowerCase();
+            const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+            
+            // Fix the article
+            if (!article.image || article.image === null || article.image === '') {
+                articles[articleIndex].image = fallbackImage;
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                
+                alert(`✅ Fixed article: "${article.title}"\\nAdded fallback image for category: ${category}`);
+                analyzeAllArticles(); // Refresh analysis
+            } else {
+                alert(`ℹ️ Article "${article.title}" already has a valid image.`);
+            }
+        }
+        
+        function fixAllArticles() {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            let fixedCount = 0;
+            
+            articles.forEach((article, index) => {
+                if (!article.image || article.image === null || article.image === '') {
+                    const category = (article.category || 'general').toLowerCase();
+                    const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                    
+                    articles[index].image = fallbackImage;
+                    fixedCount++;
+                    
+                    console.log(`🔧 Fixed article: "${article.title}" with ${category} fallback image`);
+                }
+            });
+            
+            if (fixedCount > 0) {
+                localStorage.setItem('heart-news', JSON.stringify(articles));
+                alert(`✅ Fixed ${fixedCount} articles with fallback images!`);
+                analyzeAllArticles(); // Refresh analysis
+            } else {
+                alert('ℹ️ All articles already have valid images.');
+            }
+        }
+        
+        function addFallbackImages() {
+            const articles = JSON.parse(localStorage.getItem('heart-news') || '[]');
+            
+            articles.forEach((article, index) => {
+                const category = (article.category || 'general').toLowerCase();
+                const fallbackImage = FALLBACK_IMAGES[category] || FALLBACK_IMAGES['general'];
+                
+                // Force add fallback to all articles (for testing)
+                articles[index].image = fallbackImage;
+                articles[index].category = article.category || 'general'; // Ensure category exists
+            });
+            
+            localStorage.setItem('heart-news', JSON.stringify(articles));
+            alert(`✅ Added fallback images to all ${articles.length} articles!`);
+            analyzeAllArticles(); // Refresh analysis
+        }
+        
+        // Auto-run analysis on page load
+        window.addEventListener('load', analyzeAllArticles);
+    </script>
+</body>
+</html>
