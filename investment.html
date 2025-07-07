@@ -1,23 +1,436 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - HEART Technology Park</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Investment Opportunities - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .campus-3d {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav .campus-3d::before {
+            content: "🏢 ";
+        }
+        
+        .nav .contact-btn,
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .title-decoration {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .investment-hero {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .hero-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+        
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .investment-categories {
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .category-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .category-header {
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .category-content {
+            padding: 2.5rem;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .category-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .category-details {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .detail-label {
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .category-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .category-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        .benefits-section {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+        
+        .benefits-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .benefit-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .benefit-description {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        .contact-cta {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-primary {
+            background: #fbbf24;
+            color: #1e40af;
+        }
+        
+        .btn-primary:hover {
+            background: #f59e0b;
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #1e40af;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <\!-- Same header as index.html but About Us is active -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">HEART</a>
             <nav class="nav">
                 <a href="index.html">Home</a>
-                <a href="about.html" class="active">About Us</a>
+                <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
                 <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
                 <a href="facilities.html">Facilities</a>
-                <a href="investment.html">Investment</a>
+                <a href="investment.html" class="active">Investment</a>
                 <a href="technology.html">Technology</a>
                 <a href="news.html">News</a>
                 <a href="contact.html" class="contact-btn">Contact</a>
@@ -25,15 +438,230 @@
             </nav>
         </div>
     </header>
-    
-    <\!-- About Us content here -->
+
     <section class="page-header">
-        <h1 class="page-title">About Us</h1>
+        <h1 class="page-title">Investment Opportunities</h1>
         <div class="title-decoration"></div>
-        <p class="page-subtitle">Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <p class="page-subtitle">Join us in building the future of AI innovation in Southeast Asia</p>
     </section>
-    
-    <\!-- Add same styling from master-plan.html -->
+
+    <div class="container">
+        <div class="investment-hero">
+            <h2 class="hero-title">💰 $2.6B Total Investment Opportunity</h2>
+            <p class="hero-subtitle">HEART Technology Park offers unprecedented investment opportunities across three development phases, targeting high-growth AI and technology sectors with guaranteed government support and tax incentives.</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">$2.6B</div>
+                    <div class="hero-stat-label">Total Investment</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">300+</div>
+                    <div class="hero-stat-label">Companies</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">30K</div>
+                    <div class="hero-stat-label">Jobs Created</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">15%</div>
+                    <div class="hero-stat-label">Expected ROI</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="investment-categories">
+            <h3 class="section-title">Investment Categories</h3>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-header">🏢</div>
+                    <div class="category-content">
+                        <h4 class="category-title">Real Estate Development</h4>
+                        <p class="category-description">Invest in prime technology park real estate including office buildings, research facilities, and smart residential complexes.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$10M - $100M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">12-15%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">3-5 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">🔬</div>
+                    <div class="category-content">
+                        <h4 class="category-title">AI Research & Development</h4>
+                        <p class="category-description">Fund cutting-edge AI research projects and development of next-generation artificial intelligence technologies.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$5M - $50M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">15-25%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">2-4 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">🚀</div>
+                    <div class="category-content">
+                        <h4 class="category-title">Startup Venture Capital</h4>
+                        <p class="category-description">Invest in promising AI startups and technology companies through our accelerator and incubator programs.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$1M - $20M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">20-35%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">1-3 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">⚡</div>
+                    <div class="category-content">
+                        <h4 class="category-title">Infrastructure & Utilities</h4>
+                        <p class="category-description">Invest in critical infrastructure including power grids, data centers, and smart city technologies.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$20M - $200M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">10-14%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">5-7 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">🎓</div>
+                    <div class="category-content">
+                        <h4 class="category-title">Education & Training</h4>
+                        <p class="category-description">Support AI education initiatives, training programs, and workforce development centers.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$2M - $25M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">8-12%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">3-5 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-header">🌱</div>
+                    <div class="category-content">
+                        <h4 class="category-title">Green Technology</h4>
+                        <p class="category-description">Invest in sustainable technologies, renewable energy projects, and environmental innovation initiatives.</p>
+                        <div class="category-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Investment Range:</span>
+                                <span class="detail-value">$5M - $75M</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Expected ROI:</span>
+                                <span class="detail-value">12-18%</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Timeline:</span>
+                                <span class="detail-value">4-6 years</span>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="category-button">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="benefits-section">
+            <h3 class="benefits-title">Investor Benefits & Incentives</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">💼</div>
+                    <h4 class="benefit-title">Tax Incentives</h4>
+                    <p class="benefit-description">Special economic zone status with reduced corporate tax rates and import duty exemptions</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🏛️</div>
+                    <h4 class="benefit-title">Government Support</h4>
+                    <p class="benefit-description">Direct government backing, policy support, and streamlined regulatory processes</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🌏</div>
+                    <h4 class="benefit-title">Strategic Location</h4>
+                    <p class="benefit-description">Prime location in Southeast Asia with access to regional markets and talent pools</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤝</div>
+                    <h4 class="benefit-title">Partnership Network</h4>
+                    <p class="benefit-description">Access to international partners including MIT, Stanford, and leading tech companies</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📈</div>
+                    <h4 class="benefit-title">High Growth Market</h4>
+                    <p class="benefit-description">Rapidly expanding AI market in Vietnam with 25%+ annual growth in tech sector</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🔒</div>
+                    <h4 class="benefit-title">Investment Security</div>
+                    <p class="benefit-description">Government guarantees, legal protections, and transparent investment frameworks</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-cta">
+            <h3 class="cta-title">Ready to Invest?</h3>
+            <p class="cta-subtitle">Join leading investors in shaping the future of AI innovation. Our investment team is ready to discuss opportunities tailored to your portfolio.</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-primary">
+                    <span>💼</span>
+                    <span>Schedule Consultation</span>
+                </a>
+                <a href="master-plan.html" class="btn btn-secondary">
+                    <span>📊</span>
+                    <span>View Master Plan</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-EOF < /dev/null

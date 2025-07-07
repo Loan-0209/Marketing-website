@@ -1,39 +1,755 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - HEART Technology Park</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Technology - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .campus-3d {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav .campus-3d::before {
+            content: "🏢 ";
+        }
+        
+        .nav .contact-btn,
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .title-decoration {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .tech-hero {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .hero-icon {
+            font-size: 3rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .hero-icon:nth-child(2) { animation-delay: 0.5s; }
+        .hero-icon:nth-child(3) { animation-delay: 1s; }
+        .hero-icon:nth-child(4) { animation-delay: 1.5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .tech-categories {
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .tech-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tech-header {
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tech-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+        
+        .tech-content {
+            padding: 2.5rem;
+        }
+        
+        .tech-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .tech-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .tech-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tech-features li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .tech-features li::before {
+            content: "⚡";
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        
+        .tech-applications {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .applications-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.75rem;
+        }
+        
+        .applications-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .application-tag {
+            background: #1e40af;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .innovation-showcase {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+        
+        .showcase-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .showcase-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-left: 4px solid #fbbf24;
+        }
+        
+        .showcase-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .showcase-label {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .research-partnerships {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 4rem 0;
+        }
+        
+        .partnerships-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .partnerships-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .partner-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .partner-logo {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .partner-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        
+        .partner-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-primary {
+            background: #fbbf24;
+            color: #1e40af;
+        }
+        
+        .btn-primary:hover {
+            background: #f59e0b;
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #10b981;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .showcase-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .partners-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <\!-- Same header as index.html but About Us is active -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">HEART</a>
             <nav class="nav">
                 <a href="index.html">Home</a>
-                <a href="about.html" class="active">About Us</a>
+                <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
                 <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
                 <a href="facilities.html">Facilities</a>
                 <a href="investment.html">Investment</a>
-                <a href="technology.html">Technology</a>
+                <a href="technology.html" class="active">Technology</a>
                 <a href="news.html">News</a>
                 <a href="contact.html" class="contact-btn">Contact</a>
                 <a href="login.html" class="login-btn">Login</a>
             </nav>
         </div>
     </header>
-    
-    <\!-- About Us content here -->
+
     <section class="page-header">
-        <h1 class="page-title">About Us</h1>
+        <h1 class="page-title">Advanced Technology</h1>
         <div class="title-decoration"></div>
-        <p class="page-subtitle">Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <p class="page-subtitle">Pioneering the future with cutting-edge AI and emerging technologies</p>
     </section>
-    
-    <\!-- Add same styling from master-plan.html -->
+
+    <div class="container">
+        <div class="tech-hero">
+            <h2 class="hero-title">🧠 Next-Generation AI Technologies</h2>
+            <p class="hero-subtitle">HEART Technology Park is at the forefront of artificial intelligence innovation, developing breakthrough technologies that will shape the future of human-computer interaction, automation, and intelligent systems.</p>
+            <div class="hero-icons">
+                <div class="hero-icon">🤖</div>
+                <div class="hero-icon">🧠</div>
+                <div class="hero-icon">⚡</div>
+                <div class="hero-icon">🌐</div>
+            </div>
+        </div>
+
+        <div class="tech-categories">
+            <h3 class="section-title">Core Technology Areas</h3>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-header">🧠</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Artificial Intelligence & Machine Learning</h4>
+                        <p class="tech-description">Advanced AI systems including deep learning, neural networks, and cognitive computing platforms designed to solve complex real-world problems.</p>
+                        <ul class="tech-features">
+                            <li>Deep Learning Frameworks</li>
+                            <li>Natural Language Processing</li>
+                            <li>Computer Vision Systems</li>
+                            <li>Reinforcement Learning</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Healthcare</span>
+                                <span class="application-tag">Finance</span>
+                                <span class="application-tag">Autonomous Vehicles</span>
+                                <span class="application-tag">Smart Cities</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">🤖</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Robotics & Automation</h4>
+                        <p class="tech-description">Intelligent robotics systems combining AI with mechanical engineering to create autonomous robots for various industries.</p>
+                        <ul class="tech-features">
+                            <li>Industrial Automation</li>
+                            <li>Service Robotics</li>
+                            <li>Human-Robot Collaboration</li>
+                            <li>Autonomous Navigation</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Manufacturing</span>
+                                <span class="application-tag">Healthcare</span>
+                                <span class="application-tag">Logistics</span>
+                                <span class="application-tag">Agriculture</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">🔢</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Quantum Computing</h4>
+                        <p class="tech-description">Next-generation quantum computing systems for solving complex optimization problems and advancing AI capabilities.</p>
+                        <ul class="tech-features">
+                            <li>Quantum Algorithms</li>
+                            <li>Quantum Machine Learning</li>
+                            <li>Quantum Cryptography</li>
+                            <li>Quantum Simulation</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Drug Discovery</span>
+                                <span class="application-tag">Financial Modeling</span>
+                                <span class="application-tag">Optimization</span>
+                                <span class="application-tag">Cryptography</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">🌐</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Edge Computing & IoT</h4>
+                        <p class="tech-description">Distributed computing systems that bring processing power closer to data sources for real-time AI applications.</p>
+                        <ul class="tech-features">
+                            <li>Edge AI Processing</li>
+                            <li>Real-time Analytics</li>
+                            <li>Sensor Networks</li>
+                            <li>Low-latency Systems</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Smart Cities</span>
+                                <span class="application-tag">Industrial IoT</span>
+                                <span class="application-tag">Autonomous Systems</span>
+                                <span class="application-tag">Real-time Monitoring</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">🔒</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Cybersecurity & AI Safety</h4>
+                        <p class="tech-description">Advanced security systems using AI to protect against cyber threats and ensure safe AI deployment.</p>
+                        <ul class="tech-features">
+                            <li>AI-powered Threat Detection</li>
+                            <li>Behavioral Analytics</li>
+                            <li>Secure AI Models</li>
+                            <li>Privacy-preserving AI</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Enterprise Security</span>
+                                <span class="application-tag">Financial Protection</span>
+                                <span class="application-tag">Government Defense</span>
+                                <span class="application-tag">Data Privacy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">🌱</div>
+                    <div class="tech-content">
+                        <h4 class="tech-title">Sustainable AI Technologies</h4>
+                        <p class="tech-description">Green AI solutions focused on energy efficiency, environmental monitoring, and sustainable development.</p>
+                        <ul class="tech-features">
+                            <li>Energy-efficient AI Models</li>
+                            <li>Environmental Monitoring</li>
+                            <li>Sustainable Computing</li>
+                            <li>Green Infrastructure</li>
+                        </ul>
+                        <div class="tech-applications">
+                            <h5 class="applications-title">Applications:</h5>
+                            <div class="applications-list">
+                                <span class="application-tag">Climate Science</span>
+                                <span class="application-tag">Renewable Energy</span>
+                                <span class="application-tag">Smart Grids</span>
+                                <span class="application-tag">Carbon Tracking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="innovation-showcase">
+            <h3 class="showcase-title">Innovation by the Numbers</h3>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <div class="showcase-number">150+</div>
+                    <div class="showcase-label">AI Patents</div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-number">50+</div>
+                    <div class="showcase-label">Research Projects</div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-number">200+</div>
+                    <div class="showcase-label">AI Researchers</div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-number">25+</div>
+                    <div class="showcase-label">University Partnerships</div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-number">10+</div>
+                    <div class="showcase-label">Quantum Computers</div>
+                </div>
+                <div class="showcase-item">
+                    <div class="showcase-number">1000+</div>
+                    <div class="showcase-label">GPU Cluster</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="research-partnerships">
+            <h3 class="partnerships-title">Research Partnerships</h3>
+            <p class="partnerships-subtitle">Collaborating with world-leading institutions to advance the frontiers of AI and technology innovation</p>
+            <div class="partners-grid">
+                <div class="partner-item">
+                    <div class="partner-logo">🎓</div>
+                    <div class="partner-name">MIT CSAIL</div>
+                    <div class="partner-description">Computer Science & Artificial Intelligence Laboratory</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">🌟</div>
+                    <div class="partner-name">Stanford HAI</div>
+                    <div class="partner-description">Human-Centered AI Institute</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">🔬</div>
+                    <div class="partner-name">DeepMind</div>
+                    <div class="partner-description">AI Research Division</div>
+                </div>
+                <div class="partner-item">
+                    <div class="partner-logo">⚡</div>
+                    <div class="partner-name">NVIDIA</div>
+                    <div class="partner-description">AI Computing Platform</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3 class="cta-title">Join the AI Revolution</h3>
+            <p class="cta-subtitle">Be part of the next wave of technological innovation. Explore collaboration opportunities and cutting-edge research at HEART Technology Park.</p>
+            <div class="cta-buttons">
+                <a href="facilities.html" class="btn btn-primary">
+                    <span>🔬</span>
+                    <span>Explore Research Labs</span>
+                </a>
+                <a href="contact.html" class="btn btn-secondary">
+                    <span>🤝</span>
+                    <span>Partner With Us</span>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-EOF < /dev/null

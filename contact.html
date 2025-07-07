@@ -1,39 +1,655 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - HEART Technology Park</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Contact Us - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .campus-3d {
+            background: #10b981;
+            color: white;
+        }
+        
+        .nav .campus-3d::before {
+            content: "🏢 ";
+        }
+        
+        .nav .contact-btn,
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 4rem 0;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .title-decoration {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+        
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+        
+        .contact-form-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .form-subtitle {
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            font-family: inherit;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+        
+        .contact-info-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+        }
+        
+        .info-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .info-subtitle {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .contact-methods {
+            margin-bottom: 2rem;
+        }
+        
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .contact-icon {
+            font-size: 1.5rem;
+        }
+        
+        .contact-details h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.25rem;
+        }
+        
+        .contact-details p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        .office-hours {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hours-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 1rem;
+        }
+        
+        .hours-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .location-section {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+        }
+        
+        .location-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .location-info {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+        
+        .location-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .address {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .directions-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .directions-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        .map-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 300px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .departments-section {
+            margin-top: 4rem;
+        }
+        
+        .departments-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .department-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #fbbf24;
+            transition: all 0.3s ease;
+        }
+        
+        .department-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .department-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .department-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .department-contact {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .departments-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <\!-- Same header as index.html but About Us is active -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">HEART</a>
             <nav class="nav">
                 <a href="index.html">Home</a>
-                <a href="about.html" class="active">About Us</a>
+                <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
                 <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
                 <a href="facilities.html">Facilities</a>
                 <a href="investment.html">Investment</a>
                 <a href="technology.html">Technology</a>
                 <a href="news.html">News</a>
-                <a href="contact.html" class="contact-btn">Contact</a>
+                <a href="contact.html" class="contact-btn active">Contact</a>
                 <a href="login.html" class="login-btn">Login</a>
             </nav>
         </div>
     </header>
-    
-    <\!-- About Us content here -->
+
     <section class="page-header">
-        <h1 class="page-title">About Us</h1>
+        <h1 class="page-title">Contact Us</h1>
         <div class="title-decoration"></div>
-        <p class="page-subtitle">Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
+        <p class="page-subtitle">Get in touch with our team to explore opportunities at HEART Technology Park</p>
     </section>
-    
-    <\!-- Add same styling from master-plan.html -->
+
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-form-section">
+                <h2 class="form-title">Send us a Message</h2>
+                <p class="form-subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you within 24 hours.</p>
+                
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name *</label>
+                            <input type="text" id="firstName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name *</label>
+                            <input type="text" id="lastName" class="form-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address *</label>
+                            <input type="email" id="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company" class="form-label">Company/Organization</label>
+                        <input type="text" id="company" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="inquiryType" class="form-label">Inquiry Type *</label>
+                        <select id="inquiryType" class="form-select" required>
+                            <option value="">Select an option</option>
+                            <option value="investment">Investment Opportunities</option>
+                            <option value="partnership">Partnership & Collaboration</option>
+                            <option value="research">Research Collaboration</option>
+                            <option value="startup">Startup Incubation</option>
+                            <option value="facility">Facility Tours</option>
+                            <option value="media">Media & Press</option>
+                            <option value="general">General Information</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea id="message" class="form-textarea" placeholder="Tell us more about your inquiry..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">
+                        <span>📧</span>
+                        <span>Send Message</span>
+                    </button>
+                </form>
+            </div>
+            
+            <div class="contact-info-section">
+                <h2 class="info-title">Get in Touch</h2>
+                <p class="info-subtitle">Ready to be part of the AI revolution? Contact us today to explore opportunities at HEART Technology Park.</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">
+                            <h4>Email</h4>
+                            <p>info@hearttechpark.vn</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-details">
+                            <h4>Phone</h4>
+                            <p>+84 (28) 3825 6789</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-details">
+                            <h4>WhatsApp</h4>
+                            <p>+84 901 234 567</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-details">
+                            <h4>Social Media</h4>
+                            <p>@HEARTTechPark</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="office-hours">
+                    <h3 class="hours-title">Office Hours</h3>
+                    <ul class="hours-list">
+                        <li><span>Monday - Friday</span><span>8:00 AM - 6:00 PM</span></li>
+                        <li><span>Saturday</span><span>9:00 AM - 4:00 PM</span></li>
+                        <li><span>Sunday</span><span>Closed</span></li>
+                        <li><span>Public Holidays</span><span>Closed</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="location-section">
+            <h3 class="location-title">Visit Our Campus</h3>
+            <div class="location-grid">
+                <div class="location-info">
+                    <h3>HEART Technology Park</h3>
+                    <div class="address">
+                        123 Innovation Boulevard<br>
+                        Saigon Hi-Tech Park<br>
+                        District 9, Ho Chi Minh City<br>
+                        Vietnam 700000
+                    </div>
+                    <a href="#" class="directions-btn">
+                        <span>🗺️</span>
+                        <span>Get Directions</span>
+                    </a>
+                </div>
+                <div class="map-placeholder">
+                    🗺️
+                </div>
+            </div>
+        </div>
+        
+        <div class="departments-section">
+            <h3 class="departments-title">Department Contacts</h3>
+            <div class="departments-grid">
+                <div class="department-card">
+                    <div class="department-icon">💼</div>
+                    <h4 class="department-name">Business Development</h4>
+                    <p class="department-contact">business@hearttechpark.vn<br>+84 (28) 3825 6790</p>
+                </div>
+                
+                <div class="department-card">
+                    <div class="department-icon">🔬</div>
+                    <h4 class="department-name">Research & Innovation</h4>
+                    <p class="department-contact">research@hearttechpark.vn<br>+84 (28) 3825 6791</p>
+                </div>
+                
+                <div class="department-card">
+                    <div class="department-icon">💰</div>
+                    <h4 class="department-name">Investment Relations</h4>
+                    <p class="department-contact">investment@hearttechpark.vn<br>+84 (28) 3825 6792</p>
+                </div>
+                
+                <div class="department-card">
+                    <div class="department-icon">🚀</div>
+                    <h4 class="department-name">Startup Incubation</h4>
+                    <p class="department-contact">startups@hearttechpark.vn<br>+84 (28) 3825 6793</p>
+                </div>
+                
+                <div class="department-card">
+                    <div class="department-icon">🎓</div>
+                    <h4 class="department-name">Education & Training</h4>
+                    <p class="department-contact">education@hearttechpark.vn<br>+84 (28) 3825 6794</p>
+                </div>
+                
+                <div class="department-card">
+                    <div class="department-icon">📰</div>
+                    <h4 class="department-name">Media & Communications</h4>
+                    <p class="department-contact">media@hearttechpark.vn<br>+84 (28) 3825 6795</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
-EOF < /dev/null
