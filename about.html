@@ -1226,6 +1226,127 @@
             }, 300); // Wait for DOM stability
         }
 
+        // REMOVE ALL BORDERS FROM BUILDING
+        function removeBuildingBorder() {
+            console.log("🧹 Removing all borders from building...");
+            
+            // Find all building containers
+            const buildings = document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"]');
+            
+            buildings.forEach((building, index) => {
+                if (building) {
+                    // Remove all types of borders
+                    building.style.border = 'none';
+                    building.style.borderLeft = 'none';
+                    building.style.borderRight = 'none';
+                    building.style.borderTop = 'none';
+                    building.style.borderBottom = 'none';
+                    building.style.outline = 'none';
+                    building.style.boxShadow = 'none';
+                    
+                    // Make background transparent if it has border-like appearance
+                    if (building.style.background && building.style.background.includes('linear-gradient') && 
+                        !building.innerHTML.includes('HEART TECHNOLOGY')) {
+                        building.style.background = 'transparent';
+                    }
+                    
+                    // Remove border radius that might create border-like appearance
+                    if (!building.innerHTML.includes('HEART TECHNOLOGY')) {
+                        building.style.borderRadius = '0';
+                    }
+                    
+                    console.log(`✅ Removed borders from building ${index + 1}`);
+                }
+            });
+            
+            // Also check for sky background containers
+            const skyContainers = document.querySelectorAll('[style*="border-radius"]');
+            skyContainers.forEach((container, index) => {
+                if (container.style.background && container.style.background.includes('linear-gradient') &&
+                    container.style.borderRadius && !container.innerHTML.includes('HEART TECHNOLOGY')) {
+                    container.style.border = 'none';
+                    container.style.borderRadius = '0';
+                    console.log(`✅ Removed border from sky container ${index + 1}`);
+                }
+            });
+            
+            console.log("🎯 All building borders removed!");
+        }
+
+        // CREATE BUILDING WITHOUT ANY BORDERS
+        function createBorderlessBuildingOnly() {
+            console.log("🏗️ Creating completely borderless building...");
+            
+            // Remove existing
+            document.querySelectorAll('[id*="building"], [id*="parallax"]').forEach(el => el.remove());
+            
+            // Create container with NO borders or background
+            const container = document.createElement('div');
+            container.id = 'borderless-building';
+            container.style.cssText = `
+                position: fixed !important;
+                top: 130px !important;
+                right: 0px !important;
+                width: 400px !important;
+                height: calc(100vh - 130px) !important;
+                z-index: 1 !important;
+                pointer-events: none !important;
+                overflow: hidden !important;
+                background: transparent !important;
+                border: none !important;
+                outline: none !important;
+                box-shadow: none !important;
+            `;
+            
+            // Create ONLY the building structure - NO background
+            const building = document.createElement('div');
+            building.style.cssText = `
+                position: absolute !important;
+                top: 40% !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 200px !important;
+                height: 160px !important;
+                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
+                border-radius: 12px !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+                border: none !important;
+                outline: none !important;
+            `;
+            
+            building.innerHTML = `
+                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: 900; color: #1e40af;">HEART TECHNOLOGY</div>
+                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
+                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
+                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
+                </div>
+                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
+            `;
+            
+            container.appendChild(building);
+            document.body.appendChild(container);
+            
+            // Simple parallax
+            let ticking = false;
+            function borderlessParallax() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrolled = window.pageYOffset;
+                        if (scrolled > 130) {
+                            const rate = (scrolled - 130) * -0.3;
+                            building.style.transform = `translateX(-50%) translateY(${rate}px)`;
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', borderlessParallax, { passive: true });
+            
+            console.log("✅ Borderless building created - pure building only!");
+        }
+
         // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
         window.forceAdjustBuilding = forceAdjustBuilding;
@@ -1234,6 +1355,8 @@
         window.createCleanBuildingNoBorder = createCleanBuildingNoBorder;
         window.positionBuildingFromMission = positionBuildingFromMission;
         window.fixMissionPositioning = fixMissionPositioning;
+        window.removeBuildingBorder = removeBuildingBorder;
+        window.createBorderlessBuildingOnly = createBorderlessBuildingOnly;
 
         // Add nuclear reset as emergency option
         // Uncomment the next line if you need emergency reset
