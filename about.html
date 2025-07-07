@@ -813,10 +813,118 @@
             }, 200); // Wait for DOM cleanup
         }
 
+        // REMOVE BORDER AND KEEP ONLY BUILDING WITH PARALLAX
+        function cleanBuildingOnly() {
+            console.log("🏢 Cleaning building - removing border, keeping parallax...");
+            
+            // Find the current building
+            const building = document.getElementById('nuclear-reset-building') || 
+                            document.querySelector('[class*="heart-building"]') ||
+                            document.querySelector('[style*="HEART TECHNOLOGY"]').closest('[style*="position: fixed"]');
+            
+            if (!building) {
+                console.log("❌ Building not found");
+                return;
+            }
+            
+            console.log("✅ Found building, removing border...");
+            
+            // Remove border from container
+            building.style.border = 'none';
+            building.style.borderLeft = 'none';
+            building.style.outline = 'none';
+            
+            // Keep only the essential styles
+            building.style.cssText = `
+                position: fixed !important;
+                top: 130px !important;
+                right: 0px !important;
+                width: 400px !important;
+                height: calc(100vh - 130px) !important;
+                z-index: 1 !important;
+                pointer-events: none !important;
+                overflow: hidden !important;
+                background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 50%, #f59e0b 100%) !important;
+            `;
+            
+            console.log("🎨 Border removed, building cleaned!");
+        }
+
+        // CREATE CLEAN BUILDING WITHOUT BORDER
+        function createCleanBuildingNoBorder() {
+            console.log("🏗️ Creating clean building without border...");
+            
+            // Remove existing
+            document.querySelectorAll('[id*="building"], [id*="parallax"]').forEach(el => el.remove());
+            
+            // Create clean container - NO BORDER
+            const container = document.createElement('div');
+            container.id = 'clean-building-no-border';
+            container.style.cssText = `
+                position: fixed !important;
+                top: 130px !important;
+                right: 0px !important;
+                width: 400px !important;
+                height: calc(100vh - 130px) !important;
+                z-index: 1 !important;
+                pointer-events: none !important;
+                overflow: hidden !important;
+                background: transparent !important;
+            `;
+            
+            // Create building structure
+            const buildingStructure = document.createElement('div');
+            buildingStructure.style.cssText = `
+                position: absolute !important;
+                top: 40% !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 200px !important;
+                height: 160px !important;
+                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
+                border-radius: 12px !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+            `;
+            
+            buildingStructure.innerHTML = `
+                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: 900; color: #1e40af;">HEART TECHNOLOGY</div>
+                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
+                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
+                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
+                </div>
+                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
+            `;
+            
+            container.appendChild(buildingStructure);
+            document.body.appendChild(container);
+            
+            // Add parallax effect
+            let ticking = false;
+            function parallaxEffect() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrolled = window.pageYOffset;
+                        if (scrolled > 130) {
+                            const rate = (scrolled - 130) * -0.3;
+                            buildingStructure.style.transform = `translateX(-50%) translateY(${rate}px)`;
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', parallaxEffect, { passive: true });
+            
+            console.log("✅ Clean building created - no border, with parallax!");
+        }
+
         // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
         window.forceAdjustBuilding = forceAdjustBuilding;
         window.nuclearResetBuilding = nuclearResetBuilding;
+        window.cleanBuildingOnly = cleanBuildingOnly;
+        window.createCleanBuildingNoBorder = createCleanBuildingNoBorder;
 
         // Add nuclear reset as emergency option
         // Uncomment the next line if you need emergency reset
