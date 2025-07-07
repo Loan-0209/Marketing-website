@@ -552,16 +552,82 @@
             }
         }
 
+        // FORCE ADJUST BUILDING POSITION - BELOW NAVBAR
+        function forceAdjustBuilding() {
+            console.log("🔧 Force adjusting building position...");
+            
+            // Find all possible building containers
+            const buildings = [
+                document.getElementById('heart-building-parallax'),
+                document.getElementById('heart-building-parallax-fixed'),
+                document.getElementById('clean-building-parallax'),
+                document.getElementById('immediate-building-container'),
+                document.getElementById('building-parallax-container')
+            ].filter(el => el !== null);
+            
+            console.log("Found buildings:", buildings.length);
+            
+            if (buildings.length === 0) {
+                console.log("No buildings found to adjust");
+                return;
+            }
+            
+            // Get actual navbar height
+            const navbar = document.querySelector('nav') || 
+                          document.querySelector('header') || 
+                          document.querySelector('.header') ||
+                          document.querySelector('.navbar') ||
+                          document.querySelector('[style*="background"][style*="#"]');
+            
+            let navbarHeight = 120; // Default
+            
+            if (navbar) {
+                navbarHeight = navbar.offsetHeight + 20; // Add 20px padding
+                console.log("Detected navbar height:", navbarHeight);
+            }
+            
+            // Adjust each building
+            buildings.forEach((building, index) => {
+                if (building) {
+                    building.style.position = 'fixed';
+                    building.style.top = `${navbarHeight}px`;
+                    building.style.height = `calc(100vh - ${navbarHeight}px)`;
+                    building.style.right = '0';
+                    building.style.width = '40vw';
+                    building.style.zIndex = '5'; // Lower z-index to not interfere
+                    building.style.pointerEvents = 'none';
+                    
+                    console.log(`Adjusted building ${index + 1}: top=${navbarHeight}px`);
+                }
+            });
+            
+            console.log("✅ All buildings adjusted below navbar");
+        }
+
         // Execute the fix when page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Wait a bit for styles to load
             setTimeout(() => {
                 fixBuildingPosition();
+                // Force adjust as backup
+                setTimeout(forceAdjustBuilding, 200);
             }, 100);
         });
 
-        // Make function available globally
+        // Execute immediately
+        forceAdjustBuilding();
+
+        // Also run after a delay to ensure DOM is ready
+        setTimeout(forceAdjustBuilding, 500);
+
+        // Run on window resize to maintain positioning
+        window.addEventListener('resize', function() {
+            setTimeout(forceAdjustBuilding, 100);
+        });
+
+        // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
+        window.forceAdjustBuilding = forceAdjustBuilding;
     </script>
 </body>
 </html>
