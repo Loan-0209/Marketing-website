@@ -1078,6 +1078,154 @@
             return container;
         }
 
+        // ACCURATE MISSION-BASED POSITIONING - FIX ALL ISSUES
+        function fixMissionPositioning() {
+            console.log("🔧 FIXING MISSION POSITIONING...");
+            
+            // 1. COMPLETE CLEANUP FIRST
+            document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"]').forEach(el => {
+                el.remove();
+                console.log("Removed:", el.id || el.className);
+            });
+            
+            // 2. WAIT FOR DOM TO BE STABLE
+            setTimeout(() => {
+                // 3. FIND MISSION ELEMENT MORE ACCURATELY
+                let missionElement = null;
+                let missionTop = 0;
+                
+                // Try multiple selectors
+                const selectors = [
+                    'h2:contains("Our Mission")',
+                    'h3:contains("Our Mission")',
+                    '[class*="mission"]',
+                    '*:contains("Our Mission")'
+                ];
+                
+                // Manual search through all elements
+                const allElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, .section-title, [class*="title"]');
+                
+                for (let el of allElements) {
+                    if (el.textContent && el.textContent.toLowerCase().includes('our mission')) {
+                        missionElement = el;
+                        break;
+                    }
+                }
+                
+                if (missionElement) {
+                    // Get actual position after layout
+                    const rect = missionElement.getBoundingClientRect();
+                    missionTop = window.pageYOffset + rect.top - 20; // 20px margin
+                    console.log("✅ Found Mission at:", missionTop, missionElement);
+                } else {
+                    // Fallback: measure from About Us heading
+                    const aboutHeading = document.querySelector('h1') || 
+                                        document.querySelector('[class*="about"]') ||
+                                        document.querySelector('h2');
+                    
+                    if (aboutHeading) {
+                        const aboutRect = aboutHeading.getBoundingClientRect();
+                        missionTop = window.pageYOffset + aboutRect.bottom + 150; // About + gap + content
+                        console.log("📍 Calculated Mission position:", missionTop);
+                    } else {
+                        missionTop = 500; // Safe fallback
+                        console.log("⚠️ Using fallback position:", missionTop);
+                    }
+                }
+                
+                // 4. CREATE BUILDING THAT STARTS EXACTLY AT MISSION
+                const container = document.createElement('div');
+                container.id = 'mission-precise-building';
+                container.style.cssText = `
+                    position: absolute !important;
+                    top: ${missionTop}px !important;
+                    right: 0 !important;
+                    width: 35vw !important;
+                    height: 400px !important;
+                    z-index: 2 !important;
+                    pointer-events: none !important;
+                    overflow: visible !important;
+                    background: transparent !important;
+                `;
+                
+                // 5. SKY BACKGROUND - ONLY FOR BUILDING AREA
+                const skyArea = document.createElement('div');
+                skyArea.style.cssText = `
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    background: linear-gradient(180deg, 
+                        #87CEEB 0%, 
+                        #98D8E8 40%, 
+                        #F0E68C 80%, 
+                        #DDA0DD 100%) !important;
+                    border-radius: 15px 0 0 15px !important;
+                    z-index: 1 !important;
+                `;
+                
+                // 6. BUILDING STRUCTURE
+                const building = document.createElement('div');
+                building.style.cssText = `
+                    position: absolute !important;
+                    top: 50px !important;
+                    left: 50% !important;
+                    transform: translateX(-50%) !important;
+                    width: 200px !important;
+                    height: 160px !important;
+                    background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
+                    border-radius: 12px !important;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+                    z-index: 10 !important;
+                `;
+                
+                building.innerHTML = `
+                    <div style="position: absolute; top: 15px; left: 15px; right: 15px; height: 22px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 9px; font-weight: bold; color: #1e40af;">HEART TECHNOLOGY</div>
+                    <div style="position: absolute; top: 45px; left: 15px; right: 15px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 7px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
+                    <div style="position: absolute; top: 75px; left: 20px; right: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 60px;">
+                        ${Array(16).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
+                    </div>
+                    <div style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
+                `;
+                
+                skyArea.appendChild(building);
+                container.appendChild(skyArea);
+                document.body.appendChild(container);
+                
+                // 7. VERIFY POSITIONING
+                setTimeout(() => {
+                    const containerRect = container.getBoundingClientRect();
+                    console.log("📏 Container position:", {
+                        top: container.style.top,
+                        actualTop: containerRect.top + window.pageYOffset,
+                        missionTarget: missionTop
+                    });
+                }, 100);
+                
+                // 8. PARALLAX EFFECT
+                let ticking = false;
+                function preciseParallax() {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            const scrolled = window.pageYOffset;
+                            if (scrolled > missionTop - window.innerHeight) {
+                                const rate = (scrolled - missionTop) * -0.3;
+                                building.style.transform = `translateX(-50%) translateY(${rate}px)`;
+                            }
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }
+                
+                window.addEventListener('scroll', preciseParallax, { passive: true });
+                
+                console.log(`✅ Building positioned precisely at Mission: ${missionTop}px`);
+                
+            }, 300); // Wait for DOM stability
+        }
+
         // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
         window.forceAdjustBuilding = forceAdjustBuilding;
@@ -1085,6 +1233,7 @@
         window.cleanBuildingOnly = cleanBuildingOnly;
         window.createCleanBuildingNoBorder = createCleanBuildingNoBorder;
         window.positionBuildingFromMission = positionBuildingFromMission;
+        window.fixMissionPositioning = fixMissionPositioning;
 
         // Add nuclear reset as emergency option
         // Uncomment the next line if you need emergency reset
