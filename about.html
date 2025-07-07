@@ -1615,6 +1615,169 @@
             }, 500); // Wait for DOM stability
         }
 
+        // FIX: BUILDING STARTS EXACTLY FROM "OUR MISSION" - NOT FROM TOP
+        function fixBuildingStartPosition() {
+            console.log("🔧 FIXING: Building to start from Our Mission only...");
+            
+            // 1. Remove all existing buildings
+            document.querySelectorAll('[id*="heart"], [id*="building"], [id*="parallax"]').forEach(el => {
+                el.remove();
+            });
+            
+            // 2. Find Our Mission heading precisely
+            let missionElement = null;
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            
+            for (let heading of headings) {
+                if (heading.textContent.toLowerCase().includes('our mission')) {
+                    missionElement = heading;
+                    break;
+                }
+            }
+            
+            if (!missionElement) {
+                console.log("❌ Our Mission heading not found");
+                return;
+            }
+            
+            // 3. Get exact scroll position of Our Mission
+            const missionRect = missionElement.getBoundingClientRect();
+            const missionScrollTop = window.pageYOffset + missionRect.top;
+            
+            console.log("📍 Our Mission position:", missionScrollTop);
+            
+            // 4. Create building that ONLY appears when scrolled to Our Mission
+            const buildingContainer = document.createElement('div');
+            buildingContainer.id = 'mission-triggered-building';
+            buildingContainer.style.cssText = `
+                position: fixed !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: 35vw !important;
+                height: 100vh !important;
+                z-index: 5 !important;
+                pointer-events: none !important;
+                background: transparent !important;
+                display: none !important;
+            `;
+            
+            // 5. Sky background (only visible when triggered)
+            const skyArea = document.createElement('div');
+            skyArea.style.cssText = `
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                background: linear-gradient(180deg, 
+                    #87CEEB 0%, 
+                    #B0E0E6 30%, 
+                    #F0E68C 70%, 
+                    #DDA0DD 100%) !important;
+                border-radius: 20px 0 0 20px !important;
+            `;
+            
+            // 6. Main building
+            const building = document.createElement('div');
+            building.style.cssText = `
+                position: absolute !important;
+                top: 40% !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 200px !important;
+                height: 160px !important;
+                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
+                border-radius: 12px !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+            `;
+            
+            building.innerHTML = `
+                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: bold; color: #1e40af;">HEART TECHNOLOGY</div>
+                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 20px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
+                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
+                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
+                </div>
+                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
+            `;
+            
+            skyArea.appendChild(building);
+            buildingContainer.appendChild(skyArea);
+            document.body.appendChild(buildingContainer);
+            
+            // 7. SCROLL TRIGGER - ONLY SHOW WHEN REACHED OUR MISSION
+            let ticking = false;
+            function missionTriggeredScroll() {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const currentScroll = window.pageYOffset;
+                        const windowHeight = window.innerHeight;
+                        
+                        // Check if Our Mission is in viewport
+                        const missionInView = currentScroll + windowHeight >= missionScrollTop;
+                        
+                        if (missionInView) {
+                            // Show building
+                            buildingContainer.style.display = 'block';
+                            
+                            // Apply parallax relative to Mission position
+                            const relativeScroll = currentScroll - missionScrollTop + windowHeight;
+                            const parallaxOffset = relativeScroll * -0.3;
+                            
+                            building.style.transform = `translateX(-50%) translateY(${parallaxOffset}px)`;
+                            
+                            // Fade effect
+                            const fadeDistance = windowHeight * 2;
+                            const opacity = Math.max(0.2, 1 - (relativeScroll / fadeDistance));
+                            buildingContainer.style.opacity = opacity;
+                            
+                            console.log(`Building visible - scroll: ${currentScroll}, mission: ${missionScrollTop}`);
+                        } else {
+                            // Hide building when above Our Mission
+                            buildingContainer.style.display = 'none';
+                        }
+                        
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', missionTriggeredScroll, { passive: true });
+            
+            // 8. Initial check
+            missionTriggeredScroll();
+            
+            console.log("✅ Building will ONLY appear when scrolled to Our Mission");
+            console.log(`Mission trigger position: ${missionScrollTop}px`);
+            
+            // Make available globally
+            window.missionBuilding = buildingContainer;
+            window.missionTriggerPosition = missionScrollTop;
+        }
+
+        // Test function to check mission position
+        function checkMissionPosition() {
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            let mission = null;
+            
+            for (let heading of headings) {
+                if (heading.textContent.toLowerCase().includes('our mission')) {
+                    mission = heading;
+                    break;
+                }
+            }
+            
+            if (mission) {
+                const rect = mission.getBoundingClientRect();
+                const scrollPos = window.pageYOffset + rect.top;
+                console.log("Our Mission at:", scrollPos, "Current scroll:", window.pageYOffset);
+                return scrollPos;
+            } else {
+                console.log("Our Mission heading not found");
+                return null;
+            }
+        }
+
         // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
         window.forceAdjustBuilding = forceAdjustBuilding;
@@ -1626,6 +1789,8 @@
         window.removeBuildingBorder = removeBuildingBorder;
         window.createBorderlessBuildingOnly = createBorderlessBuildingOnly;
         window.createNewHeartBuilding = createNewHeartBuilding;
+        window.fixBuildingStartPosition = fixBuildingStartPosition;
+        window.checkMissionPosition = checkMissionPosition;
 
         // Add nuclear reset as emergency option
         // Uncomment the next line if you need emergency reset
