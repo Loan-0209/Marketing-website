@@ -625,9 +625,211 @@
             setTimeout(forceAdjustBuilding, 100);
         });
 
+        // NUCLEAR OPTION - COMPLETE RESET AND REBUILD
+        function nuclearResetBuilding() {
+            console.log("💥 NUCLEAR RESET - Complete building rebuild...");
+            
+            // 1. DESTROY EVERYTHING
+            document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"], [class*="parallax"]').forEach(el => {
+                el.remove();
+                console.log("Destroyed:", el.id || el.className);
+            });
+            
+            // 2. CLEAR ALL INLINE STYLES ON BODY
+            document.body.style.overflow = 'auto';
+            
+            // 3. GET EXACT NAVBAR DIMENSIONS
+            const navbar = document.querySelector('nav') || document.querySelector('header') || document.querySelector('.header') || document.querySelector('.navbar');
+            const navRect = navbar ? navbar.getBoundingClientRect() : { height: 120 };
+            const safeTop = Math.max(navRect.height + 10, 130); // At least 130px from top
+            
+            console.log("Navbar dimensions:", navRect);
+            console.log("Safe top position:", safeTop);
+            
+            // 4. WAIT FOR DOM TO CLEAR
+            setTimeout(() => {
+                // 5. CREATE CLEAN BUILDING WITH SPECIFIC POSITIONING
+                const newBuilding = document.createElement('div');
+                newBuilding.id = 'nuclear-reset-building';
+                newBuilding.className = 'heart-building-final';
+                
+                // Use setAttribute to force styles
+                newBuilding.setAttribute('style', `
+                    position: fixed !important;
+                    top: ${safeTop}px !important;
+                    right: 0px !important;
+                    width: 400px !important;
+                    height: calc(100vh - ${safeTop}px) !important;
+                    z-index: 1 !important;
+                    pointer-events: none !important;
+                    overflow: hidden !important;
+                    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 50%, #f59e0b 100%) !important;
+                    border-left: 2px solid rgba(255,255,255,0.2) !important;
+                `);
+                
+                // 6. ADD BUILDING CONTENT
+                newBuilding.innerHTML = `
+                    <div style="
+                        position: absolute !important;
+                        top: 40% !important;
+                        left: 50% !important;
+                        transform: translateX(-50%) !important;
+                        width: 200px !important;
+                        height: 160px !important;
+                        background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
+                    ">
+                        <div style="
+                            position: absolute;
+                            top: 20px;
+                            left: 20px;
+                            right: 20px;
+                            height: 25px;
+                            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+                            border-radius: 8px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-family: Arial Black, Arial;
+                            font-size: 10px;
+                            font-weight: 900;
+                            color: #1e40af;
+                            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+                        ">HEART TECHNOLOGY</div>
+                        
+                        <div style="
+                            position: absolute;
+                            top: 55px;
+                            left: 20px;
+                            right: 20px;
+                            height: 18px;
+                            background: rgba(255,255,255,0.95);
+                            border-radius: 5px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-family: Arial;
+                            font-size: 8px;
+                            font-weight: bold;
+                            color: #1e40af;
+                        ">AI Innovation Hub</div>
+                        
+                        <div style="
+                            position: absolute;
+                            top: 85px;
+                            left: 25px;
+                            right: 25px;
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 6px;
+                            height: 50px;
+                        ">
+                            ${Array(12).fill().map((_, i) => `
+                                <div style="
+                                    background: ${Math.random() > 0.3 ? 'rgba(255,255,100,0.9)' : 'rgba(255,255,255,0.4)'};
+                                    border-radius: 2px;
+                                    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+                                "></div>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="
+                            position: absolute;
+                            bottom: 20px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 30px;
+                            height: 12px;
+                            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+                            border-radius: 6px;
+                            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+                        "></div>
+                    </div>
+                    
+                    <div style="
+                        position: absolute;
+                        bottom: 2rem;
+                        left: 2rem;
+                        right: 2rem;
+                        color: white;
+                        text-align: center;
+                        background: rgba(0, 0, 0, 0.3);
+                        padding: 1rem;
+                        border-radius: 12px;
+                        backdrop-filter: blur(10px);
+                    ">
+                        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; opacity: 0.9;">HEART AI Building</h3>
+                        <p style="font-size: 0.8rem; opacity: 0.8; line-height: 1.4;">State-of-the-art AI research facility</p>
+                    </div>
+                `;
+                
+                // 7. FORCE ADD TO DOM
+                document.body.appendChild(newBuilding);
+                
+                // 8. DOUBLE CHECK POSITIONING
+                setTimeout(() => {
+                    newBuilding.style.setProperty('top', `${safeTop}px`, 'important');
+                    newBuilding.style.setProperty('position', 'fixed', 'important');
+                    newBuilding.style.setProperty('z-index', '1', 'important');
+                    console.log("Position double-checked");
+                }, 100);
+                
+                // 9. ADD SIMPLE PARALLAX
+                let ticking = false;
+                function simpleParallax() {
+                    if (!ticking) {
+                        requestAnimationFrame(() => {
+                            const scrolled = window.pageYOffset;
+                            if (scrolled > safeTop) {
+                                const building = newBuilding.querySelector('div[style*="transform: translateX(-50%)"]');
+                                if (building) {
+                                    const rate = (scrolled - safeTop) * -0.2;
+                                    building.style.transform = `translateX(-50%) translateY(${rate}px)`;
+                                }
+                            }
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }
+                
+                window.addEventListener('scroll', simpleParallax, { passive: true });
+                
+                // 10. Hide on mobile
+                function checkMobileNuclear() {
+                    if (window.innerWidth < 768) {
+                        newBuilding.style.display = 'none';
+                    } else {
+                        newBuilding.style.display = 'block';
+                    }
+                }
+                
+                window.addEventListener('resize', checkMobileNuclear);
+                checkMobileNuclear();
+                
+                console.log(`✅ NUCLEAR RESET COMPLETE! Building at ${safeTop}px from top`);
+                
+            }, 200); // Wait for DOM cleanup
+        }
+
         // Make functions available globally
         window.fixBuildingPosition = fixBuildingPosition;
         window.forceAdjustBuilding = forceAdjustBuilding;
+        window.nuclearResetBuilding = nuclearResetBuilding;
+
+        // Add nuclear reset as emergency option
+        // Uncomment the next line if you need emergency reset
+        // setTimeout(nuclearResetBuilding, 2000);
+
+        // Verify building existence after all operations
+        setTimeout(() => {
+            const buildings = document.querySelectorAll('[id*="building"], [class*="building"]');
+            console.log(`Found ${buildings.length} building(s) after initialization`);
+            buildings.forEach((building, index) => {
+                console.log(`Building ${index + 1}:`, building.id || building.className, building.getBoundingClientRect().top + 'px from top');
+            });
+        }, 1000);
     </script>
 </body>
 </html>
