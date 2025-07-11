@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced 3D Building - HEART Technology Park</title>
+    
+    <!-- Enhanced Building CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/building-3d.css">
+    <link rel="stylesheet" href="css/windows-pattern.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Demo page specific styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .demo-container {
+            width: 60%;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 40px 0 40px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #4A6CF7;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feature-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-section h3 {
+            color: #4A6CF7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .status-good { color: #4CAF50; }
+        .status-enhanced { color: #FF9800; }
+        .status-new { color: #2196F3; }
+        
+        .controls-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+        
+        .control-button {
+            background: #4A6CF7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            background: #667EEA;
+            transform: translateY(-2px);
+        }
+        
+        .control-button.active {
+            background: #FFA726;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                width: 95%;
+                margin: 20px auto;
+                padding: 20px;
+            }
+            
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .controls-panel {
+                position: relative;
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced 3D Building Container -->
+    <div class="building-container">
+        <div class="building-glow"></div>
+        <div class="building-3d">
+            <!-- Building Roof with Antenna -->
+            <div class="building-roof"></div>
+            
+            <!-- Main Building Facade -->
+            <div class="building-facade">
+                <div class="building-atmosphere"></div>
+                
+                <!-- Enhanced Windows Grid -->
+                <div class="windows-container">
+                    <!-- Row 1 -->
+                    <div class="window window-orange"></div>
+                    <div class="window window-large window-purple"></div>
+                    <div class="window window-blue"></div>
+                    
+                    <!-- Row 2 -->
+                    <div class="window window-green"></div>
+                    <div class="window window-orange"></div>
+                    <div class="window window-purple"></div>
+                    <div class="window window-tall window-blue"></div>
+                    
+                    <!-- Row 3 -->
+                    <div class="window window-purple"></div>
+                    <div class="window window-orange"></div>
+                    <div class="window window-green"></div>
+                    
+                    <!-- Row 4 -->
+                    <div class="window window-conference"></div>
+                    <div class="window window-orange"></div>
+                    <div class="window window-purple"></div>
+                    
+                    <!-- Row 5 -->
+                    <div class="window window-blue"></div>
+                    <div class="window window-green"></div>
+                    
+                    <!-- Row 6 -->
+                    <div class="window window-orange"></div>
+                    <div class="window window-purple"></div>
+                    <div class="window window-large window-blue"></div>
+                    
+                    <!-- Row 7 -->
+                    <div class="window window-green"></div>
+                    <div class="window window-orange"></div>
+                    <div class="window window-purple"></div>
+                    <div class="window window-blue"></div>
+                    
+                    <!-- Row 8 -->
+                    <div class="window window-purple"></div>
+                    <div class="window window-tall window-orange"></div>
+                    <div class="window window-green"></div>
+                </div>
+                
+                <!-- Building Entrance -->
+                <div class="building-entrance"></div>
+            </div>
+            
+            <!-- Building Side Panel -->
+            <div class="building-side"></div>
+        </div>
+    </div>
+
+    <!-- Demo Content -->
+    <div class="demo-container">
+        <div class="demo-content">
+            <h1 class="demo-title">🏢 Enhanced 3D Building</h1>
+            <p class="demo-subtitle">HEART Technology Park - Advanced Visual System</p>
+            
+            <div class="feature-section">
+                <h3>🚀 3D Architecture Enhancements</h3>
+                <ul class="feature-list">
+                    <li><span class="status-new">🆕</span> Isometric 3D perspective with depth</li>
+                    <li><span class="status-new">🆕</span> Multi-surface structure (facade, side, roof)</li>
+                    <li><span class="status-new">🆕</span> Realistic lighting and shadows</li>
+                    <li><span class="status-new">🆕</span> Advanced materials with gradients</li>
+                    <li><span class="status-enhanced">⬆️</span> Enhanced edge definition & beveling</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🪟 Windows Pattern System</h3>
+                <ul class="feature-list">
+                    <li><span class="status-enhanced">⬆️</span> Structured 4×8 grid layout</li>
+                    <li><span class="status-new">🆕</span> Variable window sizes (normal, large, tall, conference)</li>
+                    <li><span class="status-new">🆕</span> 4 color themes: Orange, Purple, Blue, Green</li>
+                    <li><span class="status-new">🆕</span> Individual window lighting effects</li>
+                    <li><span class="status-enhanced">⬆️</span> Breathing glow animations</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🎨 Architectural Details</h3>
+                <ul class="feature-list">
+                    <li><span class="status-new">🆕</span> HEART branded entrance lobby</li>
+                    <li><span class="status-new">🆕</span> Rooftop with animated antenna</li>
+                    <li><span class="status-new">🆕</span> Surface textures and materials</li>
+                    <li><span class="status-new">🆕</span> Atmospheric lighting effects</li>
+                    <li><span class="status-enhanced">⬆️</span> Enhanced corner details</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>✨ Advanced Animations</h3>
+                <ul class="feature-list">
+                    <li><span class="status-enhanced">⬆️</span> Smooth 3D float with rotation</li>
+                    <li><span class="status-good">✅</span> Building maintains straightness</li>
+                    <li><span class="status-new">🆕</span> Staggered window animations</li>
+                    <li><span class="status-new">🆕</span> Antenna blinking effect</li>
+                    <li><span class="status-new">🆕</span> Logo glow pulse</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>📱 Responsive & Performance</h3>
+                <ul class="feature-list">
+                    <li><span class="status-good">✅</span> Desktop: Full 3D effect (33.33vw)</li>
+                    <li><span class="status-good">✅</span> Tablet: Simplified 3D (50vw)</li>
+                    <li><span class="status-good">✅</span> Mobile: Hidden (< 480px)</li>
+                    <li><span class="status-enhanced">⬆️</span> GPU acceleration optimized</li>
+                    <li><span class="status-new">🆕</span> Accessibility support</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🎯 Technical Specifications</h3>
+                <ul class="feature-list">
+                    <li><span class="status-good">✅</span> Position: Fixed right, z-index: 10</li>
+                    <li><span class="status-good">✅</span> No pointer events</li>
+                    <li><span class="status-enhanced">⬆️</span> 60fps smooth animations</li>
+                    <li><span class="status-enhanced">⬆️</span> Cross-browser compatible</li>
+                    <li><span class="status-new">🆕</span> Dark mode adaptive</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Controls -->
+    <div class="controls-panel">
+        <h4>🎛️ Demo Controls</h4>
+        <button class="control-button" onclick="toggleNightMode()">🌙 Night Mode</button>
+        <button class="control-button" onclick="toggleAnimation()">⏯️ Animation</button>
+        <button class="control-button" onclick="resetBuilding()">🔄 Reset</button>
+        <button class="control-button" onclick="showStats()">📊 Stats</button>
+    </div>
+
+    <script>
+        // Demo Controls JavaScript
+        let isNightMode = false;
+        let isAnimationPaused = false;
+        
+        function toggleNightMode() {
+            isNightMode = !isNightMode;
+            document.body.classList.toggle('night-mode', isNightMode);
+            
+            const button = event.target;
+            button.textContent = isNightMode ? '☀️ Day Mode' : '🌙 Night Mode';
+            button.classList.toggle('active', isNightMode);
+        }
+        
+        function toggleAnimation() {
+            isAnimationPaused = !isAnimationPaused;
+            const building = document.querySelector('.building-3d');
+            
+            if (building) {
+                building.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+            }
+            
+            const button = event.target;
+            button.textContent = isAnimationPaused ? '▶️ Resume' : '⏸️ Pause';
+            button.classList.toggle('active', isAnimationPaused);
+        }
+        
+        function resetBuilding() {
+            isNightMode = false;
+            isAnimationPaused = false;
+            
+            document.body.classList.remove('night-mode');
+            
+            const building = document.querySelector('.building-3d');
+            if (building) {
+                building.style.animationPlayState = 'running';
+            }
+            
+            // Reset button states
+            document.querySelectorAll('.control-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Reset button texts
+            const buttons = document.querySelectorAll('.control-button');
+            buttons[0].textContent = '🌙 Night Mode';
+            buttons[1].textContent = '⏯️ Animation';
+            
+            console.log('🔄 Building reset to default state');
+        }
+        
+        function showStats() {
+            const stats = {
+                '🏢 Building Type': '3D Enhanced',
+                '🪟 Windows Count': document.querySelectorAll('.window').length,
+                '🎨 Color Themes': '4 (Orange, Purple, Blue, Green)',
+                '📐 Dimensions': '33.33vw × 70vh',
+                '⚡ Performance': '60fps optimized',
+                '📱 Responsive': 'Yes',
+                '🎯 Z-Index': '10',
+                '🔧 Pointer Events': 'None'
+            };
+            
+            console.log('📊 HEART Building Statistics:');
+            console.table(stats);
+            
+            alert('📊 Building stats logged to console! Open DevTools to view.');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏢 Enhanced 3D Building Demo loaded!');
+            console.log('✨ All systems operational');
+            console.log('🎛️ Use controls panel to interact with building');
+            
+            // Animate entrance
+            setTimeout(() => {
+                document.body.classList.add('demo-loaded');
+            }, 500);
+        });
+        
+        // Debug information
+        window.HeartBuildingDebug = {
+            getWindowCount: () => document.querySelectorAll('.window').length,
+            getBuildingDimensions: () => {
+                const building = document.querySelector('.building-3d');
+                if (building) {
+                    const rect = building.getBoundingClientRect();
+                    return {
+                        width: rect.width,
+                        height: rect.height,
+                        top: rect.top,
+                        right: rect.right
+                    };
+                }
+                return null;
+            },
+            togglePerformanceMode: () => {
+                document.body.classList.toggle('performance-mode');
+                console.log('Performance mode toggled');
+            }
+        };
+        
+        console.log('🔧 Debug tools available: window.HeartBuildingDebug');
+    </script>
+</body>
+</html>

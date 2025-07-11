@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced AI Campus 3D</title>
+    
+    <!-- Three.js và các thư viện liên quan -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/stats.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        
+        #container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+        
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        #loading-screen h1 {
+            color: #0088ff;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        
+        #loading-bar {
+            width: 300px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        #loading-progress {
+            width: 0%;
+            height: 100%;
+            background-color: #0088ff;
+            transition: width 0.5s ease;
+        }
+        
+        #controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 10;
+        }
+        
+        button {
+            background-color: #0088ff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="loading-screen">
+            <h1>Loading Enhanced AI Campus 3D</h1>
+            <div id="loading-bar">
+                <div id="loading-progress"></div>
+            </div>
+        </div>
+        
+        <div id="controls">
+            <button id="wireframe-toggle">Toggle Wireframe</button>
+            <button id="solid-toggle">Toggle Solid</button>
+            <button id="reflections-toggle">Toggle Reflections</button>
+            <button id="lights-toggle">Toggle LED Lights</button>
+            <button id="animations-toggle">Toggle Animations</button>
+            <button id="particles-toggle">Toggle Particles</button>
+        </div>
+    </div>
+    
+    <!-- Three.js và các thư viện liên quan -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/stats.min.js"></script>
+    
+    <!-- Script chính -->
+    <script src="diagnostic-model-loader.js"></script>
+    <script src="force-render-loop.js"></script>
+    <script src="ai-campus-3d.js"></script>
+    <script src="ai-campus-3d-part2.js"></script>
+    
+    <script>
+        // Mô phỏng quá trình tải
+        let progress = 0;
+        const progressBar = document.getElementById('loading-progress');
+        const loadingInterval = setInterval(() => {
+            progress += Math.random() * 5;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(loadingInterval);
+                
+                // Khởi tạo scene sau khi tải xong
+                setTimeout(() => {
+                    init();
+                }, 500);
+            }
+            progressBar.style.width = progress + '%';
+        }, 100);
+        
+        // Xử lý các nút điều khiển
+        document.getElementById('wireframe-toggle').addEventListener('click', () => {
+            toggleWireframe();
+        });
+        
+        document.getElementById('solid-toggle').addEventListener('click', () => {
+            toggleSolid();
+        });
+        
+        document.getElementById('reflections-toggle').addEventListener('click', () => {
+            toggleReflections();
+        });
+        
+        document.getElementById('lights-toggle').addEventListener('click', () => {
+            toggleLEDLights();
+        });
+        
+        document.getElementById('animations-toggle').addEventListener('click', () => {
+            toggleAnimations();
+        });
+        
+        document.getElementById('particles-toggle').addEventListener('click', () => {
+            toggleParticles();
+        });
+        
+        // Hàm xử lý các nút điều khiển
+        function toggleWireframe() {
+            scene.traverse((object) => {
+                if (object.isMesh) {
+                    object.material.wireframe = !object.material.wireframe;
+                }
+            });
+        }
+        
+        function toggleSolid() {
+            scene.traverse((object) => {
+                if (object.isMesh) {
+                    if (object.material.transparent) {
+                        object.material.transparent = false;
+                        object.material.opacity = 1.0;
+                    } else {
+                        object.material.transparent = true;
+                        object.material.opacity = 0.7;
+                    }
+                }
+            });
+        }
+        
+        function toggleReflections() {
+            scene.traverse((object) => {
+                if (object.isMesh && object.material.envMap) {
+                    if (object.material.envMap === cubeRenderTarget.texture) {
+                        object.material.envMap = null;
+                    } else {
+                        object.material.envMap = cubeRenderTarget.texture;
+                    }
+                    object.material.needsUpdate = true;
+                }
+            });
+        }
+        
+        function toggleLEDLights() {
+            const isVisible = buildingLEDs[0].visible;
+            
+            // Chuyển đổi hiển thị của đèn LED
+            buildingLEDs.forEach(led => {
+                led.visible = !isVisible;
+            });
+            
+            // Chuyển đổi hiển thị của đèn đường
+            streetLights.forEach(light => {
+                light.visible = !isVisible;
+                if (light.userData.spotlight) {
+                    light.userData.spotlight.visible = !isVisible;
+                }
+            });
+        }
+        
+        function toggleAnimations() {
+            // Chuyển đổi trạng thái của animation mixers
+            animationMixers.forEach(mixer => {
+                mixer.timeScale = mixer.timeScale === 0 ? 1 : 0;
+            });
+        }
+        
+        function toggleParticles() {
+            // Chuyển đổi hiển thị của hệ thống hạt
+            particleSystems.forEach(system => {
+                system.particles.visible = !system.particles.visible;
+            });
+        }
+    </script>
+</body>
+</html>

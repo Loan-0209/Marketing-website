@@ -1,0 +1,348 @@
+/* HEART Technology Park - Flat Design Building */
+
+/* Flat Building Container */
+.building-container-flat {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33.33vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Main Flat Building Structure */
+.building-flat {
+    width: 280px;
+    height: 420px;
+    background: linear-gradient(135deg, #5A67D8 0%, #667EEA 50%, #764BA2 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Building Header Label */
+.building-header-flat {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Building Subtitle */
+.building-subtitle-flat {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    background: white;
+    color: #5A67D8;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Windows Grid Container */
+.windows-grid-flat {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    gap: 8px;
+    padding: 12px;
+}
+
+/* Base Window Style */
+.window-flat {
+    background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%);
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Empty Window (Purple Background) */
+.window-empty-flat {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Window Hover Effect */
+.window-flat:hover {
+    background: linear-gradient(135deg, #FFEB3B 0%, #FFB74D 100%);
+    transform: scale(1.1);
+    z-index: 1;
+}
+
+/* Specific Window Pattern Layout */
+/* Row 1 */
+.window-flat:nth-child(1) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(2) { background: transparent; } /* Empty */
+.window-flat:nth-child(3) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(4) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(5) { background: transparent; } /* Empty */
+.window-flat:nth-child(6) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 2 */
+.window-flat:nth-child(7) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(8) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(9) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(10) { background: transparent; } /* Empty */
+.window-flat:nth-child(11) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(12) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 3 */
+.window-flat:nth-child(13) { background: transparent; } /* Empty */
+.window-flat:nth-child(14) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(15) { background: transparent; } /* Empty */
+.window-flat:nth-child(16) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(17) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(18) { background: transparent; } /* Empty */
+
+/* Row 4 */
+.window-flat:nth-child(19) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(20) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(21) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(22) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(23) { background: transparent; } /* Empty */
+.window-flat:nth-child(24) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 5 */
+.window-flat:nth-child(25) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(26) { background: transparent; } /* Empty */
+.window-flat:nth-child(27) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(28) { background: transparent; } /* Empty */
+.window-flat:nth-child(29) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(30) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 6 */
+.window-flat:nth-child(31) { background: transparent; } /* Empty */
+.window-flat:nth-child(32) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(33) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(34) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(35) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(36) { background: transparent; } /* Empty */
+
+/* Row 7 */
+.window-flat:nth-child(37) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(38) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(39) { background: transparent; } /* Empty */
+.window-flat:nth-child(40) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(41) { background: transparent; } /* Empty */
+.window-flat:nth-child(42) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 8 */
+.window-flat:nth-child(43) { background: transparent; } /* Empty */
+.window-flat:nth-child(44) { background: transparent; } /* Empty */
+.window-flat:nth-child(45) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(46) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(47) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(48) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 9 */
+.window-flat:nth-child(49) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(50) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(51) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(52) { background: transparent; } /* Empty */
+.window-flat:nth-child(53) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(54) { background: transparent; } /* Empty */
+
+/* Row 10 */
+.window-flat:nth-child(55) { background: transparent; } /* Empty */
+.window-flat:nth-child(56) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(57) { background: transparent; } /* Empty */
+.window-flat:nth-child(58) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(59) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(60) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 11 */
+.window-flat:nth-child(61) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(62) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(63) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(64) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(65) { background: transparent; } /* Empty */
+.window-flat:nth-child(66) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 12 */
+.window-flat:nth-child(67) { background: transparent; } /* Empty */
+.window-flat:nth-child(68) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(69) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(70) { background: transparent; } /* Empty */
+.window-flat:nth-child(71) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-flat:nth-child(72) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Subtle Animation */
+.building-flat {
+    animation: building-float-flat 6s ease-in-out infinite;
+}
+
+@keyframes building-float-flat {
+    0%, 100% { 
+        transform: translateY(0px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    50% { 
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* Window Breathing Effect */
+.window-flat {
+    animation: window-glow-flat 3s ease-in-out infinite;
+}
+
+@keyframes window-glow-flat {
+    0%, 100% { 
+        opacity: 0.9;
+        filter: brightness(1);
+    }
+    50% { 
+        opacity: 1;
+        filter: brightness(1.1);
+    }
+}
+
+/* Staggered Window Animation */
+.window-flat:nth-child(3n) { animation-delay: 0.5s; }
+.window-flat:nth-child(3n+1) { animation-delay: 1s; }
+.window-flat:nth-child(3n+2) { animation-delay: 1.5s; }
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+    .building-container-flat {
+        width: 50vw;
+    }
+    
+    .building-flat {
+        width: 220px;
+        height: 330px;
+    }
+    
+    .windows-grid-flat {
+        gap: 6px;
+        padding: 10px;
+    }
+    
+    .building-header-flat {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .building-subtitle-flat {
+        font-size: 10px;
+        padding: 6px 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .building-container-flat {
+        width: 60vw;
+    }
+    
+    .building-flat {
+        width: 180px;
+        height: 270px;
+    }
+    
+    .windows-grid-flat {
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        gap: 5px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .building-container-flat {
+        display: none;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .building-flat {
+        background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 50%, #6D28D9 100%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .building-subtitle-flat {
+        background: #E5E7EB;
+        color: #374151;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .building-flat {
+        background: #000080;
+        border: 2px solid #FFFFFF;
+    }
+    
+    .window-flat {
+        background: #FFFF00 !important;
+        border: 1px solid #000000;
+    }
+    
+    .building-header-flat {
+        background: #FF8000;
+        color: #000000;
+        border-bottom: 2px solid #000000;
+    }
+    
+    .building-subtitle-flat {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+}
+
+/* Performance Optimizations */
+.building-container-flat,
+.building-flat,
+.window-flat {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .building-flat {
+        animation: building-static-flat 10s ease-in-out infinite;
+    }
+    
+    .window-flat {
+        animation: window-static-flat 8s ease-in-out infinite;
+    }
+    
+    @keyframes building-static-flat {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.95; }
+    }
+    
+    @keyframes window-static-flat {
+        0%, 100% { opacity: 0.9; }
+        50% { opacity: 1; }
+    }
+}

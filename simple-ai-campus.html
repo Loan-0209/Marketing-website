@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple AI Campus 3D</title>
+    
+    <!-- Three.js và các thư viện liên quan -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/stats.min.js"></script>
+    
+    <!-- Script chính -->
+    <script src="force-render-loop.js"></script>
+    <script src="ai-buildings.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #87CEEB; /* Màu xanh da trời cho ban ngày */
+            font-family: Arial, sans-serif;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        #controls button {
+            margin: 0 5px;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #controls button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        #controls button.active {
+            background-color: rgba(0, 100, 255, 0.7);
+        }
+        
+        #stats {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Thông tin -->
+    <div id="info">Simple AI Campus 3D</div>
+    
+    <!-- Điều khiển -->
+    <div id="controls">
+        <button id="toggle-wireframe">Wireframe</button>
+        <button id="toggle-solid" class="active">Solid</button>
+    </div>
+    
+    <script>
+        // Biến toàn cục
+        let scene, camera, renderer, controls;
+        let stats;
+        let clock;
+        let buildings = [];
+        
+        // Khởi tạo
+        init();
+        animate();
+        
+        function init() {
+            // Khởi tạo clock
+            clock = new THREE.Clock();
+            
+            // Tạo scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Màu xanh da trời cho ban ngày
+            scene.fog = new THREE.Fog(0x87CEEB, 50, 200); // Sương mù cùng màu với nền ban ngày
+            
+            // Tạo camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(40, 30, 40);
+            camera.lookAt(0, 0, 0);
+            
+            // Tạo renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.physicallyCorrectLights = true;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            document.body.appendChild(renderer.domElement);
+            
+            // Tạo controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.maxDistance = 200;
+            
+            // Tạo stats
+            stats = new Stats();
+            document.body.appendChild(stats.dom);
+            
+            // Thêm ánh sáng
+            setupDaytimeLighting();
+            
+            // Tạo mặt đất
+            createGround();
+            
+            // Tạo các tòa nhà AI hiện đại
+            createBuildings();
+            
+            // Xử lý sự kiện resize
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // Xử lý sự kiện click cho các nút điều khiển
+            document.getElementById('toggle-wireframe').addEventListener('click', toggleWireframe);
+            document.getElementById('toggle-solid').addEventListener('click', toggleSolid);
+        }
+        
+        function setupDaytimeLighting() {
+            // Ánh sáng môi trường
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            // Ánh sáng mặt trời
+            const sunLight = new THREE.DirectionalLight(0xffffff, 1);
+            sunLight.position.set(50, 100, 50);
+            sunLight.castShadow = true;
+            
+            // Cài đặt shadow map cho ánh sáng mặt trời
+            sunLight.shadow.mapSize.width = 2048;
+            sunLight.shadow.mapSize.height = 2048;
+            sunLight.shadow.camera.near = 10;
+            sunLight.shadow.camera.far = 200;
+            sunLight.shadow.camera.left = -100;
+            sunLight.shadow.camera.right = 100;
+            sunLight.shadow.camera.top = 100;
+            sunLight.shadow.camera.bottom = -100;
+            
+            scene.add(sunLight);
+            
+            // Thêm ánh sáng bổ sung
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight.position.set(-50, 50, -50);
+            scene.add(fillLight);
+        }
+        
+        function createGround() {
+            // Tạo mặt đất
+            const groundGeometry = new THREE.PlaneGeometry(500, 500);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x7CFC00, // Màu xanh lá cây nhạt cho ban ngày
+                roughness: 0.8,
+                metalness: 0.2,
+                side: THREE.DoubleSide
+            });
+            
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Tạo lưới tham chiếu
+            const gridHelper = new THREE.GridHelper(500, 50, 0x000000, 0x000000);
+            gridHelper.position.y = 0;
+            gridHelper.material.opacity = 0.2;
+            gridHelper.material.transparent = true;
+            scene.add(gridHelper);
+        }
+        
+        function createBuildings() {
+            console.log("Creating modern AI buildings...");
+            
+            // Vị trí các tòa nhà
+            const buildingPositions = [
+                { x: 0, y: 0, z: 0 },      // Trung tâm
+                { x: -20, y: 0, z: -20 },   // Góc trái trên
+                { x: 20, y: 0, z: -20 },    // Góc phải trên
+                { x: -20, y: 0, z: 20 },    // Góc trái dưới
+                { x: 20, y: 0, z: 20 }      // Góc phải dưới
+            ];
+            
+            // Các loại tòa nhà AI hiện đại
+            const buildingTypes = ['central', 'research', 'quantum', 'data', 'innovation'];
+            
+            // Tạo các tòa nhà AI hiện đại với vị trí và loại khác nhau
+            buildingPositions.forEach((pos, index) => {
+                const type = buildingTypes[index % buildingTypes.length];
+                
+                const building = createAIBuilding(scene, pos, {
+                    width: 10 + Math.random() * 5,
+                    height: 15 + Math.random() * 10,
+                    depth: 10 + Math.random() * 5,
+                    color: 0x0047AB,  // Giữ màu cobalt blue
+                    type: type,
+                    name: `ai_building_${index}`
+                });
+                
+                buildings.push(building);
+            });
+            
+            console.log(`Created ${buildings.length} modern AI buildings`);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Cập nhật controls
+            controls.update();
+            
+            // Cập nhật stats
+            stats.update();
+            
+            // Render scene
+            renderer.render(scene, camera);
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        function toggleWireframe() {
+            const wireframeButton = document.getElementById('toggle-wireframe');
+            const solidButton = document.getElementById('toggle-solid');
+            
+            wireframeButton.classList.toggle('active');
+            if (wireframeButton.classList.contains('active')) {
+                solidButton.classList.remove('active');
+                
+                // Chuyển sang chế độ wireframe
+                buildings.forEach(building => {
+                    building.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.wireframe = true;
+                        }
+                    });
+                });
+            } else {
+                solidButton.classList.add('active');
+                
+                // Tắt chế độ wireframe
+                buildings.forEach(building => {
+                    building.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.wireframe = false;
+                        }
+                    });
+                });
+            }
+        }
+        
+        function toggleSolid() {
+            const wireframeButton = document.getElementById('toggle-wireframe');
+            const solidButton = document.getElementById('toggle-solid');
+            
+            solidButton.classList.toggle('active');
+            if (solidButton.classList.contains('active')) {
+                wireframeButton.classList.remove('active');
+                
+                // Chuyển sang chế độ solid
+                buildings.forEach(building => {
+                    building.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.wireframe = false;
+                        }
+                    });
+                });
+            } else {
+                wireframeButton.classList.add('active');
+                
+                // Chuyển sang chế độ wireframe
+                buildings.forEach(building => {
+                    building.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.wireframe = true;
+                        }
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+</html>

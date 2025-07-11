@@ -1,0 +1,385 @@
+/* HEART Technology Park - Sparse Building V2 (30-35% Coverage) */
+
+/* Sparse Building Container */
+.building-container-sparse-v2 {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33.33vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Main Sparse Building Structure */
+.building-sparse-v2 {
+    width: 280px;
+    height: 420px;
+    background: linear-gradient(135deg, #5A67D8 0%, #667EEA 50%, #764BA2 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Building Header Label */
+.building-header-sparse-v2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Building Subtitle */
+.building-subtitle-sparse-v2 {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    background: white;
+    color: #5A67D8;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sparse Windows Grid (30-35% Coverage) */
+.windows-sparse-v2-grid {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 8px;
+    padding: 12px;
+}
+
+/* Window styles for sparse implementation */
+.window-sparse-v2 {
+    background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    animation: window-glow-sparse 4s ease-in-out infinite;
+}
+
+.window-empty-sparse-v2 {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* SPARSE PATTERN - Row-by-Row (30-35% Coverage Target) */
+/* Total positions: 40, Target windows: 12-14 (30-35%) */
+
+/* Row 1: 1 window only (center-left) ⭕🟨⭕⭕ */
+.window-sparse-v2:nth-child(1) { background: transparent; }
+.window-sparse-v2:nth-child(2) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(3) { background: transparent; }
+.window-sparse-v2:nth-child(4) { background: transparent; }
+
+/* Row 2: 2 windows (sides only) 🟨⭕⭕🟨 */
+.window-sparse-v2:nth-child(5) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(6) { background: transparent; }
+.window-sparse-v2:nth-child(7) { background: transparent; }
+.window-sparse-v2:nth-child(8) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 3: COMPLETELY EMPTY ⭕⭕⭕⭕ */
+.window-sparse-v2:nth-child(9) { background: transparent; }
+.window-sparse-v2:nth-child(10) { background: transparent; }
+.window-sparse-v2:nth-child(11) { background: transparent; }
+.window-sparse-v2:nth-child(12) { background: transparent; }
+
+/* Row 4: 1 window only (center-right) ⭕⭕🟨⭕ */
+.window-sparse-v2:nth-child(13) { background: transparent; }
+.window-sparse-v2:nth-child(14) { background: transparent; }
+.window-sparse-v2:nth-child(15) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(16) { background: transparent; }
+
+/* Row 5: 2 windows (far sides) 🟨⭕⭕🟨 */
+.window-sparse-v2:nth-child(17) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(18) { background: transparent; }
+.window-sparse-v2:nth-child(19) { background: transparent; }
+.window-sparse-v2:nth-child(20) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 6: COMPLETELY EMPTY ⭕⭕⭕⭕ */
+.window-sparse-v2:nth-child(21) { background: transparent; }
+.window-sparse-v2:nth-child(22) { background: transparent; }
+.window-sparse-v2:nth-child(23) { background: transparent; }
+.window-sparse-v2:nth-child(24) { background: transparent; }
+
+/* Row 7: 1 window only (left) 🟨⭕⭕⭕ */
+.window-sparse-v2:nth-child(25) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(26) { background: transparent; }
+.window-sparse-v2:nth-child(27) { background: transparent; }
+.window-sparse-v2:nth-child(28) { background: transparent; }
+
+/* Row 8: 2 windows (center area) ⭕🟨🟨⭕ */
+.window-sparse-v2:nth-child(29) { background: transparent; }
+.window-sparse-v2:nth-child(30) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(31) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(32) { background: transparent; }
+
+/* Row 9: 1 window only (right) ⭕⭕⭕🟨 */
+.window-sparse-v2:nth-child(33) { background: transparent; }
+.window-sparse-v2:nth-child(34) { background: transparent; }
+.window-sparse-v2:nth-child(35) { background: transparent; }
+.window-sparse-v2:nth-child(36) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 10: 2 windows (scattered) 🟨⭕🟨⭕ */
+.window-sparse-v2:nth-child(37) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(38) { background: transparent; }
+.window-sparse-v2:nth-child(39) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-sparse-v2:nth-child(40) { background: transparent; }
+
+/* Total: 13 windows out of 40 positions = 32.5% coverage */
+
+/* Sparse Window Animation */
+@keyframes window-glow-sparse {
+    0%, 100% { 
+        opacity: 0.85;
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    33% { 
+        opacity: 0.95;
+        transform: scale(1.02);
+        filter: brightness(1.1);
+    }
+    66% { 
+        opacity: 1;
+        transform: scale(1.04);
+        filter: brightness(1.2);
+    }
+}
+
+/* Building Float Animation */
+.building-sparse-v2 {
+    animation: building-float-sparse-v2 7s ease-in-out infinite;
+}
+
+@keyframes building-float-sparse-v2 {
+    0%, 100% { 
+        transform: translateY(0px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    50% { 
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Sparse Window Staggered Animation */
+.window-sparse-v2:nth-child(2) { animation-delay: 0s; }
+.window-sparse-v2:nth-child(5) { animation-delay: 0.5s; }
+.window-sparse-v2:nth-child(8) { animation-delay: 1s; }
+.window-sparse-v2:nth-child(15) { animation-delay: 1.5s; }
+.window-sparse-v2:nth-child(17) { animation-delay: 2s; }
+.window-sparse-v2:nth-child(20) { animation-delay: 2.5s; }
+.window-sparse-v2:nth-child(25) { animation-delay: 3s; }
+.window-sparse-v2:nth-child(30) { animation-delay: 3.5s; }
+.window-sparse-v2:nth-child(31) { animation-delay: 4s; }
+.window-sparse-v2:nth-child(36) { animation-delay: 4.5s; }
+.window-sparse-v2:nth-child(37) { animation-delay: 5s; }
+.window-sparse-v2:nth-child(39) { animation-delay: 5.5s; }
+
+/* Hover Effects */
+.building-sparse-v2:hover .windows-sparse-v2-grid {
+    animation-play-state: paused;
+}
+
+.window-sparse-v2:hover {
+    transform: scale(1.15);
+    filter: brightness(1.3) saturate(1.2);
+    z-index: 1;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 0 15px rgba(255, 212, 79, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+    .building-container-sparse-v2 {
+        width: 50vw;
+    }
+    
+    .building-sparse-v2 {
+        width: 220px;
+        height: 330px;
+    }
+    
+    .building-header-sparse-v2 {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .building-subtitle-sparse-v2 {
+        font-size: 10px;
+        padding: 6px 4px;
+    }
+    
+    .windows-sparse-v2-grid {
+        top: 70px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        gap: 6px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .building-container-sparse-v2 {
+        width: 60vw;
+    }
+    
+    .building-sparse-v2 {
+        width: 180px;
+        height: 270px;
+    }
+    
+    .windows-sparse-v2-grid {
+        top: 60px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        gap: 5px;
+        padding: 8px;
+        /* Simplified sparse pattern for smaller screens */
+        grid-template-rows: repeat(8, 1fr);
+    }
+    
+    /* Hide some windows on mobile for even sparser look */
+    .window-sparse-v2:nth-child(n+33) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .building-container-sparse-v2 {
+        display: none;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .building-sparse-v2 {
+        background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 50%, #6D28D9 100%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .building-subtitle-sparse-v2 {
+        background: #E5E7EB;
+        color: #374151;
+    }
+    
+    .window-sparse-v2 {
+        filter: brightness(1.1) saturate(1.1);
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .building-sparse-v2 {
+        background: #000080;
+        border: 2px solid #FFFFFF;
+    }
+    
+    .window-sparse-v2 {
+        background: #FFFF00 !important;
+        border: 1px solid #000000;
+    }
+    
+    .building-header-sparse-v2 {
+        background: #FF8000;
+        color: #000000;
+        border-bottom: 2px solid #000000;
+    }
+    
+    .building-subtitle-sparse-v2 {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+}
+
+/* Performance Optimizations */
+.building-container-sparse-v2,
+.building-sparse-v2,
+.windows-sparse-v2-grid,
+.window-sparse-v2 {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .building-sparse-v2 {
+        animation: building-static-sparse-v2 10s ease-in-out infinite;
+    }
+    
+    .window-sparse-v2 {
+        animation: window-static-sparse-v2 8s ease-in-out infinite;
+    }
+    
+    @keyframes building-static-sparse-v2 {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.95; }
+    }
+    
+    @keyframes window-static-sparse-v2 {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 0.95; }
+    }
+}
+
+/* Debug Mode for Development */
+.debug-sparse-v2 .windows-sparse-v2-grid {
+    border: 1px dashed rgba(255, 0, 0, 0.3);
+}
+
+.debug-sparse-v2 .windows-sparse-v2-grid::after {
+    content: '32.5% coverage (13/40)';
+    position: absolute;
+    top: -25px;
+    left: 0;
+    font-size: 10px;
+    color: rgba(255, 0, 0, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+/* Empty Space Emphasis */
+.emphasize-empty .window-empty-sparse-v2 {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Sparse Pattern Highlight */
+.highlight-sparse .window-sparse-v2 {
+    animation-duration: 2s;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        0 0 10px rgba(255, 212, 79, 0.6);
+}

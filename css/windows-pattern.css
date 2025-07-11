@@ -1,0 +1,183 @@
+/* HEART Technology Park - Random Circular Windows Pattern */
+
+/* Windows Container - Random Pattern */
+.windows-container {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    right: 30px;
+    bottom: 30px;
+    background: 
+        /* Random circular windows */
+        radial-gradient(circle at 15% 25%, #FFA726 8px, transparent 8px),
+        radial-gradient(circle at 45% 25%, #8E24AA 8px, transparent 8px),
+        radial-gradient(circle at 75% 25%, #FFA726 8px, transparent 8px),
+        radial-gradient(circle at 85% 25%, #FFA726 8px, transparent 8px),
+        
+        radial-gradient(circle at 25% 45%, #FFA726 8px, transparent 8px),
+        radial-gradient(circle at 55% 45%, #FFA726 8px, transparent 8px),
+        radial-gradient(circle at 85% 45%, #8E24AA 8px, transparent 8px),
+        
+        radial-gradient(circle at 15% 65%, #8E24AA 8px, transparent 8px),
+        radial-gradient(circle at 35% 65%, #8E24AA 8px, transparent 8px),
+        radial-gradient(circle at 65% 65%, #FFA726 8px, transparent 8px),
+        
+        radial-gradient(circle at 15% 85%, #FFA726 8px, transparent 8px),
+        radial-gradient(circle at 45% 85%, #8E24AA 8px, transparent 8px),
+        radial-gradient(circle at 75% 85%, #FFA726 8px, transparent 8px);
+    background-size: 100% 100%;
+    border-radius: 10px;
+    opacity: 0.8;
+    animation: windows-glow 4s ease-in-out infinite;
+}
+
+/* Random Windows Animation */
+@keyframes windows-glow {
+    0%, 100% { 
+        opacity: 0.8;
+        filter: brightness(1);
+    }
+    25% { 
+        opacity: 0.9;
+        filter: brightness(1.1);
+    }
+    50% { 
+        opacity: 1;
+        filter: brightness(1.2);
+    }
+    75% { 
+        opacity: 0.95;
+        filter: brightness(1.1);
+    }
+}
+
+/* Window Colors for Random Pattern */
+.window-orange-color { color: #FFA726; }
+.window-purple-color { color: #8E24AA; }
+.window-blue-color { color: #2196F3; }
+.window-green-color { color: #4CAF50; }
+
+/* Random Windows Pattern Override */
+.window,
+.window-large,
+.window-tall,
+.window-conference,
+.window-orange,
+.window-purple,
+.window-blue,
+.window-green {
+    display: none; /* Hide individual grid windows */
+}
+
+/* Random Windows Light Effects */
+.windows-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Subtle light effects for windows */
+        radial-gradient(circle at 15% 25%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 45% 25%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 75% 25%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 85% 25%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        
+        radial-gradient(circle at 25% 45%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 55% 45%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 85% 45%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        
+        radial-gradient(circle at 15% 65%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 35% 65%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 65% 65%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        
+        radial-gradient(circle at 15% 85%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 45% 85%, rgba(255,255,255,0.3) 6px, transparent 8px),
+        radial-gradient(circle at 75% 85%, rgba(255,255,255,0.3) 6px, transparent 8px);
+    border-radius: 10px;
+    opacity: 0.6;
+    animation: window-light-glow 6s ease-in-out infinite;
+}
+
+@keyframes window-light-glow {
+    0%, 100% { 
+        opacity: 0.6;
+        filter: blur(0px);
+    }
+    50% { 
+        opacity: 0.8;
+        filter: blur(1px);
+    }
+}
+
+/* Night Mode Windows */
+.night-mode .windows-container {
+    filter: brightness(1.4) saturate(1.2);
+}
+
+/* Interactive Hover Effects */
+.windows-container:hover {
+    animation-play-state: paused;
+    filter: brightness(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .windows-container {
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .windows-container {
+        display: none;
+    }
+}
+
+/* Performance Optimizations */
+.windows-container {
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .windows-container {
+        background: 
+            radial-gradient(circle at 15% 25%, #FFFF00 8px, transparent 8px),
+            radial-gradient(circle at 45% 25%, #FF00FF 8px, transparent 8px),
+            radial-gradient(circle at 75% 25%, #FFFF00 8px, transparent 8px),
+            radial-gradient(circle at 85% 25%, #FFFF00 8px, transparent 8px),
+            
+            radial-gradient(circle at 25% 45%, #FFFF00 8px, transparent 8px),
+            radial-gradient(circle at 55% 45%, #FFFF00 8px, transparent 8px),
+            radial-gradient(circle at 85% 45%, #FF00FF 8px, transparent 8px),
+            
+            radial-gradient(circle at 15% 65%, #FF00FF 8px, transparent 8px),
+            radial-gradient(circle at 35% 65%, #FF00FF 8px, transparent 8px),
+            radial-gradient(circle at 65% 65%, #FFFF00 8px, transparent 8px),
+            
+            radial-gradient(circle at 15% 85%, #FFFF00 8px, transparent 8px),
+            radial-gradient(circle at 45% 85%, #FF00FF 8px, transparent 8px),
+            radial-gradient(circle at 75% 85%, #FFFF00 8px, transparent 8px);
+        border: 2px solid #FFFFFF;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .windows-container {
+        animation: windows-static 8s ease-in-out infinite;
+    }
+    
+    @keyframes windows-static {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 0.9; }
+    }
+}

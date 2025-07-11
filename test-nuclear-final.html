@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nuclear Gradient Removal - Final Test</title>
+    <style>
+        body { 
+            background: linear-gradient(45deg, red, blue, yellow, purple); 
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .test-container { 
+            background: linear-gradient(135deg, orange, green); 
+            padding: 20px; 
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        .building-section {
+            height: 300px;
+            background: linear-gradient(90deg, cyan, magenta);
+            position: relative;
+            margin: 20px 0;
+        }
+        .heart-building {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #4338ca, #7c3aed);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nuclear Gradient Removal Test</h1>
+    <div class="test-container">
+        <p>This container has gradient background - should become white</p>
+    </div>
+    
+    <div class="building-section">
+        <div class="heart-building">
+            <div>HEART TECHNOLOGY</div>
+        </div>
+    </div>
+    
+    <button onclick="applyNuclear()">🔥 Apply Nuclear Gradient Removal</button>
+    <button onclick="toggleNuclear()">💥 Toggle Nuclear Mode</button>
+    
+    <script>
+        function applyNuclear() {
+            console.log('💥 NUCLEAR GRADIENT REMOVAL - Complete background override...');
+            
+            // Remove existing nuclear style if present
+            const existingNuclear = document.getElementById('nuclear-transparency');
+            if (existingNuclear) {
+                existingNuclear.remove();
+            }
+            
+            // Inject nuclear CSS override
+            const nuclearStyle = document.createElement('style');
+            nuclearStyle.id = 'nuclear-transparency';
+            nuclearStyle.innerHTML = `
+                /* NUCLEAR GRADIENT REMOVAL - COMPLETE OVERRIDE */
+                *, *::before, *::after { 
+                    background: #ffffff !important; 
+                    background-image: none !important; 
+                    background-color: #ffffff !important;
+                    background-attachment: initial !important;
+                    background-origin: initial !important;
+                    background-clip: initial !important;
+                    background-size: initial !important;
+                    background-repeat: initial !important;
+                    background-position: initial !important;
+                }
+                
+                body { 
+                    background: #ffffff !important; 
+                    background-color: #ffffff !important;
+                    background-image: none !important;
+                }
+                
+                html {
+                    background: #ffffff !important;
+                    background-color: #ffffff !important;
+                    background-image: none !important;
+                }
+                
+                /* Only building-related sections get transparency */
+                .building-section,
+                .building-container,
+                .building-parallax-container,
+                #building-parallax-container,
+                .building-sky,
+                .sky-background,
+                .parallax-bg,
+                .transparent-bg {
+                    background: transparent !important;
+                    background-color: transparent !important;
+                    background-image: none !important;
+                    backdrop-filter: none !important;
+                }
+                
+                /* Enhanced building visibility with preserved gradient */
+                .heart-building,
+                .building,
+                [class*="building"][class*="heart"],
+                [id*="building"][id*="heart"] {
+                    background: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%) !important;
+                    background-color: #4338ca !important;
+                    filter: contrast(1.2) brightness(1.15) !important;
+                    box-shadow: 0 15px 45px rgba(0,0,0,0.3), 0 0 30px rgba(67, 56, 202, 0.4) !important;
+                    transform: translate(-50%, -50%) scale(1.08) !important;
+                    opacity: 1 !important;
+                    visibility: visible !important;
+                    display: flex !important;
+                    border: none !important;
+                    outline: none !important;
+                }
+                
+                /* Override any remaining gradient backgrounds */
+                [style*="gradient"]:not(.heart-building):not([class*="building"]) {
+                    background: #ffffff !important;
+                    background-color: #ffffff !important;
+                    background-image: none !important;
+                }
+            `;
+            
+            // Inject new style
+            document.head.appendChild(nuclearStyle);
+            
+            console.log('💥 Nuclear override applied - All backgrounds white, building enhanced');
+            console.log('🎯 Building scale: 1.08x, Enhanced contrast and brightness');
+            console.log('✨ Deep shadows and glow effects applied');
+        }
+        
+        function toggleNuclear() {
+            const existing = document.getElementById('nuclear-transparency');
+            if (existing) {
+                existing.remove();
+                console.log('🔄 Nuclear mode disabled');
+            } else {
+                applyNuclear();
+                console.log('💥 Nuclear mode enabled');
+            }
+        }
+        
+        // Auto-apply after 2 seconds
+        setTimeout(() => {
+            applyNuclear();
+            console.log('🔥 Auto-applied nuclear gradient removal');
+        }, 2000);
+    </script>
+</body>
+</html>

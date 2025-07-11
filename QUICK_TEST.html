@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Nuclear Mode Quick Test</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 5s ease infinite;
+            min-height: 100vh;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nuclear-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            font-size: 18px;
+            padding: 20px 40px;
+        }
+        
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        
+        .building-demo {
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%);
+            margin: 20px auto;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(67, 56, 202, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .links a {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 10px 20px;
+            background: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: background 0.3s ease;
+        }
+        
+        .links a:hover {
+            background: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 HEART Technology Park</h1>
+        <h2 style="text-align: center; color: #7f8c8d;">Nuclear Gradient Removal - Quick Test</h2>
+        
+        <div class="status info" id="status">
+            ✅ Server is working! JavaScript enabled! Ready to test Nuclear Mode.
+        </div>
+        
+        <div class="test-section">
+            <h3>💥 Nuclear Gradient Removal Test</h3>
+            <p>Test the nuclear gradient removal feature that makes all backgrounds white while preserving building styling.</p>
+            
+            <button class="btn nuclear-btn" onclick="applyNuclearMode()">
+                🔥 Apply Nuclear Mode
+            </button>
+            
+            <button class="btn" onclick="resetNormalMode()">
+                🔄 Reset Normal Mode
+            </button>
+            
+            <div class="building-demo" id="building-demo">
+                🏢 HEART Building
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Advanced Tests</h3>
+            
+            <button class="btn" onclick="testAutoActivation()">
+                ⏰ Test Auto-Activation (1 sec delay)
+            </button>
+            
+            <button class="btn" onclick="testToggleMode()">
+                🔄 Test Toggle Mode
+            </button>
+            
+            <button class="btn" onclick="testDebugMode()">
+                🔧 Test Debug Functions
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Test Results</h3>
+            <div id="test-results" class="status info">
+                Waiting for tests...
+            </div>
+        </div>
+        
+        <div class="links">
+            <h3>🌐 Navigate to Main Pages:</h3>
+            <a href="about.html">💥 About Page (Auto Nuclear)</a>
+            <a href="index.html">🏠 Home Page</a>
+            <a href="test-nuclear-final.html">🧪 Nuclear Test Page</a>
+            <a href="master-plan.html">🏢 Master Plan</a>
+        </div>
+    </div>
+
+    <script>
+        // Nuclear gradient removal function (same as in building-parallax-manager.js)
+        function applyNuclearMode() {
+            console.log('💥 NUCLEAR GRADIENT REMOVAL - Complete background override...');
+            
+            // Remove existing nuclear style if present
+            const existingNuclear = document.getElementById('nuclear-transparency');
+            if (existingNuclear) {
+                existingNuclear.remove();
+            }
+            
+            // Inject nuclear CSS override
+            const nuclearStyle = document.createElement('style');
+            nuclearStyle.id = 'nuclear-transparency';
+            nuclearStyle.innerHTML = `
+                /* NUCLEAR GRADIENT REMOVAL - COMPLETE OVERRIDE */
+                *, *::before, *::after { 
+                    background: #ffffff !important; 
+                    background-image: none !important; 
+                    background-color: #ffffff !important;
+                    background-attachment: initial !important;
+                    background-origin: initial !important;
+                    background-clip: initial !important;
+                    background-size: initial !important;
+                    background-repeat: initial !important;
+                    background-position: initial !important;
+                }
+                
+                body { 
+                    background: #ffffff !important; 
+                    background-color: #ffffff !important;
+                    background-image: none !important;
+                    animation: none !important;
+                }
+                
+                /* Preserve building styling */
+                .building-demo,
+                .heart-building,
+                .building,
+                [class*="building"][class*="heart"] {
+                    background: linear-gradient(135deg, #4338ca 0%, #7c3aed 100%) !important;
+                    background-color: #4338ca !important;
+                    filter: contrast(1.2) brightness(1.15) !important;
+                    box-shadow: 0 15px 45px rgba(0,0,0,0.3), 0 0 30px rgba(67, 56, 202, 0.4) !important;
+                    transform: scale(1.08) !important;
+                }
+                
+                /* Preserve container styling but remove background */
+                .container {
+                    background: rgba(255, 255, 255, 0.95) !important;
+                    backdrop-filter: none !important;
+                }
+                
+                /* Preserve button gradients */
+                .btn,
+                .nuclear-btn {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                }
+                
+                .nuclear-btn {
+                    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%) !important;
+                }
+            `;
+            
+            document.head.appendChild(nuclearStyle);
+            
+            updateStatus('💥 Nuclear mode applied! All backgrounds are now white, building enhanced.', 'success');
+            console.log('💥 Nuclear override applied - All backgrounds white, building enhanced');
+        }
+        
+        function resetNormalMode() {
+            const nuclearStyle = document.getElementById('nuclear-transparency');
+            if (nuclearStyle) {
+                nuclearStyle.remove();
+                updateStatus('🔄 Normal mode restored! Gradients are back.', 'info');
+                console.log('🔄 Normal mode restored');
+            } else {
+                updateStatus('ℹ️ Already in normal mode.', 'warning');
+            }
+        }
+        
+        function testAutoActivation() {
+            updateStatus('⏰ Testing auto-activation in 1 second...', 'info');
+            setTimeout(() => {
+                applyNuclearMode();
+                updateStatus('✅ Auto-activation test successful! Nuclear mode applied after 1 second.', 'success');
+            }, 1000);
+        }
+        
+        function testToggleMode() {
+            const isNuclear = document.getElementById('nuclear-transparency');
+            if (isNuclear) {
+                resetNormalMode();
+                updateStatus('🔄 Toggled to normal mode.', 'info');
+            } else {
+                applyNuclearMode();
+                updateStatus('🔄 Toggled to nuclear mode.', 'info');
+            }
+        }
+        
+        function testDebugMode() {
+            const isNuclear = !!document.getElementById('nuclear-transparency');
+            const buildingElement = document.getElementById('building-demo');
+            
+            const debugInfo = {
+                nuclearModeActive: isNuclear,
+                buildingVisible: buildingElement ? true : false,
+                buildingStyles: buildingElement ? window.getComputedStyle(buildingElement).background : 'N/A',
+                bodyBackground: window.getComputedStyle(document.body).background
+            };
+            
+            console.log('🔧 Debug Information:', debugInfo);
+            
+            updateStatus(
+                `🔧 Debug: Nuclear=${isNuclear ? 'ON' : 'OFF'}, Building=${debugInfo.buildingVisible ? 'VISIBLE' : 'HIDDEN'}`,
+                'info'
+            );
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('test-results');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        // Test nuclear mode functions that should be available globally
+        window.nuclearGradientRemoval = applyNuclearMode;
+        window.toggleNuclearMode = testToggleMode;
+        window.debugBuilding = testDebugMode;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateStatus('✅ Quick test page loaded! All functions ready.', 'success');
+            console.log('🎯 HEART Nuclear Mode Quick Test - Ready!');
+            console.log('Available commands:');
+            console.log('  window.nuclearGradientRemoval() - Apply nuclear mode');
+            console.log('  window.toggleNuclearMode() - Toggle nuclear mode');
+            console.log('  window.debugBuilding() - Debug information');
+        });
+    </script>
+</body>
+</html>

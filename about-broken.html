@@ -1,0 +1,186 @@
+align: justify;
+        }
+        
+        .sidebar-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+        
+        .sidebar-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            opacity: 0.9;
+        }
+        
+        .sidebar-features li::before {
+            content: "✨ ";
+            margin-right: 8px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #F5C842;
+            color: #1e40af;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(245, 200, 66, 0.4);
+        }
+        
+        .cta-button:hover {
+            background: #feca57;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 200, 66, 0.6);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-content,
+            .about-sidebar {
+                padding: 40px 20px;
+            }
+            
+            .about-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html" class="active">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
+                <a href="facilities.html">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+                <a href="login.html" class="login-btn">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="about-container">
+        <div class="about-content fade-in">
+            <h1 class="about-title">About HEART</h1>
+            <div class="title-underline"></div>
+            
+            <div class="about-section">
+                <p class="about-text">
+                    HEART Technology Park represents Vietnam's most ambitious leap into the future of artificial intelligence and technological innovation. Situated in the heart of Ho Chi Minh City, our 50-hectare campus is designed to be the epicenter of AI research, development, and commercialization in Southeast Asia.
+                </p>
+                
+                <h2>Our Vision</h2>
+                <p>
+                    To establish Vietnam as a global leader in artificial intelligence research and development, fostering innovation that benefits humanity while driving economic growth and technological advancement across the region.
+                </p>
+                
+                <h2>Our Mission</h2>
+                <p>
+                    We are committed to creating an ecosystem where brilliant minds collaborate to solve the world's most challenging problems through AI innovation. Our mission encompasses research excellence, talent development, and the creation of breakthrough technologies that will shape the future of industries worldwide.
+                </p>
+                
+                <h2>Innovation Ecosystem</h2>
+                <p>
+                    HEART Technology Park brings together leading researchers, innovative startups, established corporations, and venture capital in a dynamic environment designed for collaboration and breakthrough innovation. Our facilities include state-of-the-art research laboratories, modern office spaces, and cutting-edge technology infrastructure.
+                </p>
+                
+                <h2>Global Impact</h2>
+                <p>
+                    With partnerships spanning across major technology hubs in Silicon Valley, London, Tokyo, and Singapore, HEART serves as a bridge connecting Vietnamese innovation with global markets and opportunities.
+                </p>
+            </div>
+        </div>
+        
+        <div class="about-sidebar fade-in">
+            <h3 class="sidebar-title">HEART TECHNOLOGY</h3>
+            <p class="sidebar-subtitle">AI Innovation Hub</p>
+            
+            <ul class="sidebar-features">
+                <li>Advanced AI Research Labs</li>
+                <li>Startup Incubation Program</li>
+                <li>Industry Partnerships</li>
+                <li>Global Collaboration Network</li>
+                <li>Cutting-edge Infrastructure</li>
+                <li>Talent Development Center</li>
+            </ul>
+            
+            <a href="master-plan.html" class="cta-button">Explore Master Plan</a>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll animation for fade-in elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

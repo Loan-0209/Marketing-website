@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nuclear Transparency Test</title>
+    <style>
+        body { background: linear-gradient(45deg, red, blue); }
+        .test { background: yellow; padding: 20px; }
+    </style>
+</head>
+<body>
+    <div class="test">Test Nuclear Mode</div>
+    <script>
+        // Nuclear gradient removal test
+        setTimeout(() => {
+            document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                * { background: transparent !important; background-image: none !important; }
+                body { background: #ffffff !important; }
+                .test { 
+                    background: #4338ca !important;
+                    color: white !important;
+                    transform: scale(1.1) !important;
+                }
+            </style>
+            `);
+            console.log('Nuclear mode applied');
+        }, 1000);
+    </script>
+</body>
+</html>

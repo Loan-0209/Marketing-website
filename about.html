@@ -1,312 +1,25 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - HEART Technology Park</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #1f2937;
-            background: #ffffff;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            padding: 1rem 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            color: #fbbf24;
-            font-size: 2rem;
-            font-weight: 800;
-            text-decoration: none;
-            letter-spacing: -0.02em;
-        }
-        
-        .logo::before {
-            content: "🚀";
-            margin-right: 0.75rem;
-            font-size: 2.5rem;
-        }
-        
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav a:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .nav .active {
-            background: #fbbf24;
-            color: #1e40af;
-            font-weight: 700;
-        }
-        
-        .nav .campus-3d {
-            background: #10b981;
-            color: white;
-        }
-        
-        .nav .campus-3d::before {
-            content: "🏢 ";
-        }
-        
-        .nav .contact-btn,
-        .nav .login-btn {
-            background: #f59e0b;
-            color: white;
-        }
-        
-        .page-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 4rem 0;
-            text-align: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .page-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #1e40af;
-            margin-bottom: 1rem;
-            letter-spacing: -0.025em;
-        }
-        
-        .title-decoration {
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-            margin: 1.5rem auto;
-            border-radius: 2px;
-        }
-        
-        .page-subtitle {
-            font-size: 1.25rem;
-            color: #64748b;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .main-layout {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .about-content-container {
-            max-width: 60%;
-            margin-left: 2rem;
-            margin-right: auto;
-            padding: 4rem 2rem 4rem 0;
-            z-index: 2;
-            position: relative;
-        }
-        
-        .about-section {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        
-        .mission-section, .core-values-section, .team-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .mission-section:hover, .core-values-section:hover, .team-section:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .section-content p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #4b5563;
-            margin-bottom: 1rem;
-        }
-        
-        .building-parallax {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 40%;
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        .building-placeholder {
-            color: white;
-            font-size: 8rem;
-            opacity: 0.8;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .building-content {
-            position: absolute;
-            bottom: 2rem;
-            left: 2rem;
-            right: 2rem;
-            color: white;
-            text-align: center;
-        }
-        
-        .building-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            opacity: 0.9;
-        }
-        
-        .building-subtitle {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            line-height: 1.6;
-        }
-        
-        .stats-section {
-            background: rgba(248, 250, 252, 0.95);
-            padding: 3rem 2rem;
-            margin-top: 2rem;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(2deg); }
-            66% { transform: translateY(-10px) rotate(-2deg); }
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .stat-item {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e40af;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: #64748b;
-            margin-top: 0.5rem;
-        }
-        
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .page-title {
-                font-size: 2.5rem;
-            }
-            
-            .main-layout {
-                flex-direction: column;
-            }
-            
-            .about-content-container {
-                max-width: 100%;
-                margin: 0 1rem;
-                padding: 2rem 1rem;
-            }
-            
-            .building-parallax {
-                position: relative;
-                width: 100%;
-                height: 50vh;
-                order: -1;
-            }
-            
-            .building-placeholder {
-                font-size: 4rem;
-            }
-            
-            .building-title {
-                font-size: 1.5rem;
-            }
-            
-            .building-subtitle {
-                font-size: 1rem;
-            }
-        }
-    </style>
+    <meta name="description" content="Learn about HEART Technology Park - Vietnam's premier AI innovation hub">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/building-simple.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Fixed Header -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">HEART</a>
@@ -325,1486 +38,246 @@
         </div>
     </header>
 
-    <section class="page-header">
-        <h1 class="page-title">About Us</h1>
-        <div class="title-decoration"></div>
-        <p class="page-subtitle">Khu Công Nghệ Cao AI Hàng Đầu Việt Nam</p>
-    </section>
-
-    <div class="main-layout">
-        <div class="about-content-container">
-            <div class="about-section">
-                <div class="mission-section">
-                    <h3 class="section-title">🎯 Our Mission</h3>
-                    <div class="section-content">
-                        <p>We are committed to creating a comprehensive technology ecosystem where businesses, researchers, and investors can collaborate to develop advanced AI solutions, contributing to national digital transformation.</p>
-                        <p>Our mission extends to fostering innovation, nurturing talent, and driving sustainable economic growth through cutting-edge artificial intelligence technologies.</p>
+    <!-- Main Content with Building Parallax -->
+    <main class="main-content">
+        <div class="content-layout">
+            <!-- Main Content Area -->
+            <div class="content-main fade-in">
+                <h1 class="page-title">About HEART</h1>
+                <div class="title-underline"></div>
+                
+                <div class="section">
+                    <p class="section-text">
+                        HEART Technology Park represents Vietnam's most ambitious leap into the future of artificial intelligence and technological innovation. Situated in the heart of Ho Chi Minh City, our 50-hectare campus is designed to be the epicenter of AI research, development, and commercialization in Southeast Asia.
+                    </p>
+                    
+                    <h2>Our Vision</h2>
+                    <p>
+                        To establish Vietnam as a global leader in artificial intelligence research and development, fostering innovation that benefits humanity while driving economic growth and technological advancement across the region.
+                    </p>
+                    
+                    <h2>Our Mission</h2>
+                    <p>
+                        We are committed to creating an ecosystem where brilliant minds collaborate to solve the world's most challenging problems through AI innovation. Our mission encompasses research excellence, talent development, and the creation of breakthrough technologies that will shape the future of industries worldwide.
+                    </p>
+                    
+                    <h2>Innovation Ecosystem</h2>
+                    <p>
+                        HEART Technology Park brings together leading researchers, innovative startups, established corporations, and venture capital in a dynamic environment designed for collaboration and breakthrough innovation. Our facilities include state-of-the-art research laboratories, modern office spaces, and cutting-edge technology infrastructure.
+                    </p>
+                    
+                    <h2>Global Impact</h2>
+                    <p>
+                        With partnerships spanning across major technology hubs in Silicon Valley, London, Tokyo, and Singapore, HEART serves as a bridge connecting Vietnamese innovation with global markets and opportunities.
+                    </p>
+                    
+                    <h2>Research Excellence</h2>
+                    <p>
+                        Our research programs focus on artificial intelligence, machine learning, robotics, and emerging technologies that will shape the future of human-computer interaction and automation.
+                    </p>
+                    
+                    <h2>Sustainable Development</h2>
+                    <p>
+                        We are committed to developing AI solutions that address global challenges including climate change, healthcare accessibility, education equality, and sustainable economic growth.
+                    </p>
+                    
+                    <h2>Community Engagement</h2>
+                    <p>
+                        HEART Technology Park actively engages with local communities, educational institutions, and government agencies to ensure that AI development benefits all members of society.
+                    </p>
+                    
+                    <h2>Future Vision</h2>
+                    <p>
+                        Looking ahead, we envision HEART Technology Park as the cornerstone of Vietnam's transformation into a global AI powerhouse, leading innovations that will benefit humanity for generations to come.
+                    </p>
+                    
+                    <h2>Educational Programs</h2>
+                    <p>
+                        Our comprehensive educational programs include workshops, seminars, internships, and research opportunities designed to nurture the next generation of AI professionals and researchers.
+                    </p>
+                    
+                    <h2>Industry Collaboration</h2>
+                    <p>
+                        We foster deep collaboration between academia, industry, and government to ensure that AI research translates into practical solutions that benefit society and drive economic growth.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Simple Building Sidebar -->
+            <div class="content-sidebar">
+                <!-- Simple Building Container -->
+                <div class="building-container">
+                    <div class="building">
+                        <div class="building-header">HEART TECHNOLOGY</div>
+                        <div class="building-subtitle">AI Innovation Hub</div>
+                        <div class="windows">
+                            <!-- Row 1 -->
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            
+                            <!-- Row 2 -->
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            
+                            <!-- Row 3 -->
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            
+                            <!-- Row 4 -->
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            
+                            <!-- Row 5 -->
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                            <div class="window"></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="core-values-section">
-                    <h3 class="section-title">⚡ Core Values</h3>
-                    <div class="section-content">
-                        <p>Innovation, sustainability, collaboration, and human development are the core values that guide all our activities. We believe in ethical AI development, environmental responsibility, and creating meaningful impact for society.</p>
-                        <p>Our commitment to transparency and excellence drives every project we undertake at HEART Technology Park.</p>
-                    </div>
-                </div>
-                
-                <div class="team-section">
-                    <h3 class="section-title">👥 Our Team</h3>
-                    <div class="section-content">
-                        <p>Led by internationally recognized experts in AI and technology development, our team brings together over 200 professionals from top universities and leading tech companies worldwide.</p>
-                        <p>We maintain partnerships with MIT, Stanford, and leading Asian technology institutes to ensure we stay at the forefront of innovation.</p>
-                    </div>
-                </div>
-                
-                <section class="stats-section">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">200+</div>
-                            <div class="stat-label">Chuyên gia</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="stat-label">Đối tác</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">10+</div>
-                            <div class="stat-label">Năm kinh nghiệm</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">100+</div>
-                            <div class="stat-label">Dự án</div>
-                        </div>
-                    </div>
-                </section>
             </div>
         </div>
         
-        <div class="building-parallax" id="building-parallax-container">
-            <div class="building-placeholder">🏢</div>
-            <div class="building-content">
-                <h3 class="building-title">HEART AI Building</h3>
-                <p class="building-subtitle">State-of-the-art AI research facility with cutting-edge technology and sustainable design</p>
+        <!-- Features Section -->
+        <section class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>Advanced AI Research Labs</h3>
+                    <p>State-of-the-art facilities for cutting-edge AI research and development</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Startup Incubation Program</h3>
+                    <p>Comprehensive support for emerging AI startups and entrepreneurs</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Industry Partnerships</h3>
+                    <p>Strategic collaborations with leading technology companies worldwide</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3>Global Collaboration Network</h3>
+                    <p>International partnerships spanning Silicon Valley, London, Tokyo, and Singapore</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Cutting-edge Infrastructure</h3>
+                    <p>Modern facilities with the latest technology and development tools</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Talent Development Center</h3>
+                    <p>Comprehensive training programs for AI professionals and researchers</p>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
+    <!-- JavaScript -->
     <script>
-        // FIX BUILDING POSITION - NOT OVERLAPPING HEADER
-        function fixBuildingPosition() {
-            console.log("🔧 Fixing building position...");
-            
-            // Remove existing building
-            const existingBuilding = document.getElementById('heart-building-parallax');
-            if (existingBuilding) {
-                existingBuilding.remove();
-            }
-            
-            // Get navbar height
-            const navbar = document.querySelector('nav') || document.querySelector('header') || document.querySelector('.header');
-            const navbarHeight = navbar ? navbar.offsetHeight : 100; // Default 100px if not found
-            
-            console.log("Navbar height:", navbarHeight + "px");
-            
-            // Remove the placeholder building content but keep container for positioning
-            const buildingContainer = document.getElementById('building-parallax-container');
-            if (buildingContainer) {
-                buildingContainer.innerHTML = ''; // Clear placeholder content
-                
-                // Update container positioning to start below navbar
-                buildingContainer.style.cssText = `
-                    position: fixed !important;
-                    top: ${navbarHeight}px !important;
-                    right: 0 !important;
-                    width: 40vw !important;
-                    height: calc(100vh - ${navbarHeight}px) !important;
-                    z-index: 10 !important;
-                    pointer-events: none !important;
-                    overflow: hidden !important;
-                    background: none !important;
-                `;
-                
-                // Sky gradient background
-                const skyBg = document.createElement('div');
-                skyBg.style.cssText = `
-                    position: absolute !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    width: 100% !important;
-                    height: 100% !important;
-                    background: linear-gradient(180deg, 
-                        #87CEEB 0%, 
-                        #98D8E8 30%, 
-                        #F0E68C 70%, 
-                        #DDA0DD 100%) !important;
-                `;
-                
-                // HEART Technology Building
-                const heartBuilding = document.createElement('div');
-                heartBuilding.style.cssText = `
-                    position: absolute !important;
-                    top: 40% !important;
-                    left: 50% !important;
-                    transform: translate(-50%, -50%) !important;
-                    width: 250px !important;
-                    height: 200px !important;
-                    background: linear-gradient(145deg, #1e3a8a, #3b82f6) !important;
-                    border-radius: 15px !important;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.3) !important;
-                `;
-                
-                // Building details
-                heartBuilding.innerHTML = `
-                    <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 30px; background: linear-gradient(90deg, #ffd700, #ffed4e); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 12px; font-weight: bold; color: #1e3a8a; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">HEART TECHNOLOGY</div>
-                    
-                    <div style="position: absolute; top: 60px; left: 20px; right: 20px; height: 20px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 9px; font-weight: bold; color: #1e3a8a;">AI Innovation Hub</div>
-                    
-                    <div style="position: absolute; top: 90px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; height: 80px;">
-                        ${Array(16).fill().map((_, i) => {
-                            const isLit = Math.random() > 0.3;
-                            return `<div style="background: ${isLit ? 'rgba(255,255,100,0.9)' : 'rgba(255,255,255,0.4)'}; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);"></div>`;
-                        }).join('')}
-                    </div>
-                    
-                    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 40px; height: 15px; background: linear-gradient(90deg, #ffd700, #ffed4e); border-radius: 8px; box-shadow: 0 2px 8px rgba(255,215,0,0.3);"></div>
-                `;
-                
-                // Add background buildings
-                const leftBg = document.createElement('div');
-                leftBg.style.cssText = `position: absolute; left: 15%; top: 50%; width: 60px; height: 120px; background: rgba(107, 114, 128, 0.6); border-radius: 8px; z-index: 5; box-shadow: 0 10px 25px rgba(0,0,0,0.2);`;
-                
-                const rightBg = document.createElement('div');
-                rightBg.style.cssText = `position: absolute; right: 15%; top: 45%; width: 50px; height: 100px; background: rgba(156, 163, 175, 0.6); border-radius: 8px; z-index: 5; box-shadow: 0 10px 25px rgba(0,0,0,0.2);`;
-                
-                // Add building info overlay
-                const buildingInfo = document.createElement('div');
-                buildingInfo.style.cssText = `
-                    position: absolute;
-                    bottom: 2rem;
-                    left: 2rem;
-                    right: 2rem;
-                    color: white;
-                    text-align: center;
-                    background: rgba(0, 0, 0, 0.3);
-                    padding: 1rem;
-                    border-radius: 12px;
-                    backdrop-filter: blur(10px);
-                `;
-                buildingInfo.innerHTML = `
-                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; opacity: 0.9;">HEART AI Building</h3>
-                    <p style="font-size: 0.9rem; opacity: 0.8; line-height: 1.4;">State-of-the-art AI research facility with cutting-edge technology and sustainable design</p>
-                `;
-                
-                // Assemble building
-                skyBg.appendChild(leftBg);
-                skyBg.appendChild(rightBg);
-                skyBg.appendChild(heartBuilding);
-                skyBg.appendChild(buildingInfo);
-                buildingContainer.appendChild(skyBg);
-                
-                // Parallax scroll effect - only show when scrolled past navbar
-                let ticking = false;
-                function handleParallax() {
-                    if (!ticking) {
-                        requestAnimationFrame(() => {
-                            const scrolled = window.pageYOffset;
-                            const showBuilding = scrolled > navbarHeight / 2; // Show when scrolled past half navbar
-                            
-                            if (showBuilding) {
-                                buildingContainer.style.display = 'block';
-                                
-                                const rate = (scrolled - navbarHeight) * -0.4;
-                                const opacity = Math.max(0.3, 1 - (scrolled / window.innerHeight) * 0.3);
-                                
-                                skyBg.style.transform = `translateY(${rate}px)`;
-                                buildingContainer.style.opacity = opacity;
-                                
-                                if (scrolled > 200) {
-                                    const scale = 1 + (scrolled - 200) * 0.0001;
-                                    heartBuilding.style.transform = `translate(-50%, -50%) scale(${scale})`;
-                                }
-                            } else {
-                                buildingContainer.style.display = 'none';
-                            }
-                            
-                            ticking = false;
-                        });
-                        ticking = true;
-                    }
-                }
-                
-                window.addEventListener('scroll', handleParallax, { passive: true });
-                
-                // Mobile responsiveness
-                function checkMobile() {
-                    if (window.innerWidth < 768) {
-                        buildingContainer.style.display = 'none';
-                    }
-                }
-                
-                window.addEventListener('resize', checkMobile);
-                checkMobile();
-                
-                console.log("✅ Building positioned below navbar at", navbarHeight + "px");
-                
-                return buildingContainer;
-            }
-        }
+        // Smooth scroll animation for fade-in elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-        // FORCE ADJUST BUILDING POSITION - BELOW NAVBAR
-        function forceAdjustBuilding() {
-            console.log("🔧 Force adjusting building position...");
-            
-            // Find all possible building containers
-            const buildings = [
-                document.getElementById('heart-building-parallax'),
-                document.getElementById('heart-building-parallax-fixed'),
-                document.getElementById('clean-building-parallax'),
-                document.getElementById('immediate-building-container'),
-                document.getElementById('building-parallax-container')
-            ].filter(el => el !== null);
-            
-            console.log("Found buildings:", buildings.length);
-            
-            if (buildings.length === 0) {
-                console.log("No buildings found to adjust");
-                return;
-            }
-            
-            // Get actual navbar height
-            const navbar = document.querySelector('nav') || 
-                          document.querySelector('header') || 
-                          document.querySelector('.header') ||
-                          document.querySelector('.navbar') ||
-                          document.querySelector('[style*="background"][style*="#"]');
-            
-            let navbarHeight = 120; // Default
-            
-            if (navbar) {
-                navbarHeight = navbar.offsetHeight + 20; // Add 20px padding
-                console.log("Detected navbar height:", navbarHeight);
-            }
-            
-            // Adjust each building
-            buildings.forEach((building, index) => {
-                if (building) {
-                    building.style.position = 'fixed';
-                    building.style.top = `${navbarHeight}px`;
-                    building.style.height = `calc(100vh - ${navbarHeight}px)`;
-                    building.style.right = '0';
-                    building.style.width = '40vw';
-                    building.style.zIndex = '5'; // Lower z-index to not interfere
-                    building.style.pointerEvents = 'none';
-                    
-                    console.log(`Adjusted building ${index + 1}: top=${navbarHeight}px`);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
                 }
             });
-            
-            console.log("✅ All buildings adjusted below navbar");
-        }
+        }, observerOptions);
 
-        // Execute the fix when page loads
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Simple Building System - About Page Integration
         document.addEventListener('DOMContentLoaded', function() {
-            // Wait a bit for styles to load
-            setTimeout(() => {
-                fixBuildingPosition();
-                // Force adjust as backup
-                setTimeout(forceAdjustBuilding, 200);
-            }, 100);
-        });
-
-        // Execute immediately
-        forceAdjustBuilding();
-
-        // Also run after a delay to ensure DOM is ready
-        setTimeout(forceAdjustBuilding, 500);
-
-        // Run on window resize to maintain positioning
-        window.addEventListener('resize', function() {
-            setTimeout(forceAdjustBuilding, 100);
-        });
-
-        // NUCLEAR OPTION - COMPLETE RESET AND REBUILD
-        function nuclearResetBuilding() {
-            console.log("💥 NUCLEAR RESET - Complete building rebuild...");
+            console.log('🏢 Simple Building System initialized!');
             
-            // 1. DESTROY EVERYTHING
-            document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"], [class*="parallax"]').forEach(el => {
-                el.remove();
-                console.log("Destroyed:", el.id || el.className);
-            });
+            const building = document.querySelector('.building');
+            const buildingContainer = document.querySelector('.building-container');
             
-            // 2. CLEAR ALL INLINE STYLES ON BODY
-            document.body.style.overflow = 'auto';
-            
-            // 3. GET EXACT NAVBAR DIMENSIONS
-            const navbar = document.querySelector('nav') || document.querySelector('header') || document.querySelector('.header') || document.querySelector('.navbar');
-            const navRect = navbar ? navbar.getBoundingClientRect() : { height: 120 };
-            const safeTop = Math.max(navRect.height + 10, 130); // At least 130px from top
-            
-            console.log("Navbar dimensions:", navRect);
-            console.log("Safe top position:", safeTop);
-            
-            // 4. WAIT FOR DOM TO CLEAR
-            setTimeout(() => {
-                // 5. CREATE CLEAN BUILDING WITH SPECIFIC POSITIONING
-                const newBuilding = document.createElement('div');
-                newBuilding.id = 'nuclear-reset-building';
-                newBuilding.className = 'heart-building-final';
-                
-                // Use setAttribute to force styles
-                newBuilding.setAttribute('style', `
-                    position: fixed !important;
-                    top: ${safeTop}px !important;
-                    right: 0px !important;
-                    width: 400px !important;
-                    height: calc(100vh - ${safeTop}px) !important;
-                    z-index: 1 !important;
-                    pointer-events: none !important;
-                    overflow: hidden !important;
-                    background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 50%, #f59e0b 100%) !important;
-                    border-left: 2px solid rgba(255,255,255,0.2) !important;
-                `);
-                
-                // 6. ADD BUILDING CONTENT
-                newBuilding.innerHTML = `
-                    <div style="
-                        position: absolute !important;
-                        top: 40% !important;
-                        left: 50% !important;
-                        transform: translateX(-50%) !important;
-                        width: 200px !important;
-                        height: 160px !important;
-                        background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                        border-radius: 12px !important;
-                        box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-                    ">
-                        <div style="
-                            position: absolute;
-                            top: 20px;
-                            left: 20px;
-                            right: 20px;
-                            height: 25px;
-                            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-                            border-radius: 8px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-family: Arial Black, Arial;
-                            font-size: 10px;
-                            font-weight: 900;
-                            color: #1e40af;
-                            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-                        ">HEART TECHNOLOGY</div>
-                        
-                        <div style="
-                            position: absolute;
-                            top: 55px;
-                            left: 20px;
-                            right: 20px;
-                            height: 18px;
-                            background: rgba(255,255,255,0.95);
-                            border-radius: 5px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-family: Arial;
-                            font-size: 8px;
-                            font-weight: bold;
-                            color: #1e40af;
-                        ">AI Innovation Hub</div>
-                        
-                        <div style="
-                            position: absolute;
-                            top: 85px;
-                            left: 25px;
-                            right: 25px;
-                            display: grid;
-                            grid-template-columns: repeat(4, 1fr);
-                            gap: 6px;
-                            height: 50px;
-                        ">
-                            ${Array(12).fill().map((_, i) => `
-                                <div style="
-                                    background: ${Math.random() > 0.3 ? 'rgba(255,255,100,0.9)' : 'rgba(255,255,255,0.4)'};
-                                    border-radius: 2px;
-                                    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
-                                "></div>
-                            `).join('')}
-                        </div>
-                        
-                        <div style="
-                            position: absolute;
-                            bottom: 20px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            width: 30px;
-                            height: 12px;
-                            background: linear-gradient(90deg, #fbbf24, #f59e0b);
-                            border-radius: 6px;
-                            box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
-                        "></div>
-                    </div>
-                    
-                    <div style="
-                        position: absolute;
-                        bottom: 2rem;
-                        left: 2rem;
-                        right: 2rem;
-                        color: white;
-                        text-align: center;
-                        background: rgba(0, 0, 0, 0.3);
-                        padding: 1rem;
-                        border-radius: 12px;
-                        backdrop-filter: blur(10px);
-                    ">
-                        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; opacity: 0.9;">HEART AI Building</h3>
-                        <p style="font-size: 0.8rem; opacity: 0.8; line-height: 1.4;">State-of-the-art AI research facility</p>
-                    </div>
-                `;
-                
-                // 7. FORCE ADD TO DOM
-                document.body.appendChild(newBuilding);
-                
-                // 8. DOUBLE CHECK POSITIONING
-                setTimeout(() => {
-                    newBuilding.style.setProperty('top', `${safeTop}px`, 'important');
-                    newBuilding.style.setProperty('position', 'fixed', 'important');
-                    newBuilding.style.setProperty('z-index', '1', 'important');
-                    console.log("Position double-checked");
-                }, 100);
-                
-                // 9. ADD SIMPLE PARALLAX
-                let ticking = false;
-                function simpleParallax() {
-                    if (!ticking) {
-                        requestAnimationFrame(() => {
-                            const scrolled = window.pageYOffset;
-                            if (scrolled > safeTop) {
-                                const building = newBuilding.querySelector('div[style*="transform: translateX(-50%)"]');
-                                if (building) {
-                                    const rate = (scrolled - safeTop) * -0.2;
-                                    building.style.transform = `translateX(-50%) translateY(${rate}px)`;
-                                }
-                            }
-                            ticking = false;
-                        });
-                        ticking = true;
-                    }
-                }
-                
-                window.addEventListener('scroll', simpleParallax, { passive: true });
-                
-                // 10. Hide on mobile
-                function checkMobileNuclear() {
-                    if (window.innerWidth < 768) {
-                        newBuilding.style.display = 'none';
-                    } else {
-                        newBuilding.style.display = 'block';
-                    }
-                }
-                
-                window.addEventListener('resize', checkMobileNuclear);
-                checkMobileNuclear();
-                
-                console.log(`✅ NUCLEAR RESET COMPLETE! Building at ${safeTop}px from top`);
-                
-            }, 200); // Wait for DOM cleanup
-        }
-
-        // REMOVE BORDER AND KEEP ONLY BUILDING WITH PARALLAX
-        function cleanBuildingOnly() {
-            console.log("🏢 Cleaning building - removing border, keeping parallax...");
-            
-            // Find the current building
-            const building = document.getElementById('nuclear-reset-building') || 
-                            document.querySelector('[class*="heart-building"]') ||
-                            document.querySelector('[style*="HEART TECHNOLOGY"]').closest('[style*="position: fixed"]');
-            
-            if (!building) {
-                console.log("❌ Building not found");
+            if (!building || !buildingContainer) {
+                console.warn('⚠️ Building elements not found');
                 return;
             }
             
-            console.log("✅ Found building, removing border...");
-            
-            // Remove border from container
-            building.style.border = 'none';
-            building.style.borderLeft = 'none';
-            building.style.outline = 'none';
-            
-            // Keep only the essential styles
-            building.style.cssText = `
-                position: fixed !important;
-                top: 130px !important;
-                right: 0px !important;
-                width: 400px !important;
-                height: calc(100vh - 130px) !important;
-                z-index: 1 !important;
-                pointer-events: none !important;
-                overflow: hidden !important;
-                background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 50%, #f59e0b 100%) !important;
-            `;
-            
-            console.log("🎨 Border removed, building cleaned!");
-        }
-
-        // CREATE CLEAN BUILDING WITHOUT BORDER
-        function createCleanBuildingNoBorder() {
-            console.log("🏗️ Creating clean building without border...");
-            
-            // Remove existing
-            document.querySelectorAll('[id*="building"], [id*="parallax"]').forEach(el => el.remove());
-            
-            // Create clean container - NO BORDER
-            const container = document.createElement('div');
-            container.id = 'clean-building-no-border';
-            container.style.cssText = `
-                position: fixed !important;
-                top: 130px !important;
-                right: 0px !important;
-                width: 400px !important;
-                height: calc(100vh - 130px) !important;
-                z-index: 1 !important;
-                pointer-events: none !important;
-                overflow: hidden !important;
-                background: transparent !important;
-            `;
-            
-            // Create building structure
-            const buildingStructure = document.createElement('div');
-            buildingStructure.style.cssText = `
-                position: absolute !important;
-                top: 40% !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 200px !important;
-                height: 160px !important;
-                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                border-radius: 12px !important;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-            `;
-            
-            buildingStructure.innerHTML = `
-                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: 900; color: #1e40af;">HEART TECHNOLOGY</div>
-                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
-                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
-                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
-                </div>
-                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
-            `;
-            
-            container.appendChild(buildingStructure);
-            document.body.appendChild(container);
-            
-            // Add parallax effect
-            let ticking = false;
-            function parallaxEffect() {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        const scrolled = window.pageYOffset;
-                        if (scrolled > 130) {
-                            const rate = (scrolled - 130) * -0.3;
-                            buildingStructure.style.transform = `translateX(-50%) translateY(${rate}px)`;
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-            
-            window.addEventListener('scroll', parallaxEffect, { passive: true });
-            
-            console.log("✅ Clean building created - no border, with parallax!");
-        }
-
-        // POSITION BUILDING TO START FROM "OUR MISSION" SECTION
-        function positionBuildingFromMission() {
-            console.log("📍 Positioning building to start from Our Mission...");
-            
-            // Remove existing buildings
-            document.querySelectorAll('[id*="building"], [id*="parallax"]').forEach(el => el.remove());
-            
-            // Find "Our Mission" section
-            const missionElement = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6')).find(el => 
-                el.textContent.toLowerCase().includes('mission') || 
-                el.textContent.toLowerCase().includes('our mission')
-            );
-            
-            let missionTop = 400; // Default fallback
-            
-            if (missionElement) {
-                missionTop = missionElement.offsetTop - 50; // Start 50px before Mission
-                console.log("Found Mission at:", missionTop);
-            } else {
-                // If Mission not found, calculate based on typical About page layout
-                const aboutHeading = document.querySelector('h1') || document.querySelector('h2');
-                if (aboutHeading) {
-                    missionTop = aboutHeading.offsetTop + 200; // About heading + some content
-                }
-                console.log("Mission not found, using calculated position:", missionTop);
-            }
-            
-            // Create building container positioned from Mission section
-            const container = document.createElement('div');
-            container.id = 'mission-aligned-building';
-            container.style.cssText = `
-                position: absolute !important;
-                top: ${missionTop}px !important;
-                right: 0px !important;
-                width: 40vw !important;
-                height: calc(100vh - 100px) !important;
-                z-index: 1 !important;
-                pointer-events: none !important;
-                overflow: hidden !important;
-                background: transparent !important;
-            `;
-            
-            // Sky background
-            const skyBg = document.createElement('div');
-            skyBg.style.cssText = `
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                background: linear-gradient(180deg, 
-                    #87CEEB 0%, 
-                    #98D8E8 30%, 
-                    #F0E68C 70%, 
-                    #DDA0DD 100%) !important;
-                border-radius: 15px 0 0 15px !important;
-            `;
-            
-            // Main HEART building
-            const building = document.createElement('div');
-            building.style.cssText = `
-                position: absolute !important;
-                top: 30% !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 220px !important;
-                height: 180px !important;
-                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                border-radius: 15px !important;
-                box-shadow: 0 25px 50px rgba(0,0,0,0.4) !important;
-            `;
-            
-            // Building details
-            building.innerHTML = `
-                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 28px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: Arial Black; font-size: 11px; font-weight: 900; color: #1e40af; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">HEART TECHNOLOGY</div>
+            // Simple entrance animation
+            function animateBuildingEntrance() {
+                buildingContainer.style.opacity = '0';
+                buildingContainer.style.transform = 'translateY(50px)';
                 
-                <div style="position: absolute; top: 60px; left: 20px; right: 20px; height: 22px; background: rgba(255,255,255,0.95); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 9px; font-weight: bold; color: #1e40af; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">AI Innovation Hub</div>
-                
-                <div style="position: absolute; top: 95px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; height: 60px;">
-                    ${Array(16).fill().map((_, i) => {
-                        const isLit = Math.random() > 0.25;
-                        return `<div style="background: ${isLit ? 'rgba(255,255,100,0.95)' : 'rgba(255,255,255,0.4)'}; border-radius: 3px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); transition: all 0.3s ease;"></div>`;
-                    }).join('')}
-                </div>
-                
-                <div style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 35px; height: 15px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; box-shadow: 0 3px 12px rgba(251, 191, 36, 0.5);"></div>
-            `;
-            
-            // Add background buildings for context
-            const leftBg = document.createElement('div');
-            leftBg.style.cssText = `position: absolute; left: 10%; top: 45%; width: 70px; height: 130px; background: rgba(107, 114, 128, 0.7); border-radius: 10px; z-index: 5; box-shadow: 0 15px 35px rgba(0,0,0,0.2);`;
-            
-            const rightBg = document.createElement('div');
-            rightBg.style.cssText = `position: absolute; right: 10%; top: 40%; width: 60px; height: 110px; background: rgba(156, 163, 175, 0.7); border-radius: 10px; z-index: 5; box-shadow: 0 15px 35px rgba(0,0,0,0.2);`;
-            
-            // Assemble everything
-            skyBg.appendChild(leftBg);
-            skyBg.appendChild(rightBg);
-            skyBg.appendChild(building);
-            container.appendChild(skyBg);
-            
-            // Add to page
-            document.body.appendChild(container);
-            
-            // Enhanced parallax effect
-            let ticking = false;
-            function missionParallax() {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        const scrolled = window.pageYOffset;
-                        const buildingTop = missionTop;
-                        
-                        // Only apply parallax when building is visible
-                        if (scrolled + window.innerHeight > buildingTop) {
-                            const relativeScroll = scrolled - buildingTop + window.innerHeight;
-                            const parallaxRate = relativeScroll * -0.4;
-                            const scaleEffect = 1 + (relativeScroll * 0.0001);
-                            
-                            // Update building position
-                            building.style.transform = `translateX(-50%) translateY(${parallaxRate}px) scale(${Math.min(scaleEffect, 1.1)})`;
-                            
-                            // Add subtle background movement
-                            leftBg.style.transform = `translateY(${parallaxRate * 0.7}px)`;
-                            rightBg.style.transform = `translateY(${parallaxRate * 0.5}px)`;
-                            
-                            // Fade effect for atmospheric depth
-                            const opacity = Math.max(0.3, 1 - (relativeScroll / window.innerHeight) * 0.4);
-                            container.style.opacity = opacity;
-                        }
-                        
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-            
-            window.addEventListener('scroll', missionParallax, { passive: true });
-            
-            // Responsive handling
-            function handleResize() {
-                if (window.innerWidth < 768) {
-                    container.style.display = 'none';
-                } else {
-                    container.style.display = 'block';
-                }
-            }
-            
-            window.addEventListener('resize', handleResize);
-            handleResize();
-            
-            console.log(`✅ Building positioned to start from Mission section at ${missionTop}px`);
-            
-            // Make available globally
-            window.missionBuilding = container;
-            window.repositionFromMission = positionBuildingFromMission;
-            
-            return container;
-        }
-
-        // ACCURATE MISSION-BASED POSITIONING - FIX ALL ISSUES
-        function fixMissionPositioning() {
-            console.log("🔧 FIXING MISSION POSITIONING...");
-            
-            // 1. COMPLETE CLEANUP FIRST
-            document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"]').forEach(el => {
-                el.remove();
-                console.log("Removed:", el.id || el.className);
-            });
-            
-            // 2. WAIT FOR DOM TO BE STABLE
-            setTimeout(() => {
-                // 3. FIND MISSION ELEMENT MORE ACCURATELY
-                let missionElement = null;
-                let missionTop = 0;
-                
-                // Try multiple selectors
-                const selectors = [
-                    'h2:contains("Our Mission")',
-                    'h3:contains("Our Mission")',
-                    '[class*="mission"]',
-                    '*:contains("Our Mission")'
-                ];
-                
-                // Manual search through all elements
-                const allElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, .section-title, [class*="title"]');
-                
-                for (let el of allElements) {
-                    if (el.textContent && el.textContent.toLowerCase().includes('our mission')) {
-                        missionElement = el;
-                        break;
-                    }
-                }
-                
-                if (missionElement) {
-                    // Get actual position after layout
-                    const rect = missionElement.getBoundingClientRect();
-                    missionTop = window.pageYOffset + rect.top - 20; // 20px margin
-                    console.log("✅ Found Mission at:", missionTop, missionElement);
-                } else {
-                    // Fallback: measure from About Us heading
-                    const aboutHeading = document.querySelector('h1') || 
-                                        document.querySelector('[class*="about"]') ||
-                                        document.querySelector('h2');
-                    
-                    if (aboutHeading) {
-                        const aboutRect = aboutHeading.getBoundingClientRect();
-                        missionTop = window.pageYOffset + aboutRect.bottom + 150; // About + gap + content
-                        console.log("📍 Calculated Mission position:", missionTop);
-                    } else {
-                        missionTop = 500; // Safe fallback
-                        console.log("⚠️ Using fallback position:", missionTop);
-                    }
-                }
-                
-                // 4. CREATE BUILDING THAT STARTS EXACTLY AT MISSION
-                const container = document.createElement('div');
-                container.id = 'mission-precise-building';
-                container.style.cssText = `
-                    position: absolute !important;
-                    top: ${missionTop}px !important;
-                    right: 0 !important;
-                    width: 35vw !important;
-                    height: 400px !important;
-                    z-index: 2 !important;
-                    pointer-events: none !important;
-                    overflow: visible !important;
-                    background: transparent !important;
-                `;
-                
-                // 5. SKY BACKGROUND - ONLY FOR BUILDING AREA
-                const skyArea = document.createElement('div');
-                skyArea.style.cssText = `
-                    position: absolute !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    width: 100% !important;
-                    height: 100% !important;
-                    background: linear-gradient(180deg, 
-                        #87CEEB 0%, 
-                        #98D8E8 40%, 
-                        #F0E68C 80%, 
-                        #DDA0DD 100%) !important;
-                    border-radius: 15px 0 0 15px !important;
-                    z-index: 1 !important;
-                `;
-                
-                // 6. BUILDING STRUCTURE
-                const building = document.createElement('div');
-                building.style.cssText = `
-                    position: absolute !important;
-                    top: 50px !important;
-                    left: 50% !important;
-                    transform: translateX(-50%) !important;
-                    width: 200px !important;
-                    height: 160px !important;
-                    background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                    border-radius: 12px !important;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-                    z-index: 10 !important;
-                `;
-                
-                building.innerHTML = `
-                    <div style="position: absolute; top: 15px; left: 15px; right: 15px; height: 22px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 9px; font-weight: bold; color: #1e40af;">HEART TECHNOLOGY</div>
-                    <div style="position: absolute; top: 45px; left: 15px; right: 15px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 7px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
-                    <div style="position: absolute; top: 75px; left: 20px; right: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 60px;">
-                        ${Array(16).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
-                    </div>
-                    <div style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
-                `;
-                
-                skyArea.appendChild(building);
-                container.appendChild(skyArea);
-                document.body.appendChild(container);
-                
-                // 7. VERIFY POSITIONING
                 setTimeout(() => {
-                    const containerRect = container.getBoundingClientRect();
-                    console.log("📏 Container position:", {
-                        top: container.style.top,
-                        actualTop: containerRect.top + window.pageYOffset,
-                        missionTarget: missionTop
-                    });
+                    buildingContainer.style.transition = 'opacity 1s ease, transform 1s ease';
+                    buildingContainer.style.opacity = '1';
+                    buildingContainer.style.transform = 'translateY(0px)';
                 }, 100);
-                
-                // 8. PARALLAX EFFECT
-                let ticking = false;
-                function preciseParallax() {
-                    if (!ticking) {
-                        requestAnimationFrame(() => {
-                            const scrolled = window.pageYOffset;
-                            if (scrolled > missionTop - window.innerHeight) {
-                                const rate = (scrolled - missionTop) * -0.3;
-                                building.style.transform = `translateX(-50%) translateY(${rate}px)`;
-                            }
-                            ticking = false;
-                        });
-                        ticking = true;
-                    }
-                }
-                
-                window.addEventListener('scroll', preciseParallax, { passive: true });
-                
-                console.log(`✅ Building positioned precisely at Mission: ${missionTop}px`);
-                
-            }, 300); // Wait for DOM stability
-        }
-
-        // REMOVE ALL BORDERS FROM BUILDING
-        function removeBuildingBorder() {
-            console.log("🧹 Removing all borders from building...");
+            }
             
-            // Find all building containers
-            const buildings = document.querySelectorAll('[id*="building"], [id*="parallax"], [class*="building"]');
+            // Initialize simple building system
+            animateBuildingEntrance();
             
-            buildings.forEach((building, index) => {
-                if (building) {
-                    // Remove all types of borders
-                    building.style.border = 'none';
-                    building.style.borderLeft = 'none';
-                    building.style.borderRight = 'none';
-                    building.style.borderTop = 'none';
-                    building.style.borderBottom = 'none';
-                    building.style.outline = 'none';
-                    building.style.boxShadow = 'none';
-                    
-                    // Make background transparent if it has border-like appearance
-                    if (building.style.background && building.style.background.includes('linear-gradient') && 
-                        !building.innerHTML.includes('HEART TECHNOLOGY')) {
-                        building.style.background = 'transparent';
-                    }
-                    
-                    // Remove border radius that might create border-like appearance
-                    if (!building.innerHTML.includes('HEART TECHNOLOGY')) {
-                        building.style.borderRadius = '0';
-                    }
-                    
-                    console.log(`✅ Removed borders from building ${index + 1}`);
+            console.log('✨ Simple Building loaded successfully');
+        });
+        
+        // Navigation active state management
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav a');
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
                 }
             });
+        });
+        
+        // Performance monitoring
+        window.addEventListener('load', function() {
+            console.log('🎯 HEART About Page loaded successfully!');
+            console.log('🏢 Simple Building: Active');
+            console.log('✨ Clean animations: Running');
+            console.log('📱 Responsive design: Ready');
+            console.log('🚀 Performance optimized: Yes');
             
-            // Also check for sky background containers
-            const skyContainers = document.querySelectorAll('[style*="border-radius"]');
-            skyContainers.forEach((container, index) => {
-                if (container.style.background && container.style.background.includes('linear-gradient') &&
-                    container.style.borderRadius && !container.innerHTML.includes('HEART TECHNOLOGY')) {
-                    container.style.border = 'none';
-                    container.style.borderRadius = '0';
-                    console.log(`✅ Removed border from sky container ${index + 1}`);
-                }
-            });
+            // Validate simple building system
+            const buildingSystem = {
+                container: document.querySelector('.building-container'),
+                building: document.querySelector('.building'),
+                header: document.querySelector('.building-header'),
+                subtitle: document.querySelector('.building-subtitle'),
+                windows: document.querySelector('.windows')
+            };
             
-            console.log("🎯 All building borders removed!");
-        }
-
-        // CREATE BUILDING WITHOUT ANY BORDERS
-        function createBorderlessBuildingOnly() {
-            console.log("🏗️ Creating completely borderless building...");
-            
-            // Remove existing
-            document.querySelectorAll('[id*="building"], [id*="parallax"]').forEach(el => el.remove());
-            
-            // Create container with NO borders or background
-            const container = document.createElement('div');
-            container.id = 'borderless-building';
-            container.style.cssText = `
-                position: fixed !important;
-                top: 130px !important;
-                right: 0px !important;
-                width: 400px !important;
-                height: calc(100vh - 130px) !important;
-                z-index: 1 !important;
-                pointer-events: none !important;
-                overflow: hidden !important;
-                background: transparent !important;
-                border: none !important;
-                outline: none !important;
-                box-shadow: none !important;
-            `;
-            
-            // Create ONLY the building structure - NO background
-            const building = document.createElement('div');
-            building.style.cssText = `
-                position: absolute !important;
-                top: 40% !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 200px !important;
-                height: 160px !important;
-                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                border-radius: 12px !important;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-                border: none !important;
-                outline: none !important;
-            `;
-            
-            building.innerHTML = `
-                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: 900; color: #1e40af;">HEART TECHNOLOGY</div>
-                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 18px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
-                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
-                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
-                </div>
-                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
-            `;
-            
-            container.appendChild(building);
-            document.body.appendChild(container);
-            
-            // Simple parallax
-            let ticking = false;
-            function borderlessParallax() {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        const scrolled = window.pageYOffset;
-                        if (scrolled > 130) {
-                            const rate = (scrolled - 130) * -0.3;
-                            building.style.transform = `translateX(-50%) translateY(${rate}px)`;
-                        }
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-            
-            window.addEventListener('scroll', borderlessParallax, { passive: true });
-            
-            console.log("✅ Borderless building created - pure building only!");
-        }
-
-        // CREATE BRAND NEW HEART AI BUILDING - FROM OUR MISSION POSITION
-        function createNewHeartBuilding() {
-            console.log("🏗️ Creating brand new HEART AI Building from Our Mission...");
-            
-            // 1. NUCLEAR CLEANUP - Remove everything
-            document.querySelectorAll('*').forEach(el => {
-                if (el.id && (el.id.includes('building') || el.id.includes('parallax'))) {
-                    el.remove();
-                }
-                if (el.className && (el.className.includes('building') || el.className.includes('parallax'))) {
-                    el.remove();
-                }
-                if (el.style && el.style.position === 'fixed' && el.style.right === '0px') {
-                    el.remove();
-                }
-            });
-            
-            console.log("✅ Cleanup complete");
-            
-            // 2. WAIT AND FIND OUR MISSION PRECISELY
-            setTimeout(() => {
-                let missionElement = null;
-                
-                // Find "Our Mission" heading
-                const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-                for (let heading of headings) {
-                    if (heading.textContent.toLowerCase().includes('our mission')) {
-                        missionElement = heading;
-                        break;
-                    }
-                }
-                
-                if (!missionElement) {
-                    console.log("❌ Our Mission not found, using fallback");
-                    return;
-                }
-                
-                // Get exact position
-                const missionRect = missionElement.getBoundingClientRect();
-                const missionTop = window.pageYOffset + missionRect.top;
-                
-                console.log("📍 Our Mission found at:", missionTop);
-                
-                // 3. CREATE BUILDING CONTAINER - NO BORDER, TRANSPARENT BACKGROUND
-                const buildingContainer = document.createElement('div');
-                buildingContainer.id = 'heart-ai-building-new';
-                buildingContainer.style.cssText = `
-                    position: absolute !important;
-                    top: ${missionTop}px !important;
-                    right: 0 !important;
-                    width: 40vw !important;
-                    min-width: 350px !important;
-                    height: 600px !important;
-                    z-index: 5 !important;
-                    pointer-events: none !important;
-                    background: transparent !important;
-                    border: none !important;
-                    outline: none !important;
-                `;
-                
-                // 4. SKY BACKGROUND AREA
-                const skyBackground = document.createElement('div');
-                skyBackground.style.cssText = `
-                    position: absolute !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    width: 100% !important;
-                    height: 100% !important;
-                    background: linear-gradient(180deg, 
-                        #87CEEB 0%, 
-                        #B0E0E6 25%, 
-                        #F0E68C 75%, 
-                        #DDA0DD 100%) !important;
-                    border-radius: 20px 0 0 20px !important;
-                    box-shadow: -10px 0 30px rgba(0,0,0,0.1) !important;
-                `;
-                
-                // 5. MAIN HEART TECHNOLOGY BUILDING
-                const mainBuilding = document.createElement('div');
-                mainBuilding.style.cssText = `
-                    position: absolute !important;
-                    top: 80px !important;
-                    left: 50% !important;
-                    transform: translateX(-50%) !important;
-                    width: 240px !important;
-                    height: 200px !important;
-                    background: linear-gradient(145deg, #1e3a8a, #3b82f6, #1e40af) !important;
-                    border-radius: 15px !important;
-                    box-shadow: 
-                        0 25px 50px rgba(0,0,0,0.4),
-                        inset 0 2px 10px rgba(255,255,255,0.1) !important;
-                `;
-                
-                // 6. BUILDING DETAILS
-                mainBuilding.innerHTML = `
-                    <!-- Company Sign -->
-                    <div style="
-                        position: absolute;
-                        top: 25px;
-                        left: 25px;
-                        right: 25px;
-                        height: 30px;
-                        background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
-                        border-radius: 10px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-family: Arial Black, Arial;
-                        font-size: 12px;
-                        font-weight: 900;
-                        color: #1e3a8a;
-                        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-                        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
-                    ">HEART TECHNOLOGY</div>
-                    
-                    <!-- Subtitle -->
-                    <div style="
-                        position: absolute;
-                        top: 70px;
-                        left: 25px;
-                        right: 25px;
-                        height: 25px;
-                        background: rgba(255,255,255,0.95);
-                        border-radius: 8px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-family: Arial;
-                        font-size: 10px;
-                        font-weight: bold;
-                        color: #1e3a8a;
-                        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-                    ">AI Innovation Hub</div>
-                    
-                    <!-- Office Windows Grid -->
-                    <div style="
-                        position: absolute;
-                        top: 110px;
-                        left: 30px;
-                        right: 30px;
-                        display: grid;
-                        grid-template-columns: repeat(4, 1fr);
-                        gap: 10px;
-                        height: 70px;
-                    ">
-                        ${Array(16).fill().map((_, i) => {
-                            const isLit = Math.random() > 0.2; // 80% lit
-                            return `<div style="
-                                background: ${isLit ? 
-                                    'linear-gradient(135deg, rgba(255,255,120,0.95), rgba(255,255,80,0.9))' : 
-                                    'rgba(255,255,255,0.3)'
-                                };
-                                border-radius: 4px;
-                                box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-                                transition: all 0.3s ease;
-                            "></div>`;
-                        }).join('')}
-                    </div>
-                    
-                    <!-- Entrance -->
-                    <div style="
-                        position: absolute;
-                        bottom: 20px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        width: 40px;
-                        height: 18px;
-                        background: linear-gradient(90deg, #fbbf24, #f59e0b);
-                        border-radius: 10px 10px 5px 5px;
-                        box-shadow: 0 4px 15px rgba(251, 191, 36, 0.5);
-                    "></div>
-                `;
-                
-                // 7. BACKGROUND BUILDINGS FOR DEPTH
-                const leftBuilding = document.createElement('div');
-                leftBuilding.style.cssText = `
-                    position: absolute;
-                    left: 15%;
-                    top: 120px;
-                    width: 80px;
-                    height: 150px;
-                    background: linear-gradient(145deg, #6b7280, #9ca3af);
-                    border-radius: 12px;
-                    z-index: 2;
-                    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-                    opacity: 0.8;
-                `;
-                
-                const rightBuilding = document.createElement('div');
-                rightBuilding.style.cssText = `
-                    position: absolute;
-                    right: 15%;
-                    top: 140px;
-                    width: 70px;
-                    height: 130px;
-                    background: linear-gradient(145deg, #374151, #6b7280);
-                    border-radius: 12px;
-                    z-index: 2;
-                    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-                    opacity: 0.8;
-                `;
-                
-                // 8. ASSEMBLE EVERYTHING
-                skyBackground.appendChild(leftBuilding);
-                skyBackground.appendChild(rightBuilding);
-                skyBackground.appendChild(mainBuilding);
-                buildingContainer.appendChild(skyBackground);
-                
-                // 9. ADD TO PAGE
-                document.body.appendChild(buildingContainer);
-                
-                // 10. PARALLAX EFFECT
-                let isScrolling = false;
-                function heartBuildingParallax() {
-                    if (!isScrolling) {
-                        requestAnimationFrame(() => {
-                            const scrolled = window.pageYOffset;
-                            const containerTop = missionTop;
-                            
-                            // Only apply parallax when container is visible
-                            if (scrolled + window.innerHeight > containerTop) {
-                                const relativeScroll = scrolled - containerTop + window.innerHeight;
-                                const parallaxSpeed = 0.4;
-                                const moveY = relativeScroll * -parallaxSpeed;
-                                
-                                // Apply parallax to main building
-                                mainBuilding.style.transform = `translateX(-50%) translateY(${moveY}px)`;
-                                
-                                // Subtle movement for background buildings
-                                leftBuilding.style.transform = `translateY(${moveY * 0.6}px)`;
-                                rightBuilding.style.transform = `translateY(${moveY * 0.7}px)`;
-                                
-                                // Atmospheric fade
-                                const fadeDistance = window.innerHeight * 1.5;
-                                const opacity = Math.max(0.2, 1 - (relativeScroll / fadeDistance));
-                                buildingContainer.style.opacity = opacity;
-                            }
-                            
-                            isScrolling = false;
-                        });
-                        isScrolling = true;
-                    }
-                }
-                
-                window.addEventListener('scroll', heartBuildingParallax, { passive: true });
-                
-                // 11. RESPONSIVE BEHAVIOR
-                function handleResponsive() {
-                    if (window.innerWidth < 768) {
-                        buildingContainer.style.display = 'none';
-                    } else {
-                        buildingContainer.style.display = 'block';
-                    }
-                }
-                
-                window.addEventListener('resize', handleResponsive);
-                handleResponsive();
-                
-                console.log(`✅ NEW HEART AI Building created at Our Mission position: ${missionTop}px`);
-                console.log("🎨 No borders, clean design, smooth parallax");
-                
-                // Make globally accessible
-                window.heartBuilding = buildingContainer;
-                window.recreateHeartBuilding = createNewHeartBuilding;
-                
-            }, 500); // Wait for DOM stability
-        }
-
-        // FIX: BUILDING STARTS EXACTLY FROM "OUR MISSION" - NOT FROM TOP
-        function fixBuildingStartPosition() {
-            console.log("🔧 FIXING: Building to start from Our Mission only...");
-            
-            // 1. Remove all existing buildings
-            document.querySelectorAll('[id*="heart"], [id*="building"], [id*="parallax"]').forEach(el => {
-                el.remove();
-            });
-            
-            // 2. Find Our Mission heading precisely
-            let missionElement = null;
-            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-            
-            for (let heading of headings) {
-                if (heading.textContent.toLowerCase().includes('our mission')) {
-                    missionElement = heading;
-                    break;
-                }
-            }
-            
-            if (!missionElement) {
-                console.log("❌ Our Mission heading not found");
-                return;
-            }
-            
-            // 3. Get exact scroll position of Our Mission
-            const missionRect = missionElement.getBoundingClientRect();
-            const missionScrollTop = window.pageYOffset + missionRect.top;
-            
-            console.log("📍 Our Mission position:", missionScrollTop);
-            
-            // 4. Create building that ONLY appears when scrolled to Our Mission
-            const buildingContainer = document.createElement('div');
-            buildingContainer.id = 'mission-triggered-building';
-            buildingContainer.style.cssText = `
-                position: fixed !important;
-                top: 0 !important;
-                right: 0 !important;
-                width: 35vw !important;
-                height: 100vh !important;
-                z-index: 5 !important;
-                pointer-events: none !important;
-                background: transparent !important;
-                display: none !important;
-            `;
-            
-            // 5. Sky background (only visible when triggered)
-            const skyArea = document.createElement('div');
-            skyArea.style.cssText = `
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                background: linear-gradient(180deg, 
-                    #87CEEB 0%, 
-                    #B0E0E6 30%, 
-                    #F0E68C 70%, 
-                    #DDA0DD 100%) !important;
-                border-radius: 20px 0 0 20px !important;
-            `;
-            
-            // 6. Main building
-            const building = document.createElement('div');
-            building.style.cssText = `
-                position: absolute !important;
-                top: 40% !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 200px !important;
-                height: 160px !important;
-                background: linear-gradient(145deg, #1e40af, #3b82f6) !important;
-                border-radius: 12px !important;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.4) !important;
-            `;
-            
-            building.innerHTML = `
-                <div style="position: absolute; top: 20px; left: 20px; right: 20px; height: 25px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 10px; font-weight: bold; color: #1e40af;">HEART TECHNOLOGY</div>
-                <div style="position: absolute; top: 55px; left: 20px; right: 20px; height: 20px; background: rgba(255,255,255,0.95); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-family: Arial; font-size: 8px; font-weight: bold; color: #1e40af;">AI Innovation Hub</div>
-                <div style="position: absolute; top: 85px; left: 25px; right: 25px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; height: 50px;">
-                    ${Array(12).fill().map(() => `<div style="background: rgba(255,255,100,0.9); border-radius: 2px;"></div>`).join('')}
-                </div>
-                <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 30px; height: 12px; background: linear-gradient(90deg, #fbbf24, #f59e0b); border-radius: 6px;"></div>
-            `;
-            
-            skyArea.appendChild(building);
-            buildingContainer.appendChild(skyArea);
-            document.body.appendChild(buildingContainer);
-            
-            // 7. SCROLL TRIGGER - ONLY SHOW WHEN REACHED OUR MISSION
-            let ticking = false;
-            function missionTriggeredScroll() {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        const currentScroll = window.pageYOffset;
-                        const windowHeight = window.innerHeight;
-                        
-                        // Check if Our Mission is in viewport
-                        const missionInView = currentScroll + windowHeight >= missionScrollTop;
-                        
-                        if (missionInView) {
-                            // Show building
-                            buildingContainer.style.display = 'block';
-                            
-                            // Apply parallax relative to Mission position
-                            const relativeScroll = currentScroll - missionScrollTop + windowHeight;
-                            const parallaxOffset = relativeScroll * -0.3;
-                            
-                            building.style.transform = `translateX(-50%) translateY(${parallaxOffset}px)`;
-                            
-                            // Fade effect
-                            const fadeDistance = windowHeight * 2;
-                            const opacity = Math.max(0.2, 1 - (relativeScroll / fadeDistance));
-                            buildingContainer.style.opacity = opacity;
-                            
-                            console.log(`Building visible - scroll: ${currentScroll}, mission: ${missionScrollTop}`);
-                        } else {
-                            // Hide building when above Our Mission
-                            buildingContainer.style.display = 'none';
-                        }
-                        
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-            
-            window.addEventListener('scroll', missionTriggeredScroll, { passive: true });
-            
-            // 8. Initial check
-            missionTriggeredScroll();
-            
-            console.log("✅ Building will ONLY appear when scrolled to Our Mission");
-            console.log(`Mission trigger position: ${missionScrollTop}px`);
-            
-            // Make available globally
-            window.missionBuilding = buildingContainer;
-            window.missionTriggerPosition = missionScrollTop;
-        }
-
-        // Test function to check mission position
-        function checkMissionPosition() {
-            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-            let mission = null;
-            
-            for (let heading of headings) {
-                if (heading.textContent.toLowerCase().includes('our mission')) {
-                    mission = heading;
-                    break;
-                }
-            }
-            
-            if (mission) {
-                const rect = mission.getBoundingClientRect();
-                const scrollPos = window.pageYOffset + rect.top;
-                console.log("Our Mission at:", scrollPos, "Current scroll:", window.pageYOffset);
-                return scrollPos;
+            if (buildingSystem.container && buildingSystem.building) {
+                console.log('🌟 Simple Building System: Fully operational');
+                console.log('🏢 Building components loaded successfully');
             } else {
-                console.log("Our Mission heading not found");
-                return null;
+                console.warn('⚠️ Simple Building System: Check required');
             }
-        }
-
-        // Make functions available globally
-        window.fixBuildingPosition = fixBuildingPosition;
-        window.forceAdjustBuilding = forceAdjustBuilding;
-        window.nuclearResetBuilding = nuclearResetBuilding;
-        window.cleanBuildingOnly = cleanBuildingOnly;
-        window.createCleanBuildingNoBorder = createCleanBuildingNoBorder;
-        window.positionBuildingFromMission = positionBuildingFromMission;
-        window.fixMissionPositioning = fixMissionPositioning;
-        window.removeBuildingBorder = removeBuildingBorder;
-        window.createBorderlessBuildingOnly = createBorderlessBuildingOnly;
-        window.createNewHeartBuilding = createNewHeartBuilding;
-        window.fixBuildingStartPosition = fixBuildingStartPosition;
-        window.checkMissionPosition = checkMissionPosition;
-
-        // Add nuclear reset as emergency option
-        // Uncomment the next line if you need emergency reset
-        // setTimeout(nuclearResetBuilding, 2000);
-
-        // Verify building existence after all operations
-        setTimeout(() => {
-            const buildings = document.querySelectorAll('[id*="building"], [class*="building"]');
-            console.log(`Found ${buildings.length} building(s) after initialization`);
-            buildings.forEach((building, index) => {
-                console.log(`Building ${index + 1}:`, building.id || building.className, building.getBoundingClientRect().top + 'px from top');
-            });
-        }, 1000);
+        });
     </script>
 </body>
 </html>
-EOF < /dev/null

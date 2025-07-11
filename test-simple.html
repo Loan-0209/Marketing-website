@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HEART - Simple Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px;
+            background: linear-gradient(45deg, red, blue);
+        }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .test-btn {
+            background: #4338ca;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 HEART Technology Park - Simple Test</h1>
+        <p>If you can see this page, the server is working!</p>
+        
+        <h2>Quick Links:</h2>
+        <button class="test-btn" onclick="location.href='about.html'">🏢 About Page</button>
+        <button class="test-btn" onclick="location.href='index.html'">🏠 Home Page</button>
+        <button class="test-btn" onclick="location.href='test-nuclear-final.html'">💥 Nuclear Test</button>
+        
+        <h2>💥 Nuclear Gradient Test:</h2>
+        <button class="test-btn" onclick="applyNuclear()">Apply Nuclear Mode</button>
+        <button class="test-btn" onclick="toggleTest()">Toggle Background</button>
+        
+        <div id="status">Ready to test...</div>
+    </div>
+
+    <script>
+        function applyNuclear() {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                * { background: #ffffff !important; background-image: none !important; }
+                body { background: #ffffff !important; }
+                .container { background: #f0f0f0 !important; border: 2px solid #4338ca !important; }
+            `;
+            document.head.appendChild(style);
+            document.getElementById('status').innerHTML = '💥 Nuclear mode applied!';
+        }
+        
+        function toggleTest() {
+            document.body.style.background = document.body.style.background ? '' : 'white';
+            document.getElementById('status').innerHTML = '🔄 Background toggled!';
+        }
+        
+        document.getElementById('status').innerHTML = '✅ Page loaded successfully! Server is working.';
+    </script>
+</body>
+</html>

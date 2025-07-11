@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Pattern Building - HEART Technology Park</title>
+    
+    <!-- Exact Building CSS -->
+    <link rel="stylesheet" href="css/building-exact.css">
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Demo page specific styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-container {
+            width: 60%;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #4A6CF7;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feature-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-section h3 {
+            color: #4A6CF7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .status-exact { color: #4CAF50; }
+        .status-pattern { color: #FF9800; }
+        .status-row { color: #2196F3; }
+        
+        .pattern-preview {
+            background: linear-gradient(135deg, #5A67D8 0%, #764BA2 100%);
+            height: 200px;
+            border-radius: 8px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+            padding: 15px;
+        }
+        
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 4px;
+            height: 100%;
+            width: 100%;
+        }
+        
+        .pattern-window {
+            background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%);
+            border-radius: 2px;
+        }
+        
+        .pattern-empty {
+            background: transparent;
+        }
+        
+        .row-label {
+            position: absolute;
+            left: -10px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+        
+        .controls-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+        
+        .control-button {
+            background: #4A6CF7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            background: #667EEA;
+            transform: translateY(-2px);
+        }
+        
+        .control-button.active {
+            background: #FFA726;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                width: 95%;
+                margin: 20px auto;
+                padding: 20px;
+            }
+            
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .controls-panel {
+                position: relative;
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Exact Pattern Building Container -->
+    <div class="building-container-exact">
+        <div class="building-exact">
+            <!-- Building Header -->
+            <div class="building-header-exact">HEART TECHNOLOGY</div>
+            
+            <!-- Building Subtitle -->
+            <div class="building-subtitle-exact">AI Innovation Hub</div>
+            
+            <!-- Exact Windows Grid -->
+            <div class="windows-exact-grid">
+                <!-- Row 1: 3 windows (empty, window, window, window) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 2: 4 windows (all) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 3: Empty -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 4: 2 windows (center) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 5: 3 windows (left, empty, empty, right) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 6: Empty -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 7: 4 windows (all) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 8: 2 windows (sides) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 9: 3 windows -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                
+                <!-- Row 10: 4 windows (all) -->
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+                <div class="window-exact"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Content -->
+    <div class="demo-container">
+        <div class="demo-content">
+            <h1 class="demo-title">🏢 Exact Pattern Building</h1>
+            <p class="demo-subtitle">HEART Technology Park - Precise Row-by-Row Layout</p>
+            
+            <div class="feature-section">
+                <h3>🎯 Exact Specifications</h3>
+                <ul class="feature-list">
+                    <li><span class="status-exact">📐</span> Building: 280×420px rectangular</li>
+                    <li><span class="status-exact">🎨</span> Background: Purple-blue gradient (#5A67D8 → #764BA2)</li>
+                    <li><span class="status-exact">🏷️</span> Header: "HEART TECHNOLOGY" orange background</li>
+                    <li><span class="status-exact">📝</span> Subtitle: "AI Innovation Hub" white background</li>
+                    <li><span class="status-exact">🪟</span> Windows: Yellow-orange (#FFD54F → #FFA726)</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>📋 Exact Row Pattern Layout</h3>
+                <ul class="feature-list">
+                    <li><span class="status-row">1️⃣</span> Row 1: 3 windows (evenly spaced, sides empty)</li>
+                    <li><span class="status-row">2️⃣</span> Row 2: 4 windows (full row)</li>
+                    <li><span class="status-row">3️⃣</span> Row 3: EMPTY (complete purple background)</li>
+                    <li><span class="status-row">4️⃣</span> Row 4: 2 windows (center, sides empty)</li>
+                    <li><span class="status-row">5️⃣</span> Row 5: 3 windows (left, center empty, right)</li>
+                    <li><span class="status-row">6️⃣</span> Row 6: EMPTY (complete purple background)</li>
+                    <li><span class="status-row">7️⃣</span> Row 7: 4 windows (full row)</li>
+                    <li><span class="status-row">8️⃣</span> Row 8: 2 windows (sides, large center gap)</li>
+                    <li><span class="status-row">9️⃣</span> Row 9: 3 windows (evenly spaced)</li>
+                    <li><span class="status-row">🔟</span> Row 10: 4 windows (full row)</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🎨 Pattern Preview</h3>
+                <div class="pattern-preview">
+                    <div class="pattern-grid">
+                        <!-- Row 1: ⭕🟨🟨🟨 -->
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 2: 🟨🟨🟨🟨 -->
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 3: ⭕⭕⭕⭕ -->
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        
+                        <!-- Row 4: ⭕🟨🟨⭕ -->
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-empty"></div>
+                        
+                        <!-- Row 5: 🟨⭕⭕🟨 -->
+                        <div class="pattern-window"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 6: ⭕⭕⭕⭕ -->
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        
+                        <!-- Row 7: 🟨🟨🟨🟨 -->
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 8: 🟨⭕⭕🟨 -->
+                        <div class="pattern-window"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 9: ⭕🟨🟨🟨 -->
+                        <div class="pattern-empty"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        
+                        <!-- Row 10: 🟨🟨🟨🟨 -->
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                        <div class="pattern-window"></div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: #666; font-size: 14px;">
+                    🟨 = Window (Yellow/Orange) | ⭕ = Empty (Purple background)
+                </p>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🎯 Implementation Details</h3>
+                <ul class="feature-list">
+                    <li><span class="status-pattern">📐</span> CSS Grid: 4 columns × 10 rows</li>
+                    <li><span class="status-pattern">📏</span> Even spacing: 8px gap between windows</li>
+                    <li><span class="status-pattern">🎨</span> nth-child selectors for exact positioning</li>
+                    <li><span class="status-pattern">✨</span> Flat design: No 3D effects or shadows</li>
+                    <li><span class="status-pattern">💫</span> Subtle animations: Glow + float effects</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>📊 Pattern Statistics</h3>
+                <ul class="feature-list">
+                    <li><span class="status-exact">🔢</span> Total windows: 29 out of 40 positions</li>
+                    <li><span class="status-exact">📈</span> Coverage: 72.5% window density</li>
+                    <li><span class="status-exact">🕳️</span> Empty spaces: 11 positions (27.5%)</li>
+                    <li><span class="status-exact">📏</span> Full rows: 4 (rows 2, 7, 10)</li>
+                    <li><span class="status-exact">⭕</span> Empty rows: 2 (rows 3, 6)</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🔧 Technical Features</h3>
+                <ul class="feature-list">
+                    <li><span class="status-exact">⚡</span> Performance: GPU accelerated</li>
+                    <li><span class="status-exact">📱</span> Responsive: Desktop → Tablet → Mobile</li>
+                    <li><span class="status-exact">♿</span> Accessibility: High contrast + reduced motion</li>
+                    <li><span class="status-exact">🌙</span> Dark mode support</li>
+                    <li><span class="status-exact">🖱️</span> Interactive: Hover effects on windows</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Controls -->
+    <div class="controls-panel">
+        <h4>🎛️ Exact Pattern Controls</h4>
+        <button class="control-button" onclick="highlightPattern()">🔍 Highlight</button>
+        <button class="control-button" onclick="toggleAnimation()">⏯️ Animation</button>
+        <button class="control-button" onclick="analyzePattern()">📊 Analyze</button>
+        <button class="control-button" onclick="validatePattern()">✅ Validate</button>
+    </div>
+
+    <script>
+        // Demo Controls JavaScript
+        let isHighlighted = false;
+        let isAnimationPaused = false;
+        
+        function highlightPattern() {
+            isHighlighted = !isHighlighted;
+            const windows = document.querySelectorAll('.window-exact');
+            
+            windows.forEach((window, index) => {
+                if (isHighlighted) {
+                    // Add glow effect to lit windows
+                    if (window.style.background !== 'transparent') {
+                        window.style.boxShadow = '0 0 15px rgba(255, 212, 79, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.3)';
+                    }
+                } else {
+                    window.style.boxShadow = 'inset 0 1px 2px rgba(255, 255, 255, 0.3)';
+                }
+            });
+            
+            const button = event.target;
+            button.textContent = isHighlighted ? '🔍 Normal' : '🔍 Highlight';
+            button.classList.toggle('active', isHighlighted);
+        }
+        
+        function toggleAnimation() {
+            isAnimationPaused = !isAnimationPaused;
+            const building = document.querySelector('.building-exact');
+            const windows = document.querySelectorAll('.window-exact');
+            const grid = document.querySelector('.windows-exact-grid');
+            
+            if (building) {
+                building.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+            }
+            
+            if (grid) {
+                grid.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+            }
+            
+            windows.forEach(window => {
+                window.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+            });
+            
+            const button = event.target;
+            button.textContent = isAnimationPaused ? '▶️ Resume' : '⏸️ Pause';
+            button.classList.toggle('active', isAnimationPaused);
+        }
+        
+        function analyzePattern() {
+            const analysis = {
+                '🏢 Building Type': 'Exact Pattern',
+                '📐 Dimensions': '280×420px',
+                '🪟 Implementation': 'CSS Grid 4×10',
+                '🔢 Total Windows': '29 windows',
+                '📈 Coverage': '72.5% (29/40)',
+                '🕳️ Empty Spaces': '11 positions',
+                '📏 Full Rows': '4 rows (2,7,10)',
+                '⭕ Empty Rows': '2 rows (3,6)',
+                '🎨 Method': 'nth-child selectors',
+                '⚡ Performance': 'GPU Accelerated'
+            };
+            
+            console.log('📊 Exact Pattern Analysis:');
+            console.table(analysis);
+            
+            // Row-by-row breakdown
+            const rowPatterns = {
+                'Row 1': '⭕🟨🟨🟨 (3 windows)',
+                'Row 2': '🟨🟨🟨🟨 (4 windows - FULL)',
+                'Row 3': '⭕⭕⭕⭕ (0 windows - EMPTY)',
+                'Row 4': '⭕🟨🟨⭕ (2 windows)',
+                'Row 5': '🟨⭕⭕🟨 (2 windows)',
+                'Row 6': '⭕⭕⭕⭕ (0 windows - EMPTY)',
+                'Row 7': '🟨🟨🟨🟨 (4 windows - FULL)',
+                'Row 8': '🟨⭕⭕🟨 (2 windows)',
+                'Row 9': '⭕🟨🟨🟨 (3 windows)',
+                'Row 10': '🟨🟨🟨🟨 (4 windows - FULL)'
+            };
+            
+            console.log('📋 Row-by-Row Pattern:');
+            console.table(rowPatterns);
+            
+            alert('📊 Pattern analysis logged to console! Open DevTools for detailed breakdown.');
+        }
+        
+        function validatePattern() {
+            const expectedPattern = [
+                // Row 1: ⭕🟨🟨🟨
+                'transparent', 'window', 'window', 'window',
+                // Row 2: 🟨🟨🟨🟨
+                'window', 'window', 'window', 'window',
+                // Row 3: ⭕⭕⭕⭕
+                'transparent', 'transparent', 'transparent', 'transparent',
+                // Row 4: ⭕🟨🟨⭕
+                'transparent', 'window', 'window', 'transparent',
+                // Row 5: 🟨⭕⭕🟨
+                'window', 'transparent', 'transparent', 'window',
+                // Row 6: ⭕⭕⭕⭕
+                'transparent', 'transparent', 'transparent', 'transparent',
+                // Row 7: 🟨🟨🟨🟨
+                'window', 'window', 'window', 'window',
+                // Row 8: 🟨⭕⭕🟨
+                'window', 'transparent', 'transparent', 'window',
+                // Row 9: ⭕🟨🟨🟨
+                'transparent', 'window', 'window', 'window',
+                // Row 10: 🟨🟨🟨🟨
+                'window', 'window', 'window', 'window'
+            ];
+            
+            const windows = document.querySelectorAll('.window-exact');
+            let isValid = true;
+            let errors = [];
+            
+            windows.forEach((window, index) => {
+                const expected = expectedPattern[index];
+                const actual = window.style.background === 'transparent' ? 'transparent' : 'window';
+                
+                if (actual !== expected) {
+                    isValid = false;
+                    const row = Math.floor(index / 4) + 1;
+                    const col = (index % 4) + 1;
+                    errors.push(`Row ${row}, Col ${col}: Expected ${expected}, got ${actual}`);
+                }
+            });
+            
+            const validation = {
+                '✅ Pattern Valid': isValid,
+                '🔍 Total Checked': '40 positions',
+                '❌ Errors Found': errors.length,
+                '📊 Match Rate': `${((40 - errors.length) / 40 * 100).toFixed(1)}%`
+            };
+            
+            console.log('✅ Pattern Validation:');
+            console.table(validation);
+            
+            if (errors.length > 0) {
+                console.log('❌ Validation Errors:');
+                errors.forEach(error => console.log(`  • ${error}`));
+            }
+            
+            const message = isValid ? 
+                '✅ Pattern is EXACT! All windows match specification.' :
+                `❌ Found ${errors.length} mismatches. Check console for details.`;
+            
+            alert(message);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏢 Exact Pattern Building Demo loaded!');
+            console.log('🎯 Design: Precise row-by-row layout');
+            console.log('📏 Pattern: 29 windows in specified positions');
+            console.log('🔧 Implementation: CSS Grid with nth-child selectors');
+            console.log('🎛️ Use controls to analyze and validate pattern');
+            
+            // Auto-validate on load
+            setTimeout(() => {
+                console.log('🔍 Auto-validating pattern...');
+                validatePattern();
+            }, 1000);
+            
+            // Animate entrance
+            setTimeout(() => {
+                document.body.classList.add('demo-loaded');
+            }, 500);
+        });
+        
+        // Debug tools
+        window.ExactBuildingDebug = {
+            getWindowCount: () => {
+                const windows = document.querySelectorAll('.window-exact');
+                let count = 0;
+                windows.forEach(window => {
+                    if (window.style.background !== 'transparent') count++;
+                });
+                return count;
+            },
+            getRowPattern: (rowNumber) => {
+                const windows = document.querySelectorAll('.window-exact');
+                const startIndex = (rowNumber - 1) * 4;
+                const pattern = [];
+                
+                for (let i = 0; i < 4; i++) {
+                    const window = windows[startIndex + i];
+                    pattern.push(window.style.background === 'transparent' ? '⭕' : '🟨');
+                }
+                
+                return `Row ${rowNumber}: ${pattern.join('')}`;
+            },
+            validateAll: () => validatePattern()
+        };
+        
+        console.log('🔧 Debug tools: window.ExactBuildingDebug');
+    </script>
+</body>
+</html>

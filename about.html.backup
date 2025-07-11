@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - HEART Technology Park</title>
+    <style>
+        /* Copy the existing styles from about.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f5bd5, #6366f1);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .rocket {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            background: #F5C842;
+            color: #4A5FD1;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(245, 200, 66, 0.2);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item:hover {
+            background: #F2C040;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .nav-menu {
+                gap: 6px;
+            }
+            
+            .nav-item {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                justify-content: center;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-item {
+                text-align: center;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-container {
+                padding: 0 15px;
+            }
+        }
+        
+        .about-container {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .content-section {
+            padding: 2rem 3rem;
+            background: #ffffff;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .building-section {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            background-color: transparent;
+            background-image: none;
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .title-decoration {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            margin: 1.5rem 0;
+            border-radius: 2px;
+        }
+        
+        .section-text {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin: 2rem 0 1rem 0;
+        }
+        
+        .section p {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        @media (max-width: 768px) {
+            .about-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .building-section {
+                height: 300px;
+                background: transparent;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Transparent Background Enforcement */
+        .transparent-bg,
+        .building-sky,
+        .sky-background,
+        .parallax-bg {
+            background: transparent !important;
+            background-color: transparent !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+        }
+        
+        /* Enhanced building visibility on transparent background */
+        .heart-building {
+            filter: drop-shadow(0 0 20px rgba(79, 70, 229, 0.3)) !important;
+            -webkit-font-smoothing: antialiased !important;
+            transform: translateZ(0) !important;
+        }
+        
+        /* Enhanced text readability */
+        .heart-building .text,
+        .heart-building p,
+        .heart-building h1,
+        .heart-building h2,
+        .heart-building h3 {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* FORCE NAVIGATION OVERRIDE - MAXIMUM STRENGTH */
+        .header, .header * { 
+            display: block !important; 
+            visibility: visible !important; 
+            opacity: 1 !important;
+        }
+        
+        .navbar { 
+            display: flex !important; 
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .nav-menu { 
+            display: flex !important; 
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .nav-item { 
+            display: inline-block !important; 
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+            z-index: 9999 !important;
+        }
+        
+        .logo {
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 9999 !important;
+        }
+        
+        .header-container {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 9999 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Menu Updated: 2025-07-09 17:00 -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <div class="rocket">🚀</div>
+                    HEART
+                </a>
+                
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-item">Home</a>
+                    <a href="about.html" class="nav-item">About Us</a>
+                    <a href="master-plan.html" class="nav-item">Master Plan</a>
+                    <a href="ai-campus-3d-structure.html" class="nav-item">3D Campus</a>
+                    <a href="facilities.html" class="nav-item">Facilities</a>
+                    <a href="investment.html" class="nav-item">Investment</a>
+                    <a href="technology.html" class="nav-item">Technology</a>
+                    <a href="news.html" class="nav-item">News</a>
+                    <a href="contact.html" class="nav-item">Contact</a>
+                    <a href="login.html" class="nav-item">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="about-container">
+        <div class="content-section">
+            <h1 class="page-title">About HEART</h1>
+            <div class="title-decoration"></div>
+            
+            <div class="section">
+                <p class="section-text">
+                    HEART Technology Park represents Vietnam's most ambitious leap into the future of artificial intelligence and technological innovation. Situated in the heart of Ho Chi Minh City, our 50-hectare campus is designed to be the epicenter of AI research, development, and commercialization in Southeast Asia.
+                </p>
+                
+                <h2>Our Vision</h2>
+                <p>
+                    To establish Vietnam as a global leader in artificial intelligence research and development, fostering innovation that benefits humanity while driving economic growth and technological advancement across the region.
+                </p>
+                
+                <h2>Our Mission</h2>
+                <p>
+                    We are committed to creating an ecosystem where brilliant minds collaborate to solve the world's most challenging problems through AI innovation. Our mission encompasses research excellence, talent development, and the creation of breakthrough technologies that will shape the future of industries worldwide.
+                </p>
+                
+                <h2>Innovation Ecosystem</h2>
+                <p>
+                    HEART Technology Park brings together leading researchers, innovative startups, established corporations, and venture capital in a dynamic environment designed for collaboration and breakthrough innovation. Our facilities include state-of-the-art research laboratories, modern office spaces, and cutting-edge technology infrastructure.
+                </p>
+                
+                <h2>Global Impact</h2>
+                <p>
+                    With partnerships spanning across major technology hubs in Silicon Valley, London, Tokyo, and Singapore, HEART serves as a bridge connecting Vietnamese innovation with global markets and opportunities.
+                </p>
+            </div>
+        </div>
+        
+        <div class="building-section" id="building-parallax-container">
+            <!-- Building animation will be inserted here by BuildingParallaxManager -->
+        </div>
+    </div>
+
+    <!-- Modern Building Parallax Manager -->
+    <script src="js/building-parallax-manager.js"></script>
+    
+    <script>
+        // Clean implementation using BuildingParallaxManager
+        console.log('✅ About page building system initialized');
+        console.log('🏗️ Using modern BuildingParallaxManager for production reliability');
+        console.log('📱 Includes responsive design and cross-browser compatibility');
+        
+        // NUCLEAR MODE DISABLED - FORCE NAVIGATION ONLY
+        console.log('🚫 Nuclear mode disabled - Navigation focus only');
+        
+        // Disable all nuclear functions
+        window.nuclearGradientRemoval = function() { 
+            console.log('🚫 Nuclear mode disabled'); 
+            return false;
+        };
+        
+        window.manualNuclearMode = function() { 
+            console.log('🚫 Nuclear mode disabled'); 
+            return false;
+        };
+        
+        window.toggleNuclearMode = function() { 
+            console.log('🚫 Nuclear mode disabled'); 
+            return false;
+        };
+        
+        // Legacy compatibility functions for backward compatibility
+        function fixBuildingPosition() {
+            console.log('Legacy fixBuildingPosition called - delegating to new manager');
+            if (window.buildingManager) {
+                window.buildingManager.recreate();
+            }
+        }
+        
+        function forceAdjustBuilding() {
+            console.log('Legacy forceAdjustBuilding called - delegating to new manager');
+            if (window.buildingManager) {
+                window.buildingManager.recreate();
+            }
+        }
+        
+        function nuclearResetBuilding() {
+            console.log('Legacy nuclearResetBuilding called - delegating to new manager');
+            if (window.buildingManager) {
+                window.buildingManager.recreate();
+            }
+        }
+        
+        function removeBuildingBorder() {
+            console.log('Legacy removeBuildingBorder called - handled by new manager');
+            return true;
+        }
+        
+        function createNewHeartBuilding() {
+            console.log('Legacy createNewHeartBuilding called - delegating to new manager');
+            if (window.buildingManager) {
+                window.buildingManager.recreate();
+            }
+        }
+        
+        function createBorderlessBuildingOnly() {
+            console.log('Legacy createBorderlessBuildingOnly called - delegating to new manager');
+            if (window.buildingManager) {
+                window.buildingManager.recreate();
+            }
+        }
+        
+        function debugBuildingState() {
+            console.log('Legacy debugBuildingState called - delegating to new manager');
+            if (window.buildingManager) {
+                return window.buildingManager.getState();
+            }
+            return null;
+        }
+        
+        // NAVIGATION FOCUS DEBUG - NUCLEAR DISABLED
+        window.debugBuilding = function() {
+            console.log('🔧 Navigation Debug (Nuclear Disabled):');
+            console.log('   Header visible:', !!document.querySelector('.header'));
+            console.log('   Nav visible:', !!document.querySelector('.nav'));
+            console.log('   Nav items count:', document.querySelectorAll('.nav a').length);
+            console.log('   Building Manager:', !!window.buildingManager);
+            return { 
+                navigationFocus: true, 
+                nuclearDisabled: true,
+                navItemsCount: document.querySelectorAll('.nav a').length
+            };
+        };
+        
+        // Make legacy functions globally available for backward compatibility
+        window.fixBuildingPosition = fixBuildingPosition;
+        window.forceAdjustBuilding = forceAdjustBuilding;
+        window.nuclearResetBuilding = nuclearResetBuilding;
+        window.removeBuildingBorder = removeBuildingBorder;
+        window.createNewHeartBuilding = createNewHeartBuilding;
+        window.createBorderlessBuildingOnly = createBorderlessBuildingOnly;
+        window.debugBuildingState = debugBuildingState;
+    </script>
+</body>
+</html>

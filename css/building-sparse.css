@@ -1,0 +1,362 @@
+/* HEART Technology Park - Natural Sparse Building Design */
+
+/* Sparse Building Container */
+.building-container-sparse {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33.33vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Main Sparse Building Structure */
+.building-sparse {
+    width: 280px;
+    height: 420px;
+    background: linear-gradient(135deg, #5A67D8 0%, #667EEA 50%, #764BA2 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Building Header Label */
+.building-header-sparse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Building Subtitle */
+.building-subtitle-sparse {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    background: white;
+    color: #5A67D8;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Natural Windows Container - No Grid, Pure Positioning */
+.windows-natural-sparse {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    /* Using background gradients for natural window placement */
+    background: 
+        /* Cluster 1: Upper Left Area */
+        radial-gradient(ellipse 12px 8px at 15% 12%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 10px 8px at 25% 18%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 35% 14%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Cluster 2: Right Side Sparse */
+        radial-gradient(ellipse 10px 8px at 85% 25%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 75% 32%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Cluster 3: Left Middle Area */
+        radial-gradient(ellipse 12px 8px at 20% 45%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 30% 50%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 10px 8px at 15% 55%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 35% 58%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Isolated Windows - Far Apart */
+        radial-gradient(ellipse 10px 8px at 65% 42%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 80% 48%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Lower Cluster 4: Bottom Left */
+        radial-gradient(ellipse 8px 6px at 25% 72%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 10px 8px at 15% 78%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 30% 82%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Sparse Right Bottom */
+        radial-gradient(ellipse 8px 6px at 70% 75%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 10px 8px at 85% 82%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Random Single Windows */
+        radial-gradient(ellipse 8px 6px at 55% 28%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 45% 65%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 75% 62%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        
+        /* Final Sparse Windows */
+        radial-gradient(ellipse 8px 6px at 60% 88%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+        radial-gradient(ellipse 8px 6px at 40% 35%, #FFD54F 40%, #FFA726 60%, transparent 70%);
+    
+    background-size: 100% 100%;
+    border-radius: 6px;
+    opacity: 0.9;
+    animation: windows-natural-glow 5s ease-in-out infinite;
+}
+
+/* Natural Window Light Effects */
+.windows-natural-sparse::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        /* Subtle light effects for natural windows */
+        radial-gradient(ellipse 10px 6px at 15% 12%, rgba(255,255,255,0.4) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 25% 18%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 10px 6px at 20% 45%, rgba(255,255,255,0.4) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 30% 50%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 85% 25%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 65% 42%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 25% 72%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 10px 6px at 15% 78%, rgba(255,255,255,0.4) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 70% 75%, rgba(255,255,255,0.3) 30%, transparent 60%),
+        radial-gradient(ellipse 8px 6px at 85% 82%, rgba(255,255,255,0.3) 30%, transparent 60%);
+    border-radius: 6px;
+    opacity: 0.7;
+    animation: window-light-shimmer 7s ease-in-out infinite;
+}
+
+/* Natural Breathing Animation */
+@keyframes windows-natural-glow {
+    0%, 100% { 
+        opacity: 0.9;
+        filter: brightness(1) saturate(1);
+    }
+    25% { 
+        opacity: 0.95;
+        filter: brightness(1.05) saturate(1.1);
+    }
+    50% { 
+        opacity: 1;
+        filter: brightness(1.1) saturate(1.2);
+    }
+    75% { 
+        opacity: 0.95;
+        filter: brightness(1.05) saturate(1.1);
+    }
+}
+
+/* Light Shimmer Effect */
+@keyframes window-light-shimmer {
+    0%, 100% { 
+        opacity: 0.7;
+        transform: scale(1);
+    }
+    33% { 
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+    66% { 
+        opacity: 0.75;
+        transform: scale(1.01);
+    }
+}
+
+/* Building Float Animation */
+.building-sparse {
+    animation: building-float-sparse 8s ease-in-out infinite;
+}
+
+@keyframes building-float-sparse {
+    0%, 100% { 
+        transform: translateY(0px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    50% { 
+        transform: translateY(-10px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* Hover Effects for Natural Building */
+.building-sparse:hover .windows-natural-sparse {
+    animation-play-state: paused;
+    filter: brightness(1.15) saturate(1.3);
+    transform: scale(1.02);
+}
+
+.building-sparse:hover .windows-natural-sparse::before {
+    opacity: 0.9;
+    animation-play-state: paused;
+}
+
+/* Responsive Design for Sparse Building */
+@media (max-width: 1023px) {
+    .building-container-sparse {
+        width: 50vw;
+    }
+    
+    .building-sparse {
+        width: 220px;
+        height: 330px;
+    }
+    
+    .building-header-sparse {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .building-subtitle-sparse {
+        font-size: 10px;
+        padding: 6px 4px;
+    }
+    
+    .windows-natural-sparse {
+        top: 70px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .building-container-sparse {
+        width: 60vw;
+    }
+    
+    .building-sparse {
+        width: 180px;
+        height: 270px;
+    }
+    
+    .windows-natural-sparse {
+        top: 60px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        /* Simplified pattern for smaller screens */
+        background: 
+            radial-gradient(ellipse 8px 6px at 20% 15%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 75% 25%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 25% 45%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 70% 55%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 20% 75%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 80% 80%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 50% 35%, #FFD54F 40%, #FFA726 60%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 45% 65%, #FFD54F 40%, #FFA726 60%, transparent 70%);
+    }
+}
+
+@media (max-width: 480px) {
+    .building-container-sparse {
+        display: none;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .building-sparse {
+        background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 50%, #6D28D9 100%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .building-subtitle-sparse {
+        background: #E5E7EB;
+        color: #374151;
+    }
+    
+    .windows-natural-sparse {
+        filter: brightness(1.2) saturate(1.1);
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .building-sparse {
+        background: #000080;
+        border: 2px solid #FFFFFF;
+    }
+    
+    .windows-natural-sparse {
+        background: 
+            radial-gradient(ellipse 12px 8px at 15% 12%, #FFFF00 40%, transparent 70%),
+            radial-gradient(ellipse 10px 8px at 85% 25%, #FFFF00 40%, transparent 70%),
+            radial-gradient(ellipse 12px 8px at 20% 45%, #FFFF00 40%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 65% 42%, #FFFF00 40%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 25% 72%, #FFFF00 40%, transparent 70%),
+            radial-gradient(ellipse 8px 6px at 70% 75%, #FFFF00 40%, transparent 70%) !important;
+    }
+    
+    .building-header-sparse {
+        background: #FF8000;
+        color: #000000;
+        border-bottom: 2px solid #000000;
+    }
+    
+    .building-subtitle-sparse {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+}
+
+/* Performance Optimizations */
+.building-container-sparse,
+.building-sparse,
+.windows-natural-sparse {
+    will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .building-sparse {
+        animation: building-static-sparse 12s ease-in-out infinite;
+    }
+    
+    .windows-natural-sparse {
+        animation: windows-static-sparse 10s ease-in-out infinite;
+    }
+    
+    .windows-natural-sparse::before {
+        animation: none;
+    }
+    
+    @keyframes building-static-sparse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.95; }
+    }
+    
+    @keyframes windows-static-sparse {
+        0%, 100% { opacity: 0.9; }
+        50% { opacity: 0.95; }
+    }
+}
+
+/* Natural Clustering Debug (for development) */
+.debug-sparse .windows-natural-sparse {
+    border: 1px dashed rgba(255, 0, 0, 0.3);
+}
+
+.debug-sparse .windows-natural-sparse::after {
+    content: '~45% coverage';
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: 10px;
+    color: rgba(255, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+}

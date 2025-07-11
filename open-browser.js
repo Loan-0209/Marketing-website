@@ -43,15 +43,25 @@ async function openProjectInBrowser() {
         await page3.waitForLoadState('networkidle');
         console.log('✅ Tab 3: Test page đã tải');
         
-        // Tab 4: About page
+        // Tab 4: About page với nuclear gradient removal test
         const page4 = await context.newPage();
         const aboutPath = path.join(__dirname, 'about.html');
         await page4.goto(`file://${aboutPath}`);
         await page4.waitForLoadState('networkidle');
         console.log('✅ Tab 4: About page đã tải');
         
-        // Chuyển về tab 3D Campus để xem đầu tiên
-        await page2.bringToFront();
+        // Test nuclear gradient removal on About page
+        setTimeout(async () => {
+            await page4.evaluate(() => {
+                if (typeof window.nuclearGradientRemoval === 'function') {
+                    window.nuclearGradientRemoval();
+                    console.log('💥 Nuclear gradient removal applied on About page');
+                }
+            });
+        }, 2000);
+        
+        // Chuyển về About page để xem kết quả nuclear removal
+        await page4.bringToFront();
         
         console.log('\n🎉 DỰ ÁN HEART AI CAMPUS ĐÃ MỞ THÀNH CÔNG!');
         console.log('📱 4 tab đã được mở:');

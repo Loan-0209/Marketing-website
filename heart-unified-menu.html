@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Thanh Menu Đồng Nhất</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            background: #f8f9fa;
+            min-height: calc(100vh - 100px);
+            padding: 80px 0;
+        }
+
+        .page-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #4A5FD1;
+            margin-bottom: 30px;
+            letter-spacing: -0.02em;
+        }
+
+        .title-underline {
+            width: 80px;
+            height: 4px;
+            background: #F5C842;
+            margin: 0 auto 40px auto;
+            border-radius: 2px;
+        }
+
+        .page-description {
+            font-size: 1.2rem;
+            color: #6c757d;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Page Section Styles */
+        .page-section {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f5bd5, #6366f1);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .rocket {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-item {
+            background: #F5C842;
+            color: #4A5FD1;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(245, 200, 66, 0.2);
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 200, 66, 0.3);
+            background: #F2C040;
+        }
+
+        .nav-item.active {
+            background: #F5C842;
+            color: #4A5FD1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .nav-menu {
+                gap: 6px;
+            }
+            
+            .nav-item {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            
+            .page-title {
+                font-size: 3.2rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                justify-content: center;
+                gap: 8px;
+            }
+            
+            .page-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-item {
+                text-align: center;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .page-title {
+                font-size: 2.5rem;
+            }
+            
+            .page-description {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <div class="rocket">🚀</div>
+                    HEART
+                </a>
+                
+                <div class="nav-menu">
+                    <a href="#" class="nav-item" data-page="home">Home</a>
+                    <a href="#" class="nav-item active" data-page="about">About Us</a>
+                    <a href="#" class="nav-item" data-page="master">Master Plan</a>
+                    <a href="#" class="nav-item" data-page="3d">3D Campus</a>
+                    <a href="#" class="nav-item" data-page="facilities">Facilities</a>
+                    <a href="#" class="nav-item" data-page="investment">Investment</a>
+                    <a href="#" class="nav-item" data-page="technology">Technology</a>
+                    <a href="#" class="nav-item" data-page="news">News</a>
+                    <a href="#" class="nav-item" data-page="contact">Contact</a>
+                    <a href="#" class="nav-item" data-page="login">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Home Page -->
+            <div class="page-section" id="home-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Welcome to HEART</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Chào mừng đến với HEART Technology Park<br>
+                        Nơi khởi nguồn của những ý tưởng sáng tạo
+                    </p>
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div class="page-section" id="about-page">
+                <div class="page-header">
+                    <h1 class="page-title">About HEART</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Câu chuyện về HEART Technology Park<br>
+                        Tầm nhìn và sứ mệnh của chúng tôi trong việc xây dựng<br>
+                        một hệ sinh thái công nghệ toàn diện
+                    </p>
+                </div>
+            </div>
+
+            <!-- Master Plan Page -->
+            <div class="page-section" id="master-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Master Plan</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Kế hoạch phát triển toàn diện HEART Technology Park từ 2025 đến<br>
+                        2030 và xa hơn nữa
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3D Campus Page -->
+            <div class="page-section" id="3d-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">3D Campus</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Khám phá không gian HEART Technology Park<br>
+                        qua trải nghiệm 3D tương tác hiện đại
+                    </p>
+                </div>
+            </div>
+
+            <!-- Facilities Page -->
+            <div class="page-section" id="facilities-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Facilities</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Cơ sở vật chất hiện đại và tiện nghi<br>
+                        Phục vụ tốt nhất cho cộng đồng công nghệ
+                    </p>
+                </div>
+            </div>
+
+            <!-- Investment Page -->
+            <div class="page-section" id="investment-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Investment</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Cơ hội đầu tư hấp dẫn và tiềm năng phát triển<br>
+                        Tham gia xây dựng tương lai công nghệ
+                    </p>
+                </div>
+            </div>
+
+            <!-- Technology Page -->
+            <div class="page-section" id="technology-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Technology</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Công nghệ tiên tiến nhất và giải pháp đổi mới<br>
+                        Dẫn đầu xu hướng chuyển đổi số
+                    </p>
+                </div>
+            </div>
+
+            <!-- News Page -->
+            <div class="page-section" id="news-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">News</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Tin tức và sự kiện mới nhất<br>
+                        Cập nhật thông tin từ HEART Technology Park
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contact Page -->
+            <div class="page-section" id="contact-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Contact</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Liên hệ với chúng tôi<br>
+                        Sẵn sàng hỗ trợ và tư vấn 24/7
+                    </p>
+                </div>
+            </div>
+
+            <!-- Login Page -->
+            <div class="page-section" id="login-page" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Login</h1>
+                    <div class="title-underline"></div>
+                    <p class="page-description">
+                        Đăng nhập hệ thống<br>
+                        Truy cập tài khoản của bạn
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Hàm chuyển đổi trang
+        function showPage(pageId) {
+            // Ẩn tất cả các trang
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Hiển thị trang được chọn
+            const targetPage = document.getElementById(pageId + '-page');
+            if (targetPage) {
+                targetPage.style.display = 'block';
+            }
+        }
+
+        // Xử lý click menu
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Xóa class active từ tất cả nút
+                document.querySelectorAll('.nav-item').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Thêm class active cho nút được click
+                this.classList.add('active');
+                
+                // Lấy page ID từ data-page attribute
+                const pageId = this.getAttribute('data-page');
+                
+                // Chuyển đổi trang
+                showPage(pageId);
+                
+                console.log('Đã chuyển đến trang:', pageId);
+            });
+        });
+
+        // Hiển thị trang mặc định khi load
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('about'); // Hiển thị trang About mặc định
+        });
+    </script>
+</body>
+</html>

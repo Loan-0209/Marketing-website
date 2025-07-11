@@ -53,6 +53,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-wrap: nowrap;
         }
         
         .nav a {
@@ -63,6 +64,7 @@
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
         }
         
         .nav a:hover {
@@ -76,14 +78,7 @@
             font-weight: 700;
         }
         
-        .nav .campus-3d {
-            background: #10b981;
-            color: white;
-        }
-        
-        .nav .campus-3d::before {
-            content: "🏢 ";
-        }
+
         
         .nav .contact-btn,
         .nav .login-btn {
@@ -297,8 +292,15 @@
             }
             
             .nav {
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 justify-content: center;
+                gap: 0.3rem;
+                overflow-x: auto;
+            }
+            
+            .nav a {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
             }
             
             .page-title {

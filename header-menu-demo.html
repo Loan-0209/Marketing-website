@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART Technology Park - Header Menu Demo</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #4f5bd5 0%, #6366f1 100%);
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(79, 91, 213, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header Background Animation */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo::before {
+            content: "🚀";
+            margin-right: 12px;
+            font-size: 32px;
+            animation: rocket-float 2s ease-in-out infinite;
+        }
+
+        @keyframes rocket-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Menu Button Base Styles */
+        .menu-btn {
+            background: #F5C842;
+            color: #4A5FD1;
+            text-decoration: none;
+            border: none;
+            border-radius: 15px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(245, 200, 66, 0.3);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Button Hover Effects */
+        .menu-btn:hover {
+            background: #F2C040;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 200, 66, 0.4);
+        }
+
+        /* Button Active State */
+        .menu-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(245, 200, 66, 0.3);
+        }
+
+        /* Active Menu Item */
+        .menu-btn.active {
+            background: #F2C040;
+            box-shadow: 0 6px 16px rgba(245, 200, 66, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Button Ripple Effect */
+        .menu-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .menu-btn:hover::after {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Special Button Styles */
+        .menu-btn.special {
+            background: linear-gradient(135deg, #F5C842, #F2C040);
+            position: relative;
+        }
+
+        .menu-btn.special::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #F2C040, #F5C842);
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-btn.special:hover::before {
+            opacity: 1;
+        }
+
+        .menu-btn.special span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Demo Content */
+        .demo-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .demo-section h2 {
+            color: #4A5FD1;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .demo-section p {
+            line-height: 1.6;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .menu-btn {
+                font-size: 13px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+                max-width: 500px;
+            }
+            
+            .menu-btn {
+                font-size: 12px;
+                padding: 10px 12px;
+                text-align: center;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .demo-section {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 0;
+            }
+            
+            .nav-menu {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .menu-btn {
+                font-size: 11px;
+                padding: 8px 10px;
+                border-radius: 12px;
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+            
+            .demo-section {
+                padding: 25px 15px;
+            }
+        }
+
+        /* Performance Optimizations */
+        .header,
+        .menu-btn,
+        .logo {
+            will-change: transform;
+        }
+
+        .menu-btn {
+            backface-visibility: hidden;
+        }
+
+        /* Accessibility */
+        .menu-btn:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header với Navigation Menu -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="#" class="logo">HEART</a>
+            
+            <!-- Navigation Menu -->
+            <nav class="nav-menu">
+                <a href="#home" class="menu-btn active">Home</a>
+                <a href="#about" class="menu-btn">About Us</a>
+                <a href="#master-plan" class="menu-btn">Master Plan</a>
+                <a href="#3d-campus" class="menu-btn special"><span>3D Campus</span></a>
+                <a href="#facilities" class="menu-btn">Facilities</a>
+                <a href="#investment" class="menu-btn">Investment</a>
+                <a href="#technology" class="menu-btn">Technology</a>
+                <a href="#news" class="menu-btn">News</a>
+                <a href="#contact" class="menu-btn special"><span>Contact</span></a>
+                <a href="#login" class="menu-btn special"><span>Login</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Demo Content -->
+    <div class="demo-content">
+        <div class="demo-section">
+            <h2>🚀 HEART Technology Park Header Demo</h2>
+            <p>Đây là demo cho header navigation menu với các tính năng:</p>
+            <ul style="line-height: 1.8; color: #6b7280; margin-left: 20px;">
+                <li>✅ Background gradient xanh dương (#4f5bd5 → #6366f1)</li>
+                <li>✅ Logo HEART với rocket icon 🚀</li>
+                <li>✅ 10 menu buttons với màu vàng solid (#F5C842)</li>
+                <li>✅ Hover effects với lift up + shadow</li>
+                <li>✅ Responsive design (desktop → tablet → mobile)</li>
+                <li>✅ Smooth transitions (0.3s ease)</li>
+                <li>✅ Active state management</li>
+                <li>✅ Cross-browser compatibility</li>
+            </ul>
+        </div>
+
+        <div class="demo-section">
+            <h2>📱 Responsive Breakpoints</h2>
+            <p><strong>Desktop (>1024px):</strong> Menu hiển thị 1 hàng ngang</p>
+            <p><strong>Tablet (768px-1024px):</strong> Menu tự động wrap xuống dòng</p>
+            <p><strong>Mobile (480px-768px):</strong> Grid 3 cột</p>
+            <p><strong>Small Mobile (<480px):</strong> Grid 2 cột</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎨 Design Specifications</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                    <strong>Colors:</strong><br>
+                    Button: #F5C842<br>
+                    Hover: #F2C040<br>
+                    Text: #4A5FD1<br>
+                    Gradient: #4f5bd5 → #6366f1
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                    <strong>Typography:</strong><br>
+                    Font: Segoe UI<br>
+                    Size: 14px<br>
+                    Weight: 600<br>
+                    Border Radius: 15px
+                </div>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                    <strong>Effects:</strong><br>
+                    Transitions: 0.3s ease<br>
+                    Hover lift: -2px<br>
+                    Box shadow: enhanced<br>
+                    Ripple effect: included
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript cho Interactive Features -->
+    <script>
+        // Active State Management
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuButtons = document.querySelectorAll('.menu-btn');
+            
+            menuButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all buttons
+                    menuButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Log for demo purposes
+                    console.log(`🎯 Menu clicked: ${this.textContent}`);
+                });
+            });
+        });
+
+        // Performance optimization - debounce scroll
+        let ticking = false;
+        
+        function updateHeader() {
+            const header = document.querySelector('.header');
+            const scrollY = window.pageYOffset;
+            
+            if (scrollY > 50) {
+                header.style.boxShadow = '0 6px 25px rgba(79, 91, 213, 0.4)';
+            } else {
+                header.style.boxShadow = '0 4px 20px rgba(79, 91, 213, 0.3)';
+            }
+            
+            ticking = false;
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', requestTick);
+        
+        // Accessibility - keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                const focusedElement = document.activeElement;
+                if (focusedElement.classList.contains('menu-btn')) {
+                    focusedElement.style.outline = '2px solid #ffffff';
+                    focusedElement.style.outlineOffset = '2px';
+                }
+            }
+        });
+        
+        console.log('🚀 HEART Header Demo - Loaded successfully!');
+        console.log('📱 Responsive breakpoints active');
+        console.log('🎨 All styling effects enabled');
+    </script>
+</body>
+</html>

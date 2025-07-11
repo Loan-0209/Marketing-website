@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flat Building Design - HEART Technology Park</title>
+    
+    <!-- Flat Building CSS -->
+    <link rel="stylesheet" href="css/building-flat.css">
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Demo page specific styles */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-container {
+            width: 60%;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #4A6CF7;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .demo-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .demo-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .feature-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-section h3 {
+            color: #4A6CF7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .status-feature { color: #4CAF50; }
+        .status-design { color: #FF9800; }
+        .status-pattern { color: #2196F3; }
+        
+        .controls-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+        
+        .control-button {
+            background: #4A6CF7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-button:hover {
+            background: #667EEA;
+            transform: translateY(-2px);
+        }
+        
+        .control-button.active {
+            background: #FFA726;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                width: 95%;
+                margin: 20px auto;
+                padding: 20px;
+            }
+            
+            .demo-title {
+                font-size: 2rem;
+            }
+            
+            .controls-panel {
+                position: relative;
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flat Building Container -->
+    <div class="building-container-flat">
+        <div class="building-flat">
+            <!-- Building Header -->
+            <div class="building-header-flat">HEART TECHNOLOGY</div>
+            
+            <!-- Building Subtitle -->
+            <div class="building-subtitle-flat">AI Innovation Hub</div>
+            
+            <!-- Windows Grid -->
+            <div class="windows-grid-flat">
+                <!-- Generate 72 windows (6x12 grid) -->
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+                <div class="window-flat"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Content -->
+    <div class="demo-container">
+        <div class="demo-content">
+            <h1 class="demo-title">🏢 Flat Building Design</h1>
+            <p class="demo-subtitle">HEART Technology Park - Simple Flat Design Architecture</p>
+            
+            <div class="feature-section">
+                <h3>🎨 Design Specifications</h3>
+                <ul class="feature-list">
+                    <li><span class="status-design">📐</span> Rectangular tall building (280×420px)</li>
+                    <li><span class="status-design">🎨</span> Purple/blue gradient background (#5A67D8 → #764BA2)</li>
+                    <li><span class="status-design">🪟</span> Yellow/orange rectangular windows (#FFD54F → #FFA726)</li>
+                    <li><span class="status-design">🏷️</span> Orange header: "HEART TECHNOLOGY"</li>
+                    <li><span class="status-design">📝</span> White subtitle: "AI Innovation Hub"</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>📋 Grid Pattern Layout</h3>
+                <ul class="feature-list">
+                    <li><span class="status-pattern">⚪</span> 6 columns × 12 rows grid (72 total positions)</li>
+                    <li><span class="status-pattern">🟨</span> ~60% filled with yellow/orange windows</li>
+                    <li><span class="status-pattern">🟣</span> ~40% empty spaces (purple background showing)</li>
+                    <li><span class="status-pattern">🎯</span> Random pattern distribution for visual interest</li>
+                    <li><span class="status-pattern">📏</span> 8px gap between windows, 3px border-radius</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>✨ Visual Effects</h3>
+                <ul class="feature-list">
+                    <li><span class="status-feature">🎭</span> Flat design - no 3D effects or shadows</li>
+                    <li><span class="status-feature">💫</span> Subtle building float animation (6s cycle)</li>
+                    <li><span class="status-feature">💡</span> Window glow breathing effect (3s cycle)</li>
+                    <li><span class="status-feature">🖱️</span> Hover effects: scale and brightness increase</li>
+                    <li><span class="status-feature">⏰</span> Staggered animation delays for windows</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>📱 Responsive Features</h3>
+                <ul class="feature-list">
+                    <li><span class="status-feature">💻</span> Desktop: Full size (280×420px) at 33.33vw</li>
+                    <li><span class="status-feature">📟</span> Tablet: Medium size (220×330px) at 50vw</li>
+                    <li><span class="status-feature">📱</span> Mobile: Hidden (< 480px) for clean layout</li>
+                    <li><span class="status-feature">🎯</span> Grid adapts: 6×12 → 5×10 on smaller screens</li>
+                    <li><span class="status-feature">♿</span> Accessibility: high contrast, reduced motion support</li>
+                </ul>
+            </div>
+            
+            <div class="feature-section">
+                <h3>🎯 Technical Implementation</h3>
+                <ul class="feature-list">
+                    <li><span class="status-feature">🎪</span> CSS Grid layout for precise window positioning</li>
+                    <li><span class="status-feature">🎨</span> Linear gradients for color transitions</li>
+                    <li><span class="status-feature">⚡</span> GPU acceleration for smooth animations</li>
+                    <li><span class="status-feature">🎭</span> nth-child selectors for pattern control</li>
+                    <li><span class="status-feature">🌙</span> Dark mode and high contrast support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Controls -->
+    <div class="controls-panel">
+        <h4>🎛️ Demo Controls</h4>
+        <button class="control-button" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        <button class="control-button" onclick="toggleAnimation()">⏯️ Animation</button>
+        <button class="control-button" onclick="randomizePattern()">🎲 Randomize</button>
+        <button class="control-button" onclick="showInfo()">ℹ️ Info</button>
+    </div>
+
+    <script>
+        // Demo Controls JavaScript
+        let isDarkMode = false;
+        let isAnimationPaused = false;
+        
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            
+            const button = event.target;
+            button.textContent = isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+            button.classList.toggle('active', isDarkMode);
+            
+            // Apply dark mode styles
+            const building = document.querySelector('.building-flat');
+            if (building) {
+                if (isDarkMode) {
+                    building.style.background = 'linear-gradient(135deg, #4C1D95 0%, #5B21B6 50%, #6D28D9 100%)';
+                } else {
+                    building.style.background = 'linear-gradient(135deg, #5A67D8 0%, #667EEA 50%, #764BA2 100%)';
+                }
+            }
+        }
+        
+        function toggleAnimation() {
+            isAnimationPaused = !isAnimationPaused;
+            const building = document.querySelector('.building-flat');
+            const windows = document.querySelectorAll('.window-flat');
+            
+            if (building && windows.length > 0) {
+                building.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+                windows.forEach(window => {
+                    window.style.animationPlayState = isAnimationPaused ? 'paused' : 'running';
+                });
+            }
+            
+            const button = event.target;
+            button.textContent = isAnimationPaused ? '▶️ Resume' : '⏸️ Pause';
+            button.classList.toggle('active', isAnimationPaused);
+        }
+        
+        function randomizePattern() {
+            const windows = document.querySelectorAll('.window-flat');
+            const colors = [
+                'linear-gradient(135deg, #FFD54F 0%, #FFA726 100%)',
+                'linear-gradient(135deg, #FFEB3B 0%, #FFB74D 100%)',
+                'linear-gradient(135deg, #FF8A65 0%, #FF7043 100%)',
+                'transparent'
+            ];
+            
+            windows.forEach(window => {
+                // Random chance for window to be lit or empty
+                const isLit = Math.random() > 0.3; // 70% chance of being lit
+                if (isLit) {
+                    const randomColor = colors[Math.floor(Math.random() * (colors.length - 1))];
+                    window.style.background = randomColor;
+                } else {
+                    window.style.background = 'transparent';
+                }
+            });
+            
+            console.log('🎲 Building pattern randomized!');
+        }
+        
+        function showInfo() {
+            const info = {
+                '🏢 Building Type': 'Flat Design',
+                '📐 Dimensions': '280×420px',
+                '🪟 Total Windows': '72 (6×12 grid)',
+                '🟨 Lit Windows': document.querySelectorAll('.window-flat:not([style*="transparent"])').length,
+                '🎨 Background': 'Purple/Blue Gradient',
+                '💡 Window Colors': 'Yellow/Orange Gradient',
+                '📱 Responsive': 'Yes (Desktop/Tablet/Mobile)',
+                '♿ Accessibility': 'Full Support'
+            };
+            
+            console.log('📊 HEART Flat Building Information:');
+            console.table(info);
+            
+            alert('📊 Building info logged to console! Open DevTools to view detailed specs.');
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏢 Flat Building Demo loaded!');
+            console.log('🎨 Design: Simple flat style with grid pattern');
+            console.log('📏 Layout: 6×12 windows with random empty spaces');
+            console.log('🎛️ Use controls panel to interact with building');
+            
+            // Count initial windows
+            const totalWindows = document.querySelectorAll('.window-flat').length;
+            console.log(`🪟 Total windows: ${totalWindows}`);
+            
+            // Animate entrance
+            setTimeout(() => {
+                document.body.classList.add('demo-loaded');
+            }, 500);
+        });
+        
+        // Debug information
+        window.FlatBuildingDebug = {
+            getWindowCount: () => document.querySelectorAll('.window-flat').length,
+            getLitWindows: () => document.querySelectorAll('.window-flat:not([style*="transparent"])').length,
+            getBuildingDimensions: () => {
+                const building = document.querySelector('.building-flat');
+                if (building) {
+                    const rect = building.getBoundingClientRect();
+                    return {
+                        width: rect.width,
+                        height: rect.height,
+                        aspectRatio: (rect.height / rect.width).toFixed(2)
+                    };
+                }
+                return null;
+            },
+            regeneratePattern: () => {
+                randomizePattern();
+                console.log('Pattern regenerated via debug tool');
+            }
+        };
+        
+        console.log('🔧 Debug tools available: window.FlatBuildingDebug');
+    </script>
+</body>
+</html>

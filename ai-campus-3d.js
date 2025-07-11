@@ -1,7 +1,7 @@
 // Các biến toàn cục
 let scene, camera, renderer, controls;
 let stats, diagnosticLoader;
-let clock = new THREE.Clock();
+let clock;
 
 // Biến cho phản chiếu và texture
 let cubeCamera, cubeRenderTarget;
@@ -52,6 +52,9 @@ const BUILDING_TYPES = {
 
 // Khởi tạo scene
 function init() {
+    // Khởi tạo clock
+    clock = new THREE.Clock();
+    
     // Tạo scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);

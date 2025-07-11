@@ -1,0 +1,170 @@
+/* HEART Technology Park - Simple Building Component */
+
+/* Building Container */
+.building-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+    position: relative;
+    z-index: 0;
+}
+
+/* Main Building */
+.building {
+    width: 450px;
+    height: 580px;
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* Building Header */
+.building-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #FFA726;
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+    padding: 16px 12px;
+    letter-spacing: 1.5px;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Building Subtitle */
+.building-subtitle {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: white;
+    color: #5A67D8;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    padding: 12px 8px;
+    letter-spacing: 0.8px;
+}
+
+/* Windows Container */
+.windows {
+    position: absolute;
+    top: 100px;
+    left: 25px;
+    right: 25px;
+    bottom: 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 15px;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+/* Individual Window */
+.window {
+    width: 60px;
+    height: 20px;
+    border-radius: 8px;
+    justify-self: center;
+    align-self: center;
+}
+
+/* Window Colors - Checkerboard Pattern */
+.window:nth-child(odd) {
+    background: #FFF176; /* Brighter Yellow for better contrast */
+}
+
+.window:nth-child(even) {
+    background: #90CAF9; /* Light Blue for better contrast */
+}
+
+/* Responsive */
+@media (max-width: 1023px) {
+    .building-container {
+        padding: 15px;
+        z-index: 0;
+    }
+    
+    .building {
+        width: 350px;
+        height: 450px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .building-header {
+        font-size: 16px;
+        padding: 14px 10px;
+    }
+    
+    .building-subtitle {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .windows {
+        top: 85px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        gap: 12px;
+        padding: 15px;
+    }
+    
+    .window {
+        width: 50px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .building-container {
+        padding: 10px;
+        z-index: 0;
+    }
+    
+    .building {
+        width: 280px;
+        height: 360px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .building-header {
+        font-size: 14px;
+        padding: 12px 8px;
+    }
+    
+    .building-subtitle {
+        font-size: 11px;
+        padding: 8px 4px;
+    }
+    
+    .windows {
+        top: 70px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        gap: 10px;
+        padding: 12px;
+    }
+    
+    .window {
+        width: 40px;
+        height: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .building-container {
+        display: none;
+    }
+}
