@@ -70,14 +70,6 @@ body {
     font-weight: 700;
 }
 
-.nav .campus-3d {
-    background: #10b981;
-    color: white;
-}
-
-.nav .campus-3d::before {
-    content: "🏢 ";
-}
 
 .nav .contact-btn,
 .nav .login-btn {
