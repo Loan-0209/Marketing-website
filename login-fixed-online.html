@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HEART Technology Park (Fixed Online)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .contact-btn,
+        .nav .login-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+        
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .login-subtitle {
+            font-size: 1rem;
+            color: #64748b;
+            margin-bottom: 2.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: #1e40af;
+        }
+        
+        .forgot-password {
+            color: #1e40af;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .login-button {
+            width: 100%;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+        
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-indicator {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .status-online {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .status-offline {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fed7aa;
+        }
+        
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 20px;
+            border-radius: 8px;
+            background: #1e40af;
+            color: white;
+            font-weight: 500;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 10000;
+        }
+        
+        .alert.show {
+            transform: translateX(0);
+        }
+        
+        .alert.success {
+            background: #10b981;
+        }
+        
+        .alert.error {
+            background: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
+                <a href="facilities.html">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+                <a href="login.html" class="login-btn active">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="login-container">
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle">Sign in to your HEART Technology Park account</p>
+            
+            <div id="statusIndicator" class="status-indicator">
+                🔍 Checking connection status...
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email or Username</label>
+                    <input type="text" id="email" class="form-input" placeholder="Enter your email or username" autocomplete="username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" autocomplete="current-password">
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="login-button" id="loginButton">Sign In</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Include fallback authentication -->
+    <script src="js/auth-simple.js"></script>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        class FixedLoginHandler {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.emailInput = document.getElementById('email');
+                this.passwordInput = document.getElementById('password');
+                this.rememberCheckbox = document.getElementById('remember');
+                this.submitButton = document.getElementById('loginButton');
+                this.statusIndicator = document.getElementById('statusIndicator');
+                this.isOnline = false;
+                
+                this.init();
+            }
+            
+            async init() {
+                this.setupEventListeners();
+                await this.checkBackendStatus();
+                this.loadRememberedCredentials();
+            }
+            
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Auto-fill credentials on Alt+T
+                document.addEventListener('keydown', (e) => {
+                    if (e.altKey && (e.key === 't' || e.key === 'T')) {
+                        e.preventDefault();
+                        this.fillTestCredentials();
+                    }
+                });
+            }
+            
+            async checkBackendStatus() {
+                this.updateStatus('🔍 Checking backend connection...', 'checking');
+                
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(`${API_BASE_URL}/health`, {
+                        signal: controller.signal,
+                        mode: 'cors'
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.isOnline = true;
+                        this.updateStatus(`🌐 Online Mode - Backend Connected (${data.status})`, 'online');
+                        console.log('✅ Backend API available:', data);
+                    } else {
+                        throw new Error(`Status: ${response.status}`);
+                    }
+                } catch (error) {
+                    this.isOnline = false;
+                    this.updateStatus('🔄 Offline Mode - Using Local Authentication', 'offline');
+                    console.log('❌ Backend unavailable:', error.message);
+                }
+            }
+            
+            updateStatus(message, type) {
+                this.statusIndicator.textContent = message;
+                this.statusIndicator.className = 'status-indicator';
+                
+                if (type === 'online') {
+                    this.statusIndicator.classList.add('status-online');
+                } else if (type === 'offline') {
+                    this.statusIndicator.classList.add('status-offline');
+                }
+            }
+            
+            fillTestCredentials() {
+                this.emailInput.value = 'admin';
+                this.passwordInput.value = 'heart2024';
+                this.showAlert('✅ Test credentials filled! (admin/heart2024)', 'success');
+                this.submitButton.focus();
+            }
+            
+            loadRememberedCredentials() {
+                const rememberedEmail = localStorage.getItem('rememberedEmail');
+                if (rememberedEmail) {
+                    this.emailInput.value = rememberedEmail;
+                    this.rememberCheckbox.checked = true;
+                }
+            }
+            
+            async handleSubmit(event) {
+                event.preventDefault();
+                
+                const identifier = this.emailInput.value.trim();
+                const password = this.passwordInput.value;
+                const remember = this.rememberCheckbox.checked;
+                
+                if (!identifier || !password) {
+                    this.showAlert('Please enter both email/username and password', 'error');
+                    return;
+                }
+                
+                this.setLoadingState(true);
+                
+                try {
+                    let result;
+                    
+                    if (this.isOnline) {
+                        // Try backend API
+                        result = await this.loginWithBackend(identifier, password);
+                    } else {
+                        // Use fallback authentication
+                        result = await this.loginWithFallback(identifier, password);
+                    }
+                    
+                    if (result.success) {
+                        await this.handleLoginSuccess(result.data, remember);
+                    } else {
+                        this.showAlert(result.message || 'Login failed', 'error');
+                    }
+                    
+                } catch (error) {
+                    console.error('Login error:', error);
+                    this.showAlert(error.message || 'Login failed', 'error');
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+            
+            async loginWithBackend(identifier, password) {
+                console.log('🌐 Attempting backend login...');
+                
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ identifier, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    console.log('✅ Backend login successful');
+                    return data;
+                } else {
+                    throw new Error(data.message || 'Backend login failed');
+                }
+            }
+            
+            async loginWithFallback(identifier, password) {
+                console.log('🔄 Attempting fallback login...');
+                
+                if (!window.simpleAuth) {
+                    throw new Error('Fallback authentication not available');
+                }
+                
+                const result = await window.simpleAuth.login(identifier, password);
+                console.log('✅ Fallback login successful');
+                return result;
+            }
+            
+            async handleLoginSuccess(data, remember) {
+                const { user, token } = data;
+                
+                // Store authentication data
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('heart_auth_token', token);
+                localStorage.setItem('heart_current_user', JSON.stringify(user));
+                
+                // Handle "Remember me"
+                if (remember) {
+                    localStorage.setItem('rememberedEmail', this.emailInput.value.trim());
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                
+                // Show success message
+                const mode = this.isOnline ? 'Backend API' : 'Offline Mode';
+                this.showAlert(`✅ Welcome back, ${user.firstName || user.username}! (${mode})`, 'success');
+                
+                // Update button
+                this.submitButton.textContent = '✓ Success!';
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect') || 'index.html';
+                    window.location.href = redirect;
+                }, 1500);
+            }
+            
+            setLoadingState(isLoading) {
+                if (isLoading) {
+                    this.submitButton.disabled = true;
+                    this.submitButton.innerHTML = `
+                        <span class="spinner"></span>
+                        Signing In...
+                    `;
+                } else {
+                    this.submitButton.disabled = false;
+                    this.submitButton.textContent = 'Sign In';
+                }
+            }
+            
+            showAlert(message, type = 'info') {
+                // Remove existing alerts
+                document.querySelectorAll('.alert').forEach(alert => alert.remove());
+                
+                const alert = document.createElement('div');
+                alert.className = `alert ${type}`;
+                alert.textContent = message;
+                
+                document.body.appendChild(alert);
+                
+                // Show alert
+                setTimeout(() => alert.classList.add('show'), 10);
+                
+                // Hide alert after 4 seconds
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                    setTimeout(() => alert.remove(), 300);
+                }, 4000);
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.loginHandler = new FixedLoginHandler();
+            console.log('🚀 Fixed login system initialized');
+        });
+    </script>
+</body>
+</html>

@@ -77,6 +77,7 @@ function findObjectsByType(scene, type, excludeNames = []) {
 }
 
 // Tìm các vật liệu theo loại
+
 function findMaterialsByType(scene, materialType) {
     const materials = [];
     

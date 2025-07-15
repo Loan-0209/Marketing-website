@@ -79,8 +79,7 @@
         
 
         
-        .nav .contact-btn,
-        .nav .login-btn {
+        .nav .contact-btn {
             background: #f59e0b;
             color: white;
         }
@@ -306,6 +305,20 @@
             box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
         }
         
+        
+        /* Power Flow Animations */
+        @keyframes moveDot {
+            0% { left: -20px; }
+            100% { left: calc(100% + 20px); }
+        }
+
+        @keyframes flowDown {
+            0% { top: -20px; opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
@@ -353,7 +366,6 @@
                 <a href="technology.html">Technology</a>
                 <a href="news.html">News</a>
                 <a href="contact.html" class="contact-btn">Contact</a>
-                <a href="login.html" class="login-btn">Login</a>
             </nav>
         </div>
     </header>
@@ -519,6 +531,134 @@
             </div>
         </div>
 
+        <div class="facility-category">
+            <h3 class="category-title">⚡ Infrastructure Systems</h3>
+            <div class="infrastructure-overview">
+                <p style="text-align: center; font-size: 1.1rem; color: #64748b; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Our advanced electrical infrastructure ensures reliable, high-capacity power distribution to support intensive AI computing and research operations.
+                </p>
+            </div>
+            
+            <!-- Power Flow Visualization -->
+            <div class="power-system-container">
+                <div class="power-system-header">
+                    <h4 style="font-size: 1.8rem; font-weight: 700; color: #1e40af; margin-bottom: 1rem; text-align: center;">500kV Power Transmission System</h4>
+                    <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">Real-time visualization of our high-voltage power distribution network</p>
+                </div>
+                
+                <div class="power-flow-visualization" style="background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 2rem;">
+                    <!-- 500kV Power Flow Diagram will be embedded here -->
+                    <div class="power-diagram-container" style="width: 100%; max-width: 1400px; height: 800px; position: relative; background: white; border-radius: 10px; padding: 40px; box-sizing: border-box;">
+                        <!-- Title -->
+                        <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #333; font-size: 24px; font-weight: bold; text-align: center;">500kV POWER TRANSMISSION SYSTEM</div>
+
+                        <!-- 500kV Bus Lines -->
+                        <div style="position: absolute; height: 4px; background: #e74c3c; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); width: 85%; top: 100px; left: 7.5%;">
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite;"></div>
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 2s;"></div>
+                        </div>
+                        <div style="position: absolute; height: 4px; background: #e74c3c; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); width: 85%; top: 150px; left: 7.5%;">
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 0.5s;"></div>
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 2.5s;"></div>
+                        </div>
+                        <div style="position: absolute; height: 4px; background: #e74c3c; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); width: 85%; top: 200px; left: 7.5%;">
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 1s;"></div>
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 3s;"></div>
+                        </div>
+                        <div style="position: absolute; height: 4px; background: #e74c3c; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); width: 85%; top: 250px; left: 7.5%;">
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 1.5s;"></div>
+                            <div style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; top: -3px; animation: moveDot 4s linear infinite 3.5s;"></div>
+                        </div>
+
+                        <!-- Voltage Labels -->
+                        <div style="position: absolute; top: 88px; left: 20px; background: #e74c3c; color: white; padding: 6px 16px; border-radius: 4px; font-size: 16.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">500kV LINE 01</div>
+                        <div style="position: absolute; top: 138px; left: 20px; background: #e74c3c; color: white; padding: 6px 16px; border-radius: 4px; font-size: 16.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">500kV LINE 02</div>
+                        <div style="position: absolute; top: 188px; left: 20px; background: #e74c3c; color: white; padding: 6px 16px; border-radius: 4px; font-size: 16.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">500kV LINE 03</div>
+                        <div style="position: absolute; top: 238px; left: 20px; background: #e74c3c; color: white; padding: 6px 16px; border-radius: 4px; font-size: 16.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">500kV LINE 04</div>
+
+                        <!-- Connection Points -->
+                        <div style="position: absolute; width: 12px; height: 12px; background: #e74c3c; border: 2px solid white; border-radius: 50%; z-index: 10; left: 240px; top: 175px; transform: translateX(-50%);"></div>
+                        <div style="position: absolute; width: 12px; height: 12px; background: #e74c3c; border: 2px solid white; border-radius: 50%; z-index: 10; right: 240px; top: 175px; transform: translateX(50%);"></div>
+
+                        <!-- Vertical Lines -->
+                        <div style="position: absolute; width: 2px; background: #e74c3c; height: 175px; left: 240px; top: 175px; transform: translateX(-50%);"></div>
+                        <div style="position: absolute; width: 2px; background: #e74c3c; height: 175px; right: 240px; top: 175px; transform: translateX(50%);"></div>
+
+                        <!-- Substation Groups -->
+                        <div style="position: absolute; top: 350px; left: 240px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                            <div style="width: 180px; height: 120px; background: #f8f9fa; border: 2px solid #2c3e50; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                                <div style="font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase;">SUBSTATION 01</div>
+                                <div style="font-size: 22px; font-weight: 700; color: #e74c3c; letter-spacing: -0.5px;">500/220kV</div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 400;">2 x 600MVA</div>
+                                <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); background: #3498db; color: white; padding: 3px 12px; border-radius: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">220kV OUT</div>
+                            </div>
+                        </div>
+
+                        <div style="position: absolute; top: 350px; right: 240px; transform: translateX(50%); display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                            <div style="width: 180px; height: 120px; background: #f8f9fa; border: 2px solid #2c3e50; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                                <div style="font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase;">SUBSTATION 02</div>
+                                <div style="font-size: 22px; font-weight: 700; color: #e74c3c; letter-spacing: -0.5px;">500/220kV</div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 400;">2 x 600MVA</div>
+                                <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); background: #3498db; color: white; padding: 3px 12px; border-radius: 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">220kV OUT</div>
+                            </div>
+                        </div>
+
+                        <!-- 220kV Distribution -->
+                        <div style="position: absolute; width: 60%; height: 3px; background: #3498db; bottom: 280px; left: 20%;"></div>
+
+                        <!-- Vertical drops -->
+                        <div style="position: absolute; width: 2px; height: 80px; background: #3498db; bottom: 160px; left: 365px;">
+                            <div style="position: absolute; width: 4px; height: 12px; background: #3498db; border-radius: 2px; opacity: 0.8; animation: flowDown 2s linear infinite;"></div>
+                        </div>
+                        <div style="position: absolute; width: 2px; height: 80px; background: #3498db; bottom: 160px; left: 50%; transform: translateX(-50%);">
+                            <div style="position: absolute; width: 4px; height: 12px; background: #3498db; border-radius: 2px; opacity: 0.8; animation: flowDown 2s linear infinite 0.7s;"></div>
+                        </div>
+                        <div style="position: absolute; width: 2px; height: 80px; background: #3498db; bottom: 160px; right: 365px;">
+                            <div style="position: absolute; width: 4px; height: 12px; background: #3498db; border-radius: 2px; opacity: 0.8; animation: flowDown 2s linear infinite 1.4s;"></div>
+                        </div>
+
+                        <!-- Data Centers -->
+                        <div style="position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 50px;">
+                            <div style="width: 180px; height: 100px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 13px; color: #2c3e50; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">DATA CENTER 01</div>
+                                <div class="datacenter-power" style="font-size: 28px; font-weight: 700; color: #27ae60; letter-spacing: -1px;">100MW</div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 400;">22kV</div>
+                            </div>
+                            <div style="width: 180px; height: 100px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 13px; color: #2c3e50; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">DATA CENTER 02</div>
+                                <div class="datacenter-power" style="font-size: 28px; font-weight: 700; color: #27ae60; letter-spacing: -1px;">100MW</div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 400;">22kV</div>
+                            </div>
+                            <div style="width: 180px; height: 100px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 13px; color: #2c3e50; margin-bottom: 8px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">DATA CENTER 03</div>
+                                <div class="datacenter-power" style="font-size: 28px; font-weight: 700; color: #27ae60; letter-spacing: -1px;">100MW</div>
+                                <div style="font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 400;">22kV</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="power-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">⚡ 1,200 MW Capacity</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Total power capacity to support high-performance computing workloads</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">🔄 99.99% Uptime</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Redundant systems ensure continuous power for critical operations</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">🌱 Green Energy</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Powered by renewable energy sources and smart grid technology</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">📊 Real-time Monitoring</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Advanced SCADA systems for continuous infrastructure monitoring</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="virtual-tour">
             <h3 class="tour-title">Take a Virtual Tour</h3>
             <p class="tour-description">Experience our world-class facilities through an immersive 3D virtual tour. Explore our labs, offices, and collaboration spaces from the comfort of your home.</p>
@@ -528,5 +668,30 @@
             </a>
         </div>
     </div>
+    
+    <script>
+        // Animate power values in the power flow diagram
+        setInterval(() => {
+            const powers = document.querySelectorAll('.datacenter-power');
+            powers.forEach(power => {
+                const base = 100;
+                const variation = Math.floor(Math.random() * 3 - 1);
+                power.textContent = (base + variation) + 'MW';
+            });
+        }, 3000);
+
+        // Connection point pulse effect
+        const connectionPoints = document.querySelectorAll('[style*="width: 12px"][style*="height: 12px"][style*="background: #e74c3c"]');
+        setInterval(() => {
+            connectionPoints.forEach(point => {
+                const originalTransform = point.style.transform;
+                point.style.transform = originalTransform.replace('scale(1)', 'scale(1.2)');
+                setTimeout(() => {
+                    point.style.transform = originalTransform;
+                }, 500);
+            });
+        }, 2000);
+    </script>
+    
 </body>
 </html>

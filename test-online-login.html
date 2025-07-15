@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Login Test - HEART</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-good { color: #10b981; font-weight: 600; }
+        .status-bad { color: #ef4444; font-weight: 600; }
+        .status-checking { color: #f59e0b; font-weight: 600; }
+        .test-result {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+        }
+        button:hover { background: #1d4ed8; }
+        .success { background: #10b981; }
+        .success:hover { background: #059669; }
+        .instructions {
+            background: #e0f2fe;
+            border: 1px solid #0284c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🌐 Online Login System Verification</h1>
+        <p>Testing the new fixed login page to confirm online mode is working.</p>
+        
+        <div class="instructions">
+            <h3>📋 Verification Steps:</h3>
+            <ol>
+                <li><strong>Backend Status</strong> - Check if backend is online</li>
+                <li><strong>Login Page Test</strong> - Verify new page shows "Online Mode"</li>
+                <li><strong>Authentication Test</strong> - Test backend login with admin/heart2024</li>
+                <li><strong>Feature Test</strong> - Verify Alt+T shortcut and all features</li>
+            </ol>
+        </div>
+        
+        <h3>🔍 Live Tests:</h3>
+        <button onclick="testBackendStatus()">1. Test Backend Status</button>
+        <button onclick="testAuthentication()">2. Test Authentication</button>
+        <button onclick="openNewLoginPage()" class="success">3. Open New Login Page</button>
+        <button onclick="simulateAltT()">4. Test Alt+T Shortcut</button>
+        
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-container">
+        <h3>🎯 Expected Results:</h3>
+        <ul>
+            <li class="status-good">✅ Backend Status: Online (Port 5001)</li>
+            <li class="status-good">✅ New Login Page: Shows "🌐 Online Mode - Backend Connected"</li>
+            <li class="status-good">✅ Authentication: Backend API working with admin/heart2024</li>
+            <li class="status-good">✅ Alt+T Shortcut: Auto-fills credentials</li>
+            <li class="status-good">✅ Real-time Status: Live connection monitoring</li>
+        </ul>
+    </div>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const results = document.getElementById('testResults');
+            const div = document.createElement('div');
+            div.className = 'test-result';
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong>: ${message}
+            `;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        async function testBackendStatus() {
+            showResult('🔍 Testing backend status...', 'checking');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                
+                showResult(`✅ Backend ONLINE: ${data.status} (${data.timestamp})`, 'success');
+                showResult(`📊 Version: ${data.version}, Environment: ${data.environment}`, 'info');
+                
+            } catch (error) {
+                showResult(`❌ Backend OFFLINE: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAuthentication() {
+            showResult('🔐 Testing authentication with backend...', 'checking');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        identifier: 'admin', 
+                        password: 'heart2024' 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(`✅ Authentication SUCCESS: Welcome ${data.data.user.username} (${data.data.user.role})`, 'success');
+                    showResult(`🔑 JWT Token received: ${data.data.token.substring(0, 50)}...`, 'info');
+                } else {
+                    showResult(`❌ Authentication FAILED: ${data.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Authentication ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        function openNewLoginPage() {
+            showResult('🚀 Opening new fixed login page...', 'info');
+            window.open('login-fixed-online.html', '_blank');
+            
+            setTimeout(() => {
+                showResult('💡 Check the new page for "🌐 Online Mode - Backend Connected" status', 'info');
+                showResult('🎯 Try pressing Alt+T to auto-fill credentials', 'info');
+            }, 2000);
+        }
+
+        function simulateAltT() {
+            showResult('⌨️ Alt+T shortcut simulation...', 'info');
+            showResult('💡 Press Alt+T in the login page to auto-fill: admin/heart2024', 'info');
+            showResult('🎯 The new login page has enhanced Alt+T functionality', 'info');
+        }
+
+        // Auto-run initial tests
+        window.addEventListener('load', function() {
+            showResult('🚀 Online login verification system loaded', 'success');
+            
+            // Auto-test backend
+            setTimeout(testBackendStatus, 1000);
+            
+            // Remind about new page
+            setTimeout(() => {
+                showResult('💡 REMINDER: Use the "Open New Login Page" button to access the fixed version', 'info');
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

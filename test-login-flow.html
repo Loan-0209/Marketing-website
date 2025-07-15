@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Flow Test - HEART Technology Park</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        .test-section {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        .test-link {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1d4ed8;
+        }
+        .success {
+            background: #10b981;
+        }
+        .success:hover {
+            background: #047857;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        li {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Login Flow Test Dashboard</h1>
+        
+        <div class="status">
+            <strong>✅ Post-Login Redirect Issue FIXED!</strong><br>
+            Users now have control over navigation after successful login instead of automatic redirect to "About Us" page.
+        </div>
+        
+        <div class="test-section">
+            <h3>🔑 Login Tests</h3>
+            <p>Test different login scenarios:</p>
+            <a href="production-login.html" class="test-link">Regular Login</a>
+            <a href="production-login.html?redirect=about.html" class="test-link">Login → About Us</a>
+            <a href="production-login.html?redirect=news.html" class="test-link">Login → News</a>
+            <a href="production-login.html?redirect=contact.html" class="test-link">Login → Contact</a>
+        </div>
+        
+        <div class="test-section">
+            <h3>✅ Expected Behavior</h3>
+            <ul>
+                <li><strong>After successful login:</strong> User sees navigation choice buttons</li>
+                <li><strong>Button options:</strong> "📍 [Redirect Page]", "🏠 Home", "📋 Stay Here"</li>
+                <li><strong>User control:</strong> No automatic redirects - user chooses destination</li>
+                <li><strong>Already logged in:</strong> Shows user options without auto-redirect</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🏠 Navigation Links</h3>
+            <p>Test navigation after login improvements:</p>
+            <a href="index.html" class="test-link success">Home</a>
+            <a href="about.html" class="test-link success">About Us</a>
+            <a href="news.html" class="test-link success">News</a>
+            <a href="contact.html" class="test-link success">Contact</a>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Backend Status</h3>
+            <p>Verify backend is running:</p>
+            <button onclick="checkBackend()" class="test-link">Check Backend Health</button>
+            <div id="backendStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        async function checkBackend() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.innerHTML = 'Checking...';
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                if (response.ok) {
+                    statusDiv.innerHTML = '<div style="color: #10b981; margin-top: 0.5rem;">✅ Backend is running!</div>';
+                } else {
+                    statusDiv.innerHTML = '<div style="color: #ef4444; margin-top: 0.5rem;">❌ Backend returned error</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div style="color: #ef4444; margin-top: 0.5rem;">❌ Backend not reachable</div>';
+            }
+        }
+        
+        // Auto-check backend on page load
+        window.addEventListener('load', checkBackend);
+    </script>
+</body>
+</html>

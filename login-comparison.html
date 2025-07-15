@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System Comparison - HEART</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .comparison-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .old-version {
+            border-left: 5px solid #f59e0b;
+        }
+        .new-version {
+            border-left: 5px solid #10b981;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .status-offline {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .status-online {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .feature-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .feature-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .feature-list .check::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+        .feature-list .cross::before {
+            content: "❌";
+            position: absolute;
+            left: 0;
+        }
+        .feature-list .new::before {
+            content: "🆕";
+            position: absolute;
+            left: 0;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        .recommended {
+            background: #10b981;
+        }
+        .recommended:hover {
+            background: #059669;
+        }
+        .instructions {
+            background: #e0f2fe;
+            border: 1px solid #0284c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .credentials {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Monaco', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔐 HEART Login System Comparison</h1>
+    <p>The backend is now running in <strong>Online Mode</strong>! Here's the comparison between the old and new login pages:</p>
+
+    <div class="comparison-container">
+        <div class="comparison-card old-version">
+            <h2>❌ Old Login Page</h2>
+            <div class="status-badge status-offline">🔄 Offline Mode</div>
+            
+            <h3>Issues:</h3>
+            <ul class="feature-list">
+                <li class="cross">Shows "Offline Mode" incorrectly</li>
+                <li class="cross">Backend detection fails</li>
+                <li class="cross">Uses fallback authentication only</li>
+                <li class="cross">2-second timeout too short</li>
+                <li class="cross">Email input type causes browser tooltip</li>
+            </ul>
+            
+            <h3>Current Status:</h3>
+            <p>❌ Not connecting to backend API<br>
+            ⚠️ Stuck in fallback mode</p>
+            
+            <button onclick="openOldLogin()">View Old Page</button>
+        </div>
+
+        <div class="comparison-card new-version">
+            <h2>✅ New Fixed Login Page</h2>
+            <div class="status-badge status-online">🌐 Online Mode</div>
+            
+            <h3>Improvements:</h3>
+            <ul class="feature-list">
+                <li class="check">Properly detects backend status</li>
+                <li class="check">Shows "Online Mode - Backend Connected"</li>
+                <li class="check">Uses real backend authentication</li>
+                <li class="new">5-second timeout with better error handling</li>
+                <li class="new">Real-time status indicator</li>
+                <li class="new">Enhanced Alt+T shortcut</li>
+                <li class="check">Seamless fallback if backend goes down</li>
+            </ul>
+            
+            <h3>Current Status:</h3>
+            <p>✅ Connected to backend API<br>
+            🚀 Full functionality available</p>
+            
+            <button class="recommended" onclick="openNewLogin()">🚀 Use New Page (Recommended)</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <h3>📋 How to Test the New Login System:</h3>
+        <ol>
+            <li><strong>Open the New Login Page</strong> - Click the "🚀 Use New Page" button above</li>
+            <li><strong>Check Status</strong> - You should see "🌐 Online Mode - Backend Connected"</li>
+            <li><strong>Test Alt+T</strong> - Press Alt+T to auto-fill credentials</li>
+            <li><strong>Login</strong> - Click "Sign In" to test backend authentication</li>
+            <li><strong>Success</strong> - Should show "Welcome back! (Backend API)"</li>
+        </ol>
+    </div>
+
+    <div class="credentials">
+        <h3>🔑 Test Credentials:</h3>
+        <strong>Username:</strong> admin<br>
+        <strong>Password:</strong> heart2024<br>
+        <strong>Shortcut:</strong> Press Alt+T to auto-fill
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <h3>🎯 Current Backend Status:</h3>
+        <div id="backendStatus" style="padding: 15px; border-radius: 8px; margin: 10px 0;">
+            🔍 Checking backend connection...
+        </div>
+        <button onclick="testBackend()">🔄 Refresh Backend Status</button>
+    </div>
+
+    <script>
+        function openOldLogin() {
+            window.open('login.html', '_blank');
+        }
+
+        function openNewLogin() {
+            window.open('login-fixed-online.html', '_blank');
+        }
+
+        async function testBackend() {
+            const statusDiv = document.getElementById('backendStatus');
+            statusDiv.textContent = '🔍 Testing backend connection...';
+            statusDiv.style.background = '#e2e8f0';
+            statusDiv.style.color = '#64748b';
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                
+                statusDiv.innerHTML = `
+                    ✅ <strong>Backend Online</strong><br>
+                    Status: ${data.status}<br>
+                    Time: ${new Date(data.timestamp).toLocaleTimeString()}<br>
+                    Version: ${data.version}
+                `;
+                statusDiv.style.background = '#d1fae5';
+                statusDiv.style.color = '#059669';
+                
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    ❌ <strong>Backend Offline</strong><br>
+                    Error: ${error.message}<br>
+                    <small>The new login page will use fallback authentication</small>
+                `;
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+            }
+        }
+
+        // Auto-test backend status on page load
+        window.addEventListener('load', testBackend);
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 URGENT Login Debug - HEART</title>
+    <style>
+        body {
+            font-family: 'Monaco', monospace;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .debug-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-good { 
+            color: #10b981; 
+            font-weight: 600;
+            background: #d1fae5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .status-bad { 
+            color: #ef4444; 
+            font-weight: 600;
+            background: #fee2e2;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .test-result {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #dc2626;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        button:hover { background: #b91c1c; }
+        .success { background: #10b981; }
+        .success:hover { background: #059669; }
+        .critical {
+            background: #fef2f2;
+            border: 2px solid #dc2626;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .steps {
+            background: #eff6ff;
+            border: 1px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🚨 URGENT: Backend vs Frontend Debug</h1>
+        <p><strong>ISSUE:</strong> Backend works, frontend shows "Offline Mode"</p>
+        
+        <div class="critical">
+            <h3>🔍 IMMEDIATE ACTIONS NEEDED:</h3>
+            <ol>
+                <li><strong>Hard Refresh:</strong> Press <kbd>Ctrl+F5</kbd> or <kbd>Cmd+Shift+R</kbd></li>
+                <li><strong>Clear Cache:</strong> F12 → Application → Clear Storage → Clear All</li>
+                <li><strong>Try Incognito:</strong> Open new incognito/private window</li>
+                <li><strong>Check Console:</strong> F12 → Console for errors</li>
+            </ol>
+        </div>
+        
+        <h3>🧪 LIVE BACKEND TEST:</h3>
+        <button onclick="testBackendDirect()">🔥 Test Backend Health</button>
+        <button onclick="testCORS()">🌐 Test CORS Policy</button>
+        <button onclick="testAuthentication()">🔐 Test Auth Endpoint</button>
+        <button onclick="openIncognito()" class="success">🕵️ Open Incognito Mode</button>
+        
+        <div id="debugResults"></div>
+        
+        <div class="steps">
+            <h3>📋 Debug Steps in Order:</h3>
+            <ol>
+                <li><strong>Run Tests Above</strong> - Click all red buttons</li>
+                <li><strong>Check Browser Console</strong> - F12 → Console tab</li>
+                <li><strong>Check Network Tab</strong> - F12 → Network → try login</li>
+                <li><strong>Clear Everything</strong> - Hard refresh, clear cache</li>
+                <li><strong>Try Different Browser</strong> - Chrome/Safari/Firefox</li>
+            </ol>
+        </div>
+        
+        <h3>🎯 Expected Results:</h3>
+        <ul>
+            <li class="status-good">✅ Backend Health: Should return JSON with status "OK"</li>
+            <li class="status-good">✅ CORS Test: Should allow localhost:5001 requests</li>
+            <li class="status-good">✅ Auth Test: Should accept admin/heart2024</li>
+        </ul>
+    </div>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const results = document.getElementById('debugResults');
+            const div = document.createElement('div');
+            div.className = 'test-result';
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong>: ${message}
+            `;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        async function testBackendDirect() {
+            showResult('🔥 TESTING BACKEND DIRECTLY...', 'checking');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health', {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.json();
+                showResult(`✅ BACKEND WORKS! Status: ${data.status}, Time: ${data.timestamp}`, 'success');
+                showResult(`📊 Version: ${data.version}, Environment: ${data.environment}`, 'info');
+                
+            } catch (error) {
+                showResult(`❌ BACKEND FAILED: ${error.message}`, 'error');
+                showResult(`🔧 Try: 1) Check if localhost:5001 blocked 2) CORS issue 3) Firewall`, 'info');
+            }
+        }
+
+        async function testCORS() {
+            showResult('🌐 TESTING CORS POLICY...', 'checking');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health', {
+                    method: 'OPTIONS',
+                    mode: 'cors',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'GET'
+                    }
+                });
+                
+                showResult(`✅ CORS OK: ${response.status} ${response.statusText}`, 'success');
+                showResult(`🔍 Origin: ${window.location.origin}`, 'info');
+                
+            } catch (error) {
+                showResult(`❌ CORS FAILED: ${error.message}`, 'error');
+                showResult(`🔧 This might be why frontend shows "Offline Mode"`, 'info');
+            }
+        }
+
+        async function testAuthentication() {
+            showResult('🔐 TESTING AUTHENTICATION...', 'checking');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        identifier: 'admin',
+                        password: 'heart2024'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult(`✅ AUTH WORKS! User: ${data.data.user.username} (${data.data.user.role})`, 'success');
+                    showResult(`🔑 Token: ${data.data.token.substring(0, 50)}...`, 'info');
+                } else {
+                    showResult(`❌ AUTH FAILED: ${data.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ AUTH ERROR: ${error.message}`, 'error');
+            }
+        }
+
+        function openIncognito() {
+            showResult('🕵️ Opening incognito window...', 'info');
+            showResult('📝 In incognito: Open login-fixed-online.html and test', 'info');
+            
+            // Try to open incognito (browser dependent)
+            window.open('login-fixed-online.html', '_blank');
+        }
+
+        // Auto-run tests
+        window.addEventListener('load', function() {
+            showResult('🚀 URGENT DEBUG TOOL LOADED', 'success');
+            setTimeout(() => {
+                showResult('⚡ Running automatic tests...', 'info');
+                testBackendDirect();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

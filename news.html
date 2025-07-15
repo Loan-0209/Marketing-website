@@ -79,8 +79,7 @@
         
 
         
-        .nav .contact-btn,
-        .nav .login-btn {
+        .nav .contact-btn {
             background: #f59e0b;
             color: white;
         }
@@ -294,6 +293,241 @@
             color: white;
         }
         
+        /* Admin Actions Styles */
+        .admin-actions {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .admin-actions-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.3);
+        }
+        
+        .btn-icon {
+            font-size: 1.2rem;
+        }
+        
+        /* Create New Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #1e40af;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #1e40af;
+            border: 2px solid #1e40af;
+        }
+        
+        .btn-outline:hover {
+            background: #1e40af;
+            color: white;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert.active {
+            display: block;
+        }
+
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
@@ -320,6 +554,20 @@
             .featured-title {
                 font-size: 1.5rem;
             }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-actions-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -337,7 +585,6 @@
                 <a href="technology.html">Technology</a>
                 <a href="news.html" class="active">News</a>
                 <a href="contact.html" class="contact-btn">Contact</a>
-                <a href="login.html" class="login-btn">Login</a>
             </nav>
         </div>
     </header>
@@ -355,12 +602,26 @@
             <a href="#" class="featured-btn">Read Full Story</a>
         </div>
         
+        <!-- Editor/Admin Actions Bar - Only visible to authenticated editors/admins -->
+        <div class="admin-actions" id="adminActions" data-role-required="editor" style="display: none;">
+            <div class="admin-actions-container">
+                <button class="btn btn-primary create-new-btn" onclick="createArticle()">
+                    <span class="btn-icon">➕</span>
+                    Create New Article
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='admin/users.html'" data-role-required="admin">
+                    <span class="btn-icon">👥</span>
+                    User Management
+                </button>
+            </div>
+        </div>
+
         <div class="news-filter">
-            <a href="#" class="filter-btn active">All News</a>
-            <a href="#" class="filter-btn">Announcements</a>
-            <a href="#" class="filter-btn">Technology</a>
-            <a href="#" class="filter-btn">Partnerships</a>
-            <a href="#" class="filter-btn">Events</a>
+            <a href="#" class="filter-btn active" onclick="filterNews('all')">All News</a>
+            <a href="#" class="filter-btn" onclick="filterNews('announcement')">Announcements</a>
+            <a href="#" class="filter-btn" onclick="filterNews('technology')">Technology</a>
+            <a href="#" class="filter-btn" onclick="filterNews('partnership')">Partnerships</a>
+            <a href="#" class="filter-btn" onclick="filterNews('general')">Events</a>
         </div>
         
         <div class="news-grid">
@@ -451,5 +712,377 @@
             <a href="#" class="page-btn">Next →</a>
         </div>
     </div>
+
+    <!-- Create New Article Modal -->
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">✍️ Create New Article</h2>
+                <button class="modal-close" onclick="closeCreateModal()">&times;</button>
+            </div>
+            
+            <div class="alert" id="alertMessage"></div>
+            
+            <form id="createNewsForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="articleTitle">Title *</label>
+                        <input type="text" id="articleTitle" required maxlength="200">
+                        <div class="char-count">0/200 characters</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="articleCategory">Category</label>
+                        <select id="articleCategory">
+                            <option value="general">General</option>
+                            <option value="announcement">Announcement</option>
+                            <option value="technology">Technology</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="funding">Funding</option>
+                            <option value="award">Award</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="articleAuthor">Author</label>
+                        <input type="text" id="articleAuthor" placeholder="HEART Team">
+                    </div>
+                    <div class="form-group">
+                        <label for="articleIcon">Icon</label>
+                        <input type="text" id="articleIcon" placeholder="📰" value="📰" maxlength="5">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="articleExcerpt">Excerpt *</label>
+                    <textarea id="articleExcerpt" required maxlength="500" placeholder="Brief summary of the article..."></textarea>
+                    <div class="char-count">0/500 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="articleContent">Content *</label>
+                    <textarea id="articleContent" required placeholder="Write the full article content here..."></textarea>
+                    <div class="char-count">0 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="articleTags">Tags (comma-separated)</label>
+                    <input type="text" id="articleTags" placeholder="AI, innovation, technology">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeCreateModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="loading-spinner"></span>
+                        <span class="btn-text">Create Article</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        // Global variables
+        let currentUser = null;
+        let newsArticles = [];
+        let currentFilter = 'all';
+        
+        // Authentication check
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                // Verify token and get user info
+                fetch(`${API_BASE_URL}/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentUser = data.user;
+                        showAdminActions();
+                    }
+                })
+                .catch(error => {
+                    console.log('Auth check failed:', error);
+                });
+            }
+        }
+        
+        // Create article with authentication check
+        function createArticle() {
+            if (!publicAccess.checkRestrictedAccess('editor')) {
+                return;
+            }
+            openCreateModal();
+        }
+        
+        // Load news articles from API
+        async function loadNews() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/news`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    newsArticles = data.data.news;
+                    renderNews();
+                }
+            } catch (error) {
+                console.error('Error loading news:', error);
+                // Fallback to static content if API fails
+                loadStaticNews();
+            }
+        }
+        
+        // Fallback to static news if API is unavailable
+        function loadStaticNews() {
+            // Keep existing static news articles as fallback
+            console.log('Using static news articles as fallback');
+        }
+        
+        // Render news articles
+        function renderNews() {
+            const newsGrid = document.querySelector('.news-grid');
+            if (!newsGrid || newsArticles.length === 0) return;
+            
+            const filteredNews = currentFilter === 'all' 
+                ? newsArticles 
+                : newsArticles.filter(article => article.category === currentFilter);
+            
+            const newsHTML = filteredNews.map(article => `
+                <article class="news-card">
+                    <div class="news-image">${article.icon || '📰'}</div>
+                    <div class="news-content">
+                        <span class="news-category">${formatCategory(article.category)}</span>
+                        <h3 class="news-title">${article.title}</h3>
+                        <p class="news-excerpt">${article.excerpt}</p>
+                        <div class="news-meta">
+                            <span class="news-date">${formatDate(article.publishedAt)}</span>
+                            <a href="#" class="read-more" onclick="viewArticle('${article._id}')">Read More</a>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+            
+            newsGrid.innerHTML = newsHTML;
+        }
+        
+        // Format category for display
+        function formatCategory(category) {
+            const categories = {
+                'announcement': 'Announcement',
+                'technology': 'Technology',
+                'partnership': 'Partnership',
+                'funding': 'Funding',
+                'award': 'Award',
+                'general': 'General'
+            };
+            return categories[category] || 'General';
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        // Filter news articles
+        function filterNews(category) {
+            currentFilter = category;
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderNews();
+        }
+        
+        // View article details
+        function viewArticle(articleId) {
+            // Implementation for viewing full article
+            console.log('View article:', articleId);
+        }
+        
+        // Modal functions
+        function openCreateModal() {
+            if (!currentUser) {
+                showAlert('Please log in to create articles', 'error');
+                return;
+            }
+            
+            document.getElementById('createModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            resetCreateForm();
+        }
+        
+        // Reset create form
+        function resetCreateForm() {
+            document.getElementById('createNewsForm').reset();
+            document.getElementById('articleIcon').value = '📰';
+            updateCharCounts();
+            hideAlert();
+        }
+        
+        // Show alert message
+        function showAlert(message, type) {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.textContent = message;
+            alertEl.className = `alert ${type} active`;
+            
+            setTimeout(() => {
+                hideAlert();
+            }, 5000);
+        }
+        
+        // Hide alert message
+        function hideAlert() {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.classList.remove('active');
+        }
+        
+        // Update character counts
+        function updateCharCounts() {
+            const fields = [
+                { id: 'articleTitle', max: 200 },
+                { id: 'articleExcerpt', max: 500 },
+                { id: 'articleContent', min: 100 }
+            ];
+            
+            fields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const counter = input.parentNode.querySelector('.char-count');
+                
+                if (input && counter) {
+                    const length = input.value.length;
+                    if (field.max) {
+                        counter.textContent = `${length}/${field.max} characters`;
+                        counter.style.color = length > field.max ? '#ef4444' : '#6b7280';
+                    } else if (field.min) {
+                        counter.textContent = `${length} characters (minimum ${field.min})`;
+                        counter.style.color = length < field.min ? '#ef4444' : '#6b7280';
+                    }
+                }
+            });
+        }
+        
+        // Handle form submission
+        async function handleCreateSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+            const btnText = submitBtn.querySelector('.btn-text');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Creating...';
+            
+            try {
+                const formData = new FormData(event.target);
+                const articleData = {
+                    title: document.getElementById('articleTitle').value.trim(),
+                    excerpt: document.getElementById('articleExcerpt').value.trim(),
+                    content: document.getElementById('articleContent').value.trim(),
+                    category: document.getElementById('articleCategory').value,
+                    icon: document.getElementById('articleIcon').value || '📰',
+                    tags: document.getElementById('articleTags').value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                };
+                
+                // Validation
+                if (!articleData.title || !articleData.excerpt || !articleData.content) {
+                    throw new Error('Please fill in all required fields');
+                }
+                
+                if (articleData.title.length > 200) {
+                    throw new Error('Title must be less than 200 characters');
+                }
+                
+                if (articleData.excerpt.length > 500) {
+                    throw new Error('Excerpt must be less than 500 characters');
+                }
+                
+                if (articleData.content.length < 100) {
+                    throw new Error('Content must be at least 100 characters');
+                }
+                
+                const response = await fetch(`${API_BASE_URL}/news`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify(articleData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Article created successfully!', 'success');
+                    closeCreateModal();
+                    loadNews(); // Reload news to show the new article
+                } else {
+                    throw new Error(data.message || 'Failed to create article');
+                }
+                
+            } catch (error) {
+                console.error('Error creating article:', error);
+                showAlert(error.message || 'Failed to create article', 'error');
+            } finally {
+                // Reset loading state
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                btnText.textContent = 'Create Article';
+            }
+        }
+        
+        // Close modal on outside click
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('createModal');
+            if (event.target === modal) {
+                closeCreateModal();
+            }
+        });
+        
+        // Initialize character count listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up character count listeners
+            ['articleTitle', 'articleExcerpt', 'articleContent'].forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', updateCharCounts);
+                }
+            });
+            
+            // Set up form submission
+            const createForm = document.getElementById('createNewsForm');
+            if (createForm) {
+                createForm.addEventListener('submit', handleCreateSubmit);
+            }
+            
+            // Initialize - No auth check needed for public access
+            loadNews();
+        });
+    </script>
+    
+    
+    <!-- Public Access System -->
+    <script src="js/public-access.js"></script>
 </body>
 </html>

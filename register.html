@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .register-header h1 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .register-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .strength-indicator {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+        
+        .strength-weak { background: #ef4444; width: 25%; }
+        .strength-fair { background: #f59e0b; width: 50%; }
+        .strength-good { background: #10b981; width: 75%; }
+        .strength-strong { background: #059669; width: 100%; }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: #3b82f6;
+        }
+        
+        .register-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+        
+        .register-button:active {
+            transform: translateY(0);
+        }
+        
+        .register-button.loading {
+            pointer-events: none;
+        }
+        
+        .register-button.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert.info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .alert.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .login-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .role-info {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .register-container {
+                padding: 2rem;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">🚀 HEART</div>
+            <h1>Create Your Account</h1>
+            <p>Join the HEART Technology Park community</p>
+        </div>
+        
+        <div class="alert" id="alertMessage"></div>
+        
+        <form id="registerForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" required pattern="[a-zA-Z0-9_]+" title="Username can only contain letters, numbers, and underscores">
+            </div>
+            
+            <div class="form-group">
+                <label for="role">Account Type</label>
+                <select id="role">
+                    <option value="viewer">User - View content and participate</option>
+                    <option value="editor">Editor - Create and manage content</option>
+                </select>
+                <div class="role-info">
+                    <strong>User:</strong> Can view news, contact, and use general features<br>
+                    <strong>Editor:</strong> Can create news posts and manage content (requires approval)
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" required minlength="8">
+                <div class="password-strength">
+                    <div class="strength-indicator">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <div id="strengthText">Password strength will appear here</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#" target="_blank">Terms of Service</a> and 
+                    <a href="#" target="_blank">Privacy Policy</a> of HEART Technology Park
+                </label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="newsletter">
+                <label for="newsletter">
+                    Subscribe to our newsletter for updates about HEART Technology Park developments
+                </label>
+            </div>
+            
+            <button type="submit" class="register-button">Create Account</button>
+        </form>
+        
+        <div class="login-link">
+            Already have an account? <a href="login.html">Sign in here</a>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        class RegistrationHandler {
+            constructor() {
+                this.form = document.getElementById('registerForm');
+                this.passwordInput = document.getElementById('password');
+                this.confirmPasswordInput = document.getElementById('confirmPassword');
+                this.submitButton = document.querySelector('.register-button');
+                this.originalButtonText = this.submitButton.textContent;
+                
+                this.init();
+            }
+            
+            init() {
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                this.passwordInput.addEventListener('input', this.checkPasswordStrength.bind(this));
+                this.confirmPasswordInput.addEventListener('input', this.validatePasswordMatch.bind(this));
+                
+                // Auto-generate username from email
+                document.getElementById('email').addEventListener('input', this.suggestUsername.bind(this));
+                
+                // Real-time validation
+                document.getElementById('username').addEventListener('input', this.validateUsername.bind(this));
+                document.getElementById('email').addEventListener('blur', this.validateEmail.bind(this));
+            }
+            
+            suggestUsername(e) {
+                const email = e.target.value;
+                const usernameField = document.getElementById('username');
+                
+                if (email && !usernameField.value) {
+                    const suggested = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '');
+                    usernameField.value = suggested;
+                }
+            }
+            
+            checkPasswordStrength(e) {
+                const password = e.target.value;
+                const strengthBar = document.getElementById('strengthBar');
+                const strengthText = document.getElementById('strengthText');
+                
+                let score = 0;
+                let feedback = [];
+                
+                // Length check
+                if (password.length >= 8) score++;
+                else feedback.push('At least 8 characters');
+                
+                // Character variety
+                if (/[a-z]/.test(password)) score++;
+                else feedback.push('lowercase letter');
+                
+                if (/[A-Z]/.test(password)) score++;
+                else feedback.push('uppercase letter');
+                
+                if (/[0-9]/.test(password)) score++;
+                else feedback.push('number');
+                
+                if (/[^a-zA-Z0-9]/.test(password)) score++;
+                else feedback.push('special character');
+                
+                // Update UI
+                const strengths = ['strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
+                const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+                
+                strengthBar.className = 'strength-bar';
+                if (score > 0) {
+                    const level = Math.min(score - 1, 3);
+                    strengthBar.classList.add(strengths[level]);
+                    
+                    if (score >= 4) {
+                        strengthText.textContent = `${labels[level]} password ✓`;
+                        strengthText.style.color = '#059669';
+                    } else {
+                        strengthText.textContent = `${labels[level]} - Add: ${feedback.join(', ')}`;
+                        strengthText.style.color = '#f59e0b';
+                    }
+                } else {
+                    strengthText.textContent = 'Password strength will appear here';
+                    strengthText.style.color = '#6b7280';
+                }
+            }
+            
+            validatePasswordMatch() {
+                const password = this.passwordInput.value;
+                const confirmPassword = this.confirmPasswordInput.value;
+                
+                if (confirmPassword && password !== confirmPassword) {
+                    this.confirmPasswordInput.setCustomValidity('Passwords do not match');
+                } else {
+                    this.confirmPasswordInput.setCustomValidity('');
+                }
+            }
+            
+            async validateUsername(e) {
+                const username = e.target.value;
+                if (username.length < 3) return;
+                
+                try {
+                    // Check if username exists (we'll implement this endpoint)
+                    const response = await fetch(`${API_BASE_URL}/auth/check-username`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (!data.available) {
+                            e.target.setCustomValidity('Username already taken');
+                        } else {
+                            e.target.setCustomValidity('');
+                        }
+                    }
+                } catch (error) {
+                    console.log('Username validation unavailable:', error.message);
+                }
+            }
+            
+            async validateEmail(e) {
+                const email = e.target.value;
+                if (!email) return;
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth/check-email`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (!data.available) {
+                            e.target.setCustomValidity('Email already registered');
+                            this.showAlert('This email is already registered. <a href="login.html">Sign in instead?</a>', 'info');
+                        } else {
+                            e.target.setCustomValidity('');
+                        }
+                    }
+                } catch (error) {
+                    console.log('Email validation unavailable:', error.message);
+                }
+            }
+            
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                // Validate form
+                if (!this.form.checkValidity()) {
+                    this.form.reportValidity();
+                    return;
+                }
+                
+                const formData = {
+                    firstName: document.getElementById('firstName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    username: document.getElementById('username').value.trim(),
+                    password: document.getElementById('password').value,
+                    role: document.getElementById('role').value,
+                    newsletter: document.getElementById('newsletter').checked
+                };
+                
+                this.setLoadingState(true);
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.showAlert(
+                            `🎉 Account created successfully! Welcome, ${formData.firstName}!<br>
+                            <strong>You can now sign in with:</strong><br>
+                            Email: ${formData.email}<br>
+                            Username: ${formData.username}`, 
+                            'success'
+                        );
+                        
+                        // Auto-login or redirect
+                        setTimeout(() => {
+                            window.location.href = `login.html?email=${encodeURIComponent(formData.email)}`;
+                        }, 3000);
+                        
+                    } else {
+                        this.showAlert(data.message || 'Registration failed. Please try again.', 'error');
+                    }
+                    
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    this.showAlert('Unable to connect to server. Please check your connection and try again.', 'error');
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+            
+            setLoadingState(loading) {
+                if (loading) {
+                    this.submitButton.classList.add('loading');
+                    this.submitButton.textContent = '';
+                } else {
+                    this.submitButton.classList.remove('loading');
+                    this.submitButton.textContent = this.originalButtonText;
+                }
+            }
+            
+            showAlert(message, type) {
+                const alertEl = document.getElementById('alertMessage');
+                alertEl.innerHTML = message;
+                alertEl.className = `alert ${type} active`;
+                
+                if (type !== 'success') {
+                    setTimeout(() => {
+                        alertEl.classList.remove('active');
+                    }, 8000);
+                }
+            }
+        }
+        
+        // Initialize registration system
+        document.addEventListener('DOMContentLoaded', function() {
+            window.registrationHandler = new RegistrationHandler();
+            
+            // Pre-fill email if provided in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            if (email) {
+                document.getElementById('email').value = email;
+                registrationHandler.suggestUsername({ target: { value: email } });
+            }
+        });
+    </script>
+</body>
+</html>

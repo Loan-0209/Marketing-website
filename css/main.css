@@ -163,11 +163,11 @@ a:hover {
 
 
 
-.nav .contact-btn,
-.nav .login-btn {
+.nav .contact-btn {
     background: #f59e0b;
     color: white;
 }
+
 
 /* Main Content */
 .main-content {

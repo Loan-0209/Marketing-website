@@ -308,13 +308,13 @@
             
             <form>
                 <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                    <label for="email" class="form-label">Email or Username</label>
+                    <input type="text" id="email" class="form-input" placeholder="Enter your email or username" autocomplete="username">
                 </div>
                 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" autocomplete="current-password">
                 </div>
                 
                 <div class="form-options">
@@ -348,5 +348,692 @@
             </div>
         </div>
     </main>
+
+    <!-- Alert/Toast Notifications -->
+    <div id="alertContainer" class="alert-container"></div>
+
+    <!-- Include fallback authentication -->
+    <script src="js/auth-simple.js"></script>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        // Authentication Class
+        class LoginHandler {
+            constructor() {
+                this.form = document.querySelector('form');
+                this.emailInput = document.getElementById('email');
+                this.passwordInput = document.getElementById('password');
+                this.rememberCheckbox = document.getElementById('remember');
+                this.submitButton = document.querySelector('.login-button');
+                this.originalButtonText = this.submitButton.textContent;
+                this.fallbackMode = false;
+                this.isTestingBackend = false;
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.checkExistingAuth();
+                this.loadRememberedCredentials();
+                this.detectBackendStatus();
+            }
+            
+            setupEventListeners() {
+                // Form submission
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Real-time validation
+                this.emailInput.addEventListener('blur', () => this.validateEmail());
+                this.passwordInput.addEventListener('input', () => this.validatePassword());
+                
+                // Clear errors on input
+                this.emailInput.addEventListener('input', () => this.clearFieldError('email'));
+                this.passwordInput.addEventListener('input', () => this.clearFieldError('password'));
+                
+                // Social login buttons (placeholder functionality)
+                document.querySelectorAll('.social-button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.showAlert('Social login coming soon!', 'info');
+                    });
+                });
+                
+                // Forgot password link
+                document.querySelector('.forgot-password').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showAlert('Password reset functionality coming soon!', 'info');
+                });
+            }
+            
+            // Check if user is already authenticated
+            checkExistingAuth() {
+                const token = localStorage.getItem('authToken') || localStorage.getItem('heart_auth_token');
+                const user = localStorage.getItem('currentUser') || localStorage.getItem('heart_current_user');
+                
+                if (token && user) {
+                    this.showAlert('You are already logged in. Redirecting...', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                }
+            }
+            
+            // Load remembered credentials
+            loadRememberedCredentials() {
+                const rememberedEmail = localStorage.getItem('rememberedEmail');
+                if (rememberedEmail) {
+                    this.emailInput.value = rememberedEmail;
+                    this.rememberCheckbox.checked = true;
+                }
+            }
+            
+            // Form validation - improved for username/email flexibility
+            validateEmail() {
+                const identifier = this.emailInput.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                this.clearFieldError('email');
+                
+                if (!identifier) {
+                    this.showFieldError('email', 'Email or username is required');
+                    return false;
+                }
+                
+                // Allow both email and username - more flexible validation
+                if (identifier.includes('@')) {
+                    // Email format validation
+                    if (!emailRegex.test(identifier)) {
+                        this.showFieldError('email', 'Please enter a valid email address');
+                        return false;
+                    }
+                } else {
+                    // Username validation - very lenient
+                    if (identifier.length < 2 || identifier.length > 50) {
+                        this.showFieldError('email', 'Username must be between 2 and 50 characters');
+                        return false;
+                    }
+                    
+                    // Allow alphanumeric and common special characters
+                    if (!/^[a-zA-Z0-9._-]+$/.test(identifier)) {
+                        this.showFieldError('email', 'Username can only contain letters, numbers, dots, hyphens, and underscores');
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+            
+            validatePassword() {
+                const password = this.passwordInput.value;
+                
+                this.clearFieldError('password');
+                
+                if (!password) {
+                    this.showFieldError('password', 'Password is required');
+                    return false;
+                }
+                
+                if (password.length < 6) {
+                    this.showFieldError('password', 'Password must be at least 6 characters');
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            // Show field-specific error
+            showFieldError(fieldName, message) {
+                const field = document.getElementById(fieldName);
+                const formGroup = field.parentElement;
+                
+                // Remove existing error
+                const existingError = formGroup.querySelector('.field-error');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                // Add error styling
+                field.classList.add('error');
+                
+                // Add error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'field-error';
+                errorDiv.textContent = message;
+                formGroup.appendChild(errorDiv);
+            }
+            
+            // Clear field error
+            clearFieldError(fieldName) {
+                const field = document.getElementById(fieldName);
+                const formGroup = field.parentElement;
+                const errorDiv = formGroup.querySelector('.field-error');
+                
+                field.classList.remove('error');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            }
+            
+            // Handle form submission with enhanced debugging
+            async handleSubmit(event) {
+                event.preventDefault();
+                console.log('🔐 Form submission started');
+                
+                // Validate form
+                const isEmailValid = this.validateEmail();
+                const isPasswordValid = this.validatePassword();
+                
+                console.log('📝 Validation results:', { isEmailValid, isPasswordValid });
+                
+                if (!isEmailValid || !isPasswordValid) {
+                    this.showAlert('Please fix the errors above', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                this.setLoadingState(true);
+                
+                const identifier = this.emailInput.value.trim();
+                const password = this.passwordInput.value;
+                const remember = this.rememberCheckbox.checked;
+                
+                console.log('🔑 Login attempt with:', { identifier, password: '***', remember, fallbackMode: this.fallbackMode });
+                
+                try {
+                    const response = await this.attemptLogin(identifier, password);
+                    console.log('✅ Login response:', response);
+                    
+                    if (response.success) {
+                        await this.handleLoginSuccess(response.data, remember);
+                    } else {
+                        this.handleLoginError(response.message || 'Login failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Login error:', error);
+                    this.handleLoginError(error.message || 'Unable to connect to server. Please try again.');
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+            
+            // Detect backend status and switch to fallback if needed
+            async detectBackendStatus() {
+                if (this.isTestingBackend) return;
+                
+                this.isTestingBackend = true;
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 2000);
+                    
+                    const response = await fetch(`${API_BASE_URL}/health`, {
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        this.fallbackMode = false;
+                        console.log('Backend API is available');
+                    } else {
+                        throw new Error('Backend not responding');
+                    }
+                } catch (error) {
+                    this.fallbackMode = true;
+                    console.log('Backend unavailable, using fallback mode');
+                    this.showFallbackModeIndicator();
+                }
+                this.isTestingBackend = false;
+            }
+            
+            // Show visual indicator for fallback mode
+            showFallbackModeIndicator() {
+                const subtitle = document.querySelector('.login-subtitle');
+                if (subtitle && !subtitle.textContent.includes('Offline')) {
+                    subtitle.innerHTML = 'Sign in to your HEART Technology Park account<br><small style="color: #f59e0b; font-weight: 600;">🔄 Offline Mode - Using Local Authentication</small>';
+                }
+            }
+            
+            // Attempt login with intelligent fallback
+            async attemptLogin(identifier, password) {
+                // If we know backend is down, go straight to fallback
+                if (this.fallbackMode && window.simpleAuth) {
+                    console.log('Using fallback authentication (backend unavailable)');
+                    try {
+                        const result = await window.simpleAuth.login(identifier, password);
+                        console.log('Fallback authentication successful');
+                        return result;
+                    } catch (fallbackError) {
+                        console.error('Fallback authentication failed:', fallbackError.message);
+                        throw new Error(fallbackError.message);
+                    }
+                }
+                
+                // Try backend API first
+                try {
+                    console.log('Attempting backend API login...');
+                    
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ identifier, password }),
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        console.log('Backend API login successful');
+                        this.fallbackMode = false;
+                        return data;
+                    } else {
+                        throw new Error(data.message || 'Backend login failed');
+                    }
+                    
+                } catch (apiError) {
+                    console.warn('Backend API login failed, switching to fallback:', apiError.message);
+                    
+                    // Mark as fallback mode for future requests
+                    this.fallbackMode = true;
+                    this.showFallbackModeIndicator();
+                    
+                    // Clear any existing auth data before fallback
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
+                    
+                    // Fallback to simple auth if available
+                    if (window.simpleAuth) {
+                        try {
+                            console.log('Using fallback authentication system');
+                            const fallbackResult = await window.simpleAuth.login(identifier, password);
+                            console.log('Fallback authentication successful');
+                            return fallbackResult;
+                        } catch (fallbackError) {
+                            console.error('Fallback authentication failed:', fallbackError.message);
+                            throw new Error(fallbackError.message);
+                        }
+                    } else {
+                        console.error('No fallback authentication available');
+                        throw new Error('Authentication system unavailable');
+                    }
+                }
+            }
+            
+            // Handle successful login
+            async handleLoginSuccess(data, remember) {
+                const { user, token } = data;
+                
+                // Store authentication data (multiple storage methods for compatibility)
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // For compatibility with existing systems
+                localStorage.setItem('heart_auth_token', token);
+                localStorage.setItem('heart_current_user', JSON.stringify(user));
+                
+                // Handle "Remember me"
+                if (remember) {
+                    localStorage.setItem('rememberedEmail', this.emailInput.value.trim());
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                
+                // Show success message
+                // Show success visual feedback\n                this.submitButton.textContent = '✓ Success!';\n                \n                // Show success message with mode info\n                const mode = this.fallbackMode ? 'Offline Mode' : 'Backend API';\n                this.showAlert(`✅ Welcome back, ${user.firstName || user.username}! (${mode})`, 'success');
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect') || 'index.html';
+                    window.location.href = redirect;
+                }, 1500);
+            }
+            
+            // Handle login error with smart messaging
+            handleLoginError(message) {
+                // Map common error messages to user-friendly versions
+                const errorMessages = {
+                    'Invalid credentials': this.fallbackMode ? 
+                        'Incorrect credentials. Try: admin / heart2024' : 
+                        'Incorrect email/username or password.',
+                    'User not found': this.fallbackMode ? 
+                        'User not found. Try: admin / heart2024' : 
+                        'No account found with this email/username.',
+                    'Account is deactivated': 'Your account has been deactivated. Please contact support.',
+                    'Too many requests': 'Too many login attempts. Please wait a moment and try again.'
+                };
+                
+                // Don't show technical errors like "Failed to fetch" in fallback mode
+                if (this.fallbackMode && (message.includes('fetch') || message.includes('connect') || message.includes('network'))) {
+                    // Silent fallback - just focus on the form
+                    this.emailInput.focus();
+                    return;
+                }
+                
+                let userMessage = message;
+                for (const [key, value] of Object.entries(errorMessages)) {
+                    if (message.includes(key)) {
+                        userMessage = value;
+                        break;
+                    }
+                }
+                
+                this.showAlert(userMessage, 'error');
+                
+                // Focus on first field for retry
+                this.emailInput.focus();
+            }
+            
+            // Set loading state
+            setLoadingState(isLoading) {
+                if (isLoading) {
+                    this.submitButton.disabled = true;
+                    this.submitButton.innerHTML = `
+                        <span class="spinner"></span>
+                        Signing In...
+                    `;
+                    this.submitButton.classList.add('loading');
+                } else {
+                    this.submitButton.disabled = false;
+                    this.submitButton.textContent = this.originalButtonText;
+                    this.submitButton.classList.remove('loading');
+                }
+            }
+            
+            // Show alert notification
+            showAlert(message, type = 'info') {
+                const alertContainer = document.getElementById('alertContainer');
+                
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.innerHTML = `
+                    <span class="alert-message">${message}</span>
+                    <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                `;
+                
+                alertContainer.appendChild(alert);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentElement) {
+                        alert.remove();
+                    }
+                }, 5000);
+                
+                // Animate in
+                setTimeout(() => {
+                    alert.classList.add('show');
+                }, 10);
+            }
+        }
+        
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clear any cached authentication that might be causing issues
+            if (localStorage.getItem('authToken') && !localStorage.getItem('currentUser')) {
+                localStorage.removeItem('authToken');
+            }
+            
+            // Wait for fallback auth to load, then initialize
+            let initAttempts = 0;
+            const initializeLogin = () => {
+                if (window.simpleAuth || initAttempts > 20) {
+                    window.loginHandler = new LoginHandler();
+                    console.log('✅ Login system initialized with fallback support');
+                    
+                    // Show helpful hint
+                    if (window.loginHandler.fallbackMode) {
+                        setTimeout(() => {
+                            window.loginHandler.showAlert('💡 Press Alt+T to auto-fill test credentials', 'info');
+                        }, 2000);
+                    }
+                } else {
+                    initAttempts++;
+                    setTimeout(initializeLogin, 50);
+                }
+            };
+            
+            setTimeout(initializeLogin, 100);
+        });
+        
+        // Test Admin Credentials Helper - Enhanced and Debugged
+        window.fillTestCredentials = function() {
+            console.log('🔧 Filling test credentials...');
+            
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            if (!emailInput || !passwordInput) {
+                console.error('❌ Could not find email or password inputs');
+                return;
+            }
+            
+            try {
+                // Clear any existing values and errors
+                emailInput.value = '';
+                passwordInput.value = '';
+                
+                // Clear any validation errors
+                if (window.loginHandler) {
+                    window.loginHandler.clearFieldError('email');
+                    window.loginHandler.clearFieldError('password');
+                }
+                
+                // Set new values
+                emailInput.value = 'admin';
+                passwordInput.value = 'heart2024';
+                
+                // Trigger input events to update validation
+                emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+                passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+                emailInput.dispatchEvent(new Event('change', { bubbles: true }));
+                passwordInput.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                // Focus the submit button
+                setTimeout(() => {
+                    document.querySelector('.login-button').focus();
+                }, 100);
+                
+                // Show success message
+                if (window.loginHandler) {
+                    const mode = window.loginHandler.fallbackMode ? 'Offline' : 'Online';
+                    window.loginHandler.showAlert(`✅ Test credentials filled! (${mode} Mode)`, 'success');
+                } else {
+                    console.log('✅ Test credentials filled: admin / heart2024');
+                }
+                
+                console.log('✅ Test credentials successfully filled');
+                
+            } catch (error) {
+                console.error('❌ Error filling test credentials:', error);
+            }
+        };
+        
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Alt + T to fill test credentials
+            if (e.altKey && (e.key === 't' || e.key === 'T')) {
+                e.preventDefault();
+                window.fillTestCredentials();
+            }
+            
+            // Enter key on form fields
+            if (e.key === 'Enter' && (e.target.id === 'email' || e.target.id === 'password')) {
+                e.preventDefault();
+                document.querySelector('.login-button').click();
+            }
+        });
+    </script>
+
+    <!-- Additional CSS for enhanced functionality -->
+    <style>
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Loading state button */
+        .login-button.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+        
+        /* Form validation styles */
+        .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            background-color: #fef2f2;
+        }
+        
+        .field-error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .field-error::before {
+            content: "⚠️";
+            font-size: 0.75rem;
+        }
+        
+        /* Alert container */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+        
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            backdrop-filter: blur(8px);
+        }
+        
+        .alert.show {
+            transform: translateX(0);
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .alert-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .alert-message {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 0 0 12px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .alert-close:hover {
+            opacity: 1;
+        }
+        
+        /* Mobile responsiveness for alerts */
+        @media (max-width: 768px) {
+            .alert-container {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+        
+        /* Enhanced form focus states */
+        .form-input:focus {
+            outline: none;
+            border-color: #1e40af;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        /* Remember me styling */
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            cursor: pointer;
+        }
+        
+        /* Social button hover effects */
+        .social-button {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(30, 64, 175, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .social-button:hover::before {
+            left: 100%;
+        }
+    </style>
 </body>
 </html>

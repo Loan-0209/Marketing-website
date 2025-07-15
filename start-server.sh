@@ -1,68 +1,40 @@
 #!/bin/bash
 
-echo "🚀 HEART Technology Park - Fixed Server Start"
-echo "🔧 Fixing access issues..."
+echo "🚀 Starting HEART Website Server..."
 
-# Navigate to project directory
-cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/
+# Kill any existing servers
+pkill -f "python.*http.server" 2>/dev/null
+pkill -f "SimpleHTTPServer" 2>/dev/null
 
-echo "📁 Current directory: $(pwd)"
-
-# Check if key files exist
-echo "📋 Checking files..."
-for file in "about.html" "index.html" "test-nuclear-final.html"; do
-    if [ -f "$file" ]; then
-        echo "✅ $file found"
+# Try different ports
+for port in 3000 8000 8080 9000; do
+    if ! lsof -i :$port >/dev/null 2>&1; then
+        echo "✅ Port $port is available"
+        echo "🌐 Starting server on http://localhost:$port"
+        cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18
+        python3 -m http.server $port &
+        SERVER_PID=$!
+        echo "🔧 Server PID: $SERVER_PID"
+        echo "📂 Serving from: $(pwd)"
+        echo ""
+        echo "🔗 Open these URLs to test:"
+        echo "   • Main site: http://localhost:$port"
+        echo "   • Fixed login: http://localhost:$port/login-fixed-final.html?redirect=about.html"
+        echo "   • Debug login: http://localhost:$port/production-login.html?redirect=about.html"
+        echo "   • Test dashboard: http://localhost:$port/test-login-flow.html"
+        echo ""
+        echo "🛑 To stop server: kill $SERVER_PID"
+        break
     else
-        echo "❌ $file missing"
+        echo "❌ Port $port is busy"
     fi
 done
 
-# Kill any existing servers on ports
-echo "🧹 Cleaning up existing servers..."
-lsof -ti:3000,8000,8080 | xargs kill -9 2>/dev/null || true
-
-echo ""
-echo "🌐 Starting servers..."
-
-# Method 1: Python simple server (most reliable)
-echo "✅ Starting Python server on port 8000..."
-python3 -m http.server 8000 &
-SERVER_PID=$!
-
-# Method 2: Try live-server if available
-if command -v live-server &> /dev/null; then
-    echo "✅ Starting live-server on port 3000..."
-    live-server --port=3000 --host=localhost --no-browser &
-    LIVE_PID=$!
+# Keep script running to show server status
+sleep 2
+if ps -p $SERVER_PID > /dev/null 2>&1; then
+    echo "✅ Server is running successfully!"
+    echo "🌐 Access the website at http://localhost:$port"
+else
+    echo "❌ Failed to start server"
 fi
-
-# Wait for servers to start
-sleep 3
-
-echo ""
-echo "🎯 SERVERS READY!"
-echo "🌐 Available URLs:"
-echo "   🔥 Primary:   http://localhost:8000/about.html"
-echo "   🏠 Home:      http://localhost:8000/"
-echo "   🧪 Nuclear:   http://localhost:8000/test-nuclear-final.html"
-
-if command -v live-server &> /dev/null; then
-    echo "   ⚡ Live:      http://localhost:3000/about.html"
-fi
-
-echo ""
-echo "🌐 Opening browser to About page..."
-open http://localhost:8000/about.html
-
-echo ""
-echo "💥 Nuclear Gradient Removal Features:"
-echo "   ✅ Auto-activates after 1 second"
-echo "   🎨 Pure white background"
-echo "   🏢 Enhanced building with glow effects"
-echo ""
-echo "🔧 Press Ctrl+C to stop all servers"
-
-# Wait for user interrupt
-trap 'echo "🛑 Stopping servers..."; kill $SERVER_PID 2>/dev/null; kill $LIVE_PID 2>/dev/null; exit' INT
-wait

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test - Fallback System</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success { background: #f6ffed; border-color: #b7eb8f; }
+        .error { background: #fff2f0; border-color: #ffccc7; }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1d4ed8; }
+        .credential-info {
+            background: #fffbf0;
+            border: 1px solid: #ffd591;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔐 HEART Login System Test</h1>
+        <p>Testing the enhanced login functionality with fallback authentication.</p>
+        
+        <div class="credential-info">
+            <h3>📋 Test Credentials:</h3>
+            <p><strong>Backend API (if available):</strong> admin / admin123</p>
+            <p><strong>Fallback System:</strong> admin / heart2024</p>
+        </div>
+        
+        <h3>🧪 Available Tests:</h3>
+        
+        <button onclick="testMainLogin()">Open Main Login Page</button>
+        <button onclick="testSimpleLogin()">Open Simple Login Page</button>
+        <button onclick="testBackendAPI()">Test Backend API</button>
+        <button onclick="testFallbackAuth()">Test Fallback Auth</button>
+        <button onclick="clearStorage()">Clear All Storage</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Include auth systems -->
+    <script src="js/auth-simple.js"></script>
+    <script src="js/api.js"></script>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong>: ${message}
+            `;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function testMainLogin() {
+            showResult('Opening main login page...', 'info');
+            window.open('login.html', '_blank');
+        }
+
+        function testSimpleLogin() {
+            showResult('Opening simple login page...', 'info');
+            window.open('simple-login.html', '_blank');
+        }
+
+        async function testBackendAPI() {
+            showResult('Testing backend API connection...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                showResult(`✅ Backend API is available: ${JSON.stringify(data)}`, 'success');
+            } catch (error) {
+                showResult(`❌ Backend API not available: ${error.message}`, 'error');
+                showResult('💡 This is expected if MongoDB is not running. The login page will use fallback authentication.', 'info');
+            }
+        }
+
+        async function testFallbackAuth() {
+            showResult('Testing fallback authentication system...', 'info');
+            
+            if (window.simpleAuth) {
+                try {
+                    const result = await simpleAuth.login('admin', 'heart2024');
+                    showResult(`✅ Fallback login successful: ${JSON.stringify(result.data.user)}`, 'success');
+                    showResult('🎉 You can now use the main login page with these credentials!', 'success');
+                } catch (error) {
+                    showResult(`❌ Fallback login failed: ${error.message}`, 'error');
+                }
+            } else {
+                showResult('❌ Fallback auth system not loaded', 'error');
+            }
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showResult('🧹 All browser storage cleared', 'info');
+        }
+
+        // Auto-run initial tests
+        window.addEventListener('load', function() {
+            showResult('🚀 Login test system loaded', 'success');
+            testBackendAPI();
+            
+            setTimeout(() => {
+                if (window.simpleAuth) {
+                    showResult('✅ Fallback authentication system available', 'success');
+                } else {
+                    showResult('⚠️ Loading fallback authentication...', 'info');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

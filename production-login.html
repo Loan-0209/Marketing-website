@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .login-header h1 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .connection-status {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .connection-status.online {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .connection-status.offline {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: #3b82f6;
+        }
+        
+        .forgot-password {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-button.loading {
+            pointer-events: none;
+        }
+        
+        .login-button.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert.info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .alert.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Post-login navigation buttons */
+        .post-login-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .nav-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .nav-button.primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .nav-button.success {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+        }
+        
+        .nav-button.secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .register-link a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .back-link a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .back-link a:hover {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 2rem;
+                margin: 10px;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">🚀 HEART</div>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your HEART Technology Park account</p>
+        </div>
+        
+        <div class="connection-status" id="connectionStatus"></div>
+        
+        <div class="alert" id="alertMessage"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="identifier">Email or Username</label>
+                <input type="text" id="identifier" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="login-button">Sign In</button>
+        </form>
+        
+        <div class="divider">
+            <span>New to HEART?</span>
+        </div>
+        
+        <div class="register-link">
+            <a href="register.html">Create your account here</a>
+        </div>
+        
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        class ProductionLoginHandler {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.identifierInput = document.getElementById('identifier');
+                this.passwordInput = document.getElementById('password');
+                this.rememberCheckbox = document.getElementById('remember');
+                this.submitButton = document.querySelector('.login-button');
+                this.originalButtonText = this.submitButton.textContent;
+                this.isOnline = false;
+                
+                this.init();
+            }
+            
+            async init() {
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                
+                // Check connection status
+                await this.checkConnection();
+                
+                // Pre-fill email from URL or localStorage
+                this.prefillCredentials();
+                
+                // Set up periodic connection check
+                setInterval(this.checkConnection.bind(this), 30000);
+            }
+            
+            async checkConnection() {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(`${API_BASE_URL}/health`, {
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (response.ok) {
+                        this.isOnline = true;
+                        this.showConnectionStatus('Connected to HEART servers', 'online');
+                    } else {
+                        throw new Error('Server not responding');
+                    }
+                } catch (error) {
+                    this.isOnline = false;
+                    this.showConnectionStatus('Connection issues detected - some features may be limited', 'offline');
+                }
+            }
+            
+            showConnectionStatus(message, type) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.textContent = message;
+                statusEl.className = `connection-status ${type}`;
+                statusEl.style.display = 'block';
+                
+                if (type === 'online') {
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 3000);
+                }
+            }
+            
+            prefillCredentials() {
+                // Check URL params
+                const urlParams = new URLSearchParams(window.location.search);
+                const email = urlParams.get('email');
+                
+                if (email) {
+                    this.identifierInput.value = email;
+                    this.passwordInput.focus();
+                    this.showAlert(`Welcome back! Please enter your password for ${email}`, 'info');
+                } else {
+                    // Check remembered email
+                    const rememberedEmail = localStorage.getItem('rememberedEmail');
+                    if (rememberedEmail) {
+                        this.identifierInput.value = rememberedEmail;
+                        this.rememberCheckbox.checked = true;
+                        this.passwordInput.focus();
+                    }
+                }
+            }
+            
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                const identifier = this.identifierInput.value.trim();
+                const password = this.passwordInput.value;
+                const remember = this.rememberCheckbox.checked;
+                
+                if (!identifier || !password) {
+                    this.showAlert('Please enter both email/username and password.', 'error');
+                    return;
+                }
+                
+                this.setLoadingState(true);
+                
+                try {
+                    const response = await this.attemptLogin(identifier, password);
+                    await this.handleLoginSuccess(response, remember);
+                    
+                } catch (error) {
+                    this.handleLoginError(error.message);
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+            
+            async attemptLogin(identifier, password) {
+                if (!this.isOnline) {
+                    throw new Error('Unable to connect to authentication servers. Please check your internet connection and try again.');
+                }
+                
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    // Handle specific error cases
+                    if (response.status === 423) {
+                        throw new Error('Account temporarily locked due to multiple failed attempts. Please try again in 30 minutes or contact support.');
+                    } else if (response.status === 401) {
+                        throw new Error('Invalid email/username or password. Please check your credentials and try again.');
+                    } else {
+                        throw new Error(data.message || 'Login failed. Please try again.');
+                    }
+                }
+                
+                return data;
+            }
+            
+            async handleLoginSuccess(response, remember) {
+                const { user, token } = response.data;
+                
+                // Store authentication data
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Handle remember me
+                if (remember) {
+                    localStorage.setItem('rememberedEmail', user.email);
+                } else {
+                    localStorage.removeItem('rememberedEmail');
+                }
+                
+                // Update global auth manager if available
+                if (window.authManager) {
+                    window.authManager.setAuthState(user, token);
+                }
+                
+                // Show success message with navigation options
+                this.submitButton.textContent = '✓ Login Successful!';
+                
+                // Get redirect destination
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect') || 'index.html';
+                const redirectName = this.getPageDisplayName(redirectUrl);
+                
+                // Show success with user choice instead of auto-redirect
+                this.showAlert(`
+                    <strong>✅ Welcome back, ${user.firstName || user.username}!</strong><br>
+                    <p style="margin: 0.5rem 0; color: #065f46;">Login successful! Where would you like to go?</p>
+                    <div class="post-login-nav">
+                        <button onclick="goToDestination('${redirectUrl}')" class="nav-button primary">
+                            📍 ${redirectName}
+                        </button>
+                        <button onclick="goToDestination('index.html')" class="nav-button success">
+                            🏠 Home
+                        </button>
+                        <button onclick="stayOnCurrentPage()" class="nav-button secondary">
+                            📋 Stay Here
+                        </button>
+                    </div>
+                `, 'success');
+                
+                // Log the login success for debugging
+                console.log('🔑 Login successful! User:', user.firstName || user.username);
+                console.log('🔗 Intended redirect:', redirectUrl);
+            }
+            
+            handleLoginError(message) {
+                console.error('Login failed:', message);
+                
+                // Provide user-friendly error messages
+                const userFriendlyMessages = {
+                    'Invalid credentials': 'The email/username or password you entered is incorrect. Please check your credentials and try again.',
+                    'User not found': 'No account found with this email/username. Would you like to create an account?',
+                    'Account is deactivated': 'Your account has been deactivated. Please contact support for assistance.',
+                    'Too many requests': 'Too many login attempts. Please wait a moment and try again.'
+                };
+                
+                const userMessage = userFriendlyMessages[message] || message;
+                this.showAlert(userMessage, 'error');
+                
+                // Focus on appropriate field
+                if (message.includes('credentials') || message.includes('password')) {
+                    this.passwordInput.focus();
+                    this.passwordInput.select();
+                } else {
+                    this.identifierInput.focus();
+                }
+            }
+            
+            setLoadingState(loading) {
+                if (loading) {
+                    this.submitButton.classList.add('loading');
+                    this.submitButton.textContent = '';
+                    this.form.style.pointerEvents = 'none';
+                } else {
+                    this.submitButton.classList.remove('loading');
+                    this.submitButton.textContent = this.originalButtonText;
+                    this.form.style.pointerEvents = 'auto';
+                }
+            }
+            
+            getPageDisplayName(url) {
+                // Convert URL to user-friendly page names
+                const pageNames = {
+                    'index.html': 'Home',
+                    'about.html': 'About Us',
+                    'news.html': 'News',
+                    'contact.html': 'Contact',
+                    'facilities.html': 'Facilities',
+                    'investment.html': 'Investment',
+                    'technology.html': 'Technology',
+                    'master-plan.html': 'Master Plan',
+                    'admin/users.html': 'Admin Dashboard',
+                    'admin/post-news.html': 'Create News Post'
+                };
+                
+                // Extract filename from path
+                const filename = url.split('/').pop() || url;
+                return pageNames[filename] || pageNames[url] || 'Requested Page';
+            }
+            
+            showAlert(message, type) {
+                const alertEl = document.getElementById('alertMessage');
+                alertEl.innerHTML = message;
+                alertEl.className = `alert ${type} active`;
+                
+                // Don't auto-hide success messages with interactive buttons
+                if (type !== 'success') {
+                    setTimeout(() => {
+                        alertEl.classList.remove('active');
+                    }, 8000);
+                }
+            }
+        }
+        
+        function showForgotPassword() {
+            alert('Password reset functionality will be available soon. Please contact support if you need immediate assistance.');
+        }
+        
+        // Initialize login system when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔑 Login page initializing...');
+            const urlParams = new URLSearchParams(window.location.search);
+            const forceLogin = urlParams.get('force') === 'true';
+            const logout = urlParams.get('logout') === 'true';
+            
+            // If user explicitly logged out, clear any existing session
+            if (logout) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('heart_auth_token');
+                localStorage.removeItem('heart_current_user');
+                
+                // Update URL to remove logout parameter
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+                
+                // Show logout confirmation
+                setTimeout(() => {
+                    document.getElementById('alertMessage').innerHTML = 'You have been logged out successfully.';
+                    document.getElementById('alertMessage').className = 'alert info active';
+                }, 100);
+            }
+            
+            // Check if user is already logged in (unless force login is requested)
+            if (!forceLogin && !logout) {
+                const token = localStorage.getItem('authToken');
+                const currentUser = localStorage.getItem('currentUser');
+                
+                if (token && currentUser) {
+                    try {
+                        // Show "already logged in" message with option to continue
+                        const user = JSON.parse(currentUser);
+                        const userName = user.firstName || user.username || 'User';
+                        
+                        // Add a delay to prevent flash/redirect issues
+                        setTimeout(() => {
+                            console.log('🔑 Showing already logged in message');
+                            document.getElementById('alertMessage').innerHTML = `
+                                You're already logged in as <strong>${userName}</strong>. 
+                                <br><br>
+                                <button onclick="proceedToHome()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; margin-right: 0.5rem; cursor: pointer;">Go to Home</button>
+                                <button onclick="stayOnLogin()" style="background: #6b7280; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Stay on Login</button>
+                                <button onclick="logoutAndStay()" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">Logout</button>
+                            `;
+                            document.getElementById('alertMessage').className = 'alert info active';
+                        }, 100);
+                        
+                        // EXPLICITLY prevent any auto-redirect
+                        console.log('🔑 Preventing auto-redirect for logged-in user');
+                        
+                        // Don't auto-redirect, let user choose
+                        window.loginHandler = new ProductionLoginHandler();
+                        return;
+                    } catch (error) {
+                        // If parsing fails, clear invalid data
+                        console.error('Invalid user data:', error);
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('currentUser');
+                    }
+                }
+            }
+            
+            // Initialize login handler for new login
+            window.loginHandler = new ProductionLoginHandler();
+        });
+        
+        // Helper functions for logged-in user options
+        function proceedToHome() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect') || 'index.html';
+            console.log('🏠 User clicked Go to Home button, redirecting to:', redirect);
+            window.location.href = redirect;
+        }
+        
+        function stayOnLogin() {
+            // Clear the alert and allow manual login
+            document.getElementById('alertMessage').classList.remove('active');
+            
+            // Add force parameter to URL to prevent future auto-redirects
+            const newUrl = window.location.pathname + '?force=true';
+            window.history.replaceState({}, document.title, newUrl);
+        }
+        
+        function logoutAndStay() {
+            // Clear all authentication data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('heart_auth_token');
+            localStorage.removeItem('heart_current_user');
+            
+            // Reload the page to show fresh login form
+            window.location.href = window.location.pathname + '?logout=true';
+        }
+        
+        // Navigation functions for post-login user choice
+        function goToDestination(url) {
+            console.log('🔗 User chose to go to:', url);
+            window.location.href = url;
+        }
+        
+        function stayOnCurrentPage() {
+            console.log('🔗 User chose to stay on login page');
+            // Hide the alert and show login form again
+            document.getElementById('alertMessage').classList.remove('active');
+            
+            // Reset form for potential re-login
+            const form = document.getElementById('loginForm');
+            if (form) {
+                form.style.display = 'block';
+            }
+            
+            // Show a brief confirmation
+            setTimeout(() => {
+                document.getElementById('alertMessage').innerHTML = 'You can now navigate manually or login with a different account.';
+                document.getElementById('alertMessage').className = 'alert info active';
+                
+                // Auto-hide this message
+                setTimeout(() => {
+                    document.getElementById('alertMessage').classList.remove('active');
+                }, 3000);
+            }, 500);
+        }
+        
+        // Prevent automatic redirects away from login page
+        window.addEventListener('beforeunload', function(event) {
+            console.log('🔑 User is leaving login page');
+        });
+        
+        // Override window.location methods temporarily to prevent auto-redirects
+        const originalLocationHref = Object.getOwnPropertyDescriptor(window.location, 'href') || {};
+        const originalLocationAssign = window.location.assign;
+        const originalLocationReplace = window.location.replace;
+        
+        // Flag to allow legitimate redirects
+        window.allowRedirect = false;
+        
+        // Handle browser back/forward navigation
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                console.log('🔑 Page loaded from cache');
+                // Don't auto-reload, stay on login page
+            }
+        });
+    </script>
+</body>
+</html>

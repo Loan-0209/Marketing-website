@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Debug - HEART Technology Park</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .debug-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-good { color: #10b981; font-weight: 600; }
+        .status-bad { color: #ef4444; font-weight: 600; }
+        .status-warn { color: #f59e0b; font-weight: 600; }
+        .debug-log {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1d4ed8; }
+        .form-test {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1>🔧 HEART Login System Debug</h1>
+        <p>Testing all components of the login system step by step.</p>
+        
+        <div id="systemStatus"></div>
+        
+        <h3>📋 Quick Tests:</h3>
+        <button onclick="testBackend()">Test Backend</button>
+        <button onclick="testFallback()">Test Fallback Auth</button>
+        <button onclick="testCredentials()">Test Login Credentials</button>
+        <button onclick="testKeyboard()">Test Alt+T Shortcut</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+        
+        <div class="form-test">
+            <h4>🧪 Manual Login Test:</h4>
+            <input type="text" id="testUsername" placeholder="Username (try: admin)" value="admin">
+            <input type="password" id="testPassword" placeholder="Password (try: heart2024)" value="heart2024">
+            <button onclick="testManualLogin()">Test Manual Login</button>
+        </div>
+        
+        <div class="debug-log" id="debugLog"></div>
+    </div>
+
+    <!-- Include the authentication system -->
+    <script src="js/auth-simple.js"></script>
+
+    <script>
+        let logCount = 0;
+        
+        function log(message, type = 'info') {
+            const debugLog = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warn' ? '⚠️' : '📝';
+            
+            logCount++;
+            debugLog.innerHTML += `${logCount}. [${timestamp}] ${emoji} ${message}\n`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+            
+            console.log(`[DEBUG] ${message}`);
+        }
+        
+        function clearLogs() {
+            document.getElementById('debugLog').innerHTML = '';
+            logCount = 0;
+            log('Debug log cleared');
+        }
+        
+        async function testBackend() {
+            log('Testing backend API connection...');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                log(`Backend API available: ${data.status} (${data.timestamp})`, 'success');
+                
+                // Test login endpoint
+                const loginTest = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier: 'admin', password: 'heart2024' })
+                });
+                
+                const loginData = await loginTest.json();
+                if (loginData.success) {
+                    log(`Backend login test successful: ${loginData.data.user.username}`, 'success');
+                } else {
+                    log(`Backend login test failed: ${loginData.message}`, 'error');
+                }
+                
+            } catch (error) {
+                log(`Backend API not available: ${error.message}`, 'error');
+                log('This is OK - fallback authentication will be used', 'warn');
+            }
+        }
+        
+        async function testFallback() {
+            log('Testing fallback authentication system...');
+            
+            if (window.simpleAuth) {
+                log('Fallback auth system loaded successfully', 'success');
+                
+                try {
+                    const result = await simpleAuth.login('admin', 'heart2024');
+                    log(`Fallback login successful: ${result.data.user.username} (${result.data.user.role})`, 'success');
+                    log('Authentication token stored in localStorage', 'success');
+                } catch (error) {
+                    log(`Fallback login failed: ${error.message}`, 'error');
+                }
+            } else {
+                log('Fallback auth system not loaded', 'error');
+            }
+        }
+        
+        async function testCredentials() {
+            log('Testing various credential combinations...');
+            
+            const testCases = [
+                { identifier: 'admin', password: 'heart2024', expected: true },
+                { identifier: 'admin@heart.com', password: 'heart2024', expected: true },
+                { identifier: 'admin', password: 'wrong', expected: false },
+                { identifier: 'wrong', password: 'heart2024', expected: false }
+            ];
+            
+            for (const testCase of testCases) {
+                try {
+                    if (window.simpleAuth) {
+                        const result = await simpleAuth.login(testCase.identifier, testCase.password);
+                        const success = result.success;
+                        
+                        if (success === testCase.expected) {
+                            log(`✓ ${testCase.identifier}/${testCase.password.slice(0,4)}*** - Expected: ${testCase.expected ? 'Success' : 'Fail'}, Got: ${success ? 'Success' : 'Fail'}`, 'success');
+                        } else {
+                            log(`✗ ${testCase.identifier}/${testCase.password.slice(0,4)}*** - Expected: ${testCase.expected ? 'Success' : 'Fail'}, Got: ${success ? 'Success' : 'Fail'}`, 'error');
+                        }
+                    }
+                } catch (error) {
+                    if (!testCase.expected) {
+                        log(`✓ ${testCase.identifier}/${testCase.password.slice(0,4)}*** - Expected fail, got error: ${error.message}`, 'success');
+                    } else {
+                        log(`✗ ${testCase.identifier}/${testCase.password.slice(0,4)}*** - Expected success, got error: ${error.message}`, 'error');
+                    }
+                }
+            }
+        }
+        
+        function testKeyboard() {
+            log('Testing Alt+T keyboard shortcut...');
+            
+            // Simulate Alt+T keypress
+            const event = new KeyboardEvent('keydown', {
+                key: 't',
+                altKey: true,
+                bubbles: true
+            });
+            
+            document.dispatchEvent(event);
+            log('Alt+T keypress simulated - check if credentials are filled', 'info');
+        }
+        
+        async function testManualLogin() {
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            
+            log(`Testing manual login with: ${username} / ${password.slice(0,4)}***`);
+            
+            if (window.simpleAuth) {
+                try {
+                    const result = await simpleAuth.login(username, password);
+                    log(`Manual login successful: ${JSON.stringify(result.data.user)}`, 'success');
+                } catch (error) {
+                    log(`Manual login failed: ${error.message}`, 'error');
+                }
+            } else {
+                log('Fallback auth not available for manual test', 'error');
+            }
+        }
+        
+        function updateSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            
+            const backendStatus = '❌ Backend: Offline (Expected)';
+            const fallbackStatus = window.simpleAuth ? '✅ Fallback: Available' : '❌ Fallback: Loading...';
+            const storageStatus = localStorage.getItem('heart_users') ? '✅ Storage: Users exist' : '⚠️ Storage: No users';
+            
+            statusDiv.innerHTML = `
+                <h3>📊 System Status:</h3>
+                <p class="status-bad">${backendStatus}</p>
+                <p class="${window.simpleAuth ? 'status-good' : 'status-bad'}">${fallbackStatus}</p>
+                <p class="${localStorage.getItem('heart_users') ? 'status-good' : 'status-warn'}">${storageStatus}</p>
+            `;
+        }
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            log('Debug system loaded');
+            updateSystemStatus();
+            
+            // Check every second for updates
+            setInterval(updateSystemStatus, 1000);
+            
+            // Auto-run basic tests
+            setTimeout(() => {
+                log('Running automatic tests...');
+                testBackend();
+                setTimeout(testFallback, 1000);
+            }, 2000);
+        });
+        
+        // Monitor for Alt+T presses
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && (e.key === 't' || e.key === 'T')) {
+                log('Alt+T detected! Checking if credentials were filled...');
+                
+                setTimeout(() => {
+                    const usernameInput = document.getElementById('testUsername');
+                    const passwordInput = document.getElementById('testPassword');
+                    
+                    if (usernameInput.value === 'admin' && passwordInput.value === 'heart2024') {
+                        log('Alt+T shortcut working - credentials filled!', 'success');
+                    } else {
+                        log('Alt+T shortcut may not be working properly', 'warn');
+                    }
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

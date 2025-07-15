@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEBUG: Redirect Issue Trace</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #00ff00; }
+        .log { background: #000; padding: 10px; border: 1px solid #333; margin: 10px 0; }
+        .error { color: #ff4444; }
+        .success { color: #00ff00; }
+        .warning { color: #ffaa00; }
+    </style>
+</head>
+<body>
+    <h1>🐛 DEBUG: Login Redirect Issue Tracer</h1>
+    
+    <div class="log" id="debugLog"></div>
+    
+    <h2>Test Commands:</h2>
+    <button onclick="testCurrentFile()">Test Current File Loading</button>
+    <button onclick="testLogin()">Test Login Flow</button>
+    <button onclick="clearLocalStorage()">Clear All Storage</button>
+    <button onclick="checkRedirectSources()">Check Redirect Sources</button>
+    
+    <script>
+        const log = document.getElementById('debugLog');
+        
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function testCurrentFile() {
+            addLog('🔍 Testing current file loading...', 'warning');
+            addLog(`Current URL: ${window.location.href}`, 'info');
+            addLog(`Current pathname: ${window.location.pathname}`, 'info');
+            addLog(`Current search: ${window.location.search}`, 'info');
+            
+            // Check if we can fetch the production-login.html
+            fetch('./production-login.html')
+                .then(response => {
+                    addLog(`✅ production-login.html status: ${response.status}`, 'success');
+                    return response.text();
+                })
+                .then(html => {
+                    // Check for redirect patterns in the loaded HTML
+                    const hasAutoRedirect = html.includes('window.location.href') && html.includes('setTimeout');
+                    addLog(`Auto-redirect patterns found: ${hasAutoRedirect}`, hasAutoRedirect ? 'error' : 'success');
+                    
+                    // Check for button navigation
+                    const hasUserChoice = html.includes('goToDestination') && html.includes('stayOnCurrentPage');
+                    addLog(`User choice navigation found: ${hasUserChoice}`, hasUserChoice ? 'success' : 'error');
+                })
+                .catch(error => {
+                    addLog(`❌ Error loading production-login.html: ${error}`, 'error');
+                });
+        }
+        
+        function testLogin() {
+            addLog('🔑 Testing login flow...', 'warning');
+            
+            // Simulate what happens after login
+            const mockUser = { firstName: 'TestUser', username: 'test' };
+            const mockToken = 'test-token-123';
+            
+            // Store auth data like login would
+            localStorage.setItem('authToken', mockToken);
+            localStorage.setItem('currentUser', JSON.stringify(mockUser));
+            
+            addLog('✅ Mock auth data stored', 'success');
+            addLog('🔄 Redirecting to production-login.html to test...', 'info');
+            
+            // Redirect to login page to see behavior
+            setTimeout(() => {
+                window.location.href = './production-login.html?redirect=about.html';
+            }, 2000);
+        }
+        
+        function clearLocalStorage() {
+            addLog('🧹 Clearing all localStorage...', 'warning');
+            localStorage.clear();
+            sessionStorage.clear();
+            addLog('✅ Storage cleared', 'success');
+        }
+        
+        function checkRedirectSources() {
+            addLog('🔍 Checking potential redirect sources...', 'warning');
+            
+            // Check localStorage
+            const authToken = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+            addLog(`AuthToken: ${authToken ? 'EXISTS' : 'NOT FOUND'}`, authToken ? 'warning' : 'info');
+            addLog(`CurrentUser: ${currentUser ? 'EXISTS' : 'NOT FOUND'}`, currentUser ? 'warning' : 'info');
+            
+            // Check URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect');
+            addLog(`URL redirect param: ${redirect || 'NONE'}`, redirect ? 'warning' : 'info');
+            
+            // Check for running intervals/timeouts
+            addLog('⏰ Checking for active timers...', 'info');
+            
+            // Override window.location to catch redirects
+            const originalHref = window.location.href;
+            let redirectAttempts = 0;
+            
+            Object.defineProperty(window.location, 'href', {
+                set: function(url) {
+                    redirectAttempts++;
+                    addLog(`🚨 REDIRECT ATTEMPT #${redirectAttempts}: ${url}`, 'error');
+                    addLog(`Stack trace: ${new Error().stack}`, 'error');
+                    // Don't actually redirect, just log
+                },
+                get: function() {
+                    return originalHref;
+                }
+            });
+            
+            addLog('✅ Redirect monitoring active', 'success');
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            addLog('🚀 Debug tracer loaded', 'success');
+            addLog('Click buttons above to trace the redirect issue', 'info');
+        });
+        
+        // Monitor for any automatic redirects
+        let redirectMonitor = setInterval(() => {
+            // This will help catch any automatic redirects
+        }, 100);
+        
+        // Log any errors
+        window.addEventListener('error', (event) => {
+            addLog(`❌ JavaScript Error: ${event.message}`, 'error');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Status Check - HEART</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .status-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-good { 
+            color: #10b981; 
+            font-weight: 600;
+            background: #d1fae5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .status-bad { 
+            color: #ef4444; 
+            font-weight: 600;
+            background: #fee2e2;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .status-checking { 
+            color: #f59e0b; 
+            font-weight: 600;
+            background: #fef3c7;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .test-result {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 600;
+        }
+        button:hover { background: #1d4ed8; }
+        .success { background: #10b981; }
+        .success:hover { background: #059669; }
+        .big-status {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .online {
+            background: #d1fae5;
+            color: #059669;
+            border: 2px solid #10b981;
+        }
+        .offline {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 2px solid #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-container">
+        <h1>🔍 HEART Backend Status Check</h1>
+        <p>Real-time verification of backend system status and connectivity.</p>
+        
+        <div id="overallStatus" class="big-status">
+            🔍 Checking system status...
+        </div>
+        
+        <h3>📊 Component Status:</h3>
+        <div id="componentStatus"></div>
+        
+        <h3>🧪 Live Tests:</h3>
+        <button onclick="runFullCheck()" class="success">🔄 Run Full System Check</button>
+        <button onclick="testHealth()">🏥 Test Health Endpoint</button>
+        <button onclick="testAuth()">🔐 Test Authentication</button>
+        <button onclick="openLoginPage()">🚀 Open Fixed Login Page</button>
+        
+        <div id="testResults"></div>
+        
+        <h3>📋 If Backend Shows Offline:</h3>
+        <ul>
+            <li><strong>Refresh Browser:</strong> Press F5 or Ctrl+R</li>
+            <li><strong>Check URL:</strong> Make sure you're on login-fixed-online.html</li>
+            <li><strong>Clear Cache:</strong> Hard refresh with Ctrl+Shift+R</li>
+            <li><strong>Developer Tools:</strong> Check console for CORS errors</li>
+        </ul>
+    </div>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const results = document.getElementById('testResults');
+            const div = document.createElement('div');
+            div.className = 'test-result';
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong>: ${message}
+            `;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function updateComponentStatus(component, status, message) {
+            const statusDiv = document.getElementById('componentStatus');
+            const existing = document.getElementById(`status-${component}`);
+            
+            const statusClass = status === 'online' ? 'status-good' : 
+                               status === 'offline' ? 'status-bad' : 'status-checking';
+            
+            const statusText = `<div id="status-${component}" class="${statusClass}">
+                ${component}: ${message}
+            </div>`;
+            
+            if (existing) {
+                existing.outerHTML = statusText;
+            } else {
+                statusDiv.innerHTML += statusText;
+            }
+        }
+
+        function updateOverallStatus(isOnline) {
+            const statusDiv = document.getElementById('overallStatus');
+            if (isOnline) {
+                statusDiv.className = 'big-status online';
+                statusDiv.innerHTML = '✅ Backend System ONLINE';
+            } else {
+                statusDiv.className = 'big-status offline';
+                statusDiv.innerHTML = '❌ Backend System OFFLINE';
+            }
+        }
+
+        async function testHealth() {
+            showResult('🏥 Testing health endpoint...', 'checking');
+            updateComponentStatus('Health API', 'checking', 'Testing...');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                
+                updateComponentStatus('Health API', 'online', `${data.status} (${data.version})`);
+                showResult(`✅ Health check SUCCESS: ${data.status}`, 'success');
+                return true;
+                
+            } catch (error) {
+                updateComponentStatus('Health API', 'offline', error.message);
+                showResult(`❌ Health check FAILED: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        async function testAuth() {
+            showResult('🔐 Testing authentication...', 'checking');
+            updateComponentStatus('Authentication', 'checking', 'Testing...');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        identifier: 'admin', 
+                        password: 'heart2024' 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateComponentStatus('Authentication', 'online', `User: ${data.data.user.username}`);
+                    showResult(`✅ Authentication SUCCESS: ${data.data.user.username} (${data.data.user.role})`, 'success');
+                    return true;
+                } else {
+                    updateComponentStatus('Authentication', 'offline', data.message);
+                    showResult(`❌ Authentication FAILED: ${data.message}`, 'error');
+                    return false;
+                }
+                
+            } catch (error) {
+                updateComponentStatus('Authentication', 'offline', error.message);
+                showResult(`❌ Authentication ERROR: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        async function runFullCheck() {
+            showResult('🔄 Running full system check...', 'info');
+            
+            const healthOk = await testHealth();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const authOk = await testAuth();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const overallStatus = healthOk && authOk;
+            updateOverallStatus(overallStatus);
+            
+            if (overallStatus) {
+                showResult('🎉 SYSTEM CHECK PASSED: Backend is fully operational!', 'success');
+                showResult('💡 The login page should now show "🌐 Online Mode - Backend Connected"', 'info');
+            } else {
+                showResult('⚠️ SYSTEM CHECK FAILED: Some components are offline', 'error');
+                showResult('🔧 Try refreshing the browser or checking network connectivity', 'info');
+            }
+        }
+
+        function openLoginPage() {
+            showResult('🚀 Opening fixed login page...', 'info');
+            window.open('login-fixed-online.html', '_blank');
+        }
+
+        // Auto-run check on page load
+        window.addEventListener('load', function() {
+            showResult('🚀 Backend status checker loaded', 'success');
+            setTimeout(runFullCheck, 1000);
+        });
+
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            showResult('🔄 Auto-refreshing status...', 'info');
+            runFullCheck();
+        }, 30000);
+    </script>
+</body>
+</html>

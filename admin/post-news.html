@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HEART - News Administration</title>
+    <title>Create News Post - HEART Editor Panel</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/news-manager.css">
@@ -846,6 +846,19 @@
                 }
             `;
             document.head.appendChild(style);
+        });
+    </script>
+    
+    <!-- Public Access System for Auth Protection -->
+    <script src="../js/public-access.js"></script>
+    <script>
+        // Add auth check when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user has editor/admin access
+            if (!publicAccess.checkRestrictedAccess('editor')) {
+                // User will be redirected by checkRestrictedAccess
+                return;
+            }
         });
     </script>
 </body>

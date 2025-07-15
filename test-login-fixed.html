@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test - Fixed Version</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .credential-info {
+            background: #e8f5e8;
+            border: 1px solid #86efac;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .test-result {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success { background: #f6ffed; border-color: #b7eb8f; }
+        .error { background: #fff2f0; border-color: #ffccc7; }
+        button {
+            background: #1e40af;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔐 HEART Login System - Fixed Version</h1>
+        <p>Testing the enhanced login functionality with improved fallback authentication.</p>
+        
+        <div class="credential-info">
+            <h3>✅ Correct Test Credentials:</h3>
+            <p><strong>Username:</strong> admin</p>
+            <p><strong>Password:</strong> heart2024</p>
+            <p><strong>Email:</strong> admin@heart.com (also works)</p>
+        </div>
+        
+        <h3>🧪 Quick Tests:</h3>
+        
+        <button onclick="testBackendAPI()">Test Backend API</button>
+        <button onclick="testFallbackAuth()">Test Fallback Auth</button>
+        <button onclick="openMainLogin()">Open Main Login</button>
+        <button onclick="clearAllStorage()">Clear Storage</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Include auth systems -->
+    <script src="js/auth-simple.js"></script>
+
+    <script>
+        function showResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong>: ${message}
+            `;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        function openMainLogin() {
+            showResult('Opening fixed login page...', 'info');
+            window.open('login.html', '_blank');
+        }
+
+        async function testBackendAPI() {
+            showResult('Testing backend API connection...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:5001/api/health');
+                const data = await response.json();
+                showResult(`✅ Backend API is available: ${data.status}`, 'success');
+                
+                // Test login endpoint
+                const loginResponse = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier: 'admin', password: 'heart2024' })
+                });
+                
+                const loginData = await loginResponse.json();
+                if (loginData.success) {
+                    showResult(`✅ Backend login successful: ${loginData.data.user.username}`, 'success');
+                } else {
+                    showResult(`❌ Backend login failed: ${loginData.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showResult(`❌ Backend API not available: ${error.message}`, 'error');
+                showResult('💡 The login page will automatically use fallback authentication.', 'info');
+            }
+        }
+
+        async function testFallbackAuth() {
+            showResult('Testing fallback authentication system...', 'info');
+            
+            if (window.simpleAuth) {
+                try {
+                    const result = await simpleAuth.login('admin', 'heart2024');
+                    showResult(`✅ Fallback login successful: ${result.data.user.username}`, 'success');
+                    showResult('🎉 You can now use the main login page with these credentials!', 'success');
+                } catch (error) {
+                    showResult(`❌ Fallback login failed: ${error.message}`, 'error');
+                }
+            } else {
+                showResult('❌ Fallback auth system not loaded', 'error');
+            }
+        }
+
+        function clearAllStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showResult('🧹 All browser storage cleared', 'info');
+        }
+
+        // Auto-run initial tests
+        window.addEventListener('load', function() {
+            showResult('🚀 Fixed login test system loaded', 'success');
+            testBackendAPI();
+            
+            setTimeout(() => {
+                if (window.simpleAuth) {
+                    showResult('✅ Fallback authentication system available', 'success');
+                    showResult('💡 Instructions: Use admin/heart2024 credentials in the main login page', 'info');
+                    showResult('🎯 Press Alt+T in login page to auto-fill credentials', 'info');
+                } else {
+                    showResult('⚠️ Loading fallback authentication...', 'info');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIXED LOGIN - HEART Technology Park</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .login-header h1 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .connection-status {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .connection-status.online {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .connection-status.offline {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert.info {
+            background: #dbeafe;
+            border: 1px solid #3b82f6;
+            color: #1e40af;
+        }
+        
+        .alert.warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+        }
+        
+        .alert.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .post-login-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .nav-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .nav-button.primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .nav-button.success {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+        }
+        
+        .nav-button.secondary {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .back-link a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator">
+        ✅ DEFAULT: STAY ON LOGIN PAGE
+    </div>
+    
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">🚀 HEART</div>
+            <h1>Welcome Back</h1>
+            <p>Sign in to your HEART Technology Park account</p>
+        </div>
+        
+        <div class="connection-status" id="connectionStatus"></div>
+        
+        <div class="alert" id="alertMessage"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="identifier">Email or Username</label>
+                <input type="text" id="identifier" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required autocomplete="current-password">
+            </div>
+            
+            <button type="submit" class="login-button">Sign In</button>
+        </form>
+        
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        class FixedLoginHandler {
+            constructor() {
+                this.form = document.getElementById('loginForm');
+                this.identifierInput = document.getElementById('identifier');
+                this.passwordInput = document.getElementById('password');
+                this.submitButton = document.querySelector('.login-button');
+                this.originalButtonText = this.submitButton.textContent;
+                this.isOnline = false;
+                
+                this.init();
+            }
+            
+            async init() {
+                console.log('🔧 FIXED LOGIN HANDLER INITIALIZED - NO AUTO-REDIRECTS!');
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                await this.checkConnection();
+                this.checkExistingAuth();
+            }
+            
+            checkExistingAuth() {
+                const token = localStorage.getItem('authToken');
+                const currentUser = localStorage.getItem('currentUser');
+                
+                if (token && currentUser) {
+                    try {
+                        const user = JSON.parse(currentUser);
+                        const userName = user.firstName || user.username || 'User';
+                        
+                        console.log('🔑 User already logged in:', userName);
+                        console.log('✅ DEFAULT: Staying on login page - no auto-redirect for existing auth');
+                        
+                        this.showAlert(`
+                            <strong>✅ Already logged in as ${userName}</strong><br>
+                            <p style="margin: 0.5rem 0; color: #065f46;">You are staying on this page by default.</p>
+                            <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #065f46;">
+                                ✅ <strong>Current status: Logged in and staying here</strong>
+                            </p>
+                            <details style="margin-top: 0.75rem;">
+                                <summary style="cursor: pointer; color: #3b82f6; font-weight: 600;">⚙️ Account options (click to expand)</summary>
+                                <div class="post-login-nav" style="margin-top: 0.75rem;">
+                                    <button onclick="manualGoHome()" class="nav-button success">
+                                        🏠 Go Home
+                                    </button>
+                                    <button onclick="stayHere()" class="nav-button secondary">
+                                        📋 Continue Here
+                                    </button>
+                                    <button onclick="logout()" class="nav-button" style="background: #ef4444;">
+                                        🚪 Logout
+                                    </button>
+                                </div>
+                            </details>
+                        `, 'success');
+                        
+                        // EXPLICITLY NO AUTO-REDIRECT FOR EXISTING AUTH
+                        // User stays on login page by default
+                        // Navigation only happens on explicit button click
+                        
+                    } catch (error) {
+                        console.error('Invalid stored user data:', error);
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('currentUser');
+                    }
+                }
+            }
+            
+            async checkConnection() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/health`, { 
+                        signal: AbortSignal.timeout(5000),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const healthData = await response.json();
+                        this.isOnline = true;
+                        
+                        const mongoStatus = healthData.mongodb?.status || 'unknown';
+                        if (mongoStatus === 'connected') {
+                            this.showConnectionStatus('✅ Connected to HEART servers & database', 'online');
+                        } else {
+                            this.showConnectionStatus('⚠️ Connected to server, database reconnecting...', 'online');
+                        }
+                    } else {
+                        throw new Error(`Server responded with ${response.status}`);
+                    }
+                } catch (error) {
+                    this.isOnline = false;
+                    console.warn('Connection check failed:', error.message);
+                    this.showConnectionStatus('❌ Connection issues - working offline', 'offline');
+                }
+            }
+            
+            showConnectionStatus(message, type) {
+                const statusEl = document.getElementById('connectionStatus');
+                statusEl.textContent = message;
+                statusEl.className = `connection-status ${type}`;
+                statusEl.style.display = 'block';
+                
+                if (type === 'online') {
+                    setTimeout(() => {
+                        statusEl.style.display = 'none';
+                    }, 3000);
+                }
+            }
+            
+            async handleSubmit(e) {
+                e.preventDefault();
+                console.log('🔑 Login form submitted');
+                
+                const identifier = this.identifierInput.value.trim();
+                const password = this.passwordInput.value;
+                
+                if (!identifier || !password) {
+                    this.showAlert('Please enter both email/username and password.', 'error');
+                    return;
+                }
+                
+                this.setLoadingState(true);
+                
+                try {
+                    const response = await this.attemptLogin(identifier, password);
+                    await this.handleLoginSuccess(response);
+                } catch (error) {
+                    this.handleLoginError(error.message);
+                } finally {
+                    this.setLoadingState(false);
+                }
+            }
+            
+            async attemptLogin(identifier, password) {
+                if (!this.isOnline) {
+                    throw new Error('❌ Unable to connect to authentication servers. Please check your internet connection.');
+                }
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ identifier, password }),
+                        signal: AbortSignal.timeout(10000) // 10 second timeout
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        // Handle specific error cases with better messages
+                        if (response.status === 401) {
+                            throw new Error('❌ Invalid email/username or password. Please check your credentials.');
+                        } else if (response.status === 423) {
+                            throw new Error('🔒 Account temporarily locked due to multiple failed attempts. Try again in 30 minutes.');
+                        } else if (response.status >= 500) {
+                            throw new Error('⚠️ Server error. Please try again in a few moments.');
+                        } else {
+                            throw new Error(data.message || '❌ Login failed. Please try again.');
+                        }
+                    }
+                    
+                    console.log('✅ Login API call successful');
+                    return data;
+                    
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        throw new Error('⏱️ Login request timed out. Please check your connection and try again.');
+                    }
+                    throw error; // Re-throw the original error
+                }
+            }
+            
+            async handleLoginSuccess(response) {
+                console.log('✅ Login successful! STAYING ON LOGIN PAGE BY DEFAULT!');
+                const { user, token } = response.data;
+                
+                // Store authentication data
+                localStorage.setItem('authToken', token);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Get redirect destination for optional navigation
+                const urlParams = new URLSearchParams(window.location.search);
+                const redirectUrl = urlParams.get('redirect') || 'index.html';
+                const redirectName = this.getPageDisplayName(redirectUrl);
+                
+                // DEFAULT BEHAVIOR: STAY ON LOGIN PAGE
+                this.submitButton.textContent = '✅ Logged In Successfully!';
+                
+                // Show success message with DEFAULT "STAY HERE" behavior
+                this.showAlert(`
+                    <strong>✅ Welcome back, ${user.firstName || user.username}!</strong><br>
+                    <p style="margin: 0.5rem 0; color: #065f46;">You are now logged in and staying on this page.</p>
+                    <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #065f46;">
+                        ✅ <strong>Default behavior: Staying here</strong> - You can continue working on this page.
+                    </p>
+                    <details style="margin-top: 0.75rem;">
+                        <summary style="cursor: pointer; color: #3b82f6; font-weight: 600;">🔗 Want to go somewhere else? Click here</summary>
+                        <div class="post-login-nav" style="margin-top: 0.75rem;">
+                            <button onclick="goToPage('${redirectUrl}')" class="nav-button primary">
+                                📍 ${redirectName}
+                            </button>
+                            <button onclick="goToPage('index.html')" class="nav-button success">
+                                🏠 Home
+                            </button>
+                            <button onclick="hideNavigation()" class="nav-button secondary">
+                                📋 Stay Here
+                            </button>
+                        </div>
+                    </details>
+                `, 'success');
+                
+                // Log the success for debugging
+                console.log('🔑 Login successful! User:', user.firstName || user.username);
+                console.log('🔗 Available redirect:', redirectUrl);
+                console.log('✅ DEFAULT BEHAVIOR: STAYING ON LOGIN PAGE - NO AUTO-REDIRECT!');
+                console.log('📍 User can manually choose to navigate if desired');
+                
+                // EXPLICITLY PREVENT ANY AUTO-NAVIGATION
+                // NO window.location changes
+                // NO setTimeout redirects
+                // NO automatic navigation of any kind
+            }
+            
+            handleLoginError(message) {
+                console.error('Login failed:', message);
+                this.showAlert(message, 'error');
+                this.passwordInput.focus();
+            }
+            
+            setLoadingState(loading) {
+                if (loading) {
+                    this.submitButton.textContent = 'Signing In...';
+                    this.form.style.pointerEvents = 'none';
+                } else {
+                    this.submitButton.textContent = this.originalButtonText;
+                    this.form.style.pointerEvents = 'auto';
+                }
+            }
+            
+            getPageDisplayName(url) {
+                const pageNames = {
+                    'index.html': 'Home',
+                    'about.html': 'About Us',
+                    'news.html': 'News',
+                    'contact.html': 'Contact',
+                    'facilities.html': 'Facilities',
+                    'investment.html': 'Investment',
+                    'technology.html': 'Technology',
+                    'master-plan.html': 'Master Plan'
+                };
+                
+                const filename = url.split('/').pop() || url;
+                return pageNames[filename] || pageNames[url] || 'Requested Page';
+            }
+            
+            showAlert(message, type) {
+                const alertEl = document.getElementById('alertMessage');
+                alertEl.innerHTML = message;
+                alertEl.className = `alert ${type} active`;
+                
+                // Don't auto-hide success messages with interactive buttons
+                if (type !== 'success') {
+                    setTimeout(() => {
+                        alertEl.classList.remove('active');
+                    }, 8000);
+                }
+            }
+        }
+        
+        // Global navigation functions - THESE REQUIRE USER CLICK!
+        function goToPage(url) {
+            console.log('🔗 User manually chose to go to:', url);
+            console.log('✅ This is user-initiated navigation - NOT auto-redirect');
+            window.location.href = url;
+        }
+        
+        function stayOnLoginPage() {
+            console.log('📋 User chose to stay on login page - DEFAULT BEHAVIOR');
+            document.getElementById('alertMessage').classList.remove('active');
+            
+            setTimeout(() => {
+                document.getElementById('alertMessage').innerHTML = '✅ Staying on login page - you can continue working here or login with a different account.';
+                document.getElementById('alertMessage').className = 'alert info active';
+                
+                setTimeout(() => {
+                    document.getElementById('alertMessage').classList.remove('active');
+                }, 4000);
+            }, 500);
+        }
+        
+        function hideNavigation() {
+            console.log('📋 User confirmed: staying on login page');
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.innerHTML = '✅ <strong>Confirmed:</strong> Staying on login page. You can continue working here.';
+            alertEl.className = 'alert success active';
+            
+            setTimeout(() => {
+                alertEl.classList.remove('active');
+            }, 3000);
+        }
+        
+        function manualGoHome() {
+            console.log('🏠 User manually chose to go home');
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirect = urlParams.get('redirect') || 'index.html';
+            window.location.href = redirect;
+        }
+        
+        function stayHere() {
+            console.log('📋 User chose to stay here');
+            document.getElementById('alertMessage').classList.remove('active');
+        }
+        
+        function logout() {
+            console.log('🚪 User chose to logout');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            window.location.reload();
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 FIXED LOGIN PAGE LOADED - NO AUTO-REDIRECTS!');
+            window.loginHandler = new FixedLoginHandler();
+        });
+        
+        // Log page load completion
+        window.addEventListener('load', function() {
+            console.log('✅ FIXED LOGIN PAGE FULLY LOADED');
+            console.log('❌ NO AUTO-REDIRECTS WILL OCCUR');
+            console.log('👤 USER CONTROLS ALL NAVIGATION');
+        });
+    </script>
+</body>
+</html>

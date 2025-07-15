@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HEART Technology Park</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        .alert.active {
+            display: block;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .back-link a {
+            color: #1e40af;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .admin-note {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .admin-note strong {
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo">🚀 HEART</div>
+            <h2>Sign In</h2>
+        </div>
+        
+        <div class="alert" id="alertMessage"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="identifier">Username or Email</label>
+                <input type="text" id="identifier" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        
+        <div class="admin-note">
+            <strong>Demo Accounts:</strong><br>
+            Administrator: admin / heart2024<br>
+            <em>Or <a href="register.html">create your own account</a></em>
+        </div>
+        
+        <div class="back-link">
+            <a href="news.html">← Back to News</a>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'http://localhost:5001/api';
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ identifier, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('authToken', data.data.token);
+                    localStorage.setItem('currentUser', JSON.stringify(data.data.user));
+                    
+                    showAlert('Login successful! Redirecting...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'news.html';
+                    }, 1500);
+                } else {
+                    showAlert(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('Unable to connect to server. Please try again.', 'error');
+            }
+        });
+        
+        function showAlert(message, type) {
+            const alertEl = document.getElementById('alertMessage');
+            alertEl.textContent = message;
+            alertEl.className = `alert ${type} active`;
+            
+            setTimeout(() => {
+                alertEl.classList.remove('active');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

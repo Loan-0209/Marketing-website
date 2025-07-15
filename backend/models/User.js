@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters']
+    minlength: [8, 'Password must be at least 8 characters']
   },
   role: {
     type: String,
@@ -55,6 +55,30 @@ const userSchema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+  loginAttempts: {
+    type: Number,
+    default: 0
+  },
+  lockUntil: {
+    type: Date
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
+  emailVerificationToken: {
+    type: String
+  },
+  passwordResetToken: {
+    type: String
+  },
+  passwordResetExpires: {
+    type: Date
+  },
+  newsletter: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true,
@@ -77,9 +101,43 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
+userSchema.virtual('isLocked').get(function() {
+  return !!(this.lockUntil && this.lockUntil > Date.now());
+});
+
+userSchema.methods.incLoginAttempts = function() {
+  // If we have a previous lock that has expired, restart at 1
+  if (this.lockUntil && this.lockUntil < Date.now()) {
+    return this.updateOne({
+      $unset: { lockUntil: 1 },
+      $set: { loginAttempts: 1 }
+    });
+  }
+  
+  const updates = { $inc: { loginAttempts: 1 } };
+  
+  // Lock account after 5 failed attempts for 30 minutes
+  if (this.loginAttempts + 1 >= 5 && !this.isLocked) {
+    updates.$set = { lockUntil: Date.now() + 30 * 60 * 1000 }; // 30 minutes
+  }
+  
+  return this.updateOne(updates);
+};
+
+userSchema.methods.resetLoginAttempts = function() {
+  return this.updateOne({
+    $unset: { loginAttempts: 1, lockUntil: 1 }
+  });
+};
+
 userSchema.methods.toJSON = function() {
   const userObject = this.toObject();
   delete userObject.password;
+  delete userObject.emailVerificationToken;
+  delete userObject.passwordResetToken;
+  delete userObject.passwordResetExpires;
+  delete userObject.loginAttempts;
+  delete userObject.lockUntil;
   return userObject;
 };
 
