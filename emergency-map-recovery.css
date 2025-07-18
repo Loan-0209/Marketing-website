@@ -1,0 +1,178 @@
+/* 🚨 EMERGENCY MAP RECOVERY - COMPREHENSIVE FIX */
+/* Apply this CSS to immediately restore map visibility */
+
+/* STEP 1: FORCE VISIBILITY - Override ALL hiding rules */
+.location-map,
+.location-map *,
+.location-map .map-image,
+.location-map picture,
+.location-map img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+}
+
+/* STEP 2: RESET POSITIONING - Remove problematic sticky/absolute */
+.location-map {
+    position: relative !important; /* Compromise solution */
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+/* STEP 3: SMART DIMENSIONS - Restore proper sizing */
+.location-map {
+    height: auto !important;
+    min-height: 300px !important;
+    max-height: 600px !important;
+    width: 100% !important;
+    aspect-ratio: 16/10 !important;
+}
+
+/* STEP 4: IMAGE CONTAINMENT - Prevent cropping */
+.location-map .map-image,
+.location-map img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* Show full image */
+    object-position: center !important;
+    background: #f8f9fa !important; /* Background for letterboxing */
+}
+
+/* STEP 5: GRID COMPATIBILITY - Fix layout system */
+.location-grid {
+    display: grid !important;
+    grid-template-columns: 0.8fr 1.2fr !important;
+    gap: 2rem !important;
+    align-items: start !important; /* Critical: prevents stretching */
+}
+
+/* STEP 6: SECTION CONTAINER - Proper overflow handling */
+.location-section {
+    overflow: visible !important;
+    padding: 60px 0 !important;
+}
+
+.location-section .container {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 2rem !important;
+}
+
+/* STEP 7: RESPONSIVE FALLBACKS */
+@supports not (aspect-ratio: 16/10) {
+    .location-map {
+        height: 500px !important;
+        aspect-ratio: unset !important;
+    }
+}
+
+/* STEP 8: MOBILE RESPONSIVE - Safe fallbacks */
+@media (max-width: 1024px) {
+    .location-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    
+    .location-map {
+        aspect-ratio: 4/3 !important;
+        max-height: 400px !important;
+        margin-bottom: 1rem !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .location-map {
+        aspect-ratio: 3/2 !important;
+        max-height: 350px !important;
+    }
+}
+
+/* STEP 9: OVERLAY POSITIONING - Fix map markers */
+.map-overlay {
+    position: absolute !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 10 !important;
+    pointer-events: none !important;
+}
+
+.map-marker,
+.map-info {
+    pointer-events: auto !important;
+}
+
+/* STEP 10: HOVER EFFECTS - Restore interactivity */
+.location-map:hover .map-image {
+    transform: scale(1.01) !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* STEP 11: SCROLL BEHAVIOR - Prevent conflicts */
+.location-map {
+    scroll-margin-top: 2rem !important;
+}
+
+/* STEP 12: Z-INDEX STACKING - Ensure proper layering */
+.location-map {
+    z-index: 1 !important;
+    position: relative !important;
+    isolation: isolate !important;
+}
+
+/* STEP 13: EMERGENCY DEBUG MODE - Remove when working */
+.location-map.emergency-debug {
+    border: 3px solid lime !important;
+    background: rgba(0, 255, 0, 0.1) !important;
+}
+
+.location-map.emergency-debug::before {
+    content: "🚨 MAP RECOVERED";
+    position: absolute;
+    top: -30px;
+    left: 0;
+    background: lime;
+    color: black;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 9999;
+}
+
+/* STEP 14: PERFORMANCE OPTIMIZATION */
+.location-map {
+    contain: layout style !important;
+}
+
+/* STEP 15: FINAL OVERRIDES - Nuclear option */
+.location-map.force-visible {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: 500px !important;
+    width: 100% !important;
+    background: white !important;
+    border: 1px solid #ddd !important;
+}
+
+/*
+🎯 USAGE INSTRUCTIONS:
+1. Add this CSS file to your HTML head
+2. Optionally add 'emergency-debug' class to .location-map for visual confirmation
+3. If still not visible, add 'force-visible' class as nuclear option
+4. Test scroll behavior after applying
+5. Remove debug classes when confirmed working
+
+📋 ROOT CAUSES ADDRESSED:
+- Position conflicts (sticky vs static vs relative)
+- CSS specificity wars (!important cascades)
+- Grid alignment issues (stretch vs start)
+- Aspect ratio browser support
+- Overflow hidden containers
+- Z-index stacking contexts
+- Transform interference
+*/

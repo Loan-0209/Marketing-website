@@ -1,0 +1,14 @@
+
+/* 🟠 STYLE 2: ORANGE TECH STYLE */
+.heart-button-relocated.style-orange {
+    background: linear-gradient(135deg, #FF6B35, #E55722) !important;
+    color: white !important;
+}
+
+.heart-button-relocated.style-orange::before {
+    content: "⚡" !important;
+}
+
+.heart-button-relocated.style-orange:hover {
+    background: linear-gradient(135deg, #E55722, #CC4A1C) !important;
+}

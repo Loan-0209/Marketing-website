@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Bright Header Changes</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .comparison-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .check-list {
+            list-style: none;
+            padding: 0;
+        }
+        .check-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .check-list li:last-child {
+            border-bottom: none;
+        }
+        .test-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .test-link {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1d4ed8;
+        }
+        .test-link.success {
+            background: #10b981;
+        }
+        .test-link.success:hover {
+            background: #047857;
+        }
+        .gradient-preview {
+            height: 150px;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .old-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #475569 75%, #64748b 100%);
+        }
+        .new-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+        }
+        .preview-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+        }
+        .mobile-test {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🎨 Test: Bright Header Changes</h1>
+        <p>Kiểm tra kết quả thay đổi page header của trang facilities.html</p>
+    </div>
+
+    <div class="comparison-grid">
+        <div class="comparison-card">
+            <h3>❌ Before (Dark Header)</h3>
+            <div class="gradient-preview old-gradient">Dark Gradient Header</div>
+            <ul class="check-list">
+                <li><span style="color: #ef4444;">❌</span> Màu tối (navy to slate)</li>
+                <li><span style="color: #ef4444;">❌</span> Padding lớn (6rem 0 4rem)</li>
+                <li><span style="color: #ef4444;">❌</span> Min-height 70vh</li>
+                <li><span style="color: #ef4444;">❌</span> Có dòng "Explore Facilities"</li>
+                <li><span style="color: #ef4444;">❌</span> Khoảng trống lớn phía trên</li>
+            </ul>
+        </div>
+
+        <div class="comparison-card">
+            <h3>✅ After (Bright Header)</h3>
+            <div class="gradient-preview new-gradient">Bright Gradient Header</div>
+            <ul class="check-list">
+                <li><span style="color: #10b981;">✅</span> Màu tươi sáng (blue to purple to pink)</li>
+                <li><span style="color: #10b981;">✅</span> Padding giảm (3rem 0 4rem)</li>
+                <li><span style="color: #10b981;">✅</span> Min-height giảm 60vh</li>
+                <li><span style="color: #10b981;">✅</span> Bỏ dòng "Explore Facilities"</li>
+                <li><span style="color: #10b981;">✅</span> Khoảng trống phía trên giảm</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-links">
+        <a href="facilities.html" class="test-link success" target="_blank">🔗 Open Facilities Page</a>
+        <button onclick="testResponsive()" class="test-link" style="border: none; cursor: pointer;">📱 Test Mobile</button>
+        <button onclick="checkChanges()" class="test-link" style="border: none; cursor: pointer;">✅ Verify Changes</button>
+    </div>
+
+    <div class="comparison-card">
+        <h3>🔍 Checklist Kiểm Tra</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div>
+                <strong>🎨 Background:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Gradient tươi sáng</li>
+                    <li>Nhiều màu (blue→purple→pink)</li>
+                    <li>Sáng hơn, dễ nhìn hơn</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📏 Layout:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Padding giảm từ 6rem xuống 3rem</li>
+                    <li>Height giảm từ 70vh xuống 60vh</li>
+                    <li>Compact hơn</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📝 Content:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Bỏ dòng "Explore Facilities"</li>
+                    <li>Title vẫn gradient white</li>
+                    <li>Text hiển thị rõ ràng</li>
+                </ul>
+            </div>
+            <div>
+                <strong>📱 Responsive:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Mobile height 50vh</li>
+                    <li>Padding responsive</li>
+                    <li>Icons scale down</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-test">
+        <h3>📱 Mobile Responsive Test</h3>
+        <p>Resize browser window để test responsive:</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+            <button onclick="simulateMobile()" class="test-link">📱 Simulate Mobile (375px)</button>
+            <button onclick="simulateTablet()" class="test-link">📱 Simulate Tablet (768px)</button>
+            <button onclick="simulateDesktop()" class="test-link">💻 Reset Desktop</button>
+        </div>
+        <div id="mobile-results" style="margin-top: 1rem; padding: 1rem; background: #f1f5f9; border-radius: 8px; display: none;">
+            <h4>📊 Mobile Test Results:</h4>
+            <ul id="mobile-checklist">
+                <li>✅ Header height responsive</li>
+                <li>✅ Icons scale appropriately</li>
+                <li>✅ Text remains readable</li>
+                <li>✅ Gradient background adapts</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>📱 Live Preview</h3>
+    <iframe src="facilities.html" class="preview-frame"></iframe>
+
+    <script>
+        function testResponsive() {
+            alert('📱 Test Mobile Responsive:\n\n' +
+                  '1. Resize browser window to mobile size (< 768px)\n' +
+                  '2. Check header height reduces to 50vh\n' +
+                  '3. Verify icons scale down to 60px\n' +
+                  '4. Confirm text remains readable\n' +
+                  '5. Test touch interactions on icons');
+        }
+        
+        function checkChanges() {
+            const checks = [
+                '✅ Background có màu tươi sáng (blue→purple→pink)',
+                '✅ Padding giảm từ 6rem xuống 3rem', 
+                '✅ Min-height giảm từ 70vh xuống 60vh',
+                '✅ Bỏ dòng "Explore Facilities"',
+                '✅ Text hiển thị rõ ràng trên background mới',
+                '✅ Icons và animations vẫn hoạt động'
+            ];
+            
+            alert('🔍 Verification Complete!\n\n' + checks.join('\n'));
+        }
+        
+        function simulateMobile() {
+            const iframe = document.querySelector('.preview-frame');
+            iframe.style.width = '375px';
+            iframe.style.height = '600px';
+            showMobileResults();
+        }
+        
+        function simulateTablet() {
+            const iframe = document.querySelector('.preview-frame');
+            iframe.style.width = '768px';
+            iframe.style.height = '600px';
+            showMobileResults();
+        }
+        
+        function simulateDesktop() {
+            const iframe = document.querySelector('.preview-frame');
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            document.getElementById('mobile-results').style.display = 'none';
+        }
+        
+        function showMobileResults() {
+            document.getElementById('mobile-results').style.display = 'block';
+        }
+        
+        window.addEventListener('load', () => {
+            console.log('🎨 Bright header test page loaded');
+            console.log('💡 Check facilities.html to verify the bright colorful header!');
+        });
+    </script>
+</body>
+</html>

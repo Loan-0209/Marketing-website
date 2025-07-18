@@ -1,0 +1,46 @@
+/* 🛠️ EMERGENCY FIXES - Apply if still having issues */
+
+/* Option 1: Force remove any remaining sticky */
+.location-map,
+.location-map * {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+}
+
+/* Option 2: Alternative aspect ratios */
+.location-map.wider {
+    aspect-ratio: 21/10 !important; /* Wider for more info */
+}
+
+.location-map.square {
+    aspect-ratio: 1/1 !important; /* Square for mobile */
+}
+
+/* Option 3: Fullwidth fallback */
+.location-map.fullwidth {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    aspect-ratio: 2.5/1 !important;
+    max-height: 500px !important;
+}
+
+/* Option 4: Debug mode */
+.location-map.debug {
+    border: 3px solid lime !important;
+    background: rgba(0, 255, 0, 0.2) !important;
+}
+
+.location-map.debug::before {
+    content: "DEBUG: " attr(class);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: lime;
+    color: black;
+    padding: 4px;
+    font-size: 12px;
+    z-index: 9999;
+}

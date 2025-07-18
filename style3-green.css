@@ -1,0 +1,14 @@
+
+/* 🟢 STYLE 3: GREEN SUCCESS STYLE */
+.heart-button-relocated.style-green {
+    background: linear-gradient(135deg, #27AE60, #229954) !important;
+    color: white !important;
+}
+
+.heart-button-relocated.style-green::before {
+    content: "🌟" !important;
+}
+
+.heart-button-relocated.style-green:hover {
+    background: linear-gradient(135deg, #229954, #1E8449) !important;
+}

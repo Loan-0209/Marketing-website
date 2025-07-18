@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Cyan Icon Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-title {
+            width: 100%;
+            text-align: center;
+            color: #00ffff;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.6);
+        }
+
+        .icon-container {
+            text-align: center;
+            position: relative;
+        }
+
+        /* Neon Cyan Base */
+        .neon-cyan-base {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 8px;
+            border: 2px solid #00ffff;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .neon-cyan-base:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Mock Icon */
+        .mock-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .mock-icon::after {
+            content: '💻';
+            font-size: 20px;
+        }
+
+        /* Cường độ light */
+        .neon-cyan-light {
+            box-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.3),
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        .neon-cyan-light:hover {
+            box-shadow: 
+                0 0 15px rgba(0, 255, 255, 0.4),
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 15px rgba(0, 255, 255, 0.15);
+        }
+
+        /* Cường độ medium */
+        .neon-cyan-medium {
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(0, 255, 255, 0.4),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .neon-cyan-medium:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.6),
+                inset 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Cường độ strong */
+        .neon-cyan-strong {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 90px rgba(0, 255, 255, 0.4),
+                inset 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+
+        .neon-cyan-strong:hover {
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 1),
+                0 0 80px rgba(0, 255, 255, 0.8),
+                0 0 120px rgba(0, 255, 255, 0.6),
+                inset 0 0 40px rgba(0, 255, 255, 0.2);
+        }
+
+        /* Cường độ extreme */
+        .neon-cyan-extreme {
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 1),
+                0 0 80px rgba(0, 255, 255, 0.8),
+                0 0 120px rgba(0, 255, 255, 0.6),
+                0 0 160px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-cyan-extreme:hover {
+            box-shadow: 
+                0 0 50px rgba(0, 255, 255, 1),
+                0 0 100px rgba(0, 255, 255, 0.9),
+                0 0 150px rgba(0, 255, 255, 0.7),
+                0 0 200px rgba(0, 255, 255, 0.5),
+                inset 0 0 50px rgba(0, 255, 255, 0.3);
+        }
+
+        .label {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        /* Hover effect cho icon */
+        .icon-container:hover .mock-icon {
+            transform: scale(1.1);
+        }
+
+        /* Code section */
+        .code-section {
+            width: 100%;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 40px;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .code-title {
+            color: #00ffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border-radius: 8px;
+            padding: 15px;
+            color: #ffffff;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #00ffff;
+            overflow-x: auto;
+        }
+
+        .copy-button {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: #00cccc;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="demo-title">⚡ NEON CYAN ICON FRAMES</h1>
+
+    <div class="icon-container">
+        <div class="neon-cyan-base neon-cyan-light">
+            <div class="mock-icon"></div>
+        </div>
+        <div class="label">Light</div>
+    </div>
+
+    <div class="icon-container">
+        <div class="neon-cyan-base neon-cyan-medium">
+            <div class="mock-icon"></div>
+        </div>
+        <div class="label">Medium</div>
+    </div>
+
+    <div class="icon-container">
+        <div class="neon-cyan-base neon-cyan-strong">
+            <div class="mock-icon"></div>
+        </div>
+        <div class="label">Strong</div>
+    </div>
+
+    <div class="icon-container">
+        <div class="neon-cyan-base neon-cyan-extreme">
+            <div class="mock-icon"></div>
+        </div>
+        <div class="label">Extreme</div>
+    </div>
+
+    <div class="code-section">
+        <div class="code-title">💻 CSS Code - Neon Cyan Medium</div>
+        <div class="code-block">.neon-cyan-base {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 8px;
+    border: 2px solid #00ffff;
+    transition: all 0.3s ease;
+}
+
+.neon-cyan-medium {
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.neon-cyan-medium:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
+}</div>
+        <button class="copy-button" onclick="copyCode()">📋 Copy CSS</button>
+    </div>
+
+    <script>
+        function copyCode() {
+            const code = `.neon-cyan-base {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 8px;
+    border: 2px solid #00ffff;
+    transition: all 0.3s ease;
+}
+
+.neon-cyan-medium {
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.neon-cyan-medium:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
+}`;
+
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ CSS code đã được copy!');
+            }).catch(() => {
+                alert('❌ Lỗi copy code. Hãy copy thủ công.');
+            });
+        }
+
+        // Test animation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ Neon Cyan Demo loaded successfully!');
+        });
+    </script>
+</body>
+</html>

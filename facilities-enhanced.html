@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilities - HEART Technology Park</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .contact-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+        
+        .facilities-overview {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ENHANCED POWER GRID ZONE EFFECTS */
+        .power-grid-section {
+            margin: 4rem 0;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .grid-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .grid-header h3 {
+            color: #fbbf24;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .power-grid-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .grid-map-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .grid-background-map {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        /* GRID OVERLAY WITH ZONE EFFECTS */
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* ZONE-BASED HIGHLIGHTING */
+        .power-zone {
+            position: absolute;
+            border-radius: 20px;
+            border: 3px solid;
+            animation: zonePulse 3s ease-in-out infinite;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .zone-500kv {
+            border-color: #ff4757;
+            background: radial-gradient(circle, rgba(255,71,87,0.1) 0%, rgba(255,71,87,0.05) 70%, transparent 100%);
+            box-shadow: 0 0 30px rgba(255,71,87,0.4);
+        }
+
+        .zone-220kv {
+            border-color: #3742fa;
+            background: radial-gradient(circle, rgba(55,66,250,0.1) 0%, rgba(55,66,250,0.05) 70%, transparent 100%);
+            box-shadow: 0 0 30px rgba(55,66,250,0.4);
+        }
+
+        .zone-110kv {
+            border-color: #a55eea;
+            background: radial-gradient(circle, rgba(165,94,234,0.1) 0%, rgba(165,94,234,0.05) 70%, transparent 100%);
+            box-shadow: 0 0 30px rgba(165,94,234,0.4);
+        }
+
+        /* INFRASTRUCTURE PULSE POINTS */
+        .infrastructure-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            animation: energyPulse 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 20;
+        }
+
+        .infrastructure-point:hover {
+            transform: scale(1.8);
+        }
+
+        .substation-point {
+            background: radial-gradient(circle, #ffa502 0%, #ff6348 100%);
+            box-shadow: 0 0 20px rgba(255,165,2,0.6);
+        }
+
+        .data-center-point {
+            background: radial-gradient(circle, #26de81 0%, #20bf6b 100%);
+            box-shadow: 0 0 25px rgba(38,222,129,0.8);
+            width: 30px;
+            height: 30px;
+        }
+
+        .hydro-plant-point {
+            background: radial-gradient(circle, #00d2d3 0%, #01a3a4 100%);
+            box-shadow: 0 0 20px rgba(0,210,211,0.6);
+        }
+
+        /* PARTICLE FLOW SYSTEM */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFlow 4s linear infinite;
+            pointer-events: none;
+        }
+
+        /* ENHANCED LEGEND WITH INTERACTIONS */
+        .enhanced-legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 30;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .legend-item:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+
+        .legend-voltage {
+            width: 20px;
+            height: 3px;
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .legend-500kv { background: #ff4757; }
+        .legend-220kv { background: #3742fa; }
+        .legend-110kv { background: #a55eea; }
+
+        .legend-point {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        /* CONTROL PANEL */
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 30;
+        }
+
+        .control-btn {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px 15px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        /* INFO PANEL */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            color: white;
+            z-index: 30;
+        }
+
+        .info-panel.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ANIMATIONS */
+        @keyframes zonePulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255,165,2,0.6);
+            }
+            50% { 
+                transform: scale(1.3);
+                box-shadow: 0 0 40px rgba(255,165,2,1);
+            }
+        }
+
+        @keyframes particleFlow {
+            0% { opacity: 0; transform: translateX(0) translateY(0); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(200px) translateY(-50px); }
+        }
+
+        .highlighted {
+            opacity: 1 !important;
+            transform: scale(1.1) !important;
+            box-shadow: 0 0 50px currentColor !important;
+        }
+
+        .zone.highlighted {
+            animation: highlightPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1.1); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+
+        /* TECH EFFECTS SECTION */
+        .tech-effects-section {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            margin: 4rem 0;
+            overflow: hidden;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gradient-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        .cross-horizontal {
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #38b2ac 0%, #4299e1 50%, #9f7aea 100%);
+            border-radius: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: crossPulse 3s ease-in-out infinite, crossGlow 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+        }
+        
+        .cross-vertical {
+            position: absolute;
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(180deg, #38b2ac 0%, #4299e1 50%, #9f7aea 100%);
+            border-radius: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: crossPulse 3s ease-in-out infinite 0.5s, crossGlow 4s ease-in-out infinite alternate 0.5s;
+            box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+        }
+
+        .tech-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        /* Multiple particle variants with different orbits */
+        .particle-1 { width: 4px; height: 4px; background: #3b82f6; opacity: 0.6; left: 20%; top: 25%; animation: orbit1 12s linear infinite, particleFade1 8s ease-in-out infinite; }
+        .particle-2 { width: 6px; height: 6px; background: #1e40af; opacity: 0.5; left: 75%; top: 30%; animation: orbit2 15s linear infinite, particleFade2 10s ease-in-out infinite; }
+        .particle-3 { width: 3px; height: 3px; background: #06b6d4; opacity: 0.7; left: 30%; top: 70%; animation: orbit3 10s linear infinite, particleFade3 7s ease-in-out infinite; }
+        .particle-4 { width: 5px; height: 5px; background: #3b82f6; opacity: 0.4; left: 80%; top: 65%; animation: orbit4 14s linear infinite, particleFade4 9s ease-in-out infinite; }
+        .particle-5 { width: 2px; height: 2px; background: #1e40af; opacity: 0.8; left: 15%; top: 55%; animation: orbit5 11s linear infinite, particleFade5 6s ease-in-out infinite; }
+
+        @keyframes crossPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+        
+        @keyframes crossGlow {
+            0% { box-shadow: 0 0 10px rgba(56, 178, 172, 0.3); filter: brightness(1); }
+            100% { box-shadow: 0 0 20px rgba(56, 178, 172, 0.6), 0 0 40px rgba(66, 153, 225, 0.3); filter: brightness(1.2); }
+        }
+
+        /* Particle orbital animations */
+        @keyframes orbit1 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-30px, -20px) rotate(90deg); }
+            50% { transform: translate(25px, -35px) rotate(180deg); }
+            75% { transform: translate(35px, 15px) rotate(270deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit2 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-40px, 30px) rotate(120deg); }
+            66% { transform: translate(20px, -25px) rotate(240deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit3 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(45px, -15px); }
+            50% { transform: translate(-20px, -40px); }
+            75% { transform: translate(-35px, 25px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit4 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-25px, 35px) rotate(45deg); }
+            50% { transform: translate(30px, 20px) rotate(90deg); }
+            75% { transform: translate(-15px, -30px) rotate(135deg); }
+            100% { transform: translate(0px, 0px) rotate(180deg); }
+        }
+        
+        @keyframes orbit5 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(25px, -45px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        @keyframes particleFade1 { 0%, 100% { opacity: 0.6; } 50% { opacity: 0.2; } }
+        @keyframes particleFade2 { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+        @keyframes particleFade3 { 0%, 100% { opacity: 0.7; } 50% { opacity: 0.3; } }
+        @keyframes particleFade4 { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
+        @keyframes particleFade5 { 0%, 100% { opacity: 0.8; } 50% { opacity: 0.4; } }
+
+        .facility-category {
+            margin-bottom: 4rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .facility-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .facility-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3.5rem;
+        }
+        
+        .facility-content {
+            padding: 2.5rem;
+        }
+        
+        .facility-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .facility-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .facility-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .facility-features li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .facility-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .virtual-tour {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .tour-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .tour-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tour-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tour-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Grid Stats Enhancement */
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding: 0 1rem;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .power-grid-section {
+                margin: 2rem 0;
+                padding: 2rem 1rem;
+            }
+            
+            .grid-background-map {
+                height: 400px;
+            }
+            
+            .enhanced-legend {
+                bottom: 10px;
+                left: 10px;
+                padding: 10px;
+                font-size: 10px;
+            }
+            
+            .infrastructure-point {
+                width: 15px;
+                height: 15px;
+            }
+            
+            .data-center-point {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .grid-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.4rem;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 4rem 2rem 4rem;
+            }
+            
+            .facilities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .overview-title {
+                font-size: 2rem;
+            }
+            
+            .tech-effects-section {
+                height: 150px;
+            }
+            
+            .cross-horizontal {
+                width: 60px;
+                height: 3px;
+            }
+            
+            .cross-vertical {
+                width: 3px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
+                <a href="facilities.html" class="active">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="facilities-overview">
+            <h2 class="overview-title">⚡ 500kV Onsite Power Grid</h2>
+            <p class="overview-text">Real-time visualization of our onsite power grid infrastructure connecting to the national 500kV transmission system, providing reliable power distribution throughout Hue Hi-Tech Park and HEART Data Center.</p>
+        </div>
+
+        <!-- TECH EFFECTS SECTION -->
+        <div class="tech-effects-section">
+            <div class="gradient-cross">
+                <div class="cross-horizontal"></div>
+                <div class="cross-vertical"></div>
+            </div>
+            
+            <div class="tech-particle particle-1"></div>
+            <div class="tech-particle particle-2"></div>
+            <div class="tech-particle particle-3"></div>
+            <div class="tech-particle particle-4"></div>
+            <div class="tech-particle particle-5"></div>
+        </div>
+
+        <!-- ENHANCED POWER GRID SECTION WITH ZONE EFFECTS -->
+        <div class="power-grid-section">
+            <div class="grid-header">
+                <h3>⚡ Interactive Power Grid Visualization</h3>
+                <p style="text-align: center; font-size: 1.1rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 3rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    Experience our cutting-edge zone-based power grid visualization with real-time particle flows and interactive infrastructure monitoring.
+                </p>
+            </div>
+            
+            <div class="power-grid-container">
+                <div class="grid-map-wrapper">
+                    <div class="grid-background-map" id="gridMap">
+                        <div class="grid-overlay"></div>
+                        
+                        <!-- 500kV ZONES -->
+                        <div class="power-zone zone-500kv" style="top: 10%; left: 15%; width: 70%; height: 25%;" data-voltage="500kV"></div>
+                        <div class="power-zone zone-500kv" style="top: 60%; left: 20%; width: 60%; height: 20%;" data-voltage="500kV"></div>
+                        
+                        <!-- 220kV ZONES -->
+                        <div class="power-zone zone-220kv" style="top: 40%; left: 10%; width: 80%; height: 15%;" data-voltage="220kV"></div>
+                        <div class="power-zone zone-220kv" style="top: 85%; left: 30%; width: 40%; height: 10%;" data-voltage="220kV"></div>
+                        
+                        <!-- 110kV ZONES -->
+                        <div class="power-zone zone-110kv" style="top: 25%; left: 60%; width: 35%; height: 30%;" data-voltage="110kV"></div>
+                        
+                        <!-- INFRASTRUCTURE PULSE POINTS -->
+                        <div class="infrastructure-point hydro-plant-point" style="top: 20%; left: 25%;" data-info="TA TRACH HYDRO POWER PLANT - 500kV"></div>
+                        <div class="infrastructure-point substation-point" style="top: 15%; left: 85%;" data-info="110kV LA SON SUBSTATION - 40MVA"></div>
+                        <div class="infrastructure-point data-center-point" style="top: 45%; left: 75%;" data-info="HEART DATA CENTER - 300 HA"></div>
+                        <div class="infrastructure-point substation-point" style="top: 35%; left: 45%;" data-info="500kV SUBSTATION - 2x500 MVA FUTURE"></div>
+                        <div class="infrastructure-point hydro-plant-point" style="top: 70%; left: 15%;" data-info="HUE HI TECH PARK - 1091 HA BOUNDARY"></div>
+                        <div class="infrastructure-point substation-point" style="top: 80%; left: 60%;" data-info="500kV ONSITE GRID"></div>
+
+                        <!-- ENHANCED LEGEND -->
+                        <div class="enhanced-legend">
+                            <h4 style="color: #fbbf24; margin-bottom: 15px; font-size: 14px;">🔧 POWER INFRASTRUCTURE</h4>
+                            <div class="legend-item" data-type="500kv">
+                                <div class="legend-voltage legend-500kv"></div>
+                                <span>500kV TRANSMISSION</span>
+                            </div>
+                            <div class="legend-item" data-type="220kv">
+                                <div class="legend-voltage legend-220kv"></div>
+                                <span>220kV TRANSMISSION</span>
+                            </div>
+                            <div class="legend-item" data-type="110kv">
+                                <div class="legend-voltage legend-110kv"></div>
+                                <span>110kV TRANSMISSION</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-point substation-point"></div>
+                                <span>SUBSTATION</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-point data-center-point"></div>
+                                <span>DATA CENTER</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-point hydro-plant-point"></div>
+                                <span>HYDRO PLANT</span>
+                            </div>
+                        </div>
+
+                        <!-- CONTROL PANEL -->
+                        <div class="control-panel">
+                            <button class="control-btn" onclick="toggleParticles()">🌟 Particles</button>
+                            <button class="control-btn" onclick="toggleZones()">⚡ Zones</button>
+                            <button class="control-btn" onclick="resetView()">🔄 Reset</button>
+                        </div>
+
+                        <!-- INFO PANEL -->
+                        <div class="info-panel" id="infoPanel">
+                            <div id="infoContent"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ENHANCED GRID STATS -->
+                <div class="grid-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value">500kV</div>
+                        <div class="stat-label">Main Grid Connection</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔌</div>
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Transmission Lines</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏭</div>
+                        <div class="stat-value">1,000MW</div>
+                        <div class="stat-label">Total Capacity</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🌐</div>
+                        <div class="stat-value">99.99%</div>
+                        <div class="stat-label">Grid Reliability</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🔬 Research & Development Centers</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">🧪</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">AI Research Labs</h4>
+                        <p class="facility-description">Advanced laboratories equipped with quantum computing systems, high-performance computing clusters, and specialized AI development tools.</p>
+                        <ul class="facility-features">
+                            <li>Quantum computing infrastructure</li>
+                            <li>GPU clusters for deep learning</li>
+                            <li>Advanced data analytics platforms</li>
+                            <li>Collaborative research spaces</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🤖</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Robotics Innovation Center</h4>
+                        <p class="facility-description">Dedicated spaces for robotics research, prototyping, and testing with industrial-grade equipment and safety systems.</p>
+                        <ul class="facility-features">
+                            <li>Robot testing environments</li>
+                            <li>3D printing and fabrication</li>
+                            <li>Motion capture systems</li>
+                            <li>Safety-certified testing areas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🧠</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Neural Network Institute</h4>
+                        <p class="facility-description">Specialized facility for neural network research, brain-computer interfaces, and cognitive computing studies.</p>
+                        <ul class="facility-features">
+                            <li>Neuromorphic computing systems</li>
+                            <li>EEG and brain imaging labs</li>
+                            <li>Virtual reality research pods</li>
+                            <li>Cognitive testing facilities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🏢 Business & Collaboration Spaces</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">💼</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Smart Office Buildings</h4>
+                        <p class="facility-description">Intelligent office spaces with IoT integration, automated systems, and flexible layouts for modern businesses.</p>
+                        <ul class="facility-features">
+                            <li>IoT-enabled smart systems</li>
+                            <li>Flexible workspace configurations</li>
+                            <li>High-speed fiber connectivity</li>
+                            <li>Energy-efficient design</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🚀</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Startup Incubator Hub</h4>
+                        <p class="facility-description">Dedicated spaces for startups with mentorship programs, shared resources, and networking opportunities.</p>
+                        <ul class="facility-features">
+                            <li>Coworking spaces</li>
+                            <li>Meeting and presentation rooms</li>
+                            <li>Mentorship programs</li>
+                            <li>Funding and investment support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🎯</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Innovation Commons</h4>
+                        <p class="facility-description">Open collaboration spaces designed to encourage cross-pollination of ideas between different companies and research groups.</p>
+                        <ul class="facility-features">
+                            <li>Open collaboration areas</li>
+                            <li>Interactive digital walls</li>
+                            <li>Brainstorming pods</li>
+                            <li>Community event spaces</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="virtual-tour">
+            <h3 class="tour-title">Experience the Future</h3>
+            <p class="tour-description">Take an immersive journey through our revolutionary power grid infrastructure and cutting-edge facilities designed for the next generation of AI innovation.</p>
+            <a href="ai-campus-3d-structure.html" class="tour-button">
+                <span>🏢</span>
+                <span>Start Virtual Tour</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        let particlesEnabled = true;
+        let zonesEnabled = true;
+        let particleInterval;
+
+        // Initialize enhanced effects
+        document.addEventListener('DOMContentLoaded', function() {
+            setupLegendInteractions();
+            setupInfrastructureInteractions();
+            startParticleSystem();
+            startRandomPulses();
+        });
+
+        // LEGEND INTERACTIONS
+        function setupLegendInteractions() {
+            const legendItems = document.querySelectorAll('.legend-item[data-type]');
+            
+            legendItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const type = this.dataset.type;
+                    highlightZones(type);
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    clearHighlights();
+                });
+                
+                item.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    toggleZoneType(type);
+                });
+            });
+        }
+
+        // INFRASTRUCTURE INTERACTIONS
+        function setupInfrastructureInteractions() {
+            const points = document.querySelectorAll('.infrastructure-point');
+            const infoPanel = document.getElementById('infoPanel');
+            const infoContent = document.getElementById('infoContent');
+            
+            points.forEach(point => {
+                point.addEventListener('mouseenter', function() {
+                    const info = this.dataset.info;
+                    infoContent.innerHTML = `<strong>${info}</strong>`;
+                    infoPanel.classList.add('active');
+                });
+                
+                point.addEventListener('mouseleave', function() {
+                    infoPanel.classList.remove('active');
+                });
+                
+                point.addEventListener('click', function() {
+                    // Create ripple effect
+                    createRippleEffect(this);
+                });
+            });
+        }
+
+        // ZONE HIGHLIGHTING
+        function highlightZones(type) {
+            const zones = document.querySelectorAll(`.zone-${type}`);
+            zones.forEach(zone => {
+                zone.classList.add('highlighted');
+            });
+        }
+
+        function clearHighlights() {
+            const zones = document.querySelectorAll('.power-zone');
+            zones.forEach(zone => {
+                zone.classList.remove('highlighted');
+            });
+        }
+
+        function toggleZoneType(type) {
+            const zones = document.querySelectorAll(`.zone-${type}`);
+            zones.forEach(zone => {
+                zone.style.display = zone.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+
+        // PARTICLE SYSTEM
+        function createParticle() {
+            if (!particlesEnabled) return;
+            
+            const container = document.getElementById('gridMap');
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random starting position
+            const startX = Math.random() * 100;
+            const startY = 20 + Math.random() * 60;
+            
+            particle.style.left = startX + '%';
+            particle.style.top = startY + '%';
+            
+            // Random color based on voltage zones
+            const colors = ['#ff4757', '#3742fa', '#a55eea', '#26de81'];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+            
+            container.appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 4000);
+        }
+
+        function startParticleSystem() {
+            particleInterval = setInterval(createParticle, 300);
+        }
+
+        // RIPPLE EFFECT
+        function createRippleEffect(element) {
+            const ripple = document.createElement('div');
+            ripple.style.position = 'absolute';
+            ripple.style.borderRadius = '50%';
+            ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.animation = 'ripple 0.6s linear';
+            ripple.style.left = '50%';
+            ripple.style.top = '50%';
+            ripple.style.width = '60px';
+            ripple.style.height = '60px';
+            ripple.style.marginLeft = '-30px';
+            ripple.style.marginTop = '-30px';
+            ripple.style.pointerEvents = 'none';
+            
+            element.style.position = 'relative';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // RANDOM PULSE EFFECTS
+        function startRandomPulses() {
+            setInterval(() => {
+                const points = document.querySelectorAll('.infrastructure-point');
+                const randomPoint = points[Math.floor(Math.random() * points.length)];
+                
+                randomPoint.style.transform = 'scale(2)';
+                randomPoint.style.transition = 'transform 0.5s ease';
+                
+                setTimeout(() => {
+                    randomPoint.style.transform = 'scale(1)';
+                }, 500);
+            }, 3000);
+        }
+
+        // CONTROL FUNCTIONS
+        function toggleParticles() {
+            particlesEnabled = !particlesEnabled;
+            if (particlesEnabled) {
+                startParticleSystem();
+            } else {
+                clearInterval(particleInterval);
+                // Remove existing particles
+                const particles = document.querySelectorAll('.particle');
+                particles.forEach(p => p.remove());
+            }
+        }
+
+        function toggleZones() {
+            zonesEnabled = !zonesEnabled;
+            const zones = document.querySelectorAll('.power-zone');
+            zones.forEach(zone => {
+                zone.style.display = zonesEnabled ? 'block' : 'none';
+            });
+        }
+
+        function resetView() {
+            clearHighlights();
+            document.getElementById('infoPanel').classList.remove('active');
+            
+            if (!particlesEnabled) {
+                particlesEnabled = true;
+                startParticleSystem();
+            }
+            
+            if (!zonesEnabled) {
+                zonesEnabled = true;
+                toggleZones();
+            }
+        }
+
+        // CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    
+</body>
+</html>

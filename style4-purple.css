@@ -1,0 +1,14 @@
+
+/* 🟣 STYLE 4: PURPLE PREMIUM STYLE */
+.heart-button-relocated.style-purple {
+    background: linear-gradient(135deg, #8E44AD, #7D3C98) !important;
+    color: white !important;
+}
+
+.heart-button-relocated.style-purple::before {
+    content: "💎" !important;
+}
+
+.heart-button-relocated.style-purple:hover {
+    background: linear-gradient(135deg, #7D3C98, #6C3483) !important;
+}

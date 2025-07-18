@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Power Grid Facilities Integration - HEART Technology Park</title>
+    
+    <!-- Import neon icons styles -->
+    <link rel="stylesheet" href="power-grid-neon-test/styles/neon-icons.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+        }
+        
+        /* Maintain existing header styling */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        /* Main content container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            color: #00ffff;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Integrated facilities map */
+        .facilities-map-section {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .map-title {
+            color: #00ffff;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .map-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            padding: 8px 15px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            border-radius: 6px;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .control-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .control-btn.active {
+            background: #00ffff;
+            color: #000;
+        }
+        
+        /* Enhanced map container */
+        .enhanced-map-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: #2c3e50;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        
+        .map-background {
+            width: 100%;
+            height: 100%;
+            background: url('assets/images/power-grid-map.jpg') center center / cover;
+            position: relative;
+        }
+        
+        /* Power grid overlay */
+        .power-grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Fixed transmission lines classes */
+        .transmission-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 0.8), transparent);
+            height: 4px;
+            animation: powerFlow 3s linear infinite;
+        }
+        
+        .transmission-line-500kv {
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 64, 1), transparent);
+            height: 6px;
+            box-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
+        }
+        
+        .transmission-line-220kv {
+            background: linear-gradient(90deg, transparent, rgba(0, 168, 255, 0.8), transparent);
+            height: 4px;
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.6);
+        }
+        
+        @keyframes powerFlow {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Enhanced facility markers */
+        .enhanced-facility-marker {
+            position: absolute;
+            z-index: 10;
+            pointer-events: all;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .enhanced-facility-marker:hover {
+            transform: scale(1.2);
+            z-index: 20;
+        }
+        
+        /* Real facility positions based on actual map */
+        .facility-ta-trach { top: 15%; left: 20%; }
+        .facility-500kv-main { top: 40%; left: 55%; }
+        .facility-110kv-la-son { top: 65%; left: 25%; }
+        .facility-ai-datacenter { top: 45%; right: 20%; }
+        .facility-solar-central { top: 75%; left: 65%; }
+        .facility-wind-highland { top: 10%; right: 15%; }
+        .facility-backup-gen { top: 55%; left: 40%; }
+        
+        /* Added missing backup generator icon */
+        .backup-generator {
+            width: 35px;
+            height: 35px;
+            background: #1a1a1a;
+            border: 3px solid #ff8c00;
+            border-radius: 6px;
+            box-shadow: 
+                0 0 20px rgba(255, 140, 0, 0.8),
+                0 0 40px rgba(255, 140, 0, 0.6),
+                0 0 60px rgba(255, 140, 0, 0.4);
+            animation: neonPulse 2.5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff8c00;
+            font-size: 18px;
+        }
+        
+        .backup-generator::before {
+            content: "⚡";
+            font-size: 16px;
+        }
+        
+        .backup-generator:hover {
+            transform: scale(1.2);
+            box-shadow: 
+                0 0 30px rgba(255, 140, 0, 1),
+                0 0 60px rgba(255, 140, 0, 0.8);
+        }
+        
+        /* Enhanced info panel */
+        .enhanced-info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #00ffff;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 350px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            z-index: 15;
+        }
+        
+        .enhanced-info-panel.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .info-icon {
+            margin-right: 12px;
+            transform: scale(0.8);
+        }
+        
+        .info-title {
+            color: #00ffff;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .info-details {
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .info-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #aaa;
+        }
+        
+        .stat-value {
+            color: #00ff00;
+            font-weight: 600;
+        }
+        
+        /* Enhanced legend */
+        .enhanced-legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 15;
+        }
+        
+        .legend-title {
+            color: #00ffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .legend-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .legend-icon {
+            margin-right: 12px;
+            transform: scale(0.7);
+        }
+        
+        .legend-text {
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        .status-online { background: #00ff00; }
+        .status-maintenance { background: #ffff00; }
+        .status-offline { background: #ff0000; }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        /* Added missing glow effect */
+        .glow-effect {
+            box-shadow: 0 0 30px currentColor !important;
+            animation: glowPulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { 
+                box-shadow: 0 0 30px currentColor;
+            }
+            50% { 
+                box-shadow: 0 0 50px currentColor;
+            }
+        }
+        
+        /* Performance monitor display */
+        .performance-monitor {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 200px;
+            z-index: 20;
+        }
+        
+        .performance-monitor h4 {
+            color: #00ffff;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .performance-metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .metric-value {
+            color: #00ff00;
+            font-weight: 600;
+        }
+        
+        /* Real-time data panel */
+        .realtime-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 2rem;
+        }
+        
+        .data-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .data-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.2);
+        }
+        
+        .card-header {
+            color: #00ffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .metric {
+            text-align: center;
+        }
+        
+        .metric-value {
+            color: #00ff00;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .metric-label {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .enhanced-map-container {
+                height: 400px;
+            }
+            
+            .enhanced-legend,
+            .enhanced-info-panel {
+                position: relative;
+                margin: 10px 0;
+                opacity: 1;
+                transform: none;
+            }
+            
+            .realtime-data {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-controls {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* Animation effects */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Animation paused state */
+        .animations-paused * {
+            animation-play-state: paused !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Trang chủ</a>
+                <a href="facilities.html" class="active">Cơ sở hạ tầng</a>
+                <a href="#about">Về chúng tôi</a>
+                <a href="#contact">Liên hệ</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-container">
+        <h1 class="page-title fade-in">⚡ Power Grid Facilities Integration</h1>
+        
+        <!-- Performance Monitor -->
+        <div class="performance-monitor">
+            <h4>⚡ Performance Monitor</h4>
+            <div class="performance-metric">
+                <span>FPS:</span>
+                <span class="metric-value" id="fps-counter">60</span>
+            </div>
+            <div class="performance-metric">
+                <span>Memory:</span>
+                <span class="metric-value" id="memory-usage">25MB</span>
+            </div>
+            <div class="performance-metric">
+                <span>Status:</span>
+                <span class="metric-value" id="system-status">Online</span>
+            </div>
+        </div>
+        
+        <!-- Enhanced facilities map section -->
+        <div class="facilities-map-section fade-in">
+            <div class="map-header">
+                <h2 class="map-title">Interactive Power Grid Map</h2>
+                <div class="map-controls">
+                    <button class="control-btn active" onclick="toggleLayer(event, 'all')">Tất cả</button>
+                    <button class="control-btn" onclick="toggleLayer(event, 'power')">Điện lực</button>
+                    <button class="control-btn" onclick="toggleLayer(event, 'renewable')">Tái tạo</button>
+                    <button class="control-btn" onclick="toggleLayer(event, 'data')">Dữ liệu</button>
+                    <button class="control-btn" onclick="toggleAnimations(event)">Hiệu ứng</button>
+                </div>
+            </div>
+            
+            <div class="enhanced-map-container" id="mapContainer">
+                <!-- Map background -->
+                <div class="map-background"></div>
+                
+                <!-- Power grid overlay -->
+                <div class="power-grid-overlay">
+                    <!-- 500kV transmission lines -->
+                    <div class="transmission-line transmission-line-500kv" style="top: 40%; left: 55%; width: 30%; transform: rotate(15deg);"></div>
+                    <div class="transmission-line transmission-line-500kv" style="top: 45%; left: 25%; width: 25%; transform: rotate(-10deg);"></div>
+                    
+                    <!-- 220kV transmission lines -->
+                    <div class="transmission-line transmission-line-220kv" style="top: 20%; left: 30%; width: 40%; transform: rotate(45deg);"></div>
+                    <div class="transmission-line transmission-line-220kv" style="top: 60%; left: 40%; width: 35%; transform: rotate(-20deg);"></div>
+                </div>
+                
+                <!-- Enhanced facility markers -->
+                <div class="enhanced-facility-marker facility-ta-trach" data-facility="ta-trach">
+                    <div class="hydro-plant"></div>
+                    <div class="status-indicator status-online"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-500kv-main" data-facility="500kv-main">
+                    <div class="substation-500kv">A</div>
+                    <div class="status-indicator status-online"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-110kv-la-son" data-facility="110kv-la-son">
+                    <div class="substation-110kv"></div>
+                    <div class="status-indicator status-maintenance"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-ai-datacenter" data-facility="ai-datacenter">
+                    <div class="data-center"></div>
+                    <div class="status-indicator status-online"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-solar-central" data-facility="solar-central">
+                    <div class="solar-plant"></div>
+                    <div class="status-indicator status-online"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-wind-highland" data-facility="wind-highland">
+                    <div class="wind-plant"></div>
+                    <div class="status-indicator status-online"></div>
+                </div>
+                
+                <div class="enhanced-facility-marker facility-backup-gen" data-facility="backup-gen">
+                    <div class="backup-generator"></div>
+                    <div class="status-indicator status-offline"></div>
+                </div>
+                
+                <!-- Enhanced legend -->
+                <div class="enhanced-legend">
+                    <h4 class="legend-title">Chú giải</h4>
+                    <div class="legend-item" data-type="substation">
+                        <div class="legend-icon substation-500kv">A</div>
+                        <span class="legend-text">Trạm 500kV</span>
+                    </div>
+                    <div class="legend-item" data-type="hydro">
+                        <div class="legend-icon hydro-plant"></div>
+                        <span class="legend-text">Thủy điện</span>
+                    </div>
+                    <div class="legend-item" data-type="datacenter">
+                        <div class="legend-icon data-center"></div>
+                        <span class="legend-text">Trung tâm dữ liệu</span>
+                    </div>
+                    <div class="legend-item" data-type="solar">
+                        <div class="legend-icon solar-plant"></div>
+                        <span class="legend-text">Điện mặt trời</span>
+                    </div>
+                    <div class="legend-item" data-type="wind">
+                        <div class="legend-icon wind-plant"></div>
+                        <span class="legend-text">Điện gió</span>
+                    </div>
+                    <div class="legend-item" data-type="backup">
+                        <div class="legend-icon backup-generator"></div>
+                        <span class="legend-text">Dự phòng</span>
+                    </div>
+                </div>
+                
+                <!-- Enhanced info panel -->
+                <div class="enhanced-info-panel" id="infoPanel">
+                    <div class="info-header">
+                        <div class="info-icon" id="infoIcon"></div>
+                        <h4 class="info-title" id="infoTitle">Chọn cơ sở</h4>
+                    </div>
+                    <div class="info-details" id="infoDetails">
+                        <p>Hover over các cơ sở để xem thông tin chi tiết</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Real-time data dashboard -->
+        <div class="realtime-data">
+            <div class="data-card">
+                <h3 class="card-header">🔋 Tổng sản lượng</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value" id="totalGeneration">1,247</span>
+                        <div class="metric-label">MW</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="totalConsumption">1,156</span>
+                        <div class="metric-label">MW Tiêu thụ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-card">
+                <h3 class="card-header">🌱 Năng lượng tái tạo</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value" id="renewablePercent">68.5</span>
+                        <div class="metric-label">% Tổng</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="renewableOutput">853</span>
+                        <div class="metric-label">MW Xanh</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-card">
+                <h3 class="card-header">⚡ Hiệu suất lưới</h3>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span class="metric-value" id="gridEfficiency">94.2</span>
+                        <div class="metric-label">% Hiệu suất</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value" id="gridStability">99.7</span>
+                        <div class="metric-label">% Ổn định</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Facility data integration
+        const facilitiesData = {
+            'ta-trach': {
+                name: 'TA TRACH Hydro Power Plant',
+                type: 'hydro',
+                capacity: '2x10.5MW',
+                output: '18.2MW',
+                efficiency: '87%',
+                status: 'online',
+                description: 'Nhà máy thủy điện tự động hoàn toàn với 2 tổ máy turbine',
+                icon: 'hydro-plant'
+            },
+            '500kv-main': {
+                name: '500kV Main Substation',
+                type: 'substation',
+                capacity: '2x600MVA',
+                voltage: '500kV/220kV',
+                load: '847MVA',
+                status: 'online',
+                description: 'Trạm biến áp chính 500kV với khả năng future expansion',
+                icon: 'substation-500kv'
+            },
+            '110kv-la-son': {
+                name: '110kV LA SON Substation',
+                type: 'substation',
+                capacity: '40MVA',
+                voltage: '110kV/22kV',
+                load: '32MVA',
+                status: 'maintenance',
+                description: 'Trạm phân phối chính cho khu vực LA SON',
+                icon: 'substation-110kv'
+            },
+            'ai-datacenter': {
+                name: '300MW AI Data Center',
+                type: 'datacenter',
+                capacity: '300MW',
+                area: '300 HA',
+                utilization: '78%',
+                status: 'online',
+                description: 'Trung tâm dữ liệu AI quy mô lớn với cooling hiệu quả',
+                icon: 'data-center'
+            },
+            'solar-central': {
+                name: 'Central Solar Plant',
+                type: 'solar',
+                capacity: '150MW',
+                output: '127MW',
+                efficiency: '84.7%',
+                status: 'online',
+                description: 'Nhà máy điện mặt trời với tracking system',
+                icon: 'solar-plant'
+            },
+            'wind-highland': {
+                name: 'Highland Wind Farm',
+                type: 'wind',
+                capacity: '200MW',
+                output: '156MW',
+                windSpeed: '12.5 m/s',
+                status: 'online',
+                description: 'Trang trại gió cao nguyên với 50 turbines',
+                icon: 'wind-plant'
+            },
+            'backup-gen': {
+                name: 'Emergency Backup Generator',
+                type: 'backup',
+                capacity: '50MW',
+                fuel: 'Natural Gas',
+                readiness: '100%',
+                status: 'offline',
+                description: 'Máy phát dự phòng khẩn cấp tự động khởi động',
+                icon: 'backup-generator'
+            }
+        };
+        
+        // Initialize integration
+        let animationsEnabled = true;
+        let currentLayer = 'all';
+        let performanceMonitor = null;
+        
+        // Error handling for script loading
+        function loadScriptSafely(src, callback) {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = callback;
+            script.onerror = function() {
+                console.warn(`Failed to load script: ${src}`);
+                // Fallback functionality
+                startBasicPerformanceMonitoring();
+            };
+            document.head.appendChild(script);
+        }
+        
+        function initIntegration() {
+            setupFacilityInteractions();
+            startRealTimeUpdates();
+            setupLegendInteractions();
+            
+            // Load performance monitor with fallback
+            loadScriptSafely('power-grid-neon-test/performance-monitor.js', function() {
+                if (window.PowerGridMonitor) {
+                    performanceMonitor = window.PowerGridMonitor;
+                    console.log('🔗 Performance monitor loaded successfully');
+                } else {
+                    startBasicPerformanceMonitoring();
+                }
+            });
+            
+            console.log('🔗 Power Grid Facilities Integration khởi tạo thành công');
+        }
+        
+        // Basic performance monitoring fallback
+        function startBasicPerformanceMonitoring() {
+            let frameCount = 0;
+            let lastTime = performance.now();
+            
+            function updateFPS() {
+                frameCount++;
+                const currentTime = performance.now();
+                
+                if (currentTime - lastTime >= 1000) {
+                    const fps = frameCount;
+                    const fpsElement = document.getElementById('fps-counter');
+                    if (fpsElement) {
+                        fpsElement.textContent = fps;
+                    }
+                    
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+                
+                requestAnimationFrame(updateFPS);
+            }
+            
+            updateFPS();
+            
+            // Basic memory monitoring
+            if (performance.memory) {
+                setInterval(() => {
+                    const memory = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                    const memoryElement = document.getElementById('memory-usage');
+                    if (memoryElement) {
+                        memoryElement.textContent = memory + 'MB';
+                    }
+                }, 2000);
+            }
+        }
+        
+        function setupFacilityInteractions() {
+            const facilities = document.querySelectorAll('.enhanced-facility-marker');
+            const infoPanel = document.getElementById('infoPanel');
+            const infoIcon = document.getElementById('infoIcon');
+            const infoTitle = document.getElementById('infoTitle');
+            const infoDetails = document.getElementById('infoDetails');
+            
+            facilities.forEach(facility => {
+                const facilityId = facility.dataset.facility;
+                const data = facilitiesData[facilityId];
+                
+                if (!data) return;
+                
+                facility.addEventListener('mouseenter', function() {
+                    // Update info panel
+                    infoIcon.className = `info-icon ${data.icon}`;
+                    infoTitle.textContent = data.name;
+                    
+                    let detailsHTML = `
+                        <div class="info-stat">
+                            <span class="stat-label">Loại:</span>
+                            <span class="stat-value">${data.type}</span>
+                        </div>
+                        <div class="info-stat">
+                            <span class="stat-label">Công suất:</span>
+                            <span class="stat-value">${data.capacity}</span>
+                        </div>
+                    `;
+                    
+                    if (data.output) {
+                        detailsHTML += `
+                            <div class="info-stat">
+                                <span class="stat-label">Sản lượng hiện tại:</span>
+                                <span class="stat-value">${data.output}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    if (data.efficiency) {
+                        detailsHTML += `
+                            <div class="info-stat">
+                                <span class="stat-label">Hiệu suất:</span>
+                                <span class="stat-value">${data.efficiency}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    detailsHTML += `
+                        <div class="info-stat">
+                            <span class="stat-label">Trạng thái:</span>
+                            <span class="stat-value status-${data.status}">${data.status.toUpperCase()}</span>
+                        </div>
+                        <p style="margin-top: 10px; color: #aaa; font-size: 0.9rem;">${data.description}</p>
+                    `;
+                    
+                    infoDetails.innerHTML = detailsHTML;
+                    infoPanel.classList.add('active');
+                    
+                    // Add glow effect
+                    const iconElement = facility.querySelector('[class*="substation"], [class*="hydro"], [class*="data"], [class*="solar"], [class*="wind"], [class*="backup"]');
+                    if (iconElement) {
+                        iconElement.classList.add('glow-effect');
+                    }
+                });
+                
+                facility.addEventListener('mouseleave', function() {
+                    infoPanel.classList.remove('active');
+                    const iconElement = facility.querySelector('[class*="substation"], [class*="hydro"], [class*="data"], [class*="solar"], [class*="wind"], [class*="backup"]');
+                    if (iconElement) {
+                        iconElement.classList.remove('glow-effect');
+                    }
+                });
+                
+                facility.addEventListener('click', function() {
+                    // Enhanced click interaction
+                    this.style.transform = 'scale(1.4)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 400);
+                    
+                    // Log interaction for analytics
+                    console.log(`🎯 Facility clicked: ${data.name}`);
+                });
+            });
+        }
+        
+        function setupLegendInteractions() {
+            const legendItems = document.querySelectorAll('.legend-item');
+            
+            legendItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    highlightFacilitiesByType(type);
+                });
+            });
+        }
+        
+        function highlightFacilitiesByType(type) {
+            const facilities = document.querySelectorAll('.enhanced-facility-marker');
+            
+            facilities.forEach(facility => {
+                const facilityId = facility.dataset.facility;
+                const data = facilitiesData[facilityId];
+                
+                if (data && data.type === type) {
+                    facility.style.animation = 'pulse 1.5s ease-in-out 3';
+                } else {
+                    facility.style.opacity = '0.3';
+                    setTimeout(() => {
+                        facility.style.opacity = '1';
+                    }, 2000);
+                }
+            });
+        }
+        
+        // Fixed event handlers
+        function toggleLayer(event, layer) {
+            currentLayer = layer;
+            const buttons = document.querySelectorAll('.control-btn');
+            const facilities = document.querySelectorAll('.enhanced-facility-marker');
+            
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide facilities based on layer
+            facilities.forEach(facility => {
+                const facilityId = facility.dataset.facility;
+                const data = facilitiesData[facilityId];
+                
+                let shouldShow = true;
+                
+                switch(layer) {
+                    case 'power':
+                        shouldShow = data.type === 'substation' || data.type === 'backup';
+                        break;
+                    case 'renewable':
+                        shouldShow = data.type === 'hydro' || data.type === 'solar' || data.type === 'wind';
+                        break;
+                    case 'data':
+                        shouldShow = data.type === 'datacenter';
+                        break;
+                    case 'all':
+                    default:
+                        shouldShow = true;
+                        break;
+                }
+                
+                facility.style.display = shouldShow ? 'block' : 'none';
+            });
+            
+            console.log(`🔄 Layer switched to: ${layer}`);
+        }
+        
+        function toggleAnimations(event) {
+            animationsEnabled = !animationsEnabled;
+            const button = event.target;
+            const body = document.body;
+            
+            if (animationsEnabled) {
+                body.classList.remove('animations-paused');
+                button.textContent = 'Hiệu ứng';
+                button.classList.remove('active');
+            } else {
+                body.classList.add('animations-paused');
+                button.textContent = 'Tắt HU';
+                button.classList.add('active');
+            }
+            
+            console.log(`🎭 Animations ${animationsEnabled ? 'enabled' : 'disabled'}`);
+        }
+        
+        function startRealTimeUpdates() {
+            // Simulate real-time data updates
+            setInterval(() => {
+                // Update generation values
+                const generation = 1200 + Math.random() * 100;
+                const consumption = generation * (0.9 + Math.random() * 0.15);
+                const renewablePercent = 65 + Math.random() * 8;
+                const efficiency = 93 + Math.random() * 3;
+                
+                document.getElementById('totalGeneration').textContent = Math.round(generation);
+                document.getElementById('totalConsumption').textContent = Math.round(consumption);
+                document.getElementById('renewablePercent').textContent = renewablePercent.toFixed(1);
+                document.getElementById('renewableOutput').textContent = Math.round(generation * renewablePercent / 100);
+                document.getElementById('gridEfficiency').textContent = efficiency.toFixed(1);
+                document.getElementById('gridStability').textContent = (99.5 + Math.random() * 0.4).toFixed(1);
+                
+            }, 5000); // Update every 5 seconds
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initIntegration);
+        
+        // Export integration utilities
+        window.PowerGridIntegration = {
+            getFacilityData: (id) => facilitiesData[id],
+            getCurrentLayer: () => currentLayer,
+            getAnimationState: () => animationsEnabled,
+            highlightFacility: highlightFacilitiesByType,
+            refreshData: startRealTimeUpdates
+        };
+        
+        // Add CSS animation keyframes for pulse effect
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.3); opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

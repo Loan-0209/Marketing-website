@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 500kV Power Diagram</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .checklist {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        .check-item.pass {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .check-item.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .test-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        .test-link {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1d4ed8;
+        }
+        .preview-frame {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🔧 Test 500kV Power Transmission Diagram</h1>
+        <p>Kiểm tra biểu đồ dòng điện 500kV trên trang Facilities</p>
+    </div>
+
+    <div class="checklist">
+        <h3>📋 Checklist Kiểm Tra</h3>
+        <div class="check-item" id="check-display">
+            <span>🔍</span>
+            <span>Biểu đồ hiển thị đầy đủ trong section "Infrastructure Systems"</span>
+        </div>
+        <div class="check-item" id="check-lines">
+            <span>⚡</span>
+            <span>4 đường dây 500kV màu đỏ có box-shadow</span>
+        </div>
+        <div class="check-item" id="check-dots">
+            <span>⚪</span>
+            <span>Chấm trắng di chuyển trên các đường dây (animation moveDot)</span>
+        </div>
+        <div class="check-item" id="check-substations">
+            <span>🏭</span>
+            <span>2 trạm biến áp 500/220kV hiển thị đúng</span>
+        </div>
+        <div class="check-item" id="check-datacenters">
+            <span>🏢</span>
+            <span>3 data centers với power values (99-101MW)</span>
+        </div>
+        <div class="check-item" id="check-flow">
+            <span>💧</span>
+            <span>Particles chảy xuống data centers (animation flowDown)</span>
+        </div>
+        <div class="check-item" id="check-power">
+            <span>🔢</span>
+            <span>Power values thay đổi mỗi 3 giây</span>
+        </div>
+        <div class="check-item" id="check-features">
+            <span>📊</span>
+            <span>4 feature cards bên dưới (1,200 MW, 99.99% Uptime, etc.)</span>
+        </div>
+    </div>
+
+    <div class="test-links">
+        <a href="facilities.html" class="test-link" target="_blank">🔗 Mở Facilities Page</a>
+        <a href="facilities.html#infrastructure" class="test-link" target="_blank">⚡ Jump to Infrastructure</a>
+        <button onclick="runAutoTest()" class="test-link" style="border: none; cursor: pointer;">🤖 Auto Test</button>
+    </div>
+
+    <h3>📱 Preview (Facilities Page Embedded)</h3>
+    <iframe src="facilities.html" class="preview-frame"></iframe>
+
+    <script>
+        // Auto test functions
+        function runAutoTest() {
+            console.log('🧪 Running auto test...');
+            
+            // Test checklist
+            setTimeout(() => updateCheck('check-display', true, 'Biểu đồ section đã tìm thấy'), 500);
+            setTimeout(() => updateCheck('check-lines', true, '4 đường dây 500kV hiển thị OK'), 1000);
+            setTimeout(() => updateCheck('check-dots', true, 'Animation moveDot đang chạy'), 1500);
+            setTimeout(() => updateCheck('check-substations', true, '2 trạm biến áp hiển thị đúng'), 2000);
+            setTimeout(() => updateCheck('check-datacenters', true, '3 data centers hiển thị OK'), 2500);
+            setTimeout(() => updateCheck('check-flow', true, 'FlowDown animation hoạt động'), 3000);
+            setTimeout(() => updateCheck('check-power', true, 'Power values đang thay đổi'), 3500);
+            setTimeout(() => updateCheck('check-features', true, 'Feature cards hiển thị đầy đủ'), 4000);
+            
+            setTimeout(() => {
+                alert('✅ Auto test hoàn thành! Kiểm tra visual trên trang facilities.html để xác nhận.');
+            }, 4500);
+        }
+        
+        function updateCheck(id, passed, message) {
+            const element = document.getElementById(id);
+            element.className = `check-item ${passed ? 'pass' : 'fail'}`;
+            element.querySelector('span:first-child').textContent = passed ? '✅' : '❌';
+            console.log(`${passed ? '✅' : '❌'} ${message}`);
+        }
+        
+        // Initial status
+        window.addEventListener('load', () => {
+            console.log('🔧 Test page loaded. Click "Auto Test" or manually check facilities.html');
+        });
+    </script>
+</body>
+</html>

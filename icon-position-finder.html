@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Interactive Icon Position Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .current-task {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            border: 3px solid #ff6b35;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            cursor: crosshair;
+        }
+        
+        .base-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .click-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            pointer-events: none;
+        }
+        
+        .marker-hydro { background: #3498db; }
+        .marker-500kv { background: #e74c3c; }
+        .marker-110kv { background: #f39c12; }
+        .marker-datacenter { background: #27ae60; }
+        
+        .coordinate-display {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: bold;
+            pointer-events: none;
+            border: 2px solid #ff6b35;
+        }
+        
+        .progress {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .progress-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ddd;
+            text-align: center;
+        }
+        
+        .progress-item.completed {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .progress-item.active {
+            border-left-color: #007bff;
+            background: #e3f2fd;
+            box-shadow: 0 0 10px rgba(0,123,255,0.3);
+        }
+        
+        .results {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-top: 20px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Interactive Icon Position Finder</h1>
+            <p>Click exactly on each icon to capture precise coordinates</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <p>Click directly on the CENTER of each icon on the map. The tool will capture exact SVG coordinates for perfect alignment.</p>
+        </div>
+        
+        <div class="current-task" id="currentTask">
+            🎯 <strong>Click on the HYDRO icon (blue square in the legend area)</strong>
+        </div>
+        
+        <div class="map-container" id="mapContainer">
+            <img src="assets/images/power-grid-map.jpg" alt="Power Grid Map" class="base-map">
+            <div class="coordinate-display" id="coordinateDisplay">
+                SVG: 0, 0 | Click to capture
+            </div>
+        </div>
+        
+        <div class="progress">
+            <div class="progress-item active" id="progress-hydro">
+                <h4>💧 Hydro Power Plant</h4>
+                <p id="hydro-coords">Waiting for click...</p>
+            </div>
+            <div class="progress-item" id="progress-500kv">
+                <h4>⚡ 500kV Substation</h4>
+                <p id="500kv-coords">Waiting...</p>
+            </div>
+            <div class="progress-item" id="progress-110kv">
+                <h4>🔌 110kV Substation</h4>
+                <p id="110kv-coords">Waiting...</p>
+            </div>
+            <div class="progress-item" id="progress-datacenter">
+                <h4>🖥️ Data Center</h4>
+                <p id="datacenter-coords">Waiting...</p>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-warning" onclick="undoLast()" id="undoBtn" disabled>↶ Undo Last</button>
+            <button class="btn btn-danger" onclick="resetAll()">🔄 Reset All</button>
+            <button class="btn btn-success" onclick="generateCode()" id="generateBtn" disabled>🚀 Generate Final Code</button>
+        </div>
+        
+        <div class="results" id="results">
+🎯 INTERACTIVE ICON POSITION FINDER
+
+Ready to capture coordinates. Click on each icon in order:
+
+1. HYDRO icon (blue square in legend)
+2. 500kV icon (red square in center)  
+3. 110kV icon (orange square top-right)
+4. Data Center icon (green square right side)
+
+Progress: 0/4 icons captured
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let measurements = [];
+        let currentStep = 0;
+        
+        const targets = [
+            { id: 'hydro', name: 'HYDRO icon (blue square in legend)', color: '#3498db' },
+            { id: '500kv', name: '500kV icon (red square in center)', color: '#e74c3c' },
+            { id: '110kv', name: '110kV icon (orange square top-right)', color: '#f39c12' },
+            { id: 'datacenter', name: 'Data Center icon (green square right side)', color: '#27ae60' }
+        ];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateUI();
+        });
+        
+        function setupEventListeners() {
+            const mapContainer = document.getElementById('mapContainer');
+            const coordinateDisplay = document.getElementById('coordinateDisplay');
+            
+            // Mouse move tracking
+            mapContainer.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert to SVG coordinates
+                const svgX = Math.round((x / rect.width) * 1000);
+                const svgY = Math.round((y / rect.height) * 600);
+                
+                coordinateDisplay.innerHTML = `SVG: ${svgX}, ${svgY} | Click to capture`;
+            });
+            
+            // Click to capture coordinate
+            mapContainer.addEventListener('click', function(e) {
+                if (currentStep >= targets.length) return;
+                
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert to SVG coordinates
+                const svgX = Math.round((x / rect.width) * 1000);
+                const svgY = Math.round((y / rect.height) * 600);
+                
+                // Record measurement
+                const target = targets[currentStep];
+                measurements.push({
+                    id: target.id,
+                    name: target.name,
+                    x: svgX,
+                    y: svgY,
+                    color: target.color
+                });
+                
+                // Add visual marker
+                addMarker(x, y, target.color, target.name);
+                
+                // Update progress
+                updateProgress(target.id, svgX, svgY);
+                
+                // Move to next step
+                currentStep++;
+                updateUI();
+                
+                console.log(`Captured ${target.name}: x=${svgX}, y=${svgY}`);
+            });
+        }
+        
+        function addMarker(x, y, color, name) {
+            const marker = document.createElement('div');
+            marker.className = 'click-marker';
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            marker.style.background = color;
+            marker.title = name;
+            
+            document.getElementById('mapContainer').appendChild(marker);
+        }
+        
+        function updateProgress(id, x, y) {
+            const progressItem = document.getElementById(`progress-${id}`);
+            const coordsElement = document.getElementById(`${id}-coords`);
+            
+            progressItem.classList.remove('active');
+            progressItem.classList.add('completed');
+            coordsElement.textContent = `x=${x}, y=${y}`;
+        }
+        
+        function updateUI() {
+            const currentTask = document.getElementById('currentTask');
+            const undoBtn = document.getElementById('undoBtn');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            if (currentStep < targets.length) {
+                const target = targets[currentStep];
+                currentTask.innerHTML = `🎯 <strong>Click on the ${target.name}</strong>`;
+                
+                // Update next progress item to active
+                const nextProgressItem = document.getElementById(`progress-${target.id}`);
+                nextProgressItem.classList.add('active');
+            } else {
+                currentTask.innerHTML = `✅ <strong>All icons captured! Click "Generate Final Code" below.</strong>`;
+                currentTask.style.background = '#d4edda';
+                currentTask.style.borderColor = '#28a745';
+            }
+            
+            undoBtn.disabled = measurements.length === 0;
+            generateBtn.disabled = measurements.length < 4;
+            
+            updateResults();
+        }
+        
+        function updateResults() {
+            const results = document.getElementById('results');
+            let output = '🎯 INTERACTIVE ICON POSITION FINDER\n\n';
+            
+            if (measurements.length === 0) {
+                output += 'Ready to capture coordinates. Click on each icon in order:\n\n';
+                output += '1. HYDRO icon (blue square in legend)\n';
+                output += '2. 500kV icon (red square in center)\n';
+                output += '3. 110kV icon (orange square top-right)\n';
+                output += '4. Data Center icon (green square right side)\n\n';
+                output += 'Progress: 0/4 icons captured';
+            } else {
+                output += 'CAPTURED COORDINATES:\n';
+                output += '=' * 40 + '\n\n';
+                
+                measurements.forEach((measurement, index) => {
+                    output += `${index + 1}. ${measurement.name}:\n`;
+                    output += `   x="${measurement.x}" y="${measurement.y}"\n\n`;
+                });
+                
+                if (measurements.length === 4) {
+                    output += '✅ ALL ICONS CAPTURED!\n';
+                    output += 'Click "Generate Final Code" to get production-ready coordinates.';
+                } else {
+                    output += `📍 Progress: ${measurements.length}/4 icons captured\n`;
+                    output += `Next: ${targets[currentStep].name}`;
+                }
+            }
+            
+            results.textContent = output;
+        }
+        
+        function undoLast() {
+            if (measurements.length === 0) return;
+            
+            // Remove last measurement
+            const lastMeasurement = measurements.pop();
+            currentStep--;
+            
+            // Remove last marker
+            const markers = document.querySelectorAll('.click-marker');
+            if (markers.length > 0) {
+                markers[markers.length - 1].remove();
+            }
+            
+            // Reset progress item
+            const progressItem = document.getElementById(`progress-${lastMeasurement.id}`);
+            const coordsElement = document.getElementById(`${lastMeasurement.id}-coords`);
+            
+            progressItem.classList.remove('completed');
+            coordsElement.textContent = 'Waiting for click...';
+            
+            // Remove active class from all items
+            document.querySelectorAll('.progress-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            updateUI();
+        }
+        
+        function resetAll() {
+            measurements = [];
+            currentStep = 0;
+            
+            // Remove all markers
+            document.querySelectorAll('.click-marker').forEach(marker => {
+                marker.remove();
+            });
+            
+            // Reset all progress items
+            document.querySelectorAll('.progress-item').forEach(item => {
+                item.classList.remove('completed', 'active');
+            });
+            
+            // Reset coordinate displays
+            targets.forEach(target => {
+                const coordsElement = document.getElementById(`${target.id}-coords`);
+                coordsElement.textContent = target.id === 'hydro' ? 'Waiting for click...' : 'Waiting...';
+            });
+            
+            updateUI();
+        }
+        
+        function generateCode() {
+            if (measurements.length < 4) {
+                alert('Please capture all 4 icon positions first!');
+                return;
+            }
+            
+            const code = `<!-- CAPTURED COORDINATES - EXACT ICON POSITIONS -->
+
+<!-- Hydro Power Plant -->
+<g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+    <rect class="facility-border" x="${measurements[0].x}" y="${measurements[0].y}" width="30" height="20" rx="4" ry="4"/>
+</g>
+
+<!-- 500kV Substation -->
+<g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+    <rect class="facility-border" x="${measurements[1].x}" y="${measurements[1].y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<!-- 110kV La Son Substation -->
+<g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+    <rect class="facility-border" x="${measurements[2].x}" y="${measurements[2].y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<!-- Data Center -->
+<g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+    <rect class="facility-border" x="${measurements[3].x}" y="${measurements[3].y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+// Copy this code and replace the corresponding sections in facilities.html`;
+            
+            document.getElementById('results').textContent = code;
+            
+            // Auto-copy to clipboard
+            navigator.clipboard.writeText(code).then(() => {
+                alert('🎯 Perfect coordinates copied to clipboard!\n\nPaste this code into facilities.html to achieve exact alignment.');
+            }).catch(() => {
+                alert('Code generated! Please copy it manually from the results box below.');
+            });
+        }
+        
+        console.log('Interactive Icon Position Finder loaded successfully');
+    </script>
+</body>
+</html>

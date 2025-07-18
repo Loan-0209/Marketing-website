@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Vietnam's First 300MW AI-Optimized Hyperscale Data Center</title>
+    <meta name="description" content="HEART - Vietnam's first 300MW AI-optimized hyperscale data center in Hue Hi-Tech State-owned Park with 500kV onsite grid and international connectivity.">
+    <meta name="keywords" content="AI, data center, Vietnam, artificial intelligence, hyperscale, HEART, Hue, 300MW, 500kV">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Additional styles for homepage -->
+    <style>
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="%23fbbf24" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="40" r="1.5" fill="%23fbbf24" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/></circle><circle cx="40" cy="80" r="1" fill="%23fbbf24" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: float 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+        
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease-out;
+            color: white;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            animation: fadeInUp 1s ease-out 0.6s both;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero-cta {
+            background: var(--orange-accent);
+            color: var(--primary-blue);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 20px rgba(255, 167, 38, 0.3);
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 167, 38, 0.5);
+            background: #feca57;
+        }
+        
+        .hero-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2.5rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .hero-secondary:hover {
+            background: white;
+            color: var(--primary-blue);
+            transform: translateY(-3px);
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: var(--light-bg);
+            padding: 80px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--orange-accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .stat-description {
+            font-size: 0.9rem;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+        }
+        
+        /* About Preview Section */
+        .about-preview {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-blue);
+        }
+        
+        .about-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .about-image {
+            background: linear-gradient(135deg, var(--secondary-blue), var(--orange-accent));
+            border-radius: 20px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            padding: 100px 0;
+            text-align: center;
+            color: white;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        /* Location Section */
+        .location-section {
+            background: var(--light-bg);
+            padding: 100px 0;
+        }
+        
+        .location-subtitle {
+            text-align: center;
+            font-size: 1.4rem;
+            color: var(--orange-accent);
+            font-weight: 600;
+            margin-bottom: 3rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 167, 38, 0.1);
+            border-radius: 50px;
+            display: inline-block;
+            margin-left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .location-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            grid-template-rows: auto auto;
+            gap: 2rem 4rem;
+            align-items: start;
+        }
+        
+        .location-content h3 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .location-content > p {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+            color: var(--light-text);
+        }
+        
+        .location-header {
+            grid-column: 1 / 3;
+            margin-bottom: 2rem;
+        }
+        
+        .location-content {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .location-categories {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.8rem;
+        }
+        
+        .location-category {
+            background: white;
+            padding: 1.6rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .location-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .category-icon {
+            font-size: 1.8rem;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, var(--orange-accent), #feca57);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 167, 38, 0.3);
+        }
+        
+        .location-features {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        .location-feature {
+            padding: 1.2rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            border-left: 4px solid var(--orange-accent);
+            transition: all 0.3s ease;
+        }
+        
+        .location-feature:hover {
+            background: #f8fafc;
+            border-left-color: var(--primary-blue);
+            transform: translateX(5px);
+        }
+        
+        .feature-content h5 {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .feature-content p {
+            font-size: 0.95rem;
+            color: var(--light-text);
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .location-map {
+            position: sticky;
+            top: 2rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            height: 700px;
+            max-width: none;
+            width: 100%;
+            grid-column: 2;
+            grid-row: 2;
+            align-self: start;
+        }
+        
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .location-map:hover .map-image {
+            transform: scale(1.03);
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .map-marker {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: rgba(37, 99, 235, 0.95);
+            color: white;
+            padding: 1rem 1.6rem;
+            border-radius: 28px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .marker-icon {
+            font-size: 1.6rem;
+        }
+        
+        .marker-text {
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .map-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .info-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255, 167, 38, 0.95);
+            color: var(--primary-blue);
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 6px 20px rgba(255, 167, 38, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .badge-icon {
+            font-size: 1.4rem;
+        }
+        
+        .badge-text {
+            white-space: nowrap;
+        }
+
+        /* Large Screen Responsive */
+        @media (min-width: 1200px) {
+            .location-grid {
+                grid-template-columns: 0.85fr 1.15fr;
+                gap: 5rem;
+            }
+            
+            .location-map {
+                height: 800px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .location-grid {
+                grid-template-columns: 0.8fr 1.2fr;
+                gap: 6rem;
+            }
+            
+            .location-map {
+                height: 900px;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .location-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 2rem;
+            }
+            
+            .location-header {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            
+            .location-content {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            
+            .location-map {
+                grid-column: 1;
+                grid-row: 2;
+                order: -1;
+                position: static;
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .about-image {
+                height: 300px;
+                order: -1;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .location-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 2rem;
+            }
+            
+            .location-header {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            
+            .location-content {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            
+            .location-map {
+                grid-column: 1;
+                grid-row: 2;
+                order: -1;
+                position: static;
+                height: auto;
+            }
+            
+            .map-image {
+                height: auto;
+                min-height: 400px;
+                max-height: 500px;
+            }
+            
+            .location-categories {
+                gap: 2rem;
+            }
+            
+            .location-category {
+                padding: 1.5rem;
+            }
+            
+            .category-title {
+                font-size: 1.1rem;
+                gap: 0.8rem;
+            }
+            
+            .category-icon {
+                font-size: 1.5rem;
+                padding: 0.4rem;
+            }
+            
+            .location-subtitle {
+                font-size: 1.2rem;
+                padding: 0.8rem 1.5rem;
+                margin-bottom: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-cta,
+            .hero-secondary {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .location-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .location-subtitle {
+                font-size: 1rem;
+                padding: 0.6rem 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .location-category {
+                padding: 1rem;
+            }
+            
+            .category-title {
+                font-size: 1rem;
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .category-icon {
+                font-size: 2rem;
+                padding: 0.6rem;
+            }
+            
+            .location-feature {
+                padding: 1rem;
+                text-align: center;
+            }
+            
+            .feature-content h5 {
+                font-size: 1rem;
+            }
+            
+            .feature-content p {
+                font-size: 0.9rem;
+            }
+            
+            .map-overlay {
+                position: static;
+                background: rgba(255,255,255,0.95);
+                padding: 1rem;
+                margin: 1rem;
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+            }
+            
+            .map-marker, .info-badge {
+                justify-content: center;
+            }
+        }
+    
+        
+/* URGENT MAP LAYOUT FIX */
+/* 🎯 FIX MAP LAYOUT - URGENT SOLUTION */
+
+/* 1. Giảm padding để tận dụng không gian */
+.location-section {
+    padding: 50px 0 !important; /* Giảm từ 100px xuống 50px */
+}
+
+/* 2. Fix map container - không crop hình */
+.location-map {
+    height: auto !important; /* Thay vì fixed 700px */
+    aspect-ratio: 16/10 !important; /* Tỷ lệ phù hợp */
+    max-height: 600px !important; /* Giới hạn tối đa */
+}
+
+/* 3. Hiển thị full image - không crop */
+.map-image {
+    object-fit: contain !important; /* Thay vì cover */
+    object-position: center !important;
+    background: #f8f9fa; /* Background khi có khoảng trống */
+}
+
+/* 4. Tối ưu grid cho map lớn hơn */
+.location-grid {
+    grid-template-columns: 0.7fr 1.3fr !important; /* Map chiếm nhiều không gian hơn */
+    gap: 2rem 3rem !important;
+}
+
+/* 5. Responsive cho mobile */
+@media (max-width: 1024px) {
+    .location-section {
+        padding: 30px 0 !important;
+    }
+    
+    .location-map {
+        height: auto !important;
+        aspect-ratio: 4/3 !important;
+        max-height: 400px !important;
+    }
+    
+    .location-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
+
+/* 6. Alternative: Fullwidth map option */
+.location-map-fullwidth {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 21/9 !important; /* Wide aspect ratio */
+    margin: 2rem 0 !important;
+}
+
+/* 7. Hover effect adjustment */
+.location-map:hover .map-image {
+    transform: scale(1.01) !important; /* Giảm zoom effect */
+}
+
+/* 8. Map overlay positioning for new layout */
+.map-overlay {
+    top: 15px !important;
+    left: 15px !important;
+}
+
+/* 9. Container max-width optimization */
+.location-section .container {
+    max-width: 1400px !important; /* Tăng max-width */
+}
+
+/* 10. Text content optimization */
+.location-content {
+    padding-right: 1rem !important;
+}
+
+/* 
+🎯 USAGE INSTRUCTIONS:
+1. Add this CSS to your main stylesheet
+2. Test the layout immediately 
+3. Adjust aspect-ratio if needed (16/10, 4/3, 21/9)
+4. Consider using fullwidth option for maximum impact
+*/
+
+</style>
+</head>
+<body>
+
+    <!-- Fixed Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html" class="active">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
+                <a href="facilities.html">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>HEART</h1>
+            <p>Vietnam's First 300MW AI-Optimized Hyperscale Data Center - Strategically positioned in Central Vietnam with 500kV onsite grid and international connectivity</p>
+            <div class="hero-buttons">
+                <a href="about.html" class="hero-cta">Explore Our Vision</a>
+                <a href="master-plan.html" class="hero-secondary">View Master Plan</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item fade-in">
+                    <span class="stat-number">300</span>
+                    <div class="stat-label">MW</div>
+                    <div class="stat-description">Data Center Capacity</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <span class="stat-number">500</span>
+                    <div class="stat-label">kV</div>
+                    <div class="stat-description">Onsite Grid Power</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <span class="stat-number">4</span>
+                    <div class="stat-label">Transmission Lines</div>
+                    <div class="stat-description">Grid Connections</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <span class="stat-number">99.99</span>
+                    <div class="stat-label">%</div>
+                    <div class="stat-description">Uptime Guarantee</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Preview -->
+    <section class="about-preview">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content fade-in">
+                    <h2>Leading Hyperscale Data Center in Vietnam</h2>
+                    <p>
+                        HEART represents Vietnam's most ambitious leap into the future of hyperscale data infrastructure.
+                        Our 300MW AI-optimized facility in Hue Hi-Tech State-owned Park features a 500kV onsite grid with 4 existing 
+                        transmission lines, connecting directly to Da Nang's international submarine cables.
+                    </p>
+                    <p>
+                        From AI computing to cloud services, from data processing to international connectivity,
+                        HEART is where Vietnam's digital transformation accelerates.
+                    </p>
+                    <a href="about.html" class="cta-button">Learn More About HEART</a>
+                </div>
+                <div class="about-image fade-in">
+                    🏢
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Section -->
+    <section class="location-section">
+        <div class="container">
+            <h2 class="page-title text-center">HEART</h2>
+            <div class="title-underline" style="margin: 0 auto 30px auto;"></div>
+            <p class="location-subtitle">Vietnam's First 300MW AI-Optimized Hyperscale Data Center</p>
+            
+            <div class="location-grid">
+                <div class="location-header fade-in">
+                    <h3>Strategic Location in Central Vietnam</h3>
+                    <p>
+                        Strategically positioned in Hue Hi-Tech State-owned Park with 500kV onsite grid, 
+                        4 existing transmission lines, and direct connection to Da Nang's international submarine cables.
+                    </p>
+                </div>
+                
+                <div class="location-content fade-in">
+                    <div class="location-categories">
+                        <!-- AIR Section -->
+                        <div class="location-category">
+                            <h4 class="category-title">
+                                <span class="category-icon">✈️</span>
+                                AIR CONNECTIVITY
+                            </h4>
+                            <div class="location-features">
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Phu Bai Airport</h5>
+                                        <p>Located in Hue City serving domestic and regional flights</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Da Nang International Airport</h5>
+                                        <p>Major international hub located 80km from the site</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LAND Section -->
+                        <div class="location-category">
+                            <h4 class="category-title">
+                                <span class="category-icon">🛣️</span>
+                                LAND TRANSPORT
+                            </h4>
+                            <div class="location-features">
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Highway Network</h5>
+                                        <p>Direct access to North-South Expressway and National Highway 1A</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Strategic Position</h5>
+                                        <p>Connected to coastal roads with future highway expansions planned</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEA Section -->
+                        <div class="location-category">
+                            <h4 class="category-title">
+                                <span class="category-icon">🚢</span>
+                                SEA ACCESS
+                            </h4>
+                            <div class="location-features">
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Major Seaports</h5>
+                                        <p>Chan May Port • Thuan An Port • Da Nang Port (regional hub)</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Trade Capabilities</h5>
+                                        <p>General and containerized trade, plus specialty shipping services</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- POWER Section -->
+                        <div class="location-category">
+                            <h4 class="category-title">
+                                <span class="category-icon">⚡</span>
+                                POWER INFRASTRUCTURE
+                            </h4>
+                            <div class="location-features">
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>500kV Onsite Grid</h5>
+                                        <p>4 existing transmission lines with direct grid connection</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>International Connectivity</h5>
+                                        <p>Connected to Da Nang's international submarine cables</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="location-map fade-in">
+                    <picture>
+                        <source type="image/webp" srcset="assets/images/hue-location-map-mobile.webp 400w,
+                                assets/images/hue-location-map-tablet.webp 800w,
+                                assets/images/hue-location-map-desktop.webp 1200w,
+                                assets/images/hue-location-map-high.webp 1600w"
+                                sizes="(max-width: 768px) 400px,
+                                       (max-width: 1024px) 800px,
+                                       (max-width: 1440px) 1200px,
+                                       1600px">
+                        <img srcset="assets/images/hue-location-map-mobile.jpg 400w,
+                                assets/images/hue-location-map-tablet.jpg 800w,
+                                assets/images/hue-location-map-desktop.jpg 1200w,
+                                assets/images/hue-location-map-high.jpg 1600w"
+                             sizes="(max-width: 768px) 400px,
+                                    (max-width: 1024px) 800px,
+                                    (max-width: 1440px) 1200px,
+                                    1600px"
+                             src="assets/images/hue-location-map-desktop.jpg" 
+                             alt="HEART Location Map - Enhanced High Quality" 
+                             class="map-image"
+                             loading="lazy">
+                    </picture>
+                    <div class="map-overlay">
+                        <div class="map-marker">
+                            <span class="marker-icon">📍</span>
+                            <span class="marker-text">HEART</span>
+                        </div>
+                        <div class="map-info">
+                            <div class="info-badge">
+                                <span class="badge-icon">⚡</span>
+                                <span class="badge-text">300MW Data Center</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="container" style="padding: 80px 0;">
+        <h2 class="page-title text-center">Why Choose HEART?</h2>
+        <div class="title-underline" style="margin: 0 auto 50px auto;"></div>
+        
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h3>300MW Power Capacity</h3>
+                <p>Massive 300MW data center capacity with 500kV onsite grid and 4 transmission lines</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🌐</div>
+                <h3>International Connectivity</h3>
+                <p>Direct connection to Da Nang's international submarine cables for global reach</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🧠</div>
+                <h3>AI-Optimized Infrastructure</h3>
+                <p>Purpose-built hyperscale data center optimized for AI workloads and machine learning</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🚢</div>
+                <h3>Strategic Location</h3>
+                <p>Central Vietnam location with access to Chan May, Thuan An, and Da Nang ports</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🛡️</div>
+                <h3>99.99% Uptime</h3>
+                <p>Enterprise-grade reliability with redundant systems and disaster recovery capabilities</p>
+            </div>
+            
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🏗️</div>
+                <h3>Scalable Infrastructure</h3>
+                <p>Modular design allowing rapid expansion to meet growing data processing demands</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Power Your Digital Future?</h2>
+            <p>Join HEART and be part of Vietnam's hyperscale data center revolution</p>
+            <div class="hero-buttons">
+                <a href="investment.html" class="hero-cta">Investment Opportunities</a>
+                <a href="contact.html" class="hero-secondary">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        // Smooth scroll animation for fade-in elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Navigation active state management
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav a');
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Performance monitoring and initialization
+        window.addEventListener('load', function() {
+            console.log('🎯 HEART Homepage loaded successfully!');
+            console.log('✨ Hero section: Ready');
+            console.log('📊 Stats section: Active');
+            console.log('📱 Responsive design: Ready');
+            console.log('🚀 Performance optimized: Yes');
+            
+        });
+        
+        // Add dynamic counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/\D/g, ''));
+                const suffix = counter.textContent.replace(/\d/g, '');
+                let current = 0;
+                const increment = target / 50;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.ceil(current) + suffix;
+                        setTimeout(updateCounter, 50);
+                    } else {
+                        counter.textContent = target + suffix;
+                    }
+                };
+                
+                // Start animation when element comes into view
+                const counterObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            counterObserver.unobserve(entry.target);
+                        }
+                    });
+                });
+                
+                counterObserver.observe(counter);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', animateCounters);
+    </script>
+    
+    <!-- Cache Busting System -->
+    <script src="js/cache-buster.js"></script>
+    
+    <!-- Public Access System -->
+    <script src="js/public-access.js"></script>
+</body>
+</html>

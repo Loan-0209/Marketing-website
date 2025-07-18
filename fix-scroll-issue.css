@@ -1,0 +1,80 @@
+/* 🎯 FIX SCROLL ISSUE - Disable Sticky + Optimize Height */
+
+/* 1. DISABLE STICKY POSITIONING - Root cause fix */
+.location-map {
+    position: static !important; /* Thay vì sticky */
+    top: unset !important;
+    height: auto !important; /* Thay vì 700px fixed */
+    aspect-ratio: 16/10 !important; /* Responsive height */
+    max-height: 600px !important; /* Giới hạn reasonable */
+}
+
+/* 2. Fix cho large screens */
+@media (min-width: 1200px) {
+    .location-map {
+        max-height: 700px !important;
+        aspect-ratio: 18/10 !important; /* Wider cho desktop */
+    }
+}
+
+@media (min-width: 1400px) {
+    .location-map {
+        max-height: 800px !important;
+        aspect-ratio: 2/1 !important; /* Even wider */
+    }
+}
+
+/* 3. Alternative: Smart sticky với proper calculations */
+.location-map.smart-sticky {
+    position: sticky !important;
+    top: 20px !important;
+    height: auto !important;
+    max-height: calc(100vh - 80px) !important; /* Responsive to viewport */
+    aspect-ratio: 16/10 !important;
+}
+
+/* 4. Fix grid alignment for new positioning */
+.location-grid {
+    align-items: start !important; /* Thay vì center */
+}
+
+/* 5. Ensure proper overflow handling */
+.location-section {
+    overflow: visible !important;
+}
+
+/* 6. Mobile scroll optimization */
+@media (max-width: 1024px) {
+    .location-map {
+        position: static !important; /* Always static on mobile */
+        aspect-ratio: 4/3 !important;
+        max-height: 400px !important;
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* 7. Smooth scroll behavior */
+.location-section {
+    scroll-margin-top: 2rem;
+}
+
+/* 8. Fix any remaining height issues */
+.location-map img,
+.location-map .map-image {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+}
+
+/* 9. Debug helper - Remove when confirmed working */
+.location-map.debug {
+    border: 2px solid red !important;
+    background: rgba(255, 0, 0, 0.1) !important;
+}
+
+/* 10. Performance optimization */
+.location-map {
+    will-change: auto !important; /* Remove expensive transforms */
+    transform: none !important;
+}

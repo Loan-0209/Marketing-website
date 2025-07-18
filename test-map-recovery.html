@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚨 MAP RECOVERY TEST - Emergency Diagnosis</title>
+    
+    <!-- Load emergency recovery CSS -->
+    <link rel="stylesheet" href="emergency-map-recovery.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .spacer {
+            height: 100vh;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #666;
+        }
+        
+        /* Simplified test grid */
+        .location-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        
+        .location-content {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🚨 MAP RECOVERY EMERGENCY TEST</h1>
+        <p><strong>Instructions:</strong> Scroll through this page to test if the map stays visible during scroll operations.</p>
+        
+        <div class="spacer">
+            SCROLL DOWN TO TEST MAP
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 1: Map in Grid Layout</h2>
+            <div class="location-grid">
+                <div class="location-content">
+                    <h3>Content Area</h3>
+                    <p>This content should be visible alongside the map. The map should maintain its aspect ratio and not disappear during scroll.</p>
+                    <ul>
+                        <li>Test scroll up and down</li>
+                        <li>Check map visibility</li>
+                        <li>Verify image loads properly</li>
+                        <li>Confirm no cropping occurs</li>
+                    </ul>
+                </div>
+                
+                <div class="location-map emergency-debug">
+                    <picture>
+                        <source type="image/webp" srcset="assets/images/hue-location-map-mobile.webp 400w,
+                                assets/images/hue-location-map-tablet.webp 800w,
+                                assets/images/hue-location-map-desktop.webp 1200w,
+                                assets/images/hue-location-map-high.webp 1600w"
+                                sizes="(max-width: 768px) 400px,
+                                       (max-width: 1024px) 800px,
+                                       (max-width: 1440px) 1200px,
+                                       1600px">
+                        <img srcset="assets/images/hue-location-map-mobile.jpg 400w,
+                                assets/images/hue-location-map-tablet.jpg 800w,
+                                assets/images/hue-location-map-desktop.jpg 1200w,
+                                assets/images/hue-location-map-high.jpg 1600w"
+                             sizes="(max-width: 768px) 400px,
+                                    (max-width: 1024px) 800px,
+                                    (max-width: 1440px) 1200px,
+                                    1600px"
+                             src="assets/images/hue-location-map-desktop.jpg" 
+                             alt="HEART Location Map - Recovery Test" 
+                             class="map-image"
+                             loading="lazy">
+                    </picture>
+                    <div class="map-overlay">
+                        <div class="map-marker">
+                            <span class="marker-icon">📍</span>
+                            <span class="marker-text">HEART</span>
+                        </div>
+                        <div class="map-info">
+                            <div class="info-badge">
+                                <span class="badge-icon">⚡</span>
+                                <span class="badge-text">300MW Data Center</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="spacer">
+            CONTINUE SCROLLING TO TEST
+        </div>
+        
+        <div class="test-section">
+            <h2>Test 2: Fallback Map (Force Visible)</h2>
+            <div class="location-map force-visible">
+                <img src="assets/images/hue-location-map-desktop.jpg" 
+                     alt="HEART Location Map - Force Visible Test" 
+                     class="map-image">
+            </div>
+        </div>
+        
+        <div class="spacer">
+            END OF TEST - SCROLL BACK UP
+        </div>
+        
+        <div class="test-section">
+            <h2>✅ Recovery Status</h2>
+            <p><strong>Expected Results:</strong></p>
+            <ul>
+                <li>🔍 Map should be visible with green debug border and "MAP RECOVERED" label</li>
+                <li>📐 Map should maintain 16:10 aspect ratio</li>
+                <li>🖼️ Full image should be visible (no cropping)</li>
+                <li>📱 Map should be responsive on different screen sizes</li>
+                <li>🔄 Map should stay visible during scroll operations</li>
+                <li>⚡ No performance issues or layout shifts</li>
+            </ul>
+            
+            <p><strong>If map is still not visible:</strong></p>
+            <ol>
+                <li>Check browser console for errors</li>
+                <li>Verify image files exist in assets/images/</li>
+                <li>Try force refresh (Cmd+Shift+R / Ctrl+Shift+R)</li>
+                <li>Check if other CSS files are overriding emergency fixes</li>
+            </ol>
+        </div>
+    </div>
+    
+    <script>
+        // Debug information
+        console.log("🚨 MAP RECOVERY TEST LOADED");
+        
+        window.addEventListener('load', function() {
+            const maps = document.querySelectorAll('.location-map');
+            maps.forEach((map, index) => {
+                const style = window.getComputedStyle(map);
+                console.log(`Map ${index + 1}:`, {
+                    display: style.display,
+                    visibility: style.visibility,
+                    opacity: style.opacity,
+                    position: style.position,
+                    height: style.height,
+                    width: style.width
+                });
+            });
+        });
+        
+        // Scroll monitoring
+        let scrollCount = 0;
+        window.addEventListener('scroll', function() {
+            scrollCount++;
+            if (scrollCount % 10 === 0) {
+                console.log(`Scroll test: ${scrollCount} scroll events - Maps still visible?`);
+            }
+        });
+    </script>
+</body>
+</html>

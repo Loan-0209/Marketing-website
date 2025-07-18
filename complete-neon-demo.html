@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Complete Neon Effects Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 0, 0.1) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Main Title */
+        .main-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cccccc;
+            font-size: 18px;
+            margin-bottom: 50px;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 60px 0 30px 0;
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.6);
+        }
+
+        /* Grid Layout */
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .icon-card {
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .icon-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Base Icon Frame */
+        .icon-frame {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .icon-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .icon-frame:hover::before {
+            animation: shimmer 1.5s ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        /* Mock Icon */
+        .mock-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Color Variants */
+        .cyan {
+            border-color: #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(0, 255, 255, 0.4),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .cyan:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.6),
+                inset 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .cyan .mock-icon {
+            background: linear-gradient(135deg, #00ffff, #0088cc);
+            color: #000;
+        }
+
+        .magenta {
+            border-color: #ff00ff;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.6),
+                0 0 40px rgba(255, 0, 255, 0.4),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .magenta:hover {
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.8),
+                0 0 60px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .magenta .mock-icon {
+            background: linear-gradient(135deg, #ff00ff, #cc0088);
+            color: #fff;
+        }
+
+        .green {
+            border-color: #00ff00;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.6),
+                0 0 40px rgba(0, 255, 0, 0.4),
+                inset 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .green:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 0, 0.8),
+                0 0 60px rgba(0, 255, 0, 0.6),
+                inset 0 0 30px rgba(0, 255, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .green .mock-icon {
+            background: linear-gradient(135deg, #00ff00, #00cc44);
+            color: #000;
+        }
+
+        .yellow {
+            border-color: #ffff00;
+            box-shadow: 
+                0 0 20px rgba(255, 255, 0, 0.6),
+                0 0 40px rgba(255, 255, 0, 0.4),
+                inset 0 0 20px rgba(255, 255, 0, 0.1);
+        }
+
+        .yellow:hover {
+            box-shadow: 
+                0 0 30px rgba(255, 255, 0, 0.8),
+                0 0 60px rgba(255, 255, 0, 0.6),
+                inset 0 0 30px rgba(255, 255, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .yellow .mock-icon {
+            background: linear-gradient(135deg, #ffff00, #cccc00);
+            color: #000;
+        }
+
+        .red {
+            border-color: #ff0044;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 68, 0.6),
+                0 0 40px rgba(255, 0, 68, 0.4),
+                inset 0 0 20px rgba(255, 0, 68, 0.1);
+        }
+
+        .red:hover {
+            box-shadow: 
+                0 0 30px rgba(255, 0, 68, 0.8),
+                0 0 60px rgba(255, 0, 68, 0.6),
+                inset 0 0 30px rgba(255, 0, 68, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .red .mock-icon {
+            background: linear-gradient(135deg, #ff0044, #cc0033);
+            color: #fff;
+        }
+
+        .blue {
+            border-color: #0088ff;
+            box-shadow: 
+                0 0 20px rgba(0, 136, 255, 0.6),
+                0 0 40px rgba(0, 136, 255, 0.4),
+                inset 0 0 20px rgba(0, 136, 255, 0.1);
+        }
+
+        .blue:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 136, 255, 0.8),
+                0 0 60px rgba(0, 136, 255, 0.6),
+                inset 0 0 30px rgba(0, 136, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .blue .mock-icon {
+            background: linear-gradient(135deg, #0088ff, #0066cc);
+            color: #fff;
+        }
+
+        /* Intensity Variants */
+        .intensity-light {
+            box-shadow: 
+                0 0 10px var(--neon-color, #00ffff),
+                0 0 20px var(--neon-color, #00ffff),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .intensity-medium {
+            box-shadow: 
+                0 0 20px var(--neon-color, #00ffff),
+                0 0 40px var(--neon-color, #00ffff),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .intensity-strong {
+            box-shadow: 
+                0 0 30px var(--neon-color, #00ffff),
+                0 0 60px var(--neon-color, #00ffff),
+                0 0 90px var(--neon-color, #00ffff),
+                inset 0 0 30px rgba(255, 255, 255, 0.15);
+        }
+
+        .intensity-extreme {
+            box-shadow: 
+                0 0 40px var(--neon-color, #00ffff),
+                0 0 80px var(--neon-color, #00ffff),
+                0 0 120px var(--neon-color, #00ffff),
+                0 0 160px var(--neon-color, #00ffff),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Labels */
+        .icon-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #cccccc;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animated Cards */
+        .animated-card {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animated-card:nth-child(2n) {
+            animation-delay: -2s;
+        }
+
+        .animated-card:nth-child(3n) {
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
+        }
+
+        /* Special Effects */
+        .pulse-effect {
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 20px rgba(0, 255, 255, 0.6),
+                    0 0 40px rgba(0, 255, 255, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 40px rgba(0, 255, 255, 1),
+                    0 0 80px rgba(0, 255, 255, 0.8);
+            }
+        }
+
+        .rotating-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rotating-border::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, #00ffff, transparent, #ff00ff, transparent);
+            animation: rotate 4s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Code Section */
+        .code-section {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 50px 0;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .code-title {
+            color: #00ffff;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 20px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #333;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            background: linear-gradient(45deg, #00ffff, #0088cc);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #00cccc, #0066aa);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Interactive Controls */
+        .controls {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group {
+            margin: 15px 0;
+        }
+
+        .control-label {
+            color: #cccccc;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .color-picker {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.2);
+            border-color: #fff;
+        }
+
+        .color-option.active {
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 32px;
+            }
+            
+            .demo-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 20px;
+            }
+            
+            .mock-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <div class="container">
+        <h1 class="main-title">🌟 COMPLETE NEON EFFECTS DEMO</h1>
+        <p class="subtitle">Khám phá bộ sưu tập hiệu ứng neon đầy đủ với nhiều màu sắc và cường độ khác nhau</p>
+
+        <!-- Color Variants -->
+        <h2 class="section-title">🎨 Biến Thể Màu Sắc</h2>
+        <div class="demo-grid">
+            <div class="icon-card animated-card">
+                <div class="icon-frame cyan">
+                    <div class="mock-icon">🌊</div>
+                </div>
+                <div class="icon-label">Cyan</div>
+            </div>
+            
+            <div class="icon-card animated-card">
+                <div class="icon-frame magenta">
+                    <div class="mock-icon">🔮</div>
+                </div>
+                <div class="icon-label">Magenta</div>
+            </div>
+            
+            <div class="icon-card animated-card">
+                <div class="icon-frame green">
+                    <div class="mock-icon">🌿</div>
+                </div>
+                <div class="icon-label">Green</div>
+            </div>
+            
+            <div class="icon-card animated-card">
+                <div class="icon-frame yellow">
+                    <div class="mock-icon">⚡</div>
+                </div>
+                <div class="icon-label">Yellow</div>
+            </div>
+            
+            <div class="icon-card animated-card">
+                <div class="icon-frame red">
+                    <div class="mock-icon">🔥</div>
+                </div>
+                <div class="icon-label">Red</div>
+            </div>
+            
+            <div class="icon-card animated-card">
+                <div class="icon-frame blue">
+                    <div class="mock-icon">💎</div>
+                </div>
+                <div class="icon-label">Blue</div>
+            </div>
+        </div>
+
+        <!-- Special Effects -->
+        <h2 class="section-title">✨ Hiệu Ứng Đặc Biệt</h2>
+        <div class="demo-grid">
+            <div class="icon-card">
+                <div class="icon-frame cyan pulse-effect">
+                    <div class="mock-icon">💫</div>
+                </div>
+                <div class="icon-label">Pulse Effect</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-frame rotating-border">
+                    <div class="mock-icon">🌀</div>
+                </div>
+                <div class="icon-label">Rotating Border</div>
+            </div>
+            
+            <div class="icon-card">
+                <div class="icon-frame magenta intensity-extreme">
+                    <div class="mock-icon">💥</div>
+                </div>
+                <div class="icon-label">Extreme Glow</div>
+            </div>
+        </div>
+
+        <!-- Interactive Controls -->
+        <div class="controls">
+            <h3 style="color: #00ffff; margin-bottom: 20px;">🎮 Điều Khiển Tương Tác</h3>
+            
+            <div class="control-group">
+                <label class="control-label">Chọn Màu Neon:</label>
+                <div class="color-picker">
+                    <div class="color-option active" style="background: #00ffff;" data-color="cyan"></div>
+                    <div class="color-option" style="background: #ff00ff;" data-color="magenta"></div>
+                    <div class="color-option" style="background: #00ff00;" data-color="green"></div>
+                    <div class="color-option" style="background: #ffff00;" data-color="yellow"></div>
+                    <div class="color-option" style="background: #ff0044;" data-color="red"></div>
+                    <div class="color-option" style="background: #0088ff;" data-color="blue"></div>
+                </div>
+            </div>
+            
+            <div class="demo-grid" style="margin-top: 30px;">
+                <div class="icon-card">
+                    <div id="interactive-demo" class="icon-frame cyan">
+                        <div class="mock-icon">🎯</div>
+                    </div>
+                    <div class="icon-label">Interactive Demo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Examples -->
+        <div class="code-section">
+            <div class="code-title">💻 Mã CSS Cơ Bản</div>
+            <div class="code-block">.neon-frame {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid #00ffff;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+.neon-frame:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-5px);
+}</div>
+            <button class="copy-btn" onclick="copyCode('basic')">📋 Copy CSS</button>
+        </div>
+
+        <div class="code-section">
+            <div class="code-title">🌈 CSS Biến Thể Màu</div>
+            <div class="code-block">.neon-magenta {
+    border-color: #ff00ff;
+    box-shadow: 
+        0 0 20px rgba(255, 0, 255, 0.6),
+        0 0 40px rgba(255, 0, 255, 0.4),
+        inset 0 0 20px rgba(255, 0, 255, 0.1);
+}
+
+.neon-green {
+    border-color: #00ff00;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.6),
+        0 0 40px rgba(0, 255, 0, 0.4),
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+}</div>
+            <button class="copy-btn" onclick="copyCode('colors')">📋 Copy CSS</button>
+        </div>
+    </div>
+
+    <script>
+        // Color picker interaction
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove active class from all options
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Get color and apply to interactive demo
+                const color = this.dataset.color;
+                const interactiveDemo = document.getElementById('interactive-demo');
+                
+                // Remove all color classes
+                interactiveDemo.className = 'icon-frame';
+                
+                // Add selected color class
+                interactiveDemo.classList.add(color);
+            });
+        });
+
+        // Copy code functionality
+        function copyCode(type) {
+            let code = '';
+            
+            if (type === 'basic') {
+                code = `.neon-frame {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid #00ffff;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+.neon-frame:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-5px);
+}`;
+            } else if (type === 'colors') {
+                code = `.neon-magenta {
+    border-color: #ff00ff;
+    box-shadow: 
+        0 0 20px rgba(255, 0, 255, 0.6),
+        0 0 40px rgba(255, 0, 255, 0.4),
+        inset 0 0 20px rgba(255, 0, 255, 0.1);
+}
+
+.neon-green {
+    border-color: #00ff00;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.6),
+        0 0 40px rgba(0, 255, 0, 0.4),
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+}`;
+            }
+
+            navigator.clipboard.writeText(code).then(() => {
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅ Đã Copy!';
+                button.style.background = 'linear-gradient(45deg, #00ff00, #00cc44)';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = 'linear-gradient(45deg, #00ffff, #0088cc)';
+                }, 2000);
+            }).catch(() => {
+                alert('❌ Lỗi copy. Vui lòng copy thủ công.');
+            });
+        }
+
+        // Random animation effects
+        function addRandomEffects() {
+            const cards = document.querySelectorAll('.animated-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = `float 6s ease-in-out infinite ${-index * 0.5}s`;
+                }, index * 200);
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌟 Complete Neon Demo loaded successfully!');
+            addRandomEffects();
+            
+            // Add some sparkle effects
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.style.cssText = `
+                    position: fixed;
+                    width: 4px;
+                    height: 4px;
+                    background: #00ffff;
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1000;
+                    box-shadow: 0 0 10px #00ffff;
+                    left: ${Math.random() * 100}vw;
+                    top: ${Math.random() * 100}vh;
+                    animation: sparkle 2s ease-out forwards;
+                `;
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 2000);
+            }, 3000);
+        });
+
+        // Add sparkle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkle {
+                0% {
+                    opacity: 0;
+                    transform: scale(0);
+                }
+                50% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: scale(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

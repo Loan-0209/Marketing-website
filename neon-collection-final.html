@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Neon Cyan Icon Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            overflow-x: hidden;
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 30px rgba(0, 255, 255, 0.4);
+            animation: title-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes title-glow {
+            0% {
+                text-shadow: 
+                    0 0 10px rgba(0, 255, 255, 0.8),
+                    0 0 20px rgba(0, 255, 255, 0.6),
+                    0 0 30px rgba(0, 255, 255, 0.4);
+            }
+            100% {
+                text-shadow: 
+                    0 0 20px rgba(0, 255, 255, 1),
+                    0 0 30px rgba(0, 255, 255, 0.8),
+                    0 0 40px rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #cccccc;
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .icon-container {
+            text-align: center;
+            position: relative;
+        }
+
+        /* Base neon frame */
+        .neon-frame {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 12px;
+            border: 2px solid #00ffff;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .neon-frame:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        /* Icon styles */
+        .icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+        }
+
+        /* Neon intensity levels */
+        .neon-light {
+            box-shadow: 
+                0 0 15px rgba(0, 255, 255, 0.4),
+                0 0 30px rgba(0, 255, 255, 0.2),
+                inset 0 0 15px rgba(0, 255, 255, 0.1);
+        }
+
+        .neon-light:hover {
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.15);
+        }
+
+        .neon-medium {
+            box-shadow: 
+                0 0 25px rgba(0, 255, 255, 0.6),
+                0 0 50px rgba(0, 255, 255, 0.4),
+                inset 0 0 25px rgba(0, 255, 255, 0.1);
+        }
+
+        .neon-medium:hover {
+            box-shadow: 
+                0 0 35px rgba(0, 255, 255, 0.8),
+                0 0 70px rgba(0, 255, 255, 0.6),
+                inset 0 0 35px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-strong {
+            box-shadow: 
+                0 0 35px rgba(0, 255, 255, 0.8),
+                0 0 70px rgba(0, 255, 255, 0.6),
+                0 0 105px rgba(0, 255, 255, 0.4),
+                inset 0 0 35px rgba(0, 255, 255, 0.15);
+        }
+
+        .neon-strong:hover {
+            box-shadow: 
+                0 0 45px rgba(0, 255, 255, 1),
+                0 0 90px rgba(0, 255, 255, 0.8),
+                0 0 135px rgba(0, 255, 255, 0.6),
+                inset 0 0 45px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-extreme {
+            box-shadow: 
+                0 0 45px rgba(0, 255, 255, 1),
+                0 0 90px rgba(0, 255, 255, 0.8),
+                0 0 135px rgba(0, 255, 255, 0.6),
+                0 0 180px rgba(0, 255, 255, 0.4),
+                inset 0 0 45px rgba(0, 255, 255, 0.2);
+        }
+
+        .neon-extreme:hover {
+            box-shadow: 
+                0 0 55px rgba(0, 255, 255, 1),
+                0 0 110px rgba(0, 255, 255, 0.9),
+                0 0 165px rgba(0, 255, 255, 0.7),
+                0 0 220px rgba(0, 255, 255, 0.5),
+                inset 0 0 55px rgba(0, 255, 255, 0.3);
+        }
+
+        /* Icon backgrounds */
+        .icon-blue { background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%); color: white; }
+        .icon-green { background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%); color: white; }
+        .icon-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .icon-orange { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+
+        .label {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        /* Hover animation */
+        .neon-frame:hover .icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Click animation */
+        .neon-frame:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* Code section */
+        .code-section {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 25px rgba(0, 255, 255, 0.3),
+                inset 0 0 25px rgba(0, 255, 255, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .code-title {
+            color: #00ffff;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 20px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #333;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #00ffff 0%, #00cccc 100%);
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #00cccc 0%, #009999 100%);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title { font-size: 24px; }
+            .icon-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .icon { width: 48px; height: 48px; font-size: 20px; }
+            body { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="main-title">🌟 NEON CYAN ICON COLLECTION</h1>
+    <p class="subtitle">Bộ sưu tập khung neon cyan với 4 cường độ khác nhau</p>
+
+    <div class="icon-grid">
+        <div class="icon-container">
+            <div class="neon-frame neon-light">
+                <div class="icon icon-blue">💻</div>
+            </div>
+            <div class="label">Light</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="neon-frame neon-medium">
+                <div class="icon icon-green">⚡</div>
+            </div>
+            <div class="label">Medium</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="neon-frame neon-strong">
+                <div class="icon icon-purple">🔋</div>
+            </div>
+            <div class="label">Strong</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="neon-frame neon-extreme">
+                <div class="icon icon-orange">🌟</div>
+            </div>
+            <div class="label">Extreme</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="neon-frame neon-medium">
+                <div class="icon icon-blue">🚀</div>
+            </div>
+            <div class="label">Rocket</div>
+        </div>
+
+        <div class="icon-container">
+            <div class="neon-frame neon-strong">
+                <div class="icon icon-green">💎</div>
+            </div>
+            <div class="label">Diamond</div>
+        </div>
+    </div>
+
+    <div class="code-section">
+        <div class="code-title">💻 CSS Code - Neon Cyan Medium (Khuyến nghị)</div>
+        <div class="code-block">.neon-frame {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 12px;
+    border: 2px solid #00ffff;
+    transition: all 0.3s ease;
+}
+
+.neon-medium {
+    box-shadow: 
+        0 0 25px rgba(0, 255, 255, 0.6),
+        0 0 50px rgba(0, 255, 255, 0.4),
+        inset 0 0 25px rgba(0, 255, 255, 0.1);
+}
+
+.neon-medium:hover {
+    box-shadow: 
+        0 0 35px rgba(0, 255, 255, 0.8),
+        0 0 70px rgba(0, 255, 255, 0.6),
+        inset 0 0 35px rgba(0, 255, 255, 0.2);
+    transform: translateY(-3px) scale(1.02);
+}</div>
+        <button class="copy-btn" onclick="copyToClipboard()">📋 Copy CSS Code</button>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const cssCode = `.neon-frame {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 12px;
+    border: 2px solid #00ffff;
+    transition: all 0.3s ease;
+}
+
+.neon-medium {
+    box-shadow: 
+        0 0 25px rgba(0, 255, 255, 0.6),
+        0 0 50px rgba(0, 255, 255, 0.4),
+        inset 0 0 25px rgba(0, 255, 255, 0.1);
+}
+
+.neon-medium:hover {
+    box-shadow: 
+        0 0 35px rgba(0, 255, 255, 0.8),
+        0 0 70px rgba(0, 255, 255, 0.6),
+        inset 0 0 35px rgba(0, 255, 255, 0.2);
+    transform: translateY(-3px) scale(1.02);
+}`;
+
+            navigator.clipboard.writeText(cssCode).then(() => {
+                alert('✅ CSS code đã được copy thành công!');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = cssCode;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('✅ CSS code đã được copy!');
+            });
+        }
+
+        // Add click sound effect (optional)
+        document.querySelectorAll('.neon-frame').forEach(frame => {
+            frame.addEventListener('click', () => {
+                frame.style.transform = 'translateY(-1px) scale(0.98)';
+                setTimeout(() => {
+                    frame.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Console log for debugging
+        console.log('🌟 Neon Cyan Collection loaded successfully!');
+        console.log('⚡ All CSS animations are working');
+        console.log('✅ Ready to copy and use!');
+    </script>
+</body>
+</html>

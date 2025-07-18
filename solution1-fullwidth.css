@@ -1,0 +1,24 @@
+
+/* 🌊 SOLUTION 1: FULL WIDTH MAP - Maximum Display */
+.location-map.fullwidth-solution {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    aspect-ratio: 2.5/1 !important; /* Ultra wide */
+    max-height: 80vh !important;
+    margin: 3rem 0 !important;
+    position: static !important;
+}
+
+.location-grid.fullwidth-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 2rem !important;
+}
+
+.location-grid.fullwidth-layout .location-content {
+    grid-row: 1 !important;
+}
+
+.location-grid.fullwidth-layout .location-map {
+    grid-row: 2 !important;
+}

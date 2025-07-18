@@ -1,0 +1,82 @@
+/* 🎯 FIX MAP LAYOUT - URGENT SOLUTION */
+
+/* 1. Giảm padding để tận dụng không gian */
+.location-section {
+    padding: 50px 0 !important; /* Giảm từ 100px xuống 50px */
+}
+
+/* 2. Fix map container - không crop hình */
+.location-map {
+    height: auto !important; /* Thay vì fixed 700px */
+    aspect-ratio: 16/10 !important; /* Tỷ lệ phù hợp */
+    max-height: 600px !important; /* Giới hạn tối đa */
+}
+
+/* 3. Hiển thị full image - không crop */
+.map-image {
+    object-fit: contain !important; /* Thay vì cover */
+    object-position: center !important;
+    background: #f8f9fa; /* Background khi có khoảng trống */
+}
+
+/* 4. Tối ưu grid cho map lớn hơn */
+.location-grid {
+    grid-template-columns: 0.7fr 1.3fr !important; /* Map chiếm nhiều không gian hơn */
+    gap: 2rem 3rem !important;
+}
+
+/* 5. Responsive cho mobile */
+@media (max-width: 1024px) {
+    .location-section {
+        padding: 30px 0 !important;
+    }
+    
+    .location-map {
+        height: auto !important;
+        aspect-ratio: 4/3 !important;
+        max-height: 400px !important;
+    }
+    
+    .location-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
+
+/* 6. Alternative: Fullwidth map option */
+.location-map-fullwidth {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 21/9 !important; /* Wide aspect ratio */
+    margin: 2rem 0 !important;
+}
+
+/* 7. Hover effect adjustment */
+.location-map:hover .map-image {
+    transform: scale(1.01) !important; /* Giảm zoom effect */
+}
+
+/* 8. Map overlay positioning for new layout */
+.map-overlay {
+    top: 15px !important;
+    left: 15px !important;
+}
+
+/* 9. Container max-width optimization */
+.location-section .container {
+    max-width: 1400px !important; /* Tăng max-width */
+}
+
+/* 10. Text content optimization */
+.location-content {
+    padding-right: 1rem !important;
+}
+
+/* 
+🎯 USAGE INSTRUCTIONS:
+1. Add this CSS to your main stylesheet
+2. Test the layout immediately 
+3. Adjust aspect-ratio if needed (16/10, 4/3, 21/9)
+4. Consider using fullwidth option for maximum impact
+*/

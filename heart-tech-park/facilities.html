@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilities - HEART Technology Park</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #f1f5f9;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fbbf24;
+        }
+        
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #fbbf24;
+            border-radius: 1px;
+        }
+        
+        .cta-button {
+            background: #fbbf24;
+            color: #1e40af;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #f59e0b;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            color: #f1f5f9;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links, .cta-button {
+                display: none;
+            }
+            .mobile-menu {
+                display: block;
+            }
+        }
+        
+        /* MAP CONTAINER - OPTIMIZED SVG SYSTEM */
+        .grid-map-wrapper {
+            margin: 4rem 0;
+            padding: 0 2rem;
+        }
+        
+        .grid-background-map {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        
+        .grid-map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* OPTIMIZED SVG POSITIONING SYSTEM */
+        .svg-icon-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .svg-icon-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .facility-group {
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        
+        .facility-border {
+            fill: transparent;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-group:hover .facility-border {
+            stroke-width: 4;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .facility-group:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Facility-specific colors */
+        .facility-group[data-facility="hydro-plant"] .facility-border {
+            stroke: #3498db;
+            fill: rgba(52, 152, 219, 0.1);
+        }
+        
+        .facility-group[data-facility="500kv-substation"] .facility-border {
+            stroke: #e74c3c;
+            fill: rgba(231, 76, 60, 0.1);
+        }
+        
+        .facility-group[data-facility="110kv-substation"] .facility-border {
+            stroke: #f39c12;
+            fill: rgba(243, 156, 18, 0.1);
+        }
+        
+        .facility-group[data-facility="data-center"] .facility-border {
+            stroke: #27ae60;
+            fill: rgba(39, 174, 96, 0.1);
+        }
+        
+        .facility-group[data-facility="tech-park"] .facility-border {
+            stroke: #2ecc71;
+            fill: rgba(46, 204, 113, 0.05);
+        }
+        
+        /* Responsive scaling */
+        @media (max-width: 768px) {
+            .facility-border {
+                stroke-width: 2;
+            }
+            .facility-group:hover .facility-border {
+                stroke-width: 3;
+            }
+            .facility-group:hover {
+                transform: scale(1.03);
+            }
+        }
+        
+        /* Animation classes */
+        .facility-group.active .facility-border {
+            animation: facilityPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes facilityPulse {
+            0%, 100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            50% {
+                opacity: 0.8;
+                filter: drop-shadow(0 0 15px currentColor);
+            }
+        }
+        
+        /* Grid Stats Section */
+        .grid-stats {
+            margin: 4rem 0;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stats-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 3rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART Tech Park</a>
+            <nav class="nav">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="facilities.html" class="active">Facilities</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <a href="#apply" class="cta-button">Apply Now</a>
+                <div class="mobile-menu">☰</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Power Grid Map Section -->
+        <section class="grid-map-wrapper">
+            <div class="grid-background-map" id="powerGridMap">
+                <!-- Base Map Image -->
+                <img src="assets/images/power-grid-map.jpg" alt="500kV Onsite Power Grid Map" class="grid-map-image">
+                
+                <!-- OPTIMIZED SVG OVERLAY -->
+                <div class="svg-icon-overlay">
+                    <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" class="icon-overlay">
+                        <!-- FINAL PERFECT COORDINATES - FROM LIVE ADJUSTER -->
+                        
+                        <!-- Hydro Power Plant - Perfect Manual Alignment -->
+                        <g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+                            <rect class="facility-border" x="35" y="253" width="30" height="20" rx="4" ry="4"/>
+                        </g>
+                        
+                        <!-- 500kV Substation - Perfect Manual Alignment -->
+                        <g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+                            <rect class="facility-border" x="620" y="254" width="25" height="25" rx="4" ry="4"/>
+                        </g>
+                        
+                        <!-- 110kV La Son Substation - Perfect Manual Alignment -->
+                        <g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+                            <rect class="facility-border" x="839" y="123" width="25" height="25" rx="4" ry="4"/>
+                        </g>
+                        
+                        <!-- Data Center - Perfect Manual Alignment -->
+                        <g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+                            <rect class="facility-border" x="628" y="334" width="25" height="25" rx="4" ry="4"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid Statistics -->
+        <section class="grid-stats">
+            <div class="stats-container">
+                <h2 class="stats-title">Power Grid Specifications</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-number">500</div>
+                        <div class="stat-label">kV Main Substation</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔌</div>
+                        <div class="stat-number">110</div>
+                        <div class="stat-label">kV La Son Connection</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💧</div>
+                        <div class="stat-number">20</div>
+                        <div class="stat-label">MW Hydro Power</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🖥️</div>
+                        <div class="stat-number">300</div>
+                        <div class="stat-label">HA Data Center</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Facility Interaction Script -->
+    <script>
+        // Facility interaction system
+        document.addEventListener('DOMContentLoaded', function() {
+            const facilities = document.querySelectorAll('.facility-group');
+            
+            facilities.forEach(facility => {
+                facility.addEventListener('click', function() {
+                    const name = this.getAttribute('data-name');
+                    const type = this.getAttribute('data-facility');
+                    
+                    // Remove active class from all facilities
+                    facilities.forEach(f => f.classList.remove('active'));
+                    
+                    // Add active class to clicked facility
+                    this.classList.add('active');
+                    
+                    // Log click for debugging
+                    console.log(`Clicked: ${name} (${type})`);
+                    
+                    // Optional: Show facility details (can be extended)
+                    showFacilityDetails(name, type);
+                });
+                
+                // Hover effects
+                facility.addEventListener('mouseenter', function() {
+                    const name = this.getAttribute('data-name');
+                    // Optional: Show tooltip or highlight connections
+                    console.log(`Hovering: ${name}`);
+                });
+            });
+        });
+        
+        function showFacilityDetails(name, type) {
+            // This function can be extended to show detailed facility information
+            // For now, just log the details
+            const details = {
+                'hydro-plant': 'Renewable energy source - 2x10.5MW capacity',
+                '500kv-substation': 'Main power distribution hub for the tech park',
+                '110kv-substation': 'Connection to La Son national grid - 40MVA',
+                'data-center': 'High-performance computing facility - 300 HA',
+                'transmission-point': 'Power transmission and distribution point'
+            };
+            
+            const info = details[type] || 'Facility information';
+            console.log(`${name}: ${info}`);
+        }
+        
+        // Performance monitoring
+        console.log('Facilities page loaded successfully');
+        console.log('SVG positioning system active');
+        
+        // Responsive handling
+        window.addEventListener('resize', function() {
+            // SVG automatically scales with viewBox
+            console.log('Window resized - SVG scaling maintained');
+        });
+    </script>
+</body>
+</html>

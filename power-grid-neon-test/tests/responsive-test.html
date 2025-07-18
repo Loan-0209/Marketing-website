@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Responsive Test - Neon Icons</title>
+    <link rel="stylesheet" href="../styles/neon-icons.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .breakpoint-test {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        
+        .size-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,255,255,0.8);
+            color: black;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        
+        .icon-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .test-instructions {
+            background: rgba(0,255,255,0.1);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="size-indicator" id="sizeIndicator">
+        Screen: <span id="screenSize">Loading...</span>
+    </div>
+    
+    <h1>📱 Responsive Design Test</h1>
+    
+    <div class="test-instructions">
+        <h3>🔧 Testing Instructions:</h3>
+        <p>1. Resize your browser window to test different breakpoints</p>
+        <p>2. Check if icons scale appropriately at each size</p>
+        <p>3. Verify animations remain smooth on mobile</p>
+        <p>4. Test on actual mobile devices if possible</p>
+    </div>
+    
+    <div class="breakpoint-test">
+        <h3>Mobile Test (≤768px)</h3>
+        <div class="icon-row">
+            <div class="substation-500kv">A</div>
+            <div class="substation-110kv"></div>
+            <div class="hydro-plant"></div>
+            <div class="data-center"></div>
+            <div class="solar-plant"></div>
+            <div class="wind-plant"></div>
+        </div>
+        <p id="mobileStatus">Status: Testing...</p>
+    </div>
+    
+    <div class="breakpoint-test">
+        <h3>Tablet Test (≤1024px)</h3>
+        <div class="icon-row">
+            <div class="substation-500kv">A</div>
+            <div class="substation-110kv"></div>
+            <div class="hydro-plant"></div>
+            <div class="data-center"></div>
+            <div class="solar-plant"></div>
+            <div class="wind-plant"></div>
+        </div>
+        <p id="tabletStatus">Status: Testing...</p>
+    </div>
+    
+    <div class="breakpoint-test">
+        <h3>Desktop Test (≥1920px)</h3>
+        <div class="icon-row">
+            <div class="substation-500kv">A</div>
+            <div class="substation-110kv"></div>
+            <div class="hydro-plant"></div>
+            <div class="data-center"></div>
+            <div class="solar-plant"></div>
+            <div class="wind-plant"></div>
+        </div>
+        <p id="desktopStatus">Status: Testing...</p>
+    </div>
+    
+    <div class="breakpoint-test">
+        <h3>📊 Current Viewport Analysis</h3>
+        <div id="viewportAnalysis">
+            <p>Width: <span id="currentWidth">-</span>px</p>
+            <p>Height: <span id="currentHeight">-</span>px</p>
+            <p>Breakpoint: <span id="currentBreakpoint">-</span></p>
+            <p>Icon Size Expected: <span id="expectedSize">-</span></p>
+        </div>
+    </div>
+    
+    <script>
+        function updateViewportInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            document.getElementById('screenSize').textContent = `${width}x${height}`;
+            document.getElementById('currentWidth').textContent = width;
+            document.getElementById('currentHeight').textContent = height;
+            
+            let breakpoint, expectedSize, status;
+            
+            if (width <= 768) {
+                breakpoint = 'Mobile';
+                expectedSize = '500kV: 40px, Others: 25-35px';
+                status = '📱 Mobile optimized sizes active';
+                document.getElementById('mobileStatus').innerHTML = '✅ ' + status;
+                document.getElementById('tabletStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('desktopStatus').innerHTML = '⏸️ Not active at this size';
+            } else if (width <= 1024) {
+                breakpoint = 'Tablet';
+                expectedSize = '500kV: 45px, Others: 30-40px';
+                status = '📱 Tablet optimized sizes active';
+                document.getElementById('mobileStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('tabletStatus').innerHTML = '✅ ' + status;
+                document.getElementById('desktopStatus').innerHTML = '⏸️ Not active at this size';
+            } else if (width >= 1920) {
+                breakpoint = 'Large Desktop';
+                expectedSize = '500kV: 60px, Others: 35-50px';
+                status = '🖥️ Large desktop sizes active';
+                document.getElementById('mobileStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('tabletStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('desktopStatus').innerHTML = '✅ ' + status;
+            } else {
+                breakpoint = 'Desktop';
+                expectedSize = '500kV: 50px, Others: 30-45px';
+                status = '🖥️ Standard desktop sizes active';
+                document.getElementById('mobileStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('tabletStatus').innerHTML = '⏸️ Not active at this size';
+                document.getElementById('desktopStatus').innerHTML = '✅ ' + status;
+            }
+            
+            document.getElementById('currentBreakpoint').textContent = breakpoint;
+            document.getElementById('expectedSize').textContent = expectedSize;
+        }
+        
+        // Test icon sizes at different breakpoints
+        function testIconSizes() {
+            const substation500 = document.querySelector('.substation-500kv');
+            const hydro = document.querySelector('.hydro-plant');
+            
+            if (substation500 && hydro) {
+                const style500 = window.getComputedStyle(substation500);
+                const styleHydro = window.getComputedStyle(hydro);
+                
+                console.log('📏 Current Icon Sizes:');
+                console.log('500kV Substation:', style500.width, 'x', style500.height);
+                console.log('Hydro Plant:', styleHydro.width, 'x', styleHydro.height);
+                
+                // Verify sizes match expectations
+                const width = window.innerWidth;
+                let expected500kv;
+                
+                if (width <= 768) expected500kv = '40px';
+                else if (width <= 1024) expected500kv = '45px';
+                else if (width >= 1920) expected500kv = '60px';
+                else expected500kv = '50px';
+                
+                const actual500kv = style500.width;
+                const sizeMatch = actual500kv === expected500kv;
+                
+                console.log(`Expected 500kV size: ${expected500kv}, Actual: ${actual500kv}`);
+                console.log(`Size test: ${sizeMatch ? '✅ PASS' : '❌ FAIL'}`);
+            }
+        }
+        
+        // Performance test for mobile
+        function testMobilePerformance() {
+            if (window.innerWidth <= 768) {
+                let frameCount = 0;
+                let startTime = performance.now();
+                
+                function countFrames() {
+                    frameCount++;
+                    const currentTime = performance.now();
+                    
+                    if (currentTime - startTime >= 1000) {
+                        const fps = frameCount;
+                        console.log(`📱 Mobile FPS: ${fps}`);
+                        
+                        if (fps >= 30) {
+                            console.log('✅ Mobile performance acceptable');
+                        } else {
+                            console.log('⚠️ Mobile performance may be poor');
+                        }
+                        
+                        return;
+                    }
+                    
+                    requestAnimationFrame(countFrames);
+                }
+                
+                countFrames();
+            }
+        }
+        
+        // Initialize tests
+        function initResponsiveTests() {
+            updateViewportInfo();
+            testIconSizes();
+            testMobilePerformance();
+            
+            console.log('📱 Responsive Test Suite Initialized');
+            console.log('Current viewport:', window.innerWidth + 'x' + window.innerHeight);
+        }
+        
+        // Update on resize
+        window.addEventListener('resize', () => {
+            updateViewportInfo();
+            testIconSizes();
+        });
+        
+        // Start tests
+        document.addEventListener('DOMContentLoaded', initResponsiveTests);
+        
+        // Export test results
+        window.ResponsiveTestResults = {
+            getCurrentBreakpoint: () => {
+                const width = window.innerWidth;
+                if (width <= 768) return 'mobile';
+                if (width <= 1024) return 'tablet';
+                if (width >= 1920) return 'large-desktop';
+                return 'desktop';
+            },
+            
+            testAllBreakpoints: () => {
+                const results = {};
+                const breakpoints = [
+                    { name: 'mobile', width: 375 },
+                    { name: 'tablet', width: 768 },
+                    { name: 'desktop', width: 1200 },
+                    { name: 'large-desktop', width: 1920 }
+                ];
+                
+                breakpoints.forEach(bp => {
+                    results[bp.name] = {
+                        width: bp.width,
+                        tested: window.innerWidth === bp.width,
+                        expected: `Icons should be optimized for ${bp.name}`
+                    };
+                });
+                
+                return results;
+            }
+        };
+    </script>
+</body>
+</html>

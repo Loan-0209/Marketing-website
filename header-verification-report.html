@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Verification Report - Facilities.html</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+        .report-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .verification-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .verification-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid #10b981;
+        }
+        .verification-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.75rem 0;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: #f0fdf4;
+        }
+        .check-icon {
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .gradient-preview {
+            height: 120px;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+            font-weight: bold;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 25%, #d299c2 50%, #fef9d3 75%, #85d7ff 100%);
+            border: 2px solid #e2e8f0;
+        }
+        .comparison-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+        .before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .before, .after {
+            text-align: center;
+        }
+        .before h4 {
+            color: #ef4444;
+        }
+        .after h4 {
+            color: #10b981;
+        }
+        .metrics-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .metrics-table th,
+        .metrics-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .metrics-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+        .improvement {
+            color: #10b981;
+            font-weight: 600;
+        }
+        .test-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .test-link {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1d4ed8;
+        }
+        .test-link.primary {
+            background: #10b981;
+        }
+        .test-link.primary:hover {
+            background: #047857;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="status-badge">✅ VERIFIED</div>
+        <h1>Header Verification Report</h1>
+        <p>Trang facilities.html - Compact Pastel Header Design</p>
+        <p style="color: #64748b; margin-top: 1rem;">Kiểm tra hoàn tất - Header đã được tối ưu thành công</p>
+    </div>
+
+    <div class="verification-grid">
+        <div class="verification-card">
+            <div class="verification-title">
+                🎨 Background Design
+            </div>
+            <div class="gradient-preview">
+                Pastel Gradient Background
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Màu xanh pastel dịu mắt (#a8edea → #85d7ff)</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Gradient 5 màu mềm mại, chuyên nghiệp</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Overlay effects tạo chiều sâu</span>
+            </div>
+        </div>
+
+        <div class="verification-card">
+            <div class="verification-title">
+                📏 Layout Compact
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Padding: 2rem 0 2rem (giảm từ 6rem)</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Min-height: 40vh (giảm từ 70vh)</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Ít khoảng trống, gọn gàng hơn</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Content được căn chỉnh chặt chẽ</span>
+            </div>
+        </div>
+
+        <div class="verification-card">
+            <div class="verification-title">
+                📝 Typography
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Title size: 3.5rem (phù hợp layout mới)</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Dark gradient text trên bright background</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Subtitle: 1.2rem, color #4a5568</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Contrast ratio tốt, dễ đọc</span>
+            </div>
+        </div>
+
+        <div class="verification-card">
+            <div class="verification-title">
+                📱 Mobile Responsive
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Mobile height: 30vh (compact)</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Mobile padding: 1.5rem 0 1.5rem</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Title mobile: 2.2rem</span>
+            </div>
+            <div class="check-item">
+                <span class="check-icon">✅</span>
+                <span>Icons: 55px mobile (từ 70px desktop)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison-section">
+        <h3 style="text-align: center; margin-bottom: 2rem;">📊 Before vs After Comparison</h3>
+        <div class="before-after">
+            <div class="before">
+                <h4>❌ Before (Dark Header)</h4>
+                <ul style="text-align: left; color: #64748b;">
+                    <li>Dark gradient (navy to slate)</li>
+                    <li>Padding: 6rem 0 4rem</li>
+                    <li>Height: 70vh</li>
+                    <li>White gradient text</li>
+                    <li>Có dòng "Explore Facilities"</li>
+                </ul>
+            </div>
+            <div class="after">
+                <h4>✅ After (Pastel Header)</h4>
+                <ul style="text-align: left; color: #64748b;">
+                    <li>Pastel gradient (aqua to blue)</li>
+                    <li>Padding: 2rem 0 2rem</li>
+                    <li>Height: 40vh</li>
+                    <li>Dark gradient text</li>
+                    <li>Subtitle ngắn gọn</li>
+                </ul>
+            </div>
+        </div>
+
+        <table class="metrics-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Before</th>
+                    <th>After</th>
+                    <th>Improvement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Header Height</td>
+                    <td>70vh</td>
+                    <td>40vh</td>
+                    <td class="improvement">-43% compact</td>
+                </tr>
+                <tr>
+                    <td>Padding</td>
+                    <td>6rem 0 4rem</td>
+                    <td>2rem 0 2rem</td>
+                    <td class="improvement">-67% spacing</td>
+                </tr>
+                <tr>
+                    <td>Mobile Height</td>
+                    <td>50vh</td>
+                    <td>30vh</td>
+                    <td class="improvement">-40% mobile</td>
+                </tr>
+                <tr>
+                    <td>Visual Style</td>
+                    <td>Dark themed</td>
+                    <td>Light pastel</td>
+                    <td class="improvement">Friendlier</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="verification-card">
+        <div class="verification-title">
+            🎯 Final Assessment
+        </div>
+        <div class="check-item">
+            <span class="check-icon">✅</span>
+            <span><strong>Gọn gàng:</strong> Header compact hơn 43%, tiết kiệm space</span>
+        </div>
+        <div class="check-item">
+            <span class="check-icon">✅</span>
+            <span><strong>Chuyên nghiệp:</strong> Pastel gradient tạo cảm giác modern, friendly</span>
+        </div>
+        <div class="check-item">
+            <span class="check-icon">✅</span>
+            <span><strong>Responsive tốt:</strong> Mobile layout chặt chẽ, không lãng phí space</span>
+        </div>
+        <div class="check-item">
+            <span class="check-icon">✅</span>
+            <span><strong>Typography cân bằng:</strong> Text size phù hợp với layout mới</span>
+        </div>
+        <div class="check-item">
+            <span class="check-icon">✅</span>
+            <span><strong>User Experience:</strong> Dễ nhìn, dễ đọc, không overwhelming</span>
+        </div>
+    </div>
+
+    <div class="test-links">
+        <a href="facilities.html" class="test-link primary" target="_blank">🔗 View Facilities Page</a>
+        <a href="test-bright-header.html" class="test-link" target="_blank">📊 View Comparison Test</a>
+        <button onclick="simulateMobile()" class="test-link" style="border: none; cursor: pointer;">📱 Test Mobile View</button>
+    </div>
+
+    <script>
+        function simulateMobile() {
+            window.open('facilities.html', 'mobile', 'width=375,height=812,scrollbars=yes');
+        }
+        
+        window.addEventListener('load', () => {
+            console.log('✅ Header verification complete');
+            console.log('📱 New header is 43% more compact');
+            console.log('🎨 Pastel gradient creates professional, friendly appearance');
+        });
+    </script>
+</body>
+</html>

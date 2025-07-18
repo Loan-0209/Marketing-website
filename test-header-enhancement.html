@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Enhanced Header Design</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .comparison-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid #3b82f6;
+        }
+        .feature-card.enhanced {
+            border-left-color: #10b981;
+        }
+        .test-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .test-link {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1d4ed8;
+        }
+        .test-link.success {
+            background: #10b981;
+        }
+        .test-link.success:hover {
+            background: #047857;
+        }
+        .preview-frame {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+        }
+        .improvement-list {
+            list-style: none;
+            padding: 0;
+        }
+        .improvement-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .improvement-list li:last-child {
+            border-bottom: none;
+        }
+        .check-icon {
+            color: #10b981;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🎨 Enhanced Header Design Test</h1>
+        <p>Testing the improved page-header design for Facilities page</p>
+    </div>
+
+    <div class="comparison-grid">
+        <div class="comparison-card">
+            <h3>❌ Before (Old Design)</h3>
+            <ul class="improvement-list">
+                <li><span style="color: #ef4444;">❌</span> Simple gradient background</li>
+                <li><span style="color: #ef4444;">❌</span> Basic typography with solid color</li>
+                <li><span style="color: #ef4444;">❌</span> Static layout, no interactions</li>
+                <li><span style="color: #ef4444;">❌</span> Minimal visual interest</li>
+                <li><span style="color: #ef4444;">❌</span> Short height, lots of whitespace</li>
+                <li><span style="color: #ef4444;">❌</span> No visual elements or icons</li>
+            </ul>
+        </div>
+
+        <div class="comparison-card">
+            <h3>✅ After (Enhanced Design)</h3>
+            <ul class="improvement-list">
+                <li><span class="check-icon">✅</span> Dark gradient with texture overlay</li>
+                <li><span class="check-icon">✅</span> Gradient text with glow animations</li>
+                <li><span class="check-icon">✅</span> Interactive icons with hover effects</li>
+                <li><span class="check-icon">✅</span> Parallax scroll and animations</li>
+                <li><span class="check-icon">✅</span> Full viewport height (70vh)</li>
+                <li><span class="check-icon">✅</span> 5 floating facility icons</li>
+                <li><span class="check-icon">✅</span> Scroll indicator with animation</li>
+                <li><span class="check-icon">✅</span> Modern glassmorphism effects</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card enhanced">
+            <h4>🎨 Visual Enhancements</h4>
+            <ul>
+                <li>Dark gradient background (navy to slate)</li>
+                <li>Radial gradient overlays with floating animation</li>
+                <li>SVG dot pattern texture</li>
+                <li>Gradient text with webkit clip-path</li>
+                <li>Animated title glow effect</li>
+            </ul>
+        </div>
+
+        <div class="feature-card enhanced">
+            <h4>⚡ Interactive Elements</h4>
+            <ul>
+                <li>5 floating facility icons (🏢🔬⚡🚀🎯)</li>
+                <li>Hover effects with scale and glow</li>
+                <li>Staggered entrance animations</li>
+                <li>Scroll indicator with bounce animation</li>
+                <li>Parallax header effect on scroll</li>
+            </ul>
+        </div>
+
+        <div class="feature-card enhanced">
+            <h4>🎭 Advanced Animations</h4>
+            <ul>
+                <li>Title glow animation (3s infinite)</li>
+                <li>Decoration pulse and halo rotation</li>
+                <li>Subtitle fade-in with slide up</li>
+                <li>Icon floating animations (4s each)</li>
+                <li>Arrow bounce in scroll indicator</li>
+            </ul>
+        </div>
+
+        <div class="feature-card enhanced">
+            <h4>📱 Responsive Design</h4>
+            <ul>
+                <li>Mobile-optimized header height (60vh)</li>
+                <li>Smaller icons on mobile (60px vs 80px)</li>
+                <li>Reduced gaps and padding</li>
+                <li>Touch-friendly interactive elements</li>
+                <li>Flexible icon grid layout</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-links">
+        <a href="facilities.html" class="test-link success" target="_blank">🔗 View Enhanced Header</a>
+        <a href="#" onclick="testAnimations()" class="test-link">🎬 Test Animations</a>
+        <a href="#" onclick="testResponsive()" class="test-link">📱 Test Responsive</a>
+        <a href="#" onclick="testInteractions()" class="test-link">⚡ Test Interactions</a>
+    </div>
+
+    <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+        <h3>🔍 What to Test</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div>
+                <strong>Visual Design:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Dark gradient background</li>
+                    <li>Gradient text title</li>
+                    <li>Glowing decoration bar</li>
+                    <li>Texture overlay pattern</li>
+                </ul>
+            </div>
+            <div>
+                <strong>Animations:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Title glow effect</li>
+                    <li>Icon floating motion</li>
+                    <li>Scroll arrow bounce</li>
+                    <li>Background subtle float</li>
+                </ul>
+            </div>
+            <div>
+                <strong>Interactions:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Icon hover effects</li>
+                    <li>Scroll indicator click</li>
+                    <li>Parallax on scroll</li>
+                    <li>Staggered icon entrance</li>
+                </ul>
+            </div>
+            <div>
+                <strong>Responsive:</strong>
+                <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                    <li>Mobile height adjustment</li>
+                    <li>Icon size scaling</li>
+                    <li>Gap optimization</li>
+                    <li>Touch interactions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h3>📱 Live Preview</h3>
+    <iframe src="facilities.html" class="preview-frame"></iframe>
+
+    <script>
+        function testAnimations() {
+            alert('🎬 Check these animations on the facilities page:\n\n' +
+                  '• Title text glow (3s cycle)\n' +
+                  '• Decoration bar pulse and halo rotation\n' +
+                  '• Icons floating up and down (4s each)\n' +
+                  '• Scroll arrow bouncing\n' +
+                  '• Background subtle floating motion');
+        }
+        
+        function testResponsive() {
+            alert('📱 Test responsive design:\n\n' +
+                  '• Resize browser window to mobile size\n' +
+                  '• Header height reduces to 60vh\n' +
+                  '• Icons become smaller (60px)\n' +
+                  '• Gaps and spacing optimize for mobile\n' +
+                  '• Touch interactions work properly');
+        }
+        
+        function testInteractions() {
+            alert('⚡ Test interactive elements:\n\n' +
+                  '• Hover over the 5 facility icons\n' +
+                  '• Click the "Explore Facilities" scroll indicator\n' +
+                  '• Scroll down to see parallax effect\n' +
+                  '• Watch staggered icon entrance on page load');
+        }
+        
+        // Auto-notification on load
+        window.addEventListener('load', () => {
+            console.log('🎨 Header enhancement test page loaded');
+            setTimeout(() => {
+                console.log('💡 Tip: Open facilities.html to see the enhanced header design!');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

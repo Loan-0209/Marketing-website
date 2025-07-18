@@ -1,0 +1,113 @@
+🎯 POWER GRID ANIMATION - SETUP GUIDE
+=====================================
+
+📋 WHAT'S BEEN ADDED:
+- New Power Grid section in facilities.html
+- Animated transmission lines (500kV, 220kV, 110kV)
+- Power flow dots with realistic movement
+- Interactive legend and infrastructure labels
+- Grid statistics cards
+- Responsive design for all devices
+
+🔧 SETUP STEPS:
+
+1. SAVE THE IMAGE:
+   - Save your power grid map image as: "power-grid-map.jpg"
+   - Place it in: /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/assets/images/
+   - Make sure filename matches exactly: "power-grid-map.jpg"
+
+2. OPEN THE PAGE:
+   - Navigate to: file:///Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/facilities.html
+   - Scroll down to see the new "500kV Onsite Power Grid" section
+   - It appears above "Take a Virtual Tour"
+
+🎨 ANIMATION EFFECTS:
+
+✅ 500kV Lines (Red):
+- Horizontal and diagonal transmission lines
+- White dots with red borders flowing left to right
+- 3-second animation cycles with different delays
+- Glowing shadow effects
+
+✅ 220kV Lines (Blue): 
+- Vertical and horizontal distribution lines
+- White dots with blue borders
+- Mixed horizontal and vertical flow patterns
+- 3-second animation cycles
+
+✅ 110kV Lines (Purple/Pink):
+- Local distribution lines
+- White dots with purple borders  
+- Curved and vertical flow patterns
+- 3-second animation cycles
+
+🏷️ INTERACTIVE ELEMENTS:
+
+- Live Legend: Shows line types with colors
+- Infrastructure Labels: HEART Data Center, Substations, Hi-Tech Park
+- Grid Statistics: Capacity, reliability, connections
+- Hover Effects: Stats cards lift on hover
+
+📱 RESPONSIVE FEATURES:
+
+- Desktop: Full animation with all effects
+- Tablet: Optimized layout with reduced complexity
+- Mobile: Simplified animations, stacked grid stats
+
+🔍 CUSTOMIZATION OPTIONS:
+
+1. ADJUST ANIMATION SPEED:
+   Change "animation-duration: 3s" to desired speed
+
+2. MODIFY LINE POSITIONS:
+   Edit top/left percentages in CSS classes:
+   - .line-500kv.line-horizontal-1 { top: 25%; left: 5%; }
+   - Adjust to match your actual map layout
+
+3. CHANGE COLORS:
+   - 500kV: #e74c3c (red)
+   - 220kV: #3498db (blue)  
+   - 110kV: #9b59b6 (purple)
+
+4. ADD MORE LINES:
+   Copy existing line HTML and CSS, adjust positioning
+
+⚡ POWER FLOW LOGIC:
+
+- Dots represent power flow direction
+- Multiple dots per line show continuous flow
+- Delays create realistic staggered movement
+- Glow effects emphasize high-voltage lines
+
+🎯 EXPECTED RESULT:
+
+When you open facilities.html, you should see:
+1. New section titled "500kV Onsite Power Grid"
+2. Your map image as background
+3. Animated colored lines overlaying the transmission paths
+4. Moving dots showing power flow direction
+5. Legend explaining line types
+6. Infrastructure labels marking key locations
+7. Grid statistics below the map
+
+🐛 TROUBLESHOOTING:
+
+PROBLEM: Image not showing
+SOLUTION: Check file path and name exactly matches "power-grid-map.jpg"
+
+PROBLEM: Animations not working  
+SOLUTION: Clear browser cache (Ctrl+Shift+R)
+
+PROBLEM: Lines not aligned with map
+SOLUTION: Adjust CSS positioning percentages to match your map
+
+PROBLEM: Mobile performance issues
+SOLUTION: Animations automatically simplified on mobile
+
+📋 FILE LOCATIONS:
+- Main file: facilities.html (updated)
+- Image location: assets/images/power-grid-map.jpg (you need to save this)
+- All CSS included in facilities.html
+
+✅ READY TO TEST!
+Save your image and open facilities.html to see the power grid in action!

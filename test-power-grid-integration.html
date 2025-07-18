@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Grid Integration Test Suite</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .pass { border-color: #00ff00; }
+        .fail { border-color: #ff0000; color: #ff0000; }
+        .warning { border-color: #ffff00; color: #ffff00; }
+        h1 { color: #00ffff; }
+        .fix-code {
+            background: #222;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Power Grid Integration Test Suite</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        const results = document.getElementById('test-results');
+        
+        function addResult(test, status, message, fix = null) {
+            const div = document.createElement('div');
+            div.className = `test-result ${status}`;
+            div.innerHTML = `
+                <strong>${test}:</strong> ${status.toUpperCase()}<br>
+                ${message}
+                ${fix ? `<div class="fix-code">Fix: ${fix}</div>` : ''}
+            `;
+            results.appendChild(div);
+        }
+        
+        // Test 1: Check for CSS file
+        function testCSSFile() {
+            const cssFile = 'power-grid-neon-test/styles/neon-icons.css';
+            fetch(cssFile)
+                .then(response => {
+                    if (response.ok) {
+                        addResult('CSS File Check', 'pass', `✓ ${cssFile} loaded successfully`);
+                    } else {
+                        addResult('CSS File Check', 'fail', `✗ ${cssFile} returned ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    addResult('CSS File Check', 'fail', `✗ Failed to load ${cssFile}: ${error.message}`);
+                });
+        }
+        
+        // Test 2: Check for JS file
+        function testJSFile() {
+            const jsFile = 'power-grid-neon-test/performance-monitor.js';
+            fetch(jsFile)
+                .then(response => {
+                    if (response.ok) {
+                        addResult('JS File Check', 'pass', `✓ ${jsFile} loaded successfully`);
+                    } else {
+                        addResult('JS File Check', 'fail', `✗ ${jsFile} returned ${response.status}`);
+                    }
+                })
+                .catch(error => {
+                    addResult('JS File Check', 'fail', `✗ Failed to load ${jsFile}: ${error.message}`);
+                });
+        }
+        
+        // Test 3: Check for background image
+        function testBackgroundImage() {
+            const img = new Image();
+            img.onload = function() {
+                addResult('Background Image', 'pass', `✓ power-grid-map.jpg loaded (${this.width}x${this.height})`);
+            };
+            img.onerror = function() {
+                addResult('Background Image', 'fail', '✗ Failed to load assets/images/power-grid-map.jpg');
+            };
+            img.src = 'assets/images/power-grid-map.jpg';
+        }
+        
+        // Test 4: Check browser support
+        function testBrowserSupport() {
+            const features = {
+                'CSS Animations': CSS.supports('animation', 'test 1s'),
+                'CSS Transforms': CSS.supports('transform', 'scale(1)'),
+                'CSS Grid': CSS.supports('display', 'grid'),
+                'CSS Flexbox': CSS.supports('display', 'flex'),
+                'Box Shadow': CSS.supports('box-shadow', '0 0 10px red'),
+                'Backdrop Filter': CSS.supports('backdrop-filter', 'blur(10px)')
+            };
+            
+            let allSupported = true;
+            let unsupported = [];
+            
+            for (const [feature, supported] of Object.entries(features)) {
+                if (!supported) {
+                    allSupported = false;
+                    unsupported.push(feature);
+                }
+            }
+            
+            if (allSupported) {
+                addResult('Browser Support', 'pass', '✓ All required CSS features supported');
+            } else {
+                addResult('Browser Support', 'warning', `⚠ Missing support for: ${unsupported.join(', ')}`);
+            }
+        }
+        
+        // Test 5: Console error simulation
+        function testConsoleErrors() {
+            // Intercept console errors
+            const originalError = console.error;
+            let errors = [];
+            
+            console.error = function(...args) {
+                errors.push(args.join(' '));
+                originalError.apply(console, args);
+            };
+            
+            // Test problematic code
+            try {
+                // Simulate the event.target issue
+                const testFunc = new Function('event.target.classList.add("active")');
+                testFunc();
+            } catch (e) {
+                errors.push(e.message);
+            }
+            
+            console.error = originalError;
+            
+            if (errors.length > 0) {
+                addResult('Console Errors', 'warning', `⚠ Expected errors found: ${errors.length}`, 
+                    'Pass event parameter to functions: onclick="toggleLayer(\'all\', event)"');
+            } else {
+                addResult('Console Errors', 'pass', '✓ No immediate console errors');
+            }
+        }
+        
+        // Test 6: Check for required elements
+        function testRequiredElements() {
+            // This would normally check the actual page
+            const requiredIds = ['fps-counter', 'infoPanel', 'mapContainer'];
+            addResult('Required Elements', 'warning', 
+                `⚠ Cannot check elements without loading the page. Required IDs: ${requiredIds.join(', ')}`);
+        }
+        
+        // Test 7: Animation performance
+        function testAnimationPerformance() {
+            const startTime = performance.now();
+            let frameCount = 0;
+            
+            function measureFrame() {
+                frameCount++;
+                if (frameCount < 60) {
+                    requestAnimationFrame(measureFrame);
+                } else {
+                    const duration = performance.now() - startTime;
+                    const fps = (frameCount / duration) * 1000;
+                    
+                    if (fps >= 55) {
+                        addResult('Animation Performance', 'pass', `✓ Excellent FPS: ${fps.toFixed(1)}`);
+                    } else if (fps >= 30) {
+                        addResult('Animation Performance', 'warning', `⚠ Acceptable FPS: ${fps.toFixed(1)}`);
+                    } else {
+                        addResult('Animation Performance', 'fail', `✗ Poor FPS: ${fps.toFixed(1)}`);
+                    }
+                }
+            }
+            
+            requestAnimationFrame(measureFrame);
+        }
+        
+        // Run all tests
+        function runAllTests() {
+            addResult('Test Suite', 'pass', '✓ Starting comprehensive tests...');
+            
+            testCSSFile();
+            testJSFile();
+            testBackgroundImage();
+            testBrowserSupport();
+            testConsoleErrors();
+            testRequiredElements();
+            testAnimationPerformance();
+            
+            // Summary after delay
+            setTimeout(() => {
+                const allResults = document.querySelectorAll('.test-result');
+                const passed = document.querySelectorAll('.test-result.pass').length;
+                const failed = document.querySelectorAll('.test-result.fail').length;
+                const warnings = document.querySelectorAll('.test-result.warning').length;
+                
+                addResult('Test Summary', 
+                    failed > 0 ? 'fail' : warnings > 0 ? 'warning' : 'pass',
+                    `Tests completed: ${passed} passed, ${failed} failed, ${warnings} warnings`
+                );
+            }, 2000);
+        }
+        
+        // Run tests on load
+        window.addEventListener('load', runAllTests);
+    </script>
+</body>
+</html>

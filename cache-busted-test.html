@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache-Busted Test - Facilities</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .base-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .svg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .facility-group {
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+        
+        .facility-border {
+            fill: rgba(255,255,255,0.1);
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-group:hover .facility-border {
+            stroke-width: 4;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .facility-group:hover {
+            transform: scale(1.05);
+        }
+        
+        .facility-group[data-facility="hydro-plant"] .facility-border {
+            stroke: #3498db;
+            fill: rgba(52, 152, 219, 0.1);
+        }
+        
+        .facility-group[data-facility="500kv-substation"] .facility-border {
+            stroke: #e74c3c;
+            fill: rgba(231, 76, 60, 0.1);
+        }
+        
+        .facility-group[data-facility="110kv-substation"] .facility-border {
+            stroke: #f39c12;
+            fill: rgba(243, 156, 18, 0.1);
+        }
+        
+        .facility-group[data-facility="data-center"] .facility-border {
+            stroke: #27ae60;
+            fill: rgba(39, 174, 96, 0.1);
+        }
+        
+        .facility-group.active .facility-border {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            50% {
+                opacity: 0.8;
+                filter: drop-shadow(0 0 15px currentColor);
+            }
+        }
+        
+        .info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .coordinates {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .timestamp {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Cache-Busted Facilities Test</h1>
+            <p>Fresh coordinates - No cache interference</p>
+        </div>
+        
+        <div class="info">
+            <h3>✅ Current Coordinates Applied:</h3>
+            <p><strong>Hydro:</strong> x=85, y=345 | <strong>500kV:</strong> x=515, y=285 | <strong>110kV:</strong> x=910, y=160 | <strong>Data Center:</strong> x=880, y=360</p>
+        </div>
+        
+        <div class="map-container">
+            <img src="assets/images/power-grid-map.jpg?cache_bust=<?= time() ?>" alt="Power Grid Map" class="base-map">
+            
+            <svg class="svg-overlay" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                <!-- Hydro Power Plant - CURRENT COORDINATES -->
+                <g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+                    <rect class="facility-border" x="85" y="345" width="30" height="20" rx="4" ry="4"/>
+                </g>
+                
+                <!-- 500kV Substation - CURRENT COORDINATES -->
+                <g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+                    <rect class="facility-border" x="515" y="285" width="25" height="25" rx="4" ry="4"/>
+                </g>
+                
+                <!-- 110kV La Son Substation - CURRENT COORDINATES -->
+                <g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+                    <rect class="facility-border" x="910" y="160" width="25" height="25" rx="4" ry="4"/>
+                </g>
+                
+                <!-- Data Center - CURRENT COORDINATES -->
+                <g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+                    <rect class="facility-border" x="880" y="360" width="25" height="25" rx="4" ry="4"/>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="coordinates">
+🎯 CURRENT COORDINATES VERIFICATION:
+
+Hydro Power Plant: x="85" y="345" (width=30, height=20)
+500kV Substation: x="515" y="285" (width=25, height=25) 
+110kV Substation: x="910" y="160" (width=25, height=25)
+Data Center: x="880" y="360" (width=25, height=25)
+
+STATUS: These coordinates should show perfect alignment.
+If not aligned, there may be a browser-specific issue.
+        </div>
+        
+        <div class="timestamp">
+            Cache-busted version created: <?= date('Y-m-d H:i:s') ?>
+        </div>
+    </div>
+
+    <script>
+        // Click handlers for testing
+        document.querySelectorAll('.facility-group').forEach(facility => {
+            facility.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const rect = this.querySelector('rect');
+                const x = rect.getAttribute('x');
+                const y = rect.getAttribute('y');
+                
+                console.log(`Clicked: ${name} at coordinates x=${x}, y=${y}`);
+                alert(`${name}\nCoordinates: x=${x}, y=${y}`);
+            });
+        });
+        
+        console.log('Cache-busted facilities test loaded successfully');
+        console.log('Current coordinates applied and ready for testing');
+    </script>
+</body>
+</html>

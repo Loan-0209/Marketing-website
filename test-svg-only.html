@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Positioning Test - Power Grid Map</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .timestamp {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        /* Map Container */
+        .map-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .base-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* SVG Overlay */
+        .svg-icon-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .svg-icon-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Facility Groups */
+        .facility-group {
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-border {
+            fill: transparent;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-group:hover .facility-border {
+            stroke-width: 4;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .facility-group:hover {
+            transform: scale(1.1);
+            transform-origin: center;
+        }
+        
+        /* Colors for different facilities */
+        .facility-group[data-facility="500kv-substation"] .facility-border {
+            stroke: #e74c3c;
+            fill: rgba(231, 76, 60, 0.1);
+        }
+        
+        .facility-group[data-facility="110kv-substation"] .facility-border {
+            stroke: #f39c12;
+            fill: rgba(243, 156, 18, 0.1);
+        }
+        
+        .facility-group[data-facility="hydro-plant"] .facility-border {
+            stroke: #3498db;
+            fill: rgba(52, 152, 219, 0.1);
+        }
+        
+        .facility-group[data-facility="data-center"] .facility-border {
+            stroke: #27ae60;
+            fill: rgba(39, 174, 96, 0.1);
+        }
+        
+        .facility-group[data-facility="tech-park"] .facility-border {
+            stroke: #2ecc71;
+            fill: rgba(46, 204, 113, 0.05);
+        }
+        
+        /* Active state */
+        .facility-group.active .facility-border {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            50% {
+                opacity: 0.7;
+                filter: drop-shadow(0 0 15px currentColor);
+            }
+        }
+        
+        /* Debug Info */
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .debug-line {
+            margin: 5px 0;
+            color: #666;
+        }
+        
+        .coord-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>SVG Positioning Test - Power Grid Map</h1>
+            <div class="timestamp" id="timestamp"></div>
+        </div>
+        
+        <div class="map-container" id="mapContainer">
+            <img src="assets/images/power-grid-map.jpg?t=" alt="Power Grid Map" class="base-map" id="baseMap">
+            
+            <div class="svg-icon-overlay">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" id="svgOverlay">
+                    <!-- Grid Helper (for positioning) -->
+                    <defs>
+                        <pattern id="grid" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                            <rect width="1" height="100" fill="#ccc" opacity="0.3"/>
+                            <rect width="100" height="1" fill="#ccc" opacity="0.3"/>
+                            <text x="2" y="10" font-size="8" fill="#999" opacity="0.5">100</text>
+                        </pattern>
+                    </defs>
+                    
+                    <!-- Toggle grid helper -->
+                    <rect width="100%" height="100%" fill="url(#grid)" opacity="0" id="gridHelper"/>
+                    
+                    <!-- Tech Park Boundary -->
+                    <g class="facility-group" data-facility="tech-park" data-name="Tech Park Boundary">
+                        <rect class="facility-border" x="410" y="240" width="180" height="120" rx="12" ry="12"/>
+                    </g>
+                    
+                    <!-- 500kV Substation (Center) -->
+                    <g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+                        <rect class="facility-border" x="485" y="285" width="30" height="30" rx="6" ry="6"/>
+                        <text x="500" y="305" text-anchor="middle" font-size="10" fill="#e74c3c" font-weight="bold">500kV</text>
+                    </g>
+                    
+                    <!-- 110kV Substation (Top Right) -->
+                    <g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+                        <rect class="facility-border" x="850" y="150" width="25" height="25" rx="6" ry="6"/>
+                        <text x="862.5" y="167" text-anchor="middle" font-size="8" fill="#f39c12" font-weight="bold">110kV</text>
+                    </g>
+                    
+                    <!-- Hydro Power Plant (Left) -->
+                    <g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+                        <rect class="facility-border" x="80" y="290" width="35" height="35" rx="6" ry="6"/>
+                        <text x="97.5" y="312" text-anchor="middle" font-size="9" fill="#3498db" font-weight="bold">HYDRO</text>
+                    </g>
+                    
+                    <!-- Data Center (Right) -->
+                    <g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+                        <rect class="facility-border" x="820" y="340" width="30" height="30" rx="6" ry="6"/>
+                        <text x="835" y="360" text-anchor="middle" font-size="8" fill="#27ae60" font-weight="bold">DC</text>
+                    </g>
+                    
+                    <!-- Transmission Points -->
+                    <g class="facility-group" data-facility="transmission-point" data-name="Transmission Point 1">
+                        <circle class="facility-border" cx="280" cy="220" r="6" style="stroke: #e74c3c;"/>
+                    </g>
+                    
+                    <g class="facility-group" data-facility="transmission-point" data-name="Transmission Point 2">
+                        <circle class="facility-border" cx="720" cy="250" r="6" style="stroke: #e74c3c;"/>
+                    </g>
+                    
+                    <!-- Debug crosshair -->
+                    <g id="crosshair" opacity="0" style="pointer-events: none;">
+                        <line x1="0" y1="300" x2="1000" y2="300" stroke="red" stroke-width="1" opacity="0.5"/>
+                        <line x1="500" y1="0" x2="500" y2="600" stroke="red" stroke-width="1" opacity="0.5"/>
+                        <text x="510" y="290" font-size="12" fill="red">Center (500,300)</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="debug-info">
+            <div class="debug-line"><strong>Debug Controls:</strong></div>
+            <div class="debug-line">
+                <button onclick="toggleGrid()">Toggle Grid</button>
+                <button onclick="toggleCrosshair()">Toggle Crosshair</button>
+                <button onclick="logPositions()">Log All Positions</button>
+                <button onclick="reloadMap()">Reload Map</button>
+            </div>
+            <div class="debug-line">
+                <button onclick="runSVGValidation()">Run Full Validation</button>
+                <button onclick="exportValidationResults()">Export Results</button>
+                <button onclick="showOptimizedCoords()">Show Optimized Coords</button>
+            </div>
+            <div class="debug-line" id="debugOutput">Click on facilities to see coordinates...</div>
+        </div>
+    </div>
+    
+    <div class="coord-display" id="coordDisplay">
+        SVG: 0, 0 | Page: 0, 0
+    </div>
+    
+    <script src="svg-position-validator.js"></script>
+    <script>
+        // Cache busting timestamp
+        document.getElementById('timestamp').textContent = 'Loaded at: ' + new Date().toLocaleString();
+        document.getElementById('baseMap').src += new Date().getTime();
+        
+        // Debug variables
+        let gridVisible = false;
+        let crosshairVisible = false;
+        
+        // Toggle grid helper
+        function toggleGrid() {
+            gridVisible = !gridVisible;
+            document.getElementById('gridHelper').setAttribute('opacity', gridVisible ? 0.3 : 0);
+            console.log('Grid:', gridVisible ? 'ON' : 'OFF');
+        }
+        
+        // Toggle crosshair
+        function toggleCrosshair() {
+            crosshairVisible = !crosshairVisible;
+            document.getElementById('crosshair').setAttribute('opacity', crosshairVisible ? 1 : 0);
+            console.log('Crosshair:', crosshairVisible ? 'ON' : 'OFF');
+        }
+        
+        // Log all facility positions
+        function logPositions() {
+            const facilities = document.querySelectorAll('.facility-group');
+            console.log('=== Facility Positions ===');
+            facilities.forEach(facility => {
+                const name = facility.getAttribute('data-name');
+                const rect = facility.querySelector('rect');
+                const circle = facility.querySelector('circle');
+                
+                if (rect) {
+                    console.log(`${name}: x=${rect.getAttribute('x')}, y=${rect.getAttribute('y')}, w=${rect.getAttribute('width')}, h=${rect.getAttribute('height')}`);
+                } else if (circle) {
+                    console.log(`${name}: cx=${circle.getAttribute('cx')}, cy=${circle.getAttribute('cy')}, r=${circle.getAttribute('r')}`);
+                }
+            });
+        }
+        
+        // Reload map with new timestamp
+        function reloadMap() {
+            location.reload();
+        }
+        
+        // Mouse coordinate tracking
+        const svg = document.getElementById('svgOverlay');
+        const coordDisplay = document.getElementById('coordDisplay');
+        const mapContainer = document.getElementById('mapContainer');
+        
+        mapContainer.addEventListener('mousemove', (e) => {
+            const rect = svg.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Convert to SVG coordinates
+            const svgX = (x / rect.width) * 1000;
+            const svgY = (y / rect.height) * 600;
+            
+            coordDisplay.innerHTML = `SVG: ${Math.round(svgX)}, ${Math.round(svgY)} | Page: ${Math.round(x)}, ${Math.round(y)}`;
+        });
+        
+        // Click handler for facilities
+        document.querySelectorAll('.facility-group').forEach(facility => {
+            facility.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const type = this.getAttribute('data-facility');
+                const rect = this.querySelector('rect');
+                const circle = this.querySelector('circle');
+                
+                let coords = '';
+                if (rect) {
+                    coords = `x: ${rect.getAttribute('x')}, y: ${rect.getAttribute('y')}, width: ${rect.getAttribute('width')}, height: ${rect.getAttribute('height')}`;
+                } else if (circle) {
+                    coords = `cx: ${circle.getAttribute('cx')}, cy: ${circle.getAttribute('cy')}, r: ${circle.getAttribute('r')}`;
+                }
+                
+                const debugMsg = `Clicked: ${name} (${type}) - ${coords}`;
+                document.getElementById('debugOutput').textContent = debugMsg;
+                console.log(debugMsg);
+            });
+        });
+        
+        // Enhanced debug function
+        function showOptimizedCoords() {
+            if (window.svgValidator) {
+                const results = window.svgValidator.exportResults();
+                console.log('\n🎯 OPTIMIZED COORDINATES:');
+                results.optimizedCoordinates.forEach(coord => {
+                    console.log(`${coord.name}: Current(${coord.current.x}, ${coord.current.y}) -> Optimized(${coord.optimized.x}, ${coord.optimized.y})`);
+                });
+            } else {
+                console.warn('Run validation first');
+            }
+        }
+        
+        // Initial log
+        console.log('SVG Test Page loaded successfully');
+        console.log('Map dimensions:', mapContainer.offsetWidth, 'x', mapContainer.offsetHeight);
+        console.log('SVG viewBox: 0 0 1000 600');
+    </script>
+</body>
+</html>

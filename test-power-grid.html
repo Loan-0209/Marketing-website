@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Power Grid Display</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .title {
+            color: #00ffff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+        .image-container {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 20px;
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(0, 255, 255, 0.4);
+            margin-bottom: 20px;
+        }
+        .power-grid-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border-left: 4px solid #00ffff;
+        }
+        .success {
+            color: #00ff88;
+        }
+        .error {
+            color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🌟 Power Grid Map - Test Display</h1>
+        
+        <div class="image-container">
+            <img src="assets/images/power-grid-map.jpg" 
+                 alt="Power Grid Map" 
+                 class="power-grid-image"
+                 onload="showStatus('success', 'Hình ảnh đã load thành công!')"
+                 onerror="showStatus('error', 'Lỗi: Không thể load hình ảnh!')">
+        </div>
+
+        <div class="status" id="status">
+            <span id="statusText">Đang kiểm tra hình ảnh...</span>
+        </div>
+
+        <div style="margin-top: 20px; text-align: left; background: #2a2a2a; padding: 15px; border-radius: 8px;">
+            <h3 style="color: #00ffff;">🔍 Thông tin kiểm tra:</h3>
+            <p><strong>File đường dẫn:</strong> assets/images/power-grid-map.jpg</p>
+            <p><strong>Kích thước mong đợi:</strong> 936×490 pixel (đã crop)</p>
+            <p><strong>Định dạng:</strong> JPEG</p>
+            <p><strong>Chất lượng:</strong> 95%</p>
+            
+            <h3 style="color: #00ffff; margin-top: 20px;">📋 Kết quả xử lý:</h3>
+            <ul style="color: #00ff88;">
+                <li>✅ Đã xóa khung chú thích che khuất</li>
+                <li>✅ Đã crop dòng chữ "500KV ONSITE GRID" bị cắt</li>
+                <li>✅ Kích thước từ 936×528 → 936×490</li>
+                <li>✅ Chất lượng hình ảnh được bảo toàn</li>
+                <li>✅ Backup các file an toàn</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = message;
+            
+            if (type === 'success') {
+                statusDiv.className = 'status success';
+            } else {
+                statusDiv.className = 'status error';
+            }
+        }
+        
+        // Check image after 2 seconds if no load/error event
+        setTimeout(() => {
+            const img = document.querySelector('.power-grid-image');
+            if (!img.complete || img.naturalWidth === 0) {
+                showStatus('error', 'Timeout: Hình ảnh không load được. Kiểm tra đường dẫn file.');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

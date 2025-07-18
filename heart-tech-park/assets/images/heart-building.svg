@@ -1,0 +1,67 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="windowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#f3f4f6;stop-opacity:0.8" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Building Base -->
+  <rect x="80" y="120" width="240" height="240" fill="url(#buildingGradient)" rx="10"/>
+  
+  <!-- Main Building -->
+  <rect x="120" y="80" width="160" height="280" fill="#1e3a8a" rx="8"/>
+  
+  <!-- Building Details -->
+  <rect x="130" y="90" width="140" height="20" fill="#fbbf24" rx="4"/>
+  
+  <!-- Windows Grid -->
+  <!-- Row 1 -->
+  <rect x="140" y="120" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="180" y="120" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="220" y="120" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- Row 2 -->
+  <rect x="140" y="160" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="180" y="160" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="220" y="160" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- Row 3 -->
+  <rect x="140" y="200" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="180" y="200" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="220" y="200" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- Row 4 -->
+  <rect x="140" y="240" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="180" y="240" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="220" y="240" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- Row 5 -->
+  <rect x="140" y="280" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="180" y="280" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  <rect x="220" y="280" width="25" height="20" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- Entrance -->
+  <rect x="185" y="320" width="30" height="40" fill="#fbbf24" rx="4"/>
+  <rect x="190" y="330" width="20" height="30" fill="url(#windowGradient)" rx="2"/>
+  
+  <!-- HEART Technology Sign -->
+  <rect x="130" y="130" width="140" height="15" fill="#ffffff" rx="3"/>
+  <text x="200" y="141" text-anchor="middle" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="8" font-weight="bold">HEART TECHNOLOGY</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="350" cy="60" r="25" fill="#fbbf24" opacity="0.3"/>
+  <circle cx="50" cy="320" r="15" fill="#3b82f6" opacity="0.4"/>
+  <circle cx="350" cy="350" r="20" fill="#ffffff" opacity="0.2"/>
+  
+  <!-- Tech Elements -->
+  <rect x="100" y="50" width="4" height="30" fill="#fbbf24" opacity="0.6"/>
+  <rect x="110" y="45" width="4" height="35" fill="#3b82f6" opacity="0.7"/>
+  <rect x="300" y="40" width="4" height="40" fill="#fbbf24" opacity="0.6"/>
+  <rect x="310" y="35" width="4" height="45" fill="#3b82f6" opacity="0.7"/>
+</svg>

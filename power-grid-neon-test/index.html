@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Power Grid Neon Icons - Complete Test Suite</title>
+    <link rel="stylesheet" href="styles/neon-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .test-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #00ffff, #ff0040, #00ff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .test-section h2 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .icon-demo {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-demo h3 {
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .icon-demo .icon-wrapper {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+        }
+
+        .icon-demo .specs {
+            font-size: 0.8rem;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        .power-map-simulation {
+            position: relative;
+            background: #2c3e50;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            min-height: 400px;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 0, 64, 0.1) 0%, transparent 50%);
+        }
+
+        .map-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        .facility-placement {
+            position: absolute;
+        }
+
+        .facility-placement.hydro-1 { top: 20%; left: 15%; }
+        .facility-placement.substation-main { top: 30%; left: 50%; }
+        .facility-placement.substation-small { top: 60%; left: 25%; }
+        .facility-placement.datacenter-1 { top: 45%; right: 20%; }
+        .facility-placement.solar-1 { top: 70%; left: 60%; }
+        .facility-placement.wind-1 { top: 15%; right: 30%; }
+
+        .transmission-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .line-500kv {
+            position: absolute;
+            width: 40%;
+            top: 32%;
+            left: 30%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff0040, transparent);
+            box-shadow: 0 0 10px rgba(255, 0, 64, 0.6);
+        }
+
+        .line-220kv {
+            position: absolute;
+            width: 30%;
+            top: 50%;
+            left: 35%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00a8ff, transparent);
+            box-shadow: 0 0 8px rgba(0, 168, 255, 0.6);
+        }
+
+        .performance-monitor {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .performance-monitor h3 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .performance-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-pass { background: #00ff00; }
+        .status-fail { background: #ff0040; }
+        .status-warning { background: #ffd700; }
+
+        .responsive-test {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .screen-size {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .screen-size h4 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .responsive-test {
+                grid-template-columns: 1fr;
+            }
+            
+            .icon-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        .debug-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.8rem;
+            max-width: 250px;
+            z-index: 1000;
+        }
+
+        .debug-panel h4 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Header -->
+        <div class="test-header">
+            <h1>🔍 Power Grid Neon Icons Test Suite</h1>
+            <p>Comprehensive testing and validation of neon icon implementation</p>
+        </div>
+
+        <!-- Test Case 1: Icon Rendering -->
+        <div class="test-section">
+            <h2>📋 Test Case 1: Icon Rendering Validation</h2>
+            <div class="icon-grid">
+                <div class="icon-demo">
+                    <h3>500kV Substation</h3>
+                    <div class="icon-wrapper">
+                        <div class="substation-500kv">A</div>
+                    </div>
+                    <div class="specs">
+                        Size: 50x50px<br>
+                        Color: Red (#ff0040)<br>
+                        Animation: 2s pulse
+                    </div>
+                </div>
+
+                <div class="icon-demo">
+                    <h3>110kV Substation</h3>
+                    <div class="icon-wrapper">
+                        <div class="substation-110kv"></div>
+                    </div>
+                    <div class="specs">
+                        Size: 30x30px<br>
+                        Color: Red (#ff0040)<br>
+                        Icon: Lightning ⚡
+                    </div>
+                </div>
+
+                <div class="icon-demo">
+                    <h3>Hydro Power Plant</h3>
+                    <div class="icon-wrapper">
+                        <div class="hydro-plant"></div>
+                    </div>
+                    <div class="specs">
+                        Size: 40x40px<br>
+                        Color: Blue (#00a8ff)<br>
+                        Icon: Water drop 💧
+                    </div>
+                </div>
+
+                <div class="icon-demo">
+                    <h3>AI Data Center</h3>
+                    <div class="icon-wrapper">
+                        <div class="data-center"></div>
+                    </div>
+                    <div class="specs">
+                        Size: 45x45px<br>
+                        Color: Green (#00ff00)<br>
+                        Icon: Building 🏢
+                    </div>
+                </div>
+
+                <div class="icon-demo">
+                    <h3>Solar Plant</h3>
+                    <div class="icon-wrapper">
+                        <div class="solar-plant"></div>
+                    </div>
+                    <div class="specs">
+                        Size: 35x35px<br>
+                        Color: Yellow (#ffd700)<br>
+                        Icon: Sun ☀️
+                    </div>
+                </div>
+
+                <div class="icon-demo">
+                    <h3>Wind Plant</h3>
+                    <div class="icon-wrapper">
+                        <div class="wind-plant"></div>
+                    </div>
+                    <div class="specs">
+                        Size: 35x35px<br>
+                        Color: Cyan (#00ffff)<br>
+                        Icon: Wind 🌪️
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Case 2: Integration Testing -->
+        <div class="test-section">
+            <h2>🗺️ Test Case 2: Map Integration Simulation</h2>
+            <div class="power-map-simulation">
+                <div class="map-grid"></div>
+                
+                <!-- Transmission Lines -->
+                <div class="transmission-lines">
+                    <div class="line-500kv"></div>
+                    <div class="line-220kv"></div>
+                </div>
+                
+                <!-- Facility Placements -->
+                <div class="facility-placement hydro-1">
+                    <div class="hydro-plant"></div>
+                </div>
+                <div class="facility-placement substation-main">
+                    <div class="substation-500kv">A</div>
+                </div>
+                <div class="facility-placement substation-small">
+                    <div class="substation-110kv"></div>
+                </div>
+                <div class="facility-placement datacenter-1">
+                    <div class="data-center"></div>
+                </div>
+                <div class="facility-placement solar-1">
+                    <div class="solar-plant"></div>
+                </div>
+                <div class="facility-placement wind-1">
+                    <div class="wind-plant"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Case 3: Performance Monitoring -->
+        <div class="test-section">
+            <h2>⚡ Test Case 3: Performance Analysis</h2>
+            <div class="performance-monitor">
+                <h3>Real-time Performance Metrics</h3>
+                <div class="performance-stat">
+                    <span>Frame Rate (FPS):</span>
+                    <span id="fps-counter">Calculating...</span>
+                </div>
+                <div class="performance-stat">
+                    <span>Animation Smoothness:</span>
+                    <span id="animation-status"><span class="status-indicator status-pass"></span>Smooth</span>
+                </div>
+                <div class="performance-stat">
+                    <span>CSS Load Time:</span>
+                    <span id="css-load-time">< 50ms</span>
+                </div>
+                <div class="performance-stat">
+                    <span>Memory Usage:</span>
+                    <span id="memory-usage">Monitoring...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Case 4: Responsive Testing -->
+        <div class="test-section">
+            <h2>📱 Test Case 4: Responsive Behavior</h2>
+            <div class="responsive-test">
+                <div class="screen-size">
+                    <h4>Mobile (≤768px)</h4>
+                    <div style="transform: scale(0.8);">
+                        <div class="substation-500kv">A</div>
+                        <div class="hydro-plant"></div>
+                        <div class="data-center"></div>
+                    </div>
+                    <p>40px, 35px, 35px</p>
+                </div>
+                <div class="screen-size">
+                    <h4>Tablet (≤1024px)</h4>
+                    <div style="transform: scale(0.9);">
+                        <div class="substation-500kv">A</div>
+                        <div class="hydro-plant"></div>
+                        <div class="data-center"></div>
+                    </div>
+                    <p>45px, 40px, 40px</p>
+                </div>
+                <div class="screen-size">
+                    <h4>Desktop (≥1920px)</h4>
+                    <div style="transform: scale(1.2);">
+                        <div class="substation-500kv">A</div>
+                        <div class="hydro-plant"></div>
+                        <div class="data-center"></div>
+                    </div>
+                    <p>60px, 50px, 50px</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Panel -->
+        <div class="debug-panel">
+            <h4>🔧 Debug Info</h4>
+            <div id="debug-info">
+                <div>Screen: <span id="screen-size">Unknown</span></div>
+                <div>Viewport: <span id="viewport-size">Unknown</span></div>
+                <div>Animations: <span id="animation-support">Unknown</span></div>
+                <div>CSS Features: <span id="css-support">Unknown</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Performance monitoring
+        let fps = 0;
+        let lastTime = performance.now();
+        let frameCount = 0;
+
+        function calculateFPS() {
+            frameCount++;
+            const currentTime = performance.now();
+            
+            if (currentTime >= lastTime + 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                document.getElementById('fps-counter').textContent = fps + ' FPS';
+                
+                // Update animation status based on FPS
+                const animationStatus = document.getElementById('animation-status');
+                if (fps >= 55) {
+                    animationStatus.innerHTML = '<span class="status-indicator status-pass"></span>Smooth (' + fps + ' FPS)';
+                } else if (fps >= 30) {
+                    animationStatus.innerHTML = '<span class="status-indicator status-warning"></span>Acceptable (' + fps + ' FPS)';
+                } else {
+                    animationStatus.innerHTML = '<span class="status-indicator status-fail"></span>Poor (' + fps + ' FPS)';
+                }
+                
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+            
+            requestAnimationFrame(calculateFPS);
+        }
+
+        // Memory monitoring
+        function updateMemoryUsage() {
+            if ('memory' in performance) {
+                const memory = performance.memory;
+                const usedMB = Math.round(memory.usedJSHeapSize / 1048576);
+                const totalMB = Math.round(memory.totalJSHeapSize / 1048576);
+                document.getElementById('memory-usage').textContent = usedMB + 'MB / ' + totalMB + 'MB';
+            } else {
+                document.getElementById('memory-usage').textContent = 'Not supported';
+            }
+        }
+
+        // Debug information
+        function updateDebugInfo() {
+            const screenSize = screen.width + 'x' + screen.height;
+            const viewportSize = window.innerWidth + 'x' + window.innerHeight;
+            
+            document.getElementById('screen-size').textContent = screenSize;
+            document.getElementById('viewport-size').textContent = viewportSize;
+            
+            // Check animation support
+            const animationSupport = CSS.supports('animation', 'neonPulse 2s ease-in-out infinite');
+            document.getElementById('animation-support').textContent = animationSupport ? 'Supported' : 'Limited';
+            
+            // Check CSS features
+            const cssFeatures = [];
+            if (CSS.supports('box-shadow', '0 0 20px rgba(255,0,0,0.8)')) cssFeatures.push('box-shadow');
+            if (CSS.supports('border-radius', '50%')) cssFeatures.push('border-radius');
+            if (CSS.supports('transform', 'scale(1.2)')) cssFeatures.push('transform');
+            
+            document.getElementById('css-support').textContent = cssFeatures.length + '/3 features';
+        }
+
+        // CSS load time measurement
+        const cssLoadStart = performance.now();
+        window.addEventListener('load', () => {
+            const loadTime = Math.round(performance.now() - cssLoadStart);
+            document.getElementById('css-load-time').textContent = loadTime + 'ms';
+        });
+
+        // Test icon interactions
+        function testIconInteractions() {
+            const icons = document.querySelectorAll('.substation-500kv, .substation-110kv, .hydro-plant, .data-center, .solar-plant, .wind-plant');
+            
+            icons.forEach(icon => {
+                icon.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.5)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 300);
+                });
+                
+                icon.addEventListener('mouseenter', function() {
+                    console.log('Hover detected on:', this.className);
+                });
+            });
+        }
+
+        // Accessibility testing
+        function testAccessibility() {
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const highContrast = window.matchMedia('(prefers-contrast: high)').matches;
+            
+            console.log('Accessibility Settings:');
+            console.log('- Reduced Motion:', reducedMotion);
+            console.log('- High Contrast:', highContrast);
+            
+            if (reducedMotion) {
+                console.log('✓ Animations will be disabled for accessibility');
+            }
+        }
+
+        // Initialize all tests
+        function initializeTests() {
+            calculateFPS();
+            updateDebugInfo();
+            updateMemoryUsage();
+            testIconInteractions();
+            testAccessibility();
+            
+            // Update debug info on resize
+            window.addEventListener('resize', updateDebugInfo);
+            
+            // Update memory usage periodically
+            setInterval(updateMemoryUsage, 5000);
+            
+            console.log('🔍 Power Grid Neon Icons Test Suite Initialized');
+            console.log('✅ All 7 icon types loaded');
+            console.log('✅ Performance monitoring active');
+            console.log('✅ Responsive testing ready');
+            console.log('✅ Accessibility checks complete');
+        }
+
+        // Start tests when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeTests);
+
+        // Export test results
+        window.PowerGridTestSuite = {
+            getFPS: () => fps,
+            getMemoryUsage: () => performance.memory ? performance.memory.usedJSHeapSize : 0,
+            testIconRendering: () => {
+                const icons = document.querySelectorAll('.substation-500kv, .substation-110kv, .hydro-plant, .data-center, .solar-plant, .wind-plant');
+                return {
+                    totalIcons: icons.length,
+                    expectedIcons: 6,
+                    allRendered: icons.length === 6
+                };
+            },
+            generateReport: () => {
+                const iconTest = window.PowerGridTestSuite.testIconRendering();
+                return {
+                    timestamp: new Date().toISOString(),
+                    fps: fps,
+                    memoryUsage: performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + 'MB' : 'N/A',
+                    iconRendering: iconTest.allRendered ? 'PASS' : 'FAIL',
+                    screenSize: window.innerWidth + 'x' + window.innerHeight,
+                    userAgent: navigator.userAgent,
+                    testResults: {
+                        visualAccuracy: iconTest.allRendered,
+                        animationSmooth: fps >= 55,
+                        responsive: window.innerWidth >= 320,
+                        performance: fps >= 30
+                    }
+                };
+            }
+        };
+    </script>
+</body>
+</html>

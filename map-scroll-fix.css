@@ -1,0 +1,213 @@
+/* 🎯 MAP SCROLL EFFECT FIX - URGENT SOLUTION */
+/* File: map-scroll-fix.css */
+/* Purpose: Fix map losing scroll effect when scrolling down */
+
+/* 1. CORE FIX - Reset conflicting sticky positioning */
+.location-map {
+    /* Force correct sticky positioning */
+    position: sticky !important;
+    top: 20px !important;
+    
+    /* Proper sizing without conflicts */
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1.6/1 !important;
+    max-height: calc(100vh - 40px) !important;
+    min-height: 500px !important;
+    
+    /* Critical for sticky to work */
+    align-self: start !important;
+    z-index: 2 !important;
+    
+    /* Visual styles */
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
+    
+    /* Performance optimization */
+    will-change: transform !important;
+    contain: layout style !important;
+    
+    /* Remove any conflicting transforms */
+    transform: none !important;
+}
+
+/* 2. CONTAINER FIXES - Critical for sticky to function */
+.location-section {
+    /* Remove height constraints that break sticky */
+    min-height: unset !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 50px 0 !important;
+}
+
+.location-grid {
+    display: grid !important;
+    grid-template-columns: 0.8fr 1.2fr !important;
+    gap: 2rem 3rem !important;
+    align-items: start !important;
+    
+    /* CRITICAL: Container must be tall enough for sticky to work */
+    min-height: 120vh !important;
+    height: auto !important;
+}
+
+/* 3. CONTENT SPACING - Give sticky element room to stick */
+.location-content {
+    /* Add bottom padding to create scroll space */
+    padding-bottom: 300px !important;
+}
+
+/* 4. IMAGE OPTIMIZATION */
+.map-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* 5. RESPONSIVE BEHAVIOR */
+@media (min-width: 1200px) {
+    .location-map {
+        aspect-ratio: 1.8/1 !important;
+        max-height: calc(100vh - 60px) !important;
+        min-height: 600px !important;
+    }
+    
+    .location-grid {
+        grid-template-columns: 0.75fr 1.25fr !important;
+        min-height: 140vh !important;
+    }
+    
+    .location-content {
+        padding-bottom: 400px !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    /* Disable sticky on tablets for better UX */
+    .location-map {
+        position: static !important;
+        top: unset !important;
+        aspect-ratio: 1.4/1 !important;
+        max-height: 60vh !important;
+        margin-bottom: 2rem !important;
+        min-height: 400px !important;
+    }
+    
+    .location-grid {
+        grid-template-columns: 1fr !important;
+        min-height: auto !important;
+    }
+    
+    .location-content {
+        padding-bottom: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .location-map {
+        aspect-ratio: 1.2/1 !important;
+        max-height: 50vh !important;
+        min-height: 350px !important;
+    }
+}
+
+/* 6. SMOOTH SCROLLING */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* 7. HOVER EFFECTS */
+.location-map:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25) !important;
+}
+
+.location-map:hover .map-image {
+    transform: scale(1.02) !important;
+}
+
+/* 8. FALLBACK FOR OLDER BROWSERS */
+@supports not (aspect-ratio: 1.6/1) {
+    .location-map {
+        height: 600px !important;
+    }
+    
+    @media (min-width: 1200px) {
+        .location-map {
+            height: 700px !important;
+        }
+    }
+    
+    @media (max-width: 1024px) {
+        .location-map {
+            height: 450px !important;
+        }
+    }
+}
+
+/* 9. FORCE OVERRIDE EXISTING STYLES */
+.location-map.map-fixed {
+    position: sticky !important;
+    top: 20px !important;
+    align-self: flex-start !important;
+}
+
+/* 10. DEBUG STYLES (Remove after confirming fix works) */
+.debug-mode .location-map {
+    border: 3px solid red !important;
+}
+
+.debug-mode .location-grid {
+    border: 2px solid blue !important;
+}
+
+/* 11. PERFORMANCE ENHANCEMENTS */
+.location-map {
+    /* Optimize for smooth scrolling */
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    perspective: 1000px !important;
+}
+
+/* 12. GRID ITEM POSITIONING */
+.location-map {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+}
+
+.location-content {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+}
+
+.location-header {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+}
+
+/* 
+🎯 USAGE INSTRUCTIONS:
+1. Link this CSS file in your HTML head AFTER all other CSS files:
+   <link rel="stylesheet" href="map-scroll-fix.css">
+
+2. Or copy this entire CSS content and paste it at the END of your main CSS file
+
+3. Clear browser cache and refresh (Ctrl+Shift+R or Cmd+Shift+R)
+
+4. Test: Scroll down - map should stick to top while content scrolls
+
+5. If still not working, add class "map-fixed" to your .location-map element
+
+🔧 TROUBLESHOOTING:
+- Cache issue: Hard refresh browser
+- Still not sticky: Check if other CSS is overriding with higher specificity
+- Map too small: Adjust aspect-ratio values
+- Conflicts: This CSS uses !important to override conflicts
+
+✅ EXPECTED RESULT:
+Map stays visible at top of viewport when scrolling down, creating a "sticky" effect
+*/

@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Real Power Grid Data Integration</title>
+    <link rel="stylesheet" href="styles/neon-icons.css">
+    <script src="performance-monitor.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .real-data-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00ffff, #00a8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .data-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .data-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-panel h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .facility-data {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .facility-data:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .facility-data.hydro { border-left-color: #00a8ff; }
+        .facility-data.substation-500 { border-left-color: #ff0040; }
+        .facility-data.substation-110 { border-left-color: #ff0040; }
+        .facility-data.datacenter { border-left-color: #00ff00; }
+        .facility-data.solar { border-left-color: #ffd700; }
+        .facility-data.wind { border-left-color: #00ffff; }
+
+        .facility-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .facility-name {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .facility-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-online { background: #00ff00; color: #000; }
+        .status-offline { background: #ff0040; color: #fff; }
+        .status-maintenance { background: #ffff00; color: #000; }
+
+        .facility-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .spec-label {
+            opacity: 0.7;
+        }
+
+        .spec-value {
+            font-weight: bold;
+        }
+
+        .interactive-map {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: #2c3e50;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .map-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQwMCIgaGVpZ2h0PSI2MDAiIHZpZXdCb3g9IjAgMCAxNDAwIDYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIE1hcCBCYWNrZ3JvdW5kIC0tPgogIDxyZWN0IHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzJjM2U1MCIvPgogIAogIDwhLS0gR3JpZCBQYXR0ZXJuIC0tPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxwYXRoIGQ9Ik0gNTAgMCBMIDAgMCAwIDUwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxNDAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0idXJsKCNncmlkKSIvPgogIAogIDx0ZXh0IHg9IjcwMCIgeT0iNTcwIiBmb250LXNpemU9IjE4IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SFVFIFBPV0VSIEdSSUQgLSBSRUFMIERBVEEgSU5URUdSQVRJT048L3RleHQ+Cjwvc3ZnPg==') center center / cover;
+        }
+
+        .transmission-network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .transmission-line {
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .line-500kv {
+            height: 6px;
+            background: linear-gradient(90deg, 
+                rgba(255, 0, 64, 0.8) 0%, 
+                rgba(255, 0, 64, 1) 50%, 
+                rgba(255, 0, 64, 0.8) 100%);
+            box-shadow: 0 0 15px rgba(255, 0, 64, 0.6);
+            animation: powerFlow 3s linear infinite;
+        }
+
+        .line-220kv {
+            height: 4px;
+            background: linear-gradient(90deg, 
+                rgba(0, 168, 255, 0.8) 0%, 
+                rgba(0, 168, 255, 1) 50%, 
+                rgba(0, 168, 255, 0.8) 100%);
+            box-shadow: 0 0 12px rgba(0, 168, 255, 0.6);
+            animation: powerFlow 4s linear infinite;
+        }
+
+        .line-110kv {
+            height: 3px;
+            background: linear-gradient(90deg, 
+                rgba(138, 43, 226, 0.8) 0%, 
+                rgba(138, 43, 226, 1) 50%, 
+                rgba(138, 43, 226, 0.8) 100%);
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.6);
+            animation: powerFlow 5s linear infinite;
+        }
+
+        @keyframes powerFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .facility-marker {
+            position: absolute;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .facility-marker:hover {
+            z-index: 20;
+            transform: scale(1.1);
+        }
+
+        .facility-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .facility-marker:hover .facility-tooltip {
+            opacity: 1;
+        }
+
+        .load-monitoring {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .load-chart {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .load-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .load-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .load-hydro { color: #00a8ff; }
+        .load-substation { color: #ff0040; }
+        .load-datacenter { color: #00ff00; }
+        .load-solar { color: #ffd700; }
+
+        .load-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .load-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .controls-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            border-radius: 6px;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        @media (max-width: 768px) {
+            .data-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .facility-specs {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="real-data-container">
+        <div class="header">
+            <h1>⚡ Real Power Grid Data Integration</h1>
+            <p>Tích hợp dữ liệu thực tế từ lưới điện Thừa Thiên Huế với biểu tượng neon</p>
+        </div>
+
+        <!-- Data Dashboard -->
+        <div class="data-dashboard">
+            <div class="data-panel">
+                <h3>🏭 Power Generation Facilities</h3>
+                
+                <div class="facility-data hydro" data-facility="ta-trach">
+                    <div class="facility-header">
+                        <div class="facility-name">TA TRACH Hydro Power Plant</div>
+                        <div class="facility-status status-online">ONLINE</div>
+                    </div>
+                    <div class="facility-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">2x10.5MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Current Output:</span>
+                            <span class="spec-value" id="tatrach-output">18.2MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Efficiency:</span>
+                            <span class="spec-value">87%</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Water Level:</span>
+                            <span class="spec-value">Normal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="facility-data solar" data-facility="solar-farm">
+                    <div class="facility-header">
+                        <div class="facility-name">Solar Power Farm</div>
+                        <div class="facility-status status-online">ONLINE</div>
+                    </div>
+                    <div class="facility-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">150MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Current Output:</span>
+                            <span class="spec-value" id="solar-output">142MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Solar Irradiance:</span>
+                            <span class="spec-value">850W/m²</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Panel Temp:</span>
+                            <span class="spec-value">45°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-panel">
+                <h3>🔌 Transmission & Distribution</h3>
+                
+                <div class="facility-data substation-500" data-facility="substation-500">
+                    <div class="facility-header">
+                        <div class="facility-name">500kV Main Substation</div>
+                        <div class="facility-status status-online">ONLINE</div>
+                    </div>
+                    <div class="facility-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Capacity:</span>
+                            <span class="spec-value">2x600MVA</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Current Load:</span>
+                            <span class="spec-value" id="sub500-load">850MVA</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Voltage:</span>
+                            <span class="spec-value">525kV</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Frequency:</span>
+                            <span class="spec-value">50.02Hz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="facility-data datacenter" data-facility="heart-datacenter">
+                    <div class="facility-header">
+                        <div class="facility-name">HEART AI Data Center</div>
+                        <div class="facility-status status-online">ONLINE</div>
+                    </div>
+                    <div class="facility-specs">
+                        <div class="spec-item">
+                            <span class="spec-label">Power Demand:</span>
+                            <span class="spec-value" id="datacenter-demand">300MW</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Servers Active:</span>
+                            <span class="spec-value">15,420</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">CPU Usage:</span>
+                            <span class="spec-value">78%</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Temperature:</span>
+                            <span class="spec-value">24°C</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Map with Real Data -->
+        <div class="interactive-map">
+            <div class="map-background"></div>
+            
+            <!-- Transmission Lines -->
+            <div class="transmission-network">
+                <!-- 500kV Lines -->
+                <div class="transmission-line line-500kv" style="top: 25%; left: 15%; width: 40%; transform: rotate(2deg);"></div>
+                <div class="transmission-line line-500kv" style="top: 35%; left: 45%; width: 35%; transform: rotate(-1deg);"></div>
+                
+                <!-- 220kV Lines -->
+                <div class="transmission-line line-220kv" style="top: 20%; left: 30%; height: 35%; width: 4px; transform: rotate(90deg);"></div>
+                <div class="transmission-line line-220kv" style="top: 45%; left: 20%; width: 60%;"></div>
+                
+                <!-- 110kV Lines -->
+                <div class="transmission-line line-110kv" style="top: 60%; left: 25%; width: 30%;"></div>
+                <div class="transmission-line line-110kv" style="top: 70%; left: 60%; width: 25%;"></div>
+            </div>
+            
+            <!-- Facility Markers with Real Data -->
+            <div class="facility-marker" style="top: 18%; left: 25%;" data-facility="ta-trach">
+                <div class="hydro-plant"></div>
+                <div class="facility-tooltip">
+                    TA TRACH Hydro: <span id="tooltip-tatrach">18.2MW</span>
+                </div>
+            </div>
+            
+            <div class="facility-marker" style="top: 35%; left: 50%;" data-facility="substation-500">
+                <div class="substation-500kv">A</div>
+                <div class="facility-tooltip">
+                    500kV Substation: <span id="tooltip-sub500">850MVA</span>
+                </div>
+            </div>
+            
+            <div class="facility-marker" style="top: 55%; left: 30%;" data-facility="substation-110">
+                <div class="substation-110kv"></div>
+                <div class="facility-tooltip">
+                    110kV Substation: 40MVA
+                </div>
+            </div>
+            
+            <div class="facility-marker" style="top: 45%; right: 25%;" data-facility="heart-datacenter">
+                <div class="data-center"></div>
+                <div class="facility-tooltip">
+                    HEART Data Center: <span id="tooltip-datacenter">300MW</span>
+                </div>
+            </div>
+            
+            <div class="facility-marker" style="top: 70%; left: 60%;" data-facility="solar-farm">
+                <div class="solar-plant"></div>
+                <div class="facility-tooltip">
+                    Solar Farm: <span id="tooltip-solar">142MW</span>
+                </div>
+            </div>
+            
+            <div class="facility-marker" style="top: 15%; right: 20%;" data-facility="wind-farm">
+                <div class="wind-plant"></div>
+                <div class="facility-tooltip">
+                    Wind Farm: 200MW
+                </div>
+            </div>
+        </div>
+
+        <!-- Load Monitoring -->
+        <div class="load-monitoring">
+            <h3 style="color: #00ffff; margin-bottom: 15px;">📊 Real-time Load Monitoring</h3>
+            <div class="load-chart">
+                <div class="load-item">
+                    <h4>Hydro Generation</h4>
+                    <div class="load-value load-hydro" id="hydro-load">18.2</div>
+                    <div>MW</div>
+                    <div class="load-bar">
+                        <div class="load-fill" style="background: #00a8ff; width: 87%;"></div>
+                    </div>
+                </div>
+                
+                <div class="load-item">
+                    <h4>Solar Generation</h4>
+                    <div class="load-value load-solar" id="solar-load">142</div>
+                    <div>MW</div>
+                    <div class="load-bar">
+                        <div class="load-fill" style="background: #ffd700; width: 95%;"></div>
+                    </div>
+                </div>
+                
+                <div class="load-item">
+                    <h4>Transmission Load</h4>
+                    <div class="load-value load-substation" id="transmission-load">850</div>
+                    <div>MVA</div>
+                    <div class="load-bar">
+                        <div class="load-fill" style="background: #ff0040; width: 71%;"></div>
+                    </div>
+                </div>
+                
+                <div class="load-item">
+                    <h4>Data Center Demand</h4>
+                    <div class="load-value load-datacenter" id="datacenter-load">300</div>
+                    <div>MW</div>
+                    <div class="load-bar">
+                        <div class="load-fill" style="background: #00ff00; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <h3 style="color: #00ffff; margin-bottom: 15px;">🎮 Real-time Controls</h3>
+            
+            <div class="control-group">
+                <button class="control-btn active" onclick="toggleRealTimeData()">Real-time Data</button>
+                <button class="control-btn" onclick="simulateLoad()">Simulate Load Changes</button>
+                <button class="control-btn" onclick="testFacilityAlerts()">Test Alerts</button>
+                <button class="control-btn" onclick="exportRealDataReport()">Export Data</button>
+            </div>
+            
+            <div class="control-group">
+                <button class="control-btn" onclick="toggleTransmissionFlow()">Toggle Power Flow</button>
+                <button class="control-btn" onclick="highlightCriticalPath()">Critical Path</button>
+                <button class="control-btn" onclick="showLoadDistribution()">Load Distribution</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real power grid data simulation
+        const powerGridData = {
+            facilities: {
+                'ta-trach': {
+                    name: 'TA TRACH Hydro Power Plant',
+                    type: 'hydro',
+                    capacity: 21,
+                    currentOutput: 18.2,
+                    efficiency: 87,
+                    status: 'online',
+                    coordinates: { x: 25, y: 18 }
+                },
+                'substation-500': {
+                    name: '500kV Main Substation',
+                    type: 'substation',
+                    capacity: 1200,
+                    currentLoad: 850,
+                    voltage: 525,
+                    frequency: 50.02,
+                    status: 'online',
+                    coordinates: { x: 50, y: 35 }
+                },
+                'heart-datacenter': {
+                    name: 'HEART AI Data Center',
+                    type: 'datacenter',
+                    powerDemand: 300,
+                    serversActive: 15420,
+                    cpuUsage: 78,
+                    temperature: 24,
+                    status: 'online',
+                    coordinates: { x: 75, y: 45 }
+                },
+                'solar-farm': {
+                    name: 'Solar Power Farm',
+                    type: 'solar',
+                    capacity: 150,
+                    currentOutput: 142,
+                    irradiance: 850,
+                    panelTemp: 45,
+                    status: 'online',
+                    coordinates: { x: 60, y: 70 }
+                }
+            },
+            
+            transmissionLines: {
+                '500kv-main': { voltage: 500, load: 850, status: 'normal' },
+                '220kv-dist': { voltage: 220, load: 340, status: 'normal' },
+                '110kv-local': { voltage: 110, load: 85, status: 'normal' }
+            },
+            
+            systemStatus: {
+                totalGeneration: 160.2,
+                totalDemand: 300,
+                gridFrequency: 50.02,
+                systemStability: 'stable'
+            }
+        };
+
+        let realTimeDataActive = true;
+        let dataUpdateInterval;
+
+        // Initialize real data integration
+        function initRealDataIntegration() {
+            startRealTimeUpdates();
+            setupFacilityInteractions();
+            updateLoadMonitoring();
+            
+            console.log('⚡ Real Data Integration khởi tạo thành công');
+        }
+
+        // Start real-time data updates
+        function startRealTimeUpdates() {
+            if (dataUpdateInterval) clearInterval(dataUpdateInterval);
+            
+            dataUpdateInterval = setInterval(() => {
+                if (realTimeDataActive) {
+                    updateRealTimeData();
+                }
+            }, 3000); // Update every 3 seconds
+        }
+
+        // Update real-time data with realistic variations
+        function updateRealTimeData() {
+            // Simulate realistic data variations
+            const data = powerGridData.facilities;
+            
+            // TA TRACH Hydro - varies with water flow
+            const tatrach = data['ta-trach'];
+            tatrach.currentOutput = Math.max(15, Math.min(21, 
+                tatrach.currentOutput + (Math.random() - 0.5) * 2));
+            
+            // Solar Farm - varies with weather/time
+            const solar = data['solar-farm'];
+            solar.currentOutput = Math.max(100, Math.min(150,
+                solar.currentOutput + (Math.random() - 0.5) * 10));
+            
+            // Substation load varies with demand
+            const substation = data['substation-500'];
+            substation.currentLoad = Math.max(600, Math.min(1100,
+                substation.currentLoad + (Math.random() - 0.5) * 50));
+            
+            // Data center demand varies with compute load
+            const datacenter = data['heart-datacenter'];
+            datacenter.powerDemand = Math.max(250, Math.min(320,
+                datacenter.powerDemand + (Math.random() - 0.5) * 20));
+            
+            // Update UI
+            updateDataDisplay();
+            updateTooltips();
+            updateLoadBars();
+            
+            console.log('📊 Real-time data updated');
+        }
+
+        // Update data display in UI
+        function updateDataDisplay() {
+            const data = powerGridData.facilities;
+            
+            document.getElementById('tatrach-output').textContent = data['ta-trach'].currentOutput.toFixed(1) + 'MW';
+            document.getElementById('solar-output').textContent = data['solar-farm'].currentOutput.toFixed(0) + 'MW';
+            document.getElementById('sub500-load').textContent = data['substation-500'].currentLoad.toFixed(0) + 'MVA';
+            document.getElementById('datacenter-demand').textContent = data['heart-datacenter'].powerDemand.toFixed(0) + 'MW';
+            
+            // Update load monitoring
+            document.getElementById('hydro-load').textContent = data['ta-trach'].currentOutput.toFixed(1);
+            document.getElementById('solar-load').textContent = data['solar-farm'].currentOutput.toFixed(0);
+            document.getElementById('transmission-load').textContent = data['substation-500'].currentLoad.toFixed(0);
+            document.getElementById('datacenter-load').textContent = data['heart-datacenter'].powerDemand.toFixed(0);
+        }
+
+        // Update tooltips
+        function updateTooltips() {
+            const data = powerGridData.facilities;
+            
+            document.getElementById('tooltip-tatrach').textContent = data['ta-trach'].currentOutput.toFixed(1) + 'MW';
+            document.getElementById('tooltip-sub500').textContent = data['substation-500'].currentLoad.toFixed(0) + 'MVA';
+            document.getElementById('tooltip-datacenter').textContent = data['heart-datacenter'].powerDemand.toFixed(0) + 'MW';
+            document.getElementById('tooltip-solar').textContent = data['solar-farm'].currentOutput.toFixed(0) + 'MW';
+        }
+
+        // Update load bars
+        function updateLoadBars() {
+            const data = powerGridData.facilities;
+            
+            const hydroPercent = (data['ta-trach'].currentOutput / data['ta-trach'].capacity) * 100;
+            const solarPercent = (data['solar-farm'].currentOutput / data['solar-farm'].capacity) * 100;
+            const substationPercent = (data['substation-500'].currentLoad / data['substation-500'].capacity) * 100;
+            const datacenterPercent = (data['heart-datacenter'].powerDemand / 320) * 100; // Max expected
+            
+            document.querySelector('.load-item:nth-child(1) .load-fill').style.width = hydroPercent + '%';
+            document.querySelector('.load-item:nth-child(2) .load-fill').style.width = solarPercent + '%';
+            document.querySelector('.load-item:nth-child(3) .load-fill').style.width = substationPercent + '%';
+            document.querySelector('.load-item:nth-child(4) .load-fill').style.width = datacenterPercent + '%';
+        }
+
+        // Setup facility interactions
+        function setupFacilityInteractions() {
+            document.querySelectorAll('.facility-data').forEach(facility => {
+                facility.addEventListener('click', () => {
+                    const facilityId = facility.dataset.facility;
+                    highlightFacilityOnMap(facilityId);
+                });
+            });
+            
+            document.querySelectorAll('.facility-marker').forEach(marker => {
+                marker.addEventListener('click', () => {
+                    const facilityId = marker.dataset.facility;
+                    showFacilityDetails(facilityId);
+                });
+            });
+        }
+
+        // Highlight facility on map
+        function highlightFacilityOnMap(facilityId) {
+            // Remove previous highlights
+            document.querySelectorAll('.facility-marker').forEach(marker => {
+                marker.style.boxShadow = '';
+                marker.style.transform = '';
+            });
+            
+            // Highlight selected facility
+            const marker = document.querySelector(`[data-facility="${facilityId}"]`);
+            if (marker) {
+                marker.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.8)';
+                marker.style.transform = 'scale(1.3)';
+                
+                setTimeout(() => {
+                    marker.style.transform = 'scale(1.1)';
+                }, 300);
+            }
+        }
+
+        // Show facility details
+        function showFacilityDetails(facilityId) {
+            const facility = powerGridData.facilities[facilityId];
+            if (facility) {
+                alert(`${facility.name}\nType: ${facility.type}\nStatus: ${facility.status}\nCurrent Output: ${facility.currentOutput || facility.currentLoad || facility.powerDemand}MW`);
+            }
+        }
+
+        // Control functions
+        function toggleRealTimeData() {
+            realTimeDataActive = !realTimeDataActive;
+            const btn = event.target;
+            
+            if (realTimeDataActive) {
+                btn.textContent = 'Real-time Data';
+                btn.classList.add('active');
+                startRealTimeUpdates();
+            } else {
+                btn.textContent = 'Data Paused';
+                btn.classList.remove('active');
+                clearInterval(dataUpdateInterval);
+            }
+        }
+
+        function simulateLoad() {
+            // Simulate sudden load change
+            const datacenter = powerGridData.facilities['heart-datacenter'];
+            datacenter.powerDemand += 50;
+            
+            const substation = powerGridData.facilities['substation-500'];
+            substation.currentLoad += 50;
+            
+            updateDataDisplay();
+            updateLoadBars();
+            
+            console.log('📈 Load simulation triggered');
+        }
+
+        function testFacilityAlerts() {
+            // Simulate alert condition
+            const alertFacility = document.querySelector('[data-facility="ta-trach"]');
+            alertFacility.style.animation = 'none';
+            alertFacility.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.8)';
+            
+            setTimeout(() => {
+                alertFacility.style.boxShadow = '';
+                alertFacility.style.animation = '';
+            }, 3000);
+            
+            console.log('🚨 Alert test triggered');
+        }
+
+        function exportRealDataReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                facilities: powerGridData.facilities,
+                transmissionLines: powerGridData.transmissionLines,
+                systemStatus: powerGridData.systemStatus,
+                dataSource: 'Simulated Real-time Data'
+            };
+            
+            console.log('📄 Real Data Report:', report);
+            
+            // Create downloadable report
+            const dataStr = JSON.stringify(report, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `power-grid-data-${new Date().toISOString().slice(0, 19)}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+
+        function toggleTransmissionFlow() {
+            const lines = document.querySelectorAll('.transmission-line');
+            lines.forEach(line => {
+                if (line.style.animationPlayState === 'paused') {
+                    line.style.animationPlayState = 'running';
+                } else {
+                    line.style.animationPlayState = 'paused';
+                }
+            });
+        }
+
+        function highlightCriticalPath() {
+            // Highlight critical transmission path
+            const criticalLines = document.querySelectorAll('.line-500kv');
+            criticalLines.forEach(line => {
+                line.style.boxShadow = '0 0 25px rgba(255, 255, 0, 0.8)';
+                setTimeout(() => {
+                    line.style.boxShadow = '0 0 15px rgba(255, 0, 64, 0.6)';
+                }, 2000);
+            });
+        }
+
+        function showLoadDistribution() {
+            // Show load distribution visualization
+            const facilities = document.querySelectorAll('.facility-marker');
+            facilities.forEach((facility, index) => {
+                setTimeout(() => {
+                    facility.style.transform = 'scale(1.5)';
+                    facility.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.8)';
+                    
+                    setTimeout(() => {
+                        facility.style.transform = '';
+                        facility.style.boxShadow = '';
+                    }, 1000);
+                }, index * 300);
+            });
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initRealDataIntegration);
+        
+        // Export global access
+        window.PowerGridRealData = {
+            getData: () => powerGridData,
+            updateData: updateRealTimeData,
+            exportReport: exportRealDataReport
+        };
+    </script>
+</body>
+</html>

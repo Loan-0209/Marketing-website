@@ -1,0 +1,74 @@
+
+/* 🎯 OPTIMIZED MAP LAYOUT CSS */
+
+/* Container tối ưu cho map */
+.location-section {
+    padding: 2rem 0; /* Giảm padding để tận dụng không gian */
+    margin: 0;
+}
+
+.map-container {
+    width: 100%;
+    max-width: 1200px; /* Tăng max-width */
+    margin: 0 auto;
+    position: relative;
+    /* Aspect ratio theo tỷ lệ hình gốc */
+    aspect-ratio: 16/10; /* Điều chỉnh theo tỷ lệ hình thực tế */
+}
+
+.map-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Hiển thị full image, không crop */
+    object-position: center;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.map-image:hover {
+    transform: scale(1.02);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .location-section {
+        padding: 1rem 0;
+    }
+    
+    .map-container {
+        aspect-ratio: 4/3; /* Tỷ lệ khác cho mobile */
+        margin: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .map-container {
+        aspect-ratio: 1/1; /* Square cho screen nhỏ */
+    }
+}
+
+/* Alternative: Fullwidth approach */
+.map-fullwidth {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 60vh; /* Cố định height */
+    object-fit: cover;
+    object-position: center top; /* Ưu tiên hiển thị phần trên */
+}
+
+/* Grid layout optimization */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Text nhỏ, map lớn */
+    gap: 2rem;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr; /* Stack trên mobile */
+        gap: 1rem;
+    }
+}

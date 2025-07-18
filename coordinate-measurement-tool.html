@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Coordinate Measurement Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            cursor: crosshair;
+        }
+        
+        .base-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .coordinate-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        .crosshair {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .crosshair-h {
+            width: 100%;
+            height: 1px;
+            background: #ff0000;
+            position: absolute;
+        }
+        
+        .crosshair-v {
+            width: 1px;
+            height: 100%;
+            background: #ff0000;
+            position: absolute;
+        }
+        
+        .coordinate-display {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .control-group h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .btn-danger { background: #dc3545; color: white; }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .measurements {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .icon-markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .icon-marker {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+        
+        .marker-hydro { background: #3498db; }
+        .marker-500kv { background: #e74c3c; }
+        .marker-110kv { background: #f39c12; }
+        .marker-datacenter { background: #27ae60; }
+        
+        .click-instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Coordinate Measurement Tool</h1>
+            <p>Click directly on each icon to measure exact coordinates</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instructions:</h3>
+            <ol>
+                <li><strong>Click directly on each icon</strong> (HYDRO, 500kV, 110kV, DC) on the map</li>
+                <li>The tool will <strong>record exact SVG coordinates</strong> for each click</li>
+                <li>Use the <strong>grid and crosshair</strong> for precise positioning</li>
+                <li>Click <strong>"Generate Production Code"</strong> when all positions are marked</li>
+            </ol>
+        </div>
+        
+        <div class="click-instructions">
+            🎯 <strong>Next:</strong> Click on the <span id="next-target">HYDRO icon (blue)</span> to mark its position
+        </div>
+        
+        <div class="map-container" id="mapContainer">
+            <img src="assets/images/power-grid-map.jpg" alt="Power Grid Map" class="base-map" id="baseMap">
+            
+            <!-- Grid Overlay -->
+            <svg class="grid-overlay" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <pattern id="grid" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                        <rect width="50" height="50" fill="none" stroke="#ccc" stroke-width="0.5"/>
+                        <rect width="10" height="10" fill="none" stroke="#ddd" stroke-width="0.2"/>
+                    </pattern>
+                    <pattern id="majorGrid" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                        <rect width="100" height="100" fill="none" stroke="#999" stroke-width="1"/>
+                        <text x="2" y="12" font-size="8" fill="#666">100</text>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+                <rect width="100%" height="100%" fill="url(#majorGrid)"/>
+            </svg>
+            
+            <!-- Coordinate Overlay -->
+            <div class="coordinate-overlay">
+                <div class="crosshair" id="crosshair" style="display: none;">
+                    <div class="crosshair-h"></div>
+                    <div class="crosshair-v"></div>
+                </div>
+            </div>
+            
+            <!-- Icon Markers -->
+            <div class="icon-markers" id="iconMarkers">
+                <!-- Markers will be added here when clicking -->
+            </div>
+            
+            <div class="coordinate-display" id="coordinateDisplay">
+                SVG: 0, 0 | Mouse: 0, 0
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h3>🎛️ Display Controls</h3>
+                <div class="control-row">
+                    <button class="btn btn-primary" onclick="toggleGrid()">Toggle Grid</button>
+                    <button class="btn btn-primary" onclick="toggleCrosshair()">Toggle Crosshair</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>📍 Measurements</h3>
+                <div class="control-row">
+                    <button class="btn btn-warning" onclick="clearMeasurements()">Clear All</button>
+                    <button class="btn btn-danger" onclick="undoLast()">Undo Last</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>⚙️ Output</h3>
+                <div class="control-row">
+                    <button class="btn btn-success" onclick="generateCode()">Generate Code</button>
+                    <button class="btn btn-success" onclick="copyToClipboard()">Copy Code</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="measurements" id="measurements">
+🎯 COORDINATE MEASUREMENT TOOL
+
+Ready to measure exact icon positions.
+Click on each icon in this order:
+1. HYDRO icon (blue) 
+2. 500kV icon (red)
+3. 110kV icon (orange) 
+4. Data Center icon (green)
+
+Current measurements: None
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let measurements = {};
+        let currentTarget = 'hydro';
+        let showGrid = true;
+        let showCrosshair = false;
+        
+        const targets = [
+            { id: 'hydro', name: 'HYDRO icon (blue)', color: '#3498db' },
+            { id: '500kv', name: '500kV icon (red)', color: '#e74c3c' },
+            { id: '110kv', name: '110kV icon (orange)', color: '#f39c12' },
+            { id: 'datacenter', name: 'Data Center icon (green)', color: '#27ae60' }
+        ];
+        let targetIndex = 0;
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            updateNextTarget();
+        });
+        
+        function setupEventListeners() {
+            const mapContainer = document.getElementById('mapContainer');
+            const coordinateDisplay = document.getElementById('coordinateDisplay');
+            
+            // Mouse move tracking
+            mapContainer.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert to SVG coordinates
+                const svgX = (x / rect.width) * 1000;
+                const svgY = (y / rect.height) * 600;
+                
+                coordinateDisplay.innerHTML = `SVG: ${Math.round(svgX)}, ${Math.round(svgY)} | Mouse: ${Math.round(x)}, ${Math.round(y)}`;
+                
+                // Update crosshair
+                if (showCrosshair) {
+                    const crosshair = document.getElementById('crosshair');
+                    crosshair.style.left = x + 'px';
+                    crosshair.style.top = y + 'px';
+                }
+            });
+            
+            // Click to measure
+            mapContainer.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert to SVG coordinates
+                const svgX = Math.round((x / rect.width) * 1000);
+                const svgY = Math.round((y / rect.height) * 600);
+                
+                // Record measurement
+                recordMeasurement(svgX, svgY);
+                
+                // Add visual marker
+                addMarker(x, y, targets[targetIndex].color, targets[targetIndex].name);
+                
+                // Move to next target
+                targetIndex = Math.min(targetIndex + 1, targets.length - 1);
+                updateNextTarget();
+                updateMeasurements();
+            });
+        }
+        
+        function recordMeasurement(x, y) {
+            const target = targets[targetIndex];
+            measurements[target.id] = { x, y, name: target.name };
+        }
+        
+        function addMarker(x, y, color, name) {
+            const marker = document.createElement('div');
+            marker.className = 'icon-marker';
+            marker.style.left = x + 'px';
+            marker.style.top = y + 'px';
+            marker.style.background = color;
+            marker.title = name;
+            
+            document.getElementById('iconMarkers').appendChild(marker);
+        }
+        
+        function updateNextTarget() {
+            const nextTargetEl = document.getElementById('next-target');
+            if (targetIndex < targets.length) {
+                nextTargetEl.textContent = targets[targetIndex].name;
+                nextTargetEl.style.color = targets[targetIndex].color;
+            } else {
+                nextTargetEl.textContent = 'All icons measured! Generate code below.';
+                nextTargetEl.style.color = '#28a745';
+            }
+        }
+        
+        function updateMeasurements() {
+            const measurementsEl = document.getElementById('measurements');
+            let output = '🎯 COORDINATE MEASUREMENT TOOL\n\n';
+            
+            if (Object.keys(measurements).length === 0) {
+                output += 'Ready to measure exact icon positions.\nClick on each icon in this order:\n';
+                output += '1. HYDRO icon (blue)\n2. 500kV icon (red)\n3. 110kV icon (orange)\n4. Data Center icon (green)\n\n';
+                output += 'Current measurements: None';
+            } else {
+                output += 'MEASURED COORDINATES:\n';
+                output += '=' * 40 + '\n\n';
+                
+                Object.entries(measurements).forEach(([id, data]) => {
+                    output += `${data.name}: x="${data.x}" y="${data.y}"\n`;
+                });
+                
+                if (Object.keys(measurements).length === 4) {
+                    output += '\n✅ ALL ICONS MEASURED!\nClick "Generate Code" to get production-ready SVG code.';
+                } else {
+                    output += `\n📍 Progress: ${Object.keys(measurements).length}/4 icons measured`;
+                }
+            }
+            
+            measurementsEl.textContent = output;
+        }
+        
+        function generateCode() {
+            if (Object.keys(measurements).length < 4) {
+                alert('Please measure all 4 icons first!');
+                return;
+            }
+            
+            const code = `<!-- MEASURED COORDINATES - PRODUCTION READY -->
+<g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+    <rect class="facility-border" x="${measurements.hydro.x}" y="${measurements.hydro.y}" width="30" height="20" rx="4" ry="4"/>
+</g>
+
+<g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+    <rect class="facility-border" x="${measurements['500kv'].x}" y="${measurements['500kv'].y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+    <rect class="facility-border" x="${measurements['110kv'].x}" y="${measurements['110kv'].y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+    <rect class="facility-border" x="${measurements.datacenter.x}" y="${measurements.datacenter.y}" width="25" height="25" rx="4" ry="4"/>
+</g>`;
+            
+            document.getElementById('measurements').textContent = code;
+        }
+        
+        function copyToClipboard() {
+            const text = document.getElementById('measurements').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Code copied to clipboard! 📋');
+            });
+        }
+        
+        function clearMeasurements() {
+            measurements = {};
+            targetIndex = 0;
+            document.getElementById('iconMarkers').innerHTML = '';
+            updateNextTarget();
+            updateMeasurements();
+        }
+        
+        function undoLast() {
+            if (Object.keys(measurements).length > 0) {
+                targetIndex = Math.max(0, targetIndex - 1);
+                const targetId = targets[targetIndex].id;
+                delete measurements[targetId];
+                
+                // Remove last marker
+                const markers = document.querySelectorAll('.icon-marker');
+                if (markers.length > 0) {
+                    markers[markers.length - 1].remove();
+                }
+                
+                updateNextTarget();
+                updateMeasurements();
+            }
+        }
+        
+        function toggleGrid() {
+            showGrid = !showGrid;
+            document.querySelector('.grid-overlay').style.display = showGrid ? 'block' : 'none';
+        }
+        
+        function toggleCrosshair() {
+            showCrosshair = !showCrosshair;
+            const crosshair = document.getElementById('crosshair');
+            crosshair.style.display = showCrosshair ? 'block' : 'none';
+        }
+        
+        // Initialize display
+        updateMeasurements();
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+🗺️ HƯỚNG DẪN THÊM HÌNH ẢNH BẢN ĐỒ HEART
+
+BƯỚC 1: LƯU HÌNH ẢNH
+📸 Quay lại hình ảnh bản đồ Huế Hi-Tech Park bạn đã upload
+📱 Click chuột phải vào hình ảnh
+💾 Chọn "Save image as..." hoặc "Lưu hình ảnh thành..."
+📝 Đặt tên file: hue-location-map.jpg
+
+BƯỚC 2: CHỌN ĐÚNG THỨ MỤC
+📂 Trong cửa sổ Save, điều hướng đến:
+   /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/assets/images/
+
+BƯỚC 3: LƯU FILE
+✅ Đảm bảo tên file chính xác: hue-location-map.jpg
+✅ Đảm bảo đúng thư mục: .../assets/images/
+💾 Click "Save" để lưu
+
+BƯỚC 4: KIỂM TRA
+🔄 Quay lại trình duyệt
+🔄 Refresh trang web (F5 hoặc Cmd+R)
+👀 Hình ảnh bản đồ sẽ hiển thị trong Location Section
+
+LƯU Ý:
+- Tên file phải chính xác: hue-location-map.jpg (không phải .png hay tên khác)
+- File phải ở đúng thư mục assets/images/
+- Sau khi lưu xong, refresh trang web để thấy hình ảnh
+
+THƯ MỤC ĐÍCH:
+/Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/assets/images/hue-location-map.jpg

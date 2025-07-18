@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Quick Position Adjuster</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            border: 3px solid #ff6b35;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .base-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .svg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .svg-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .facility-border {
+            fill: transparent;
+            stroke-width: 3;
+        }
+        
+        .hydro { stroke: #3498db; fill: rgba(52, 152, 219, 0.2); }
+        .substation-500 { stroke: #e74c3c; fill: rgba(231, 76, 60, 0.2); }
+        .substation-110 { stroke: #f39c12; fill: rgba(243, 156, 18, 0.2); }
+        .datacenter { stroke: #27ae60; fill: rgba(39, 174, 96, 0.2); }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .control-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .control-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .coordinate-inputs {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .input-group label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .input-group input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .input-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .result-code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Quick Position Adjuster</h1>
+            <p>Điều chỉnh tọa độ chính xác để alignment hoàn hảo</p>
+        </div>
+        
+        <div class="map-container">
+            <img src="assets/images/power-grid-map.jpg" alt="Power Grid Map" class="base-map">
+            <div class="svg-overlay">
+                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                    <rect id="hydro-rect" class="facility-border hydro" x="53" y="254" width="30" height="20" rx="4" ry="4"/>
+                    <rect id="500kv-rect" class="facility-border substation-500" x="628" y="264" width="25" height="25" rx="4" ry="4"/>
+                    <rect id="110kv-rect" class="facility-border substation-110" x="849" y="116" width="25" height="25" rx="4" ry="4"/>
+                    <rect id="datacenter-rect" class="facility-border datacenter" x="670" y="310" width="25" height="25" rx="4" ry="4"/>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-title">💧 Hydro Power Plant</div>
+                <div class="coordinate-inputs">
+                    <div class="input-group">
+                        <label>X:</label>
+                        <input type="number" id="hydro-x" value="53" min="0" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Y:</label>
+                        <input type="number" id="hydro-y" value="254" min="0" max="600">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-title">⚡ 500kV Substation</div>
+                <div class="coordinate-inputs">
+                    <div class="input-group">
+                        <label>X:</label>
+                        <input type="number" id="500kv-x" value="620" min="0" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Y:</label>
+                        <input type="number" id="500kv-y" value="254" min="0" max="600">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-title">🔌 110kV Substation</div>
+                <div class="coordinate-inputs">
+                    <div class="input-group">
+                        <label>X:</label>
+                        <input type="number" id="110kv-x" value="838" min="0" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Y:</label>
+                        <input type="number" id="110kv-y" value="123" min="0" max="600">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-title">🖥️ Data Center</div>
+                <div class="coordinate-inputs">
+                    <div class="input-group">
+                        <label>X:</label>
+                        <input type="number" id="datacenter-x" value="632" min="0" max="1000">
+                    </div>
+                    <div class="input-group">
+                        <label>Y:</label>
+                        <input type="number" id="datacenter-y" value="332" min="0" max="600">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="generate-btn" onclick="generateCode()">🚀 Generate Final Code</button>
+        
+        <div id="result-code" class="result-code"></div>
+    </div>
+
+    <script>
+        // Real-time position update
+        function updatePosition(facility, x, y) {
+            const rect = document.getElementById(facility + '-rect');
+            rect.setAttribute('x', x);
+            rect.setAttribute('y', y);
+        }
+        
+        // Set up event listeners for all inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = ['hydro-x', 'hydro-y', '500kv-x', '500kv-y', '110kv-x', '110kv-y', 'datacenter-x', 'datacenter-y'];
+            
+            inputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                input.addEventListener('input', function() {
+                    const [facility, coord] = inputId.split('-');
+                    const x = document.getElementById(facility + '-x').value;
+                    const y = document.getElementById(facility + '-y').value;
+                    updatePosition(facility, x, y);
+                });
+            });
+        });
+        
+        function generateCode() {
+            const hydroX = document.getElementById('hydro-x').value;
+            const hydroY = document.getElementById('hydro-y').value;
+            const kv500X = document.getElementById('500kv-x').value;
+            const kv500Y = document.getElementById('500kv-y').value;
+            const kv110X = document.getElementById('110kv-x').value;
+            const kv110Y = document.getElementById('110kv-y').value;
+            const datacenterX = document.getElementById('datacenter-x').value;
+            const datacenterY = document.getElementById('datacenter-y').value;
+            
+            const code = `<!-- PERFECT ALIGNMENT COORDINATES - MANUALLY ADJUSTED -->
+
+<!-- Hydro Power Plant -->
+<g class="facility-group" data-facility="hydro-plant" data-name="Hydro Power Plant">
+    <rect class="facility-border" x="${hydroX}" y="${hydroY}" width="30" height="20" rx="4" ry="4"/>
+</g>
+
+<!-- 500kV Substation -->
+<g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+    <rect class="facility-border" x="${kv500X}" y="${kv500Y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<!-- 110kV La Son Substation -->
+<g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+    <rect class="facility-border" x="${kv110X}" y="${kv110Y}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+<!-- Data Center -->
+<g class="facility-group" data-facility="data-center" data-name="Main Data Center">
+    <rect class="facility-border" x="${datacenterX}" y="${datacenterY}" width="25" height="25" rx="4" ry="4"/>
+</g>
+
+// COORDINATES SUMMARY:
+// Hydro: x="${hydroX}" y="${hydroY}"
+// 500kV: x="${kv500X}" y="${kv500Y}"  
+// 110kV: x="${kv110X}" y="${kv110Y}"
+// Data Center: x="${datacenterX}" y="${datacenterY}"
+
+// Copy this code and send to Claude to update facilities.html`;
+            
+            const resultDiv = document.getElementById('result-code');
+            resultDiv.textContent = code;
+            resultDiv.style.display = 'block';
+            
+            // Auto-copy to clipboard
+            navigator.clipboard.writeText(code).then(() => {
+                alert('🎯 Code copied to clipboard!\nSend this to Claude to update facilities.html');
+            });
+        }
+        
+        console.log('Quick Position Adjuster loaded successfully');
+    </script>
+</body>
+</html>

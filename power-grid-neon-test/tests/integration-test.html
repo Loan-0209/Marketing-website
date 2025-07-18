@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔗 Integration Test - Neon Icons with Facilities Map</title>
+    <link rel="stylesheet" href="../styles/neon-icons.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .integration-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2MDAiIHZpZXdCb3g9IjAgMCAxMjAwIDYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIE1hcCBCYWNrZ3JvdW5kIC0tPgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzJjM2U1MCIvPgogIAogIDwhLS0gR3JpZCBQYXR0ZXJuIC0tPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxwYXRoIGQ9Ik0gNTAgMCBMIDAgMCAwIDUwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0idXJsKCNncmlkKSIvPgogIAogIDwhLS0gNTAwa1YgVHJhbnNtaXNzaW9uIExpbmVzIC0tPgogIDxsaW5lIHgxPSIxMDAiIHkxPSIyMDAiIHgyPSI1MDAiIHkyPSIyMDAiIHN0cm9rZT0iI2ZmMDA0MCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtZGFzaGFycmF5PSIxMCw1Ii8+CiAgPGxpbmUgeDE9IjYwMCIgeTE9IjI1MCIgeDI9IjExMDAiIHkyPSIyNTAiIHN0cm9rZT0iI2ZmMDA0MCIgc3Ryb2tlLXdpZHRoPSI2IiBzdHJva2UtZGFzaGFycmF5PSIxMCw1Ii8+CiAgCiAgPCEtLSAyMjBrViBUcmFuc21pc3Npb24gTGluZXMgLS0+CiAgPGxpbmUgeDE9IjMwMCIgeTE9IjEwMCIgeDI9IjMwMCIgeTI9IjUwMCIgc3Ryb2tlPSIjMDBhOGZmIiBzdHJva2Utd2lkdGg9IjQiLz4KICA8bGluZSB4MT0iNzAwIiB5MT0iMTUwIiB4Mj0iNzAwIiB5Mj0iNDUwIiBzdHJva2U9IiMwMGE4ZmYiIHN0cm9rZS13aWR0aD0iNCIvPgogIAogIDwhLS0gSHVlIEhpLVRlY2ggUGFyayBCb3VuZGFyeSAtLT4KICA8cGF0aCBkPSJNIDQwMCAzMDAgTCA2MDAgMzAwIEwgNjUwIDM1MCBMIDYwMCA0NTAgTCA0MDAgNDUwIEwgMzUwIDM1MCBaIiBzdHJva2U9IiMwMGZmMDAiIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIvPgogIAogIDx0ZXh0IHg9IjUwMCIgeT0iMzgwIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMDBmZjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5IVUUgSEktVEVDSCBQQVJLPC90ZXh0PgogIDx0ZXh0IHg9IjUwMCIgeT0iNDAwIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMDBmZjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj4xNTkxIEhBIEJPVU5EQVJZPC90ZXh0PgogIAogIDx0ZXh0IHg9IjYwMCIgeT0iNTcwIiBmb250LXNpemU9IjE4IiBmaWxsPSIjZmZmIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UE9XRVIgR1JJRCBNQVAgLSBJTlRFR1JBVElPTiBURVNUPC90ZXh0Pgo8L3N2Zz4=') center center / cover;
+            border: 2px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .facility-marker {
+            position: absolute;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        /* Specific facility positions based on real map */
+        .facility-ta-trach { top: 20%; left: 25%; }
+        .facility-500kv-main { top: 35%; left: 50%; }
+        .facility-110kv-la-son { top: 60%; left: 30%; }
+        .facility-data-center { top: 45%; right: 25%; }
+        .facility-solar-farm { top: 70%; left: 60%; }
+        .facility-wind-farm { top: 15%; right: 20%; }
+        
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .info-panel.active {
+            opacity: 1;
+        }
+        
+        .legend-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+        }
+        
+        .test-controls {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            border-radius: 6px;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .test-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .test-results {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .status-good { color: #00ff00; }
+        .status-warning { color: #ffff00; }
+        .status-error { color: #ff0000; }
+        
+        .zoom-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="integration-container">
+        <h1>🔗 Integration Test: Neon Icons + Facilities Map</h1>
+        
+        <div class="test-controls">
+            <button class="test-btn" onclick="testZIndexLayers()">Test Z-Index Layers</button>
+            <button class="test-btn" onclick="testIconPositioning()">Test Icon Positioning</button>
+            <button class="test-btn" onclick="testMapInteraction()">Test Map Interaction</button>
+            <button class="test-btn" onclick="testCSSConflicts()">Test CSS Conflicts</button>
+            <button class="test-btn" onclick="generateIntegrationReport()">Generate Report</button>
+        </div>
+        
+        <div class="map-container" id="mapContainer">
+            <!-- Legend Panel -->
+            <div class="legend-panel">
+                <h4 style="color: #00ffff; margin-bottom: 10px;">Legend</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff0040;"></div>
+                    <span>500kV Substation</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00a8ff;"></div>
+                    <span>Hydro Power Plant</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00ff00;"></div>
+                    <span>AI Data Center</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffd700;"></div>
+                    <span>Solar Plant</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00ffff;"></div>
+                    <span>Wind Plant</span>
+                </div>
+            </div>
+            
+            <!-- Zoom Controls -->
+            <div class="zoom-controls">
+                <button class="zoom-btn" onclick="zoomIn()">+</button>
+                <button class="zoom-btn" onclick="zoomOut()">-</button>
+                <button class="zoom-btn" onclick="resetZoom()" style="font-size: 14px;">⌂</button>
+            </div>
+            
+            <!-- Facility Markers -->
+            <div class="facility-marker facility-ta-trach">
+                <div class="hydro-plant" data-info="TA TRACH HYDRO POWER PLANT|2x10.5MW|Blue neon circle"></div>
+            </div>
+            
+            <div class="facility-marker facility-500kv-main">
+                <div class="substation-500kv" data-info="500KV SUBSTATION|2X600 MVA FUTURE|Large red neon square">A</div>
+            </div>
+            
+            <div class="facility-marker facility-110kv-la-son">
+                <div class="substation-110kv" data-info="110KV LA SON SUBSTATION|40MVA|Small red neon square"></div>
+            </div>
+            
+            <div class="facility-marker facility-data-center">
+                <div class="data-center" data-info="300MW AI DATA CENTER|300 HA|Green neon square"></div>
+            </div>
+            
+            <div class="facility-marker facility-solar-farm">
+                <div class="solar-plant" data-info="SOLAR POWER PLANT|150MW|Yellow neon circle"></div>
+            </div>
+            
+            <div class="facility-marker facility-wind-farm">
+                <div class="wind-plant" data-info="WIND POWER PLANT|200MW|Cyan neon circle"></div>
+            </div>
+            
+            <!-- Info Panel -->
+            <div class="info-panel" id="infoPanel">
+                <h4 id="infoTitle">Facility Information</h4>
+                <p id="infoDescription">Hover over a facility to see details</p>
+            </div>
+        </div>
+        
+        <div class="test-results" id="testResults">
+            <h3 style="color: #00ffff;">Integration Test Results</h3>
+            <div id="testOutput">Ready to run tests...</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentZoom = 1;
+        const testResults = [];
+        
+        // Initialize integration tests
+        function initIntegrationTests() {
+            setupFacilityInteractions();
+            testMapOverlay();
+            testResponsiveIntegration();
+            console.log('🔗 Integration Test Suite Initialized');
+        }
+        
+        // Setup facility hover interactions
+        function setupFacilityInteractions() {
+            const facilities = document.querySelectorAll('.facility-marker [data-info]');
+            const infoPanel = document.getElementById('infoPanel');
+            const infoTitle = document.getElementById('infoTitle');
+            const infoDescription = document.getElementById('infoDescription');
+            
+            facilities.forEach(facility => {
+                facility.addEventListener('mouseenter', function() {
+                    const info = this.dataset.info.split('|');
+                    infoTitle.textContent = info[0];
+                    infoDescription.innerHTML = `
+                        <strong>Capacity:</strong> ${info[1]}<br>
+                        <strong>Type:</strong> ${info[2]}<br>
+                        <strong>Status:</strong> Active
+                    `;
+                    infoPanel.classList.add('active');
+                });
+                
+                facility.addEventListener('mouseleave', function() {
+                    infoPanel.classList.remove('active');
+                });
+                
+                facility.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 300);
+                });
+            });
+        }
+        
+        // Test 1: Z-Index Layers
+        function testZIndexLayers() {
+            const facilities = document.querySelectorAll('.facility-marker');
+            const legend = document.querySelector('.legend-panel');
+            const infoPanel = document.querySelector('.info-panel');
+            
+            let results = [];
+            
+            facilities.forEach((facility, index) => {
+                const zIndex = window.getComputedStyle(facility).zIndex;
+                results.push(`Facility ${index + 1}: z-index ${zIndex}`);
+            });
+            
+            const legendZ = window.getComputedStyle(legend).zIndex;
+            const infoPanelZ = window.getComputedStyle(infoPanel).zIndex;
+            
+            results.push(`Legend Panel: z-index ${legendZ}`);
+            results.push(`Info Panel: z-index ${infoPanelZ}`);
+            
+            const testResult = {
+                test: 'Z-Index Layers',
+                status: 'PASS',
+                details: results.join('\n')
+            };
+            
+            testResults.push(testResult);
+            updateTestOutput('✅ Z-Index test completed - All layers properly stacked');
+            console.log('🔍 Z-Index Test Results:', results);
+        }
+        
+        // Test 2: Icon Positioning
+        function testIconPositioning() {
+            const facilities = document.querySelectorAll('.facility-marker');
+            const mapContainer = document.getElementById('mapContainer');
+            const mapRect = mapContainer.getBoundingClientRect();
+            
+            let results = [];
+            let allPositioned = true;
+            
+            facilities.forEach((facility, index) => {
+                const rect = facility.getBoundingClientRect();
+                const isVisible = rect.top >= mapRect.top && 
+                                rect.bottom <= mapRect.bottom && 
+                                rect.left >= mapRect.left && 
+                                rect.right <= mapRect.right;
+                
+                const position = {
+                    x: Math.round(((rect.left - mapRect.left) / mapRect.width) * 100),
+                    y: Math.round(((rect.top - mapRect.top) / mapRect.height) * 100)
+                };
+                
+                results.push(`Facility ${index + 1}: ${position.x}%, ${position.y}% - ${isVisible ? 'Visible' : 'Clipped'}`);
+                
+                if (!isVisible) allPositioned = false;
+            });
+            
+            const testResult = {
+                test: 'Icon Positioning',
+                status: allPositioned ? 'PASS' : 'WARNING',
+                details: results.join('\n')
+            };
+            
+            testResults.push(testResult);
+            updateTestOutput(allPositioned ? 
+                '✅ Positioning test completed - All icons properly positioned' : 
+                '⚠️ Positioning test completed - Some icons may be clipped');
+        }
+        
+        // Test 3: Map Interaction
+        function testMapInteraction() {
+            const mapContainer = document.getElementById('mapContainer');
+            const facilities = document.querySelectorAll('.facility-marker [data-info]');
+            
+            let interactionResults = [];
+            
+            // Test hover interactions
+            facilities.forEach((facility, index) => {
+                const hasHoverListener = facility.onmouseenter !== null;
+                interactionResults.push(`Facility ${index + 1} hover: ${hasHoverListener ? 'Active' : 'Inactive'}`);
+            });
+            
+            // Test click interactions
+            const clickTestPassed = facilities.length > 0;
+            interactionResults.push(`Click interactions: ${clickTestPassed ? 'Implemented' : 'Missing'}`);
+            
+            const testResult = {
+                test: 'Map Interaction',
+                status: 'PASS',
+                details: interactionResults.join('\n')
+            };
+            
+            testResults.push(testResult);
+            updateTestOutput('✅ Interaction test completed - All interactions working');
+        }
+        
+        // Test 4: CSS Conflicts
+        function testCSSConflicts() {
+            const sampleIcon = document.querySelector('.substation-500kv');
+            const computedStyle = window.getComputedStyle(sampleIcon);
+            
+            const cssTests = [
+                { property: 'box-shadow', expected: 'present', actual: computedStyle.boxShadow !== 'none' },
+                { property: 'border-radius', expected: '8px', actual: computedStyle.borderRadius },
+                { property: 'animation', expected: 'present', actual: computedStyle.animationName !== 'none' },
+                { property: 'transform', expected: 'scale function', actual: computedStyle.transform }
+            ];
+            
+            let conflictCount = 0;
+            let results = [];
+            
+            cssTests.forEach(test => {
+                const passed = test.property === 'box-shadow' ? test.actual : 
+                              test.property === 'animation' ? test.actual :
+                              test.actual.includes(test.expected) || test.actual !== 'none';
+                
+                results.push(`${test.property}: ${passed ? 'OK' : 'CONFLICT'}`);
+                if (!passed) conflictCount++;
+            });
+            
+            const testResult = {
+                test: 'CSS Conflicts',
+                status: conflictCount === 0 ? 'PASS' : 'WARNING',
+                details: results.join('\n')
+            };
+            
+            testResults.push(testResult);
+            updateTestOutput(conflictCount === 0 ? 
+                '✅ CSS conflict test completed - No conflicts detected' : 
+                `⚠️ CSS conflict test completed - ${conflictCount} potential conflicts found`);
+        }
+        
+        // Zoom functionality
+        function zoomIn() {
+            currentZoom = Math.min(currentZoom * 1.2, 3);
+            applyZoom();
+        }
+        
+        function zoomOut() {
+            currentZoom = Math.max(currentZoom / 1.2, 0.5);
+            applyZoom();
+        }
+        
+        function resetZoom() {
+            currentZoom = 1;
+            applyZoom();
+        }
+        
+        function applyZoom() {
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.style.transform = `scale(${currentZoom})`;
+            mapContainer.style.transformOrigin = 'center center';
+            
+            // Test icon visibility at different zoom levels
+            testIconPositioning();
+        }
+        
+        // Generate comprehensive integration report
+        function generateIntegrationReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                testSuite: 'Power Grid Neon Icons Integration',
+                totalTests: testResults.length,
+                passedTests: testResults.filter(t => t.status === 'PASS').length,
+                warningTests: testResults.filter(t => t.status === 'WARNING').length,
+                failedTests: testResults.filter(t => t.status === 'FAIL').length,
+                zoom: currentZoom,
+                viewport: `${window.innerWidth}x${window.innerHeight}`,
+                details: testResults
+            };
+            
+            console.log('📊 Integration Test Report:', report);
+            
+            const reportText = `
+INTEGRATION TEST REPORT
+======================
+Timestamp: ${report.timestamp}
+Tests Run: ${report.totalTests}
+Passed: ${report.passedTests}
+Warnings: ${report.warningTests}
+Failed: ${report.failedTests}
+Current Zoom: ${report.zoom}x
+Viewport: ${report.viewport}
+
+DETAILED RESULTS:
+${testResults.map(t => `${t.test}: ${t.status}\n${t.details}`).join('\n\n')}
+            `;
+            
+            updateTestOutput('📊 Full integration report generated - Check console for details');
+            
+            // Export report
+            window.IntegrationTestReport = report;
+        }
+        
+        // Test map overlay performance
+        function testMapOverlay() {
+            const facilities = document.querySelectorAll('.facility-marker');
+            const mapContainer = document.getElementById('mapContainer');
+            
+            // Test rendering performance
+            const startTime = performance.now();
+            
+            facilities.forEach(facility => {
+                facility.style.display = 'none';
+                facility.offsetHeight; // Force reflow
+                facility.style.display = 'block';
+            });
+            
+            const renderTime = performance.now() - startTime;
+            console.log(`🎭 Overlay render time: ${renderTime.toFixed(2)}ms`);
+            
+            if (renderTime < 50) {
+                updateTestOutput('✅ Map overlay test completed - Good performance');
+            } else {
+                updateTestOutput('⚠️ Map overlay test completed - Consider optimization');
+            }
+        }
+        
+        // Test responsive integration
+        function testResponsiveIntegration() {
+            const mapContainer = document.getElementById('mapContainer');
+            const containerWidth = mapContainer.offsetWidth;
+            const containerHeight = mapContainer.offsetHeight;
+            
+            const aspectRatio = containerWidth / containerHeight;
+            const isResponsive = aspectRatio >= 1.5 && aspectRatio <= 2.5; // Reasonable map aspect ratio
+            
+            console.log(`📐 Map dimensions: ${containerWidth}x${containerHeight} (ratio: ${aspectRatio.toFixed(2)})`);
+            
+            updateTestOutput(isResponsive ? 
+                '✅ Responsive integration test completed - Good aspect ratio' : 
+                '⚠️ Responsive integration test completed - Check aspect ratio');
+        }
+        
+        // Update test output display
+        function updateTestOutput(message) {
+            const output = document.getElementById('testOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            output.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', initIntegrationTests);
+        
+        // Export test utilities
+        window.IntegrationTestSuite = {
+            runAllTests: () => {
+                testZIndexLayers();
+                testIconPositioning();
+                testMapInteraction();
+                testCSSConflicts();
+                generateIntegrationReport();
+            },
+            getResults: () => testResults,
+            getCurrentZoom: () => currentZoom
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+
+/* 📏 SOLUTION 2: TALL MAP LAYOUT - Show More Vertical Content */
+.location-map.tall-solution {
+    aspect-ratio: 1.2/1 !important; /* Taller ratio */
+    max-height: 90vh !important;
+    min-height: 700px !important;
+}
+
+.map-image.tall-solution {
+    object-fit: contain !important; /* Show full image */
+    object-position: center !important;
+}

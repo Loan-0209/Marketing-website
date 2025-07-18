@@ -1,0 +1,14 @@
+
+/* 🔴 STYLE 1: RED HEART STYLE */
+.heart-button-relocated.style-red {
+    background: linear-gradient(135deg, #E74C3C, #C0392B) !important;
+    color: white !important;
+}
+
+.heart-button-relocated.style-red::before {
+    content: "❤️" !important;
+}
+
+.heart-button-relocated.style-red:hover {
+    background: linear-gradient(135deg, #C0392B, #A93226) !important;
+}

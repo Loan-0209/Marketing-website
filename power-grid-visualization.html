@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Power Grid Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .visualization-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            position: relative;
+            background: rgba(10, 10, 20, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .02) 25%, rgba(255, 255, 255, .02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .02) 75%, rgba(255, 255, 255, .02) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .02) 25%, rgba(255, 255, 255, .02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .02) 75%, rgba(255, 255, 255, .02) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* Map Container */
+        .map-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 80%;
+            background: url('assets/images/power-grid-map.jpg') no-repeat center center;
+            background-size: contain;
+            filter: brightness(0.8) contrast(1.2);
+        }
+
+        /* Zone Overlays */
+        .zone-overlay {
+            position: absolute;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 500kV Zones */
+        .zone-500kv {
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
+            animation: pulse500kv 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse500kv {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        /* 220kV Zones */
+        .zone-220kv {
+            background: radial-gradient(circle, rgba(0, 100, 255, 0.3) 0%, transparent 70%);
+            animation: pulse220kv 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse220kv {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.03); }
+        }
+
+        /* 110kV Zones */
+        .zone-110kv {
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%);
+            animation: pulse110kv 5s ease-in-out infinite;
+        }
+
+        @keyframes pulse110kv {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.02); }
+        }
+
+        /* Infrastructure Points */
+        .infrastructure-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .substation {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .substation::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+            animation: substationPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes substationPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .heart-datacenter {
+            background: rgba(0, 255, 0, 0.9);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+            width: 30px;
+            height: 30px;
+        }
+
+        .heart-datacenter::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.4), transparent);
+            animation: heartPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.8); opacity: 0; }
+        }
+
+        .hydro-plant {
+            background: rgba(0, 255, 255, 0.9);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+        }
+
+        .hydro-plant::before {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            right: -12px;
+            bottom: -12px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent);
+            animation: hydroPulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes hydroPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .hitech-park {
+            background: rgba(255, 215, 0, 0.9);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Interactive Legend */
+        .legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .legend-title {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .legend-item:hover {
+            transform: translateX(5px);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .legend-500kv { background: #ff0000; }
+        .legend-220kv { background: #0064ff; }
+        .legend-110kv { background: #9333ea; }
+
+        .legend-text {
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Control Panel */
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            display: block;
+            width: 100%;
+            padding: 10px 20px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn.active {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: rgba(0, 255, 0, 0.6);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px 30px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+
+        .info-panel.show {
+            opacity: 1;
+        }
+
+        /* Particle Canvas */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Transmission Lines (for particle paths) */
+        .transmission-line {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .legend, .controls {
+                position: fixed;
+                top: auto;
+                bottom: 20px;
+            }
+            
+            .legend {
+                left: 10px;
+                right: auto;
+            }
+            
+            .controls {
+                right: 10px;
+                left: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="visualization-container">
+        <div class="grid-overlay"></div>
+        
+        <!-- Map Container -->
+        <div class="map-container">
+            <!-- Zone Overlays will be dynamically positioned -->
+            <!-- 500kV Zones -->
+            <div class="zone-overlay zone-500kv" style="top: 20%; left: 10%; width: 80%; height: 15%;"></div>
+            <div class="zone-overlay zone-500kv" style="top: 40%; left: 15%; width: 70%; height: 10%;"></div>
+            
+            <!-- 220kV Zones -->
+            <div class="zone-overlay zone-220kv" style="top: 50%; left: 20%; width: 60%; height: 12%;"></div>
+            <div class="zone-overlay zone-220kv" style="top: 65%; left: 25%; width: 50%; height: 10%;"></div>
+            
+            <!-- 110kV Zones -->
+            <div class="zone-overlay zone-110kv" style="top: 75%; left: 30%; width: 40%; height: 8%;"></div>
+            
+            <!-- Infrastructure Points -->
+            <div class="infrastructure-point substation" style="top: 30%; left: 25%;" data-name="Substation 1" data-info="500/220kV - 2x600MVA"></div>
+            <div class="infrastructure-point substation" style="top: 30%; left: 75%;" data-name="Substation 2" data-info="500/220kV - 2x600MVA"></div>
+            <div class="infrastructure-point substation" style="top: 55%; left: 50%;" data-name="Substation 3" data-info="220/110kV - 2x250MVA"></div>
+            
+            <div class="infrastructure-point heart-datacenter" style="top: 60%; left: 50%;" data-name="HEART Data Center" data-info="100MW Power Capacity"></div>
+            <div class="infrastructure-point hydro-plant" style="top: 25%; left: 60%;" data-name="TA TRACH Hydro Power Plant" data-info="190MW Generation Capacity"></div>
+            <div class="infrastructure-point hitech-park" style="top: 70%; left: 40%;" data-name="Hue Hi-Tech Park" data-info="Industrial Zone Connection"></div>
+        </div>
+        
+        <!-- Particle Canvas -->
+        <canvas id="particleCanvas"></canvas>
+        
+        <!-- Interactive Legend -->
+        <div class="legend">
+            <h3 class="legend-title">Voltage Levels</h3>
+            <div class="legend-item" data-voltage="500kv">
+                <div class="legend-color legend-500kv"></div>
+                <span class="legend-text">500kV Transmission</span>
+            </div>
+            <div class="legend-item" data-voltage="220kv">
+                <div class="legend-color legend-220kv"></div>
+                <span class="legend-text">220kV Distribution</span>
+            </div>
+            <div class="legend-item" data-voltage="110kv">
+                <div class="legend-color legend-110kv"></div>
+                <span class="legend-text">110kV Local Grid</span>
+            </div>
+        </div>
+        
+        <!-- Control Panel -->
+        <div class="controls">
+            <button class="control-btn active" id="toggleParticles">Particles: ON</button>
+            <button class="control-btn active" id="toggleZones">Zones: ON</button>
+            <button class="control-btn" id="resetView">Reset View</button>
+        </div>
+        
+        <!-- Info Panel -->
+        <div class="info-panel" id="infoPanel">
+            <div id="infoContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // Particle System
+        class ParticleSystem {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.enabled = true;
+                this.resize();
+                
+                window.addEventListener('resize', () => this.resize());
+            }
+            
+            resize() {
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = this.canvas.offsetHeight;
+            }
+            
+            createParticle(x, y, color, targetX, targetY) {
+                return {
+                    x: x,
+                    y: y,
+                    targetX: targetX,
+                    targetY: targetY,
+                    speed: 0.5 + Math.random() * 1.5,
+                    size: 2 + Math.random() * 3,
+                    color: color,
+                    opacity: 1,
+                    trail: []
+                };
+            }
+            
+            update() {
+                if (!this.enabled) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    return;
+                }
+                
+                // Clear canvas with trail effect
+                this.ctx.fillStyle = 'rgba(10, 10, 20, 0.1)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Update and draw particles
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const particle = this.particles[i];
+                    
+                    // Move particle
+                    const dx = particle.targetX - particle.x;
+                    const dy = particle.targetY - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 5) {
+                        particle.x += (dx / distance) * particle.speed;
+                        particle.y += (dy / distance) * particle.speed;
+                        
+                        // Add to trail
+                        particle.trail.push({ x: particle.x, y: particle.y });
+                        if (particle.trail.length > 10) {
+                            particle.trail.shift();
+                        }
+                    } else {
+                        // Particle reached target, remove it
+                        this.particles.splice(i, 1);
+                        continue;
+                    }
+                    
+                    // Draw trail
+                    this.ctx.beginPath();
+                    particle.trail.forEach((point, index) => {
+                        this.ctx.lineTo(point.x, point.y);
+                    });
+                    this.ctx.strokeStyle = particle.color + '33';
+                    this.ctx.lineWidth = particle.size * 0.5;
+                    this.ctx.stroke();
+                    
+                    // Draw particle
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = particle.color;
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
+                }
+                
+                // Add new particles from substations
+                if (Math.random() < 0.05 && this.particles.length < 50) {
+                    const substations = document.querySelectorAll('.substation');
+                    const targets = document.querySelectorAll('.heart-datacenter, .hydro-plant, .hitech-park');
+                    
+                    if (substations.length > 0 && targets.length > 0) {
+                        const substation = substations[Math.floor(Math.random() * substations.length)];
+                        const target = targets[Math.floor(Math.random() * targets.length)];
+                        
+                        const rect = this.canvas.getBoundingClientRect();
+                        const subRect = substation.getBoundingClientRect();
+                        const targetRect = target.getBoundingClientRect();
+                        
+                        const colors = ['#ff0000', '#0064ff', '#9333ea'];
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        
+                        this.particles.push(this.createParticle(
+                            subRect.left - rect.left + subRect.width / 2,
+                            subRect.top - rect.top + subRect.height / 2,
+                            color,
+                            targetRect.left - rect.left + targetRect.width / 2,
+                            targetRect.top - rect.top + targetRect.height / 2
+                        ));
+                    }
+                }
+            }
+            
+            toggle() {
+                this.enabled = !this.enabled;
+                return this.enabled;
+            }
+        }
+        
+        // Initialize particle system
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleSystem = new ParticleSystem(particleCanvas);
+        
+        // Animation loop
+        function animate() {
+            particleSystem.update();
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        // Legend interaction
+        const legendItems = document.querySelectorAll('.legend-item');
+        const voltageStates = {
+            '500kv': true,
+            '220kv': true,
+            '110kv': true
+        };
+        
+        legendItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const voltage = item.dataset.voltage;
+                voltageStates[voltage] = !voltageStates[voltage];
+                
+                // Toggle zone visibility
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.style.display = voltageStates[voltage] ? 'block' : 'none';
+                });
+                
+                // Update legend appearance
+                item.style.opacity = voltageStates[voltage] ? '1' : '0.3';
+            });
+            
+            // Hover effect
+            item.addEventListener('mouseenter', () => {
+                const voltage = item.dataset.voltage;
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.style.opacity = '0.8';
+                    zone.style.transform = 'scale(1.1)';
+                });
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const voltage = item.dataset.voltage;
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.style.opacity = '';
+                    zone.style.transform = '';
+                });
+            });
+        });
+        
+        // Infrastructure point interactions
+        const infoPanel = document.getElementById('infoPanel');
+        const infoContent = document.getElementById('infoContent');
+        
+        document.querySelectorAll('.infrastructure-point').forEach(point => {
+            point.addEventListener('mouseenter', (e) => {
+                const name = e.target.dataset.name;
+                const info = e.target.dataset.info;
+                
+                infoContent.innerHTML = `<strong>${name}</strong><br>${info}`;
+                infoPanel.classList.add('show');
+            });
+            
+            point.addEventListener('mouseleave', () => {
+                infoPanel.classList.remove('show');
+            });
+            
+            point.addEventListener('click', (e) => {
+                e.target.style.animation = 'none';
+                setTimeout(() => {
+                    e.target.style.animation = '';
+                }, 10);
+            });
+        });
+        
+        // Control buttons
+        document.getElementById('toggleParticles').addEventListener('click', (e) => {
+            const enabled = particleSystem.toggle();
+            e.target.textContent = `Particles: ${enabled ? 'ON' : 'OFF'}`;
+            e.target.classList.toggle('active', enabled);
+        });
+        
+        document.getElementById('toggleZones').addEventListener('click', (e) => {
+            const zones = document.querySelectorAll('.zone-overlay');
+            const isVisible = e.target.classList.contains('active');
+            
+            zones.forEach(zone => {
+                zone.style.display = isVisible ? 'none' : 'block';
+            });
+            
+            e.target.textContent = `Zones: ${isVisible ? 'OFF' : 'ON'}`;
+            e.target.classList.toggle('active');
+        });
+        
+        document.getElementById('resetView').addEventListener('click', () => {
+            // Reset all states
+            Object.keys(voltageStates).forEach(key => {
+                voltageStates[key] = true;
+            });
+            
+            // Reset zones
+            document.querySelectorAll('.zone-overlay').forEach(zone => {
+                zone.style.display = 'block';
+                zone.style.opacity = '';
+                zone.style.transform = '';
+            });
+            
+            // Reset legend
+            legendItems.forEach(item => {
+                item.style.opacity = '1';
+            });
+            
+            // Reset particles
+            if (!particleSystem.enabled) {
+                particleSystem.toggle();
+                document.getElementById('toggleParticles').textContent = 'Particles: ON';
+                document.getElementById('toggleParticles').classList.add('active');
+            }
+            
+            // Reset zones button
+            document.getElementById('toggleZones').textContent = 'Zones: ON';
+            document.getElementById('toggleZones').classList.add('active');
+        });
+        
+        // Add floating animation to zones
+        document.querySelectorAll('.zone-overlay').forEach((zone, index) => {
+            zone.style.animationDelay = `${index * 0.5}s`;
+        });
+    </script>
+</body>
+</html>

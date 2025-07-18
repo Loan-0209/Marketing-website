@@ -1,0 +1,2819 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facilities - HEART Technology Park</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .nav .active {
+            background: #fbbf24;
+            color: #1e40af;
+            font-weight: 700;
+        }
+        
+        .nav .contact-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+        
+        .facilities-overview {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* TECH EFFECTS SECTION */
+        .tech-effects-section {
+            position: relative;
+            height: 280px;
+            width: 100%;
+            margin: 4rem 0;
+            overflow: visible;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gradient-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        .cross-horizontal {
+            display: none; /* Ẩn thanh ngang cũ */
+        }
+        
+        .wind-turbine {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 5;
+        }
+        
+        .wind-turbine svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 8px rgba(56, 178, 172, 0.4));
+        }
+        
+        .turbine-blades {
+            transform-origin: 25px 25px; /* Tâm của 50x50 */
+            animation: turbineRotate 3s linear infinite;
+        }
+        
+        /* Animation delays for different turbines */
+        .turbine-2 .turbine-blades {
+            animation-delay: -1s;
+        }
+        
+        .turbine-3 .turbine-blades {
+            animation-delay: -2s;
+        }
+        
+        .turbine-4 .turbine-blades {
+            animation-delay: -0.5s;
+        }
+        
+        .turbine-5 .turbine-blades {
+            animation-delay: -1.5s;
+        }
+        
+        /* Turbine blade animation */
+        
+        .cross-vertical {
+            display: none; /* Ẩn thanh dọc */
+        }
+        
+
+        
+        /* CROSS ANIMATIONS */
+        @keyframes crossPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes crossRotate {
+            0% { 
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% { 
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+        
+        @keyframes turbineRotate {
+            0% { 
+                transform: rotate(0deg);
+            }
+            100% { 
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes crossGlow {
+            0% { 
+                box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: 0 0 20px rgba(56, 178, 172, 0.6), 0 0 40px rgba(66, 153, 225, 0.3);
+                filter: brightness(1.2);
+            }
+        }
+        
+        .tech-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        
+        /* Particle Variants - Kích thước lớn hơn */
+        .particle-1 {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            opacity: 0.6;
+            left: 20%;
+            top: 25%;
+            animation: orbit1 12s linear infinite, particleFade1 8s ease-in-out infinite;
+        }
+        
+        .particle-2 {
+            width: 12px;
+            height: 12px;
+            background: #1e40af;
+            opacity: 0.5;
+            left: 75%;
+            top: 30%;
+            animation: orbit2 15s linear infinite, particleFade2 10s ease-in-out infinite;
+        }
+        
+        .particle-3 {
+            width: 6px;
+            height: 6px;
+            background: #06b6d4;
+            opacity: 0.7;
+            left: 30%;
+            top: 70%;
+            animation: orbit3 10s linear infinite, particleFade3 7s ease-in-out infinite;
+        }
+        
+        .particle-4 {
+            width: 10px;
+            height: 10px;
+            background: #3b82f6;
+            opacity: 0.4;
+            left: 80%;
+            top: 65%;
+            animation: orbit4 14s linear infinite, particleFade4 9s ease-in-out infinite;
+        }
+        
+        .particle-5 {
+            width: 4px;
+            height: 4px;
+            background: #1e40af;
+            opacity: 0.8;
+            left: 15%;
+            top: 55%;
+            animation: orbit5 11s linear infinite, particleFade5 6s ease-in-out infinite;
+        }
+        
+        /* Particles mới */
+        .particle-6 {
+            width: 7px;
+            height: 7px;
+            background: #06b6d4;
+            opacity: 0.6;
+            left: 60%;
+            top: 20%;
+            animation: orbit6 13s linear infinite, particleFade6 8s ease-in-out infinite;
+        }
+        
+        .particle-7 {
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            opacity: 0.7;
+            left: 85%;
+            top: 40%;
+            animation: orbit7 16s linear infinite, particleFade7 9s ease-in-out infinite;
+        }
+        
+        .particle-8 {
+            width: 9px;
+            height: 9px;
+            background: #1e40af;
+            opacity: 0.5;
+            left: 10%;
+            top: 35%;
+            animation: orbit8 12s linear infinite, particleFade8 7s ease-in-out infinite;
+        }
+        
+        .particle-9 {
+            width: 6px;
+            height: 6px;
+            background: #06b6d4;
+            opacity: 0.8;
+            left: 40%;
+            top: 80%;
+            animation: orbit9 14s linear infinite, particleFade9 10s ease-in-out infinite;
+        }
+        
+        .particle-10 {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            opacity: 0.6;
+            left: 70%;
+            top: 75%;
+            animation: orbit10 15s linear infinite, particleFade10 8s ease-in-out infinite;
+        }
+        
+        .particle-11 {
+            width: 5px;
+            height: 5px;
+            background: #1e40af;
+            opacity: 0.7;
+            left: 90%;
+            top: 20%;
+            animation: orbit11 11s linear infinite, particleFade11 6s ease-in-out infinite;
+        }
+        
+        .particle-12 {
+            width: 11px;
+            height: 11px;
+            background: #06b6d4;
+            opacity: 0.4;
+            left: 25%;
+            top: 15%;
+            animation: orbit12 17s linear infinite, particleFade12 9s ease-in-out infinite;
+        }
+        
+        /* ORBIT ANIMATIONS */
+        @keyframes orbit1 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-30px, -20px) rotate(90deg); }
+            50% { transform: translate(25px, -35px) rotate(180deg); }
+            75% { transform: translate(35px, 15px) rotate(270deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit2 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-40px, 30px) rotate(120deg); }
+            66% { transform: translate(20px, -25px) rotate(240deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit3 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(45px, -15px); }
+            50% { transform: translate(-20px, -40px); }
+            75% { transform: translate(-35px, 25px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit4 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-25px, 35px) rotate(45deg); }
+            50% { transform: translate(30px, 20px) rotate(90deg); }
+            75% { transform: translate(-15px, -30px) rotate(135deg); }
+            100% { transform: translate(0px, 0px) rotate(180deg); }
+        }
+        
+        @keyframes orbit5 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(25px, -45px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        /* Orbit animations cho particles mới */
+        @keyframes orbit6 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(30px, 20px) rotate(90deg); }
+            50% { transform: translate(-15px, 40px) rotate(180deg); }
+            75% { transform: translate(-25px, -10px) rotate(270deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit7 {
+            0% { transform: translate(0px, 0px); }
+            33% { transform: translate(-35px, 25px); }
+            66% { transform: translate(20px, -30px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit8 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(40px, -20px) rotate(180deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit9 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(-20px, -35px); }
+            50% { transform: translate(35px, -15px); }
+            75% { transform: translate(15px, 30px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit10 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(25px, 35px) rotate(120deg); }
+            66% { transform: translate(-30px, 10px) rotate(240deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit11 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(-40px, 30px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit12 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(45px, -25px) rotate(60deg); }
+            50% { transform: translate(-20px, -40px) rotate(120deg); }
+            75% { transform: translate(-35px, 20px) rotate(180deg); }
+            100% { transform: translate(0px, 0px) rotate(240deg); }
+        }
+        
+        @keyframes particleFade1 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes particleFade2 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes particleFade3 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes particleFade4 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes particleFade5 {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+        
+        /* Fade animations cho particles mới */
+        @keyframes particleFade6 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes particleFade7 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes particleFade8 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes particleFade9 {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes particleFade10 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes particleFade11 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes particleFade12 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+
+        
+
+
+
+
+
+
+        /* Data Center Power Value Animation */
+        .power-value {
+            animation: powerFlicker 3s ease-in-out infinite;
+        }
+
+        @keyframes powerFlicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Transmission Lines Glow Effect */
+        .transmission-line-500kv {
+            animation: lineGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes lineGlow {
+            0% { 
+                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+            }
+            100% { 
+                box-shadow: 0 2px 8px rgba(231, 76, 60, 0.6), 0 0 15px rgba(231, 76, 60, 0.4);
+            }
+        }
+
+        /* Substation Hover Pulse */
+        .substation-box:hover {
+            animation: substationPulse 0.5s ease-in-out;
+        }
+
+        @keyframes substationPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* Data Center Hover Bounce */
+        .data-center-box:hover .power-value {
+            animation: powerBounce 0.6s ease-in-out;
+        }
+
+        @keyframes powerBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .facility-category {
+            margin-bottom: 4rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .facility-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .facility-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3.5rem;
+        }
+        
+        .facility-content {
+            padding: 2.5rem;
+        }
+        
+        .facility-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .facility-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .facility-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .facility-features li {
+            padding: 0.5rem 0;
+            color: #4b5563;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .facility-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .virtual-tour {
+            background: #f8fafc;
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .tour-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .tour-description {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tour-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tour-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Power Grid Section Styles */
+        .power-grid-section {
+            margin: 4rem 0;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 20px;
+        }
+        
+        .grid-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .power-grid-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .grid-map-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        
+        .grid-background-map {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+        }
+        
+        .grid-map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .power-flow-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        /* ENHANCED ZONE-BASED HIGHLIGHTING - TẮT ĐỂ GIỮ HÌNH RÕ NÉT */
+        .power-zone {
+            /* Đã tắt zone highlighting */
+            display: none;
+        }
+
+        .zone-500kv, .zone-220kv, .zone-110kv {
+            /* Đã tắt zone effects */
+            display: none;
+        }
+
+
+
+
+
+        /* LEGEND WITH INTERACTIONS - Giảm backdrop-filter */
+        .interactive-legend {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.98); /* Tăng opacity */
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px); /* Giảm blur */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 20;
+        }
+
+        .legend-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 6px 0;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .legend-item:hover {
+            background: rgba(0,0,0,0.05);
+            transform: translateX(3px);
+        }
+
+        .legend-line {
+            width: 20px;
+            height: 2px;
+            margin-right: 8px;
+            border-radius: 1px;
+        }
+
+        .legend-500kv { background: #e74c3c; }
+        .legend-220kv { background: #3498db; }
+        .legend-110kv { background: #9b59b6; }
+
+        .legend-point {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        /* CONTROL BUTTONS */
+        .grid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .grid-control-btn {
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .grid-control-btn:hover {
+            background: rgba(255,255,255,1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+
+
+        /* ANIMATIONS */
+        @keyframes zonePulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.02); }
+        }
+
+
+
+        @keyframes flowParticle {
+            0% { opacity: 0; transform: translateX(0) translateY(0); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(150px) translateY(-30px); }
+        }
+
+        .highlighted-zone {
+            opacity: 0.8 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 0 30px currentColor !important;
+        }
+
+        .highlighted-zone.zone-500kv {
+            animation: highlightPulse500 1s ease-in-out infinite;
+        }
+
+        .highlighted-zone.zone-220kv {
+            animation: highlightPulse220 1s ease-in-out infinite;
+        }
+
+        .highlighted-zone.zone-110kv {
+            animation: highlightPulse110 1s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse500 {
+            0%, 100% { 
+                opacity: 0.8; 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(231,76,60,0.8);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.08);
+                box-shadow: 0 0 40px rgba(231,76,60,1);
+            }
+        }
+
+        @keyframes highlightPulse220 {
+            0%, 100% { 
+                opacity: 0.8; 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(52,152,219,0.8);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.08);
+                box-shadow: 0 0 40px rgba(52,152,219,1);
+            }
+        }
+
+        @keyframes highlightPulse110 {
+            0%, 100% { 
+                opacity: 0.8; 
+                transform: scale(1.05);
+                box-shadow: 0 0 30px rgba(155,89,182,0.8);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.08);
+                box-shadow: 0 0 40px rgba(155,89,182,1);
+            }
+        }
+
+        /* Grid Stats */
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            padding: 0 1rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .power-grid-section {
+                margin: 2rem 0;
+                padding: 2rem 1rem;
+            }
+            
+            .grid-background-map {
+                height: 400px;
+            }
+            
+            .interactive-legend {
+                bottom: 10px;
+                left: 10px;
+                padding: 10px;
+                font-size: 10px;
+            }
+            
+            .infrastructure-pulse-point {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .data-center-pulse {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .grid-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-value {
+                font-size: 1.4rem;
+            }
+            
+            /* Power Transmission Diagram Mobile */
+            .diagram-container {
+                padding: 20px !important;
+                height: 500px !important;
+                overflow-x: auto;
+            }
+            
+            .diagram-container > div[style*="position: absolute"] {
+                transform: scale(0.8);
+                transform-origin: top left;
+            }
+            
+            .transmission-line-500kv {
+                width: 60% !important;
+                left: 160px !important;
+            }
+            
+            .substation-box {
+                left: 280px !important;
+            }
+            
+            .substation-box:nth-child(2) {
+                right: 280px !important;
+            }
+            
+            .data-center-group {
+                gap: 20px !important;
+            }
+            
+            .data-center-box {
+                width: 110px !important;
+                height: 70px !important;
+            }
+            
+            .power-value {
+                font-size: 16px !important;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 4rem 2rem 4rem;
+            }
+            
+            .facilities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .overview-title {
+                font-size: 2rem;
+            }
+            
+            .tech-effects-section {
+                height: 250px;
+                padding: 0 1rem;
+            }
+            
+            .cross-horizontal {
+                width: 60px;
+                height: 3px;
+            }
+            
+            .cross-vertical {
+                width: 3px;
+                height: 60px;
+            }
+        }
+        
+        /* ===== POWER FLOW EFFECTS ===== */
+        /* CSS tạo hiệu ứng dòng điện chạy trên các đường dây */
+        
+        /* Animations - Synchronized Speed for new particle system */
+        @keyframes moveDot {
+            0% { left: -20px; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { left: calc(100% + 20px); opacity: 0; }
+        }
+
+        @keyframes moveBusHorizontal {
+            0% { transform: translateX(0); opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { transform: translateX(500px); opacity: 0; }
+        }
+        
+        @keyframes dropToDataCenter01 {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(-50%) translateY(120px); opacity: 0; }
+        }
+        
+        @keyframes dropToDataCenter02 {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(-50%) translateY(120px); opacity: 0; }
+        }
+        
+        @keyframes dropToDataCenter03 {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(-50%) translateY(120px); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.2); 
+            }
+        }
+        
+        /* Hiệu ứng dòng điện chạy cho các đường dây 500kV */
+        .transmission-line-500kv {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .transmission-line-500kv::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -30px;
+            width: 30px;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.8) 30%, 
+                rgba(255, 255, 255, 1) 50%, 
+                rgba(255, 255, 255, 0.8) 70%, 
+                transparent 100%);
+            animation: powerFlow 2s linear infinite;
+            z-index: 1;
+        }
+        
+        .transmission-line-500kv:nth-child(2)::before {
+            animation-delay: 0.5s;
+        }
+        
+        .transmission-line-500kv:nth-child(3)::before {
+            animation-delay: 1s;
+        }
+        
+        .transmission-line-500kv:nth-child(4)::before {
+            animation-delay: 1.5s;
+        }
+        
+        /* Hiệu ứng dòng điện chạy cho đường dây 220kV */
+        .vertical-drop::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.8) 30%, 
+                rgba(255, 255, 255, 1) 50%, 
+                rgba(255, 255, 255, 0.8) 70%, 
+                transparent 100%);
+            animation: powerFlowVertical 1.5s linear infinite;
+            z-index: 1;
+        }
+        
+        .vertical-drop:nth-child(2)::before {
+            animation-delay: 0.3s;
+        }
+        
+        .vertical-drop:nth-child(3)::before {
+            animation-delay: 0.6s;
+        }
+        
+        /* Keyframes cho hiệu ứng dòng điện chạy ngang */
+        @keyframes powerFlow {
+            0% {
+                left: -30px;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+        
+        /* Keyframes cho đường dây 220kV */
+        @keyframes powerFlow220kv {
+            0% {
+                left: -25px;
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+        
+        /* Keyframes cho hiệu ứng dòng điện chạy dọc */
+        @keyframes powerFlowVertical {
+            0% {
+                top: -15px;
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+        
+        /* Hiệu ứng nhấp nháy cho các trạm */
+        .substation-box {
+            position: relative;
+        }
+        
+        .substation-box::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid rgba(231, 76, 60, 0.6);
+            border-radius: 10px;
+            animation: stationPulse 3s ease-in-out infinite;
+        }
+        
+        .data-center-box {
+            position: relative;
+        }
+        
+        .data-center-box::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border: 2px solid rgba(39, 174, 96, 0.6);
+            border-radius: 10px;
+            animation: dataCenterPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes stationPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes dataCenterPulse {
+            0%, 100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.03);
+            }
+        }
+        
+        /* Tắt hiệu ứng viền cũ */
+        /*
+        .facility-image {
+            position: relative;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .facility-image.icon-research {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .facility-image.icon-research:hover {
+            border-color: #1e40af;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .facility-image.icon-business {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 5px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .facility-image.icon-business:hover {
+            border-color: #047857;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .facility-image.icon-education {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .facility-image.icon-education:hover {
+            border-color: #b45309;
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.5);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .substation-box div, .data-center-box {
+            border: 3px solid #e74c3c !important;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .substation-box div:hover, .data-center-box:hover {
+            border-color: #c0392b !important;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .data-center-box {
+            border: 3px solid #27ae60 !important;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+        }
+        
+        .data-center-box:hover {
+            border-color: #1e8449 !important;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+        
+        .facility-icon {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            margin: 2px;
+        }
+        
+        .icon-active {
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+            }
+        }
+        
+        .icon-special {
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #3b82f6, #10b981, #f59e0b) 1;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes borderGlow {
+            from {
+                box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            }
+            to {
+                box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
+            }
+        }
+        
+        .transmission-line-500kv {
+            border: 2px solid #e74c3c;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+        }
+        
+        .transmission-line-500kv:hover {
+            border-color: #c0392b;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.6);
+        }
+        
+        .wind-turbine svg {
+            filter: drop-shadow(0 0 8px rgba(56, 178, 172, 0.4));
+            border-radius: 50%;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .wind-turbine:hover svg {
+            filter: drop-shadow(0 0 15px rgba(56, 178, 172, 0.7));
+            transform: scale(1.1);
+        }
+        */
+        
+        /* Responsive icon borders */
+        @media (max-width: 768px) {
+            .facility-image {
+                border-width: 2px;
+            }
+            
+            .substation-box div, .data-center-box {
+                border-width: 2px !important;
+            }
+        }
+        
+        /* ===== SVG OVERLAY SYSTEM ===== */
+        /* New SVG-based positioning system for precise icon placement */
+        
+        .svg-icon-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .svg-icon-overlay svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .facility-group {
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-border {
+            fill: transparent;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .facility-group:hover .facility-border {
+            stroke-width: 4;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .facility-group:hover {
+            transform: scale(1.05);
+            transform-origin: center;
+        }
+        
+        /* Specific facility colors */
+        .facility-group[data-facility="500kv-substation"] .facility-border {
+            stroke: #e74c3c;
+            fill: rgba(231, 76, 60, 0.1);
+        }
+        
+        .facility-group[data-facility="110kv-substation"] .facility-border {
+            stroke: #f39c12;
+            fill: rgba(243, 156, 18, 0.1);
+        }
+        
+        .facility-group[data-facility="hydro-plant"] .facility-border {
+            stroke: #3498db;
+            fill: rgba(52, 152, 219, 0.1);
+        }
+        
+        .facility-group[data-facility="data-center"] .facility-border {
+            stroke: #27ae60;
+            fill: rgba(39, 174, 96, 0.1);
+        }
+        
+        .facility-group[data-facility="tech-park"] .facility-border {
+            stroke: #2ecc71;
+            fill: rgba(46, 204, 113, 0.05);
+        }
+        
+        .facility-group[data-facility="transmission-point"] .facility-border {
+            stroke: #e74c3c;
+            fill: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Animation classes */
+        .facility-group.active .facility-border {
+            animation: facilityPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes facilityPulse {
+            0%, 100% {
+                opacity: 1;
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            50% {
+                opacity: 0.8;
+                filter: drop-shadow(0 0 15px currentColor);
+            }
+        }
+        
+        .facility-group.special .facility-border {
+            animation: specialGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes specialGlow {
+            from {
+                filter: drop-shadow(0 0 10px rgba(39, 174, 96, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 25px rgba(39, 174, 96, 0.8));
+            }
+        }
+        
+        /* Legacy support - hide old system */
+        .map-overlay-icons {
+            display: none;
+        }
+        
+        .map-icon-overlay {
+            pointer-events: auto;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            transform-origin: center center;
+        }
+        
+        .map-icon-overlay:hover {
+            transform: translate(-50%, -50%) scale(1.1) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 500kV Substation Icon */
+        .icon-500kv-substation {
+            border-color: #e74c3c !important;
+            background: rgba(231, 76, 60, 0.1) !important;
+        }
+        
+        .icon-500kv-substation:hover {
+            border-color: #c0392b !important;
+            background: rgba(231, 76, 60, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+        
+        .icon-500kv-substation.icon-active {
+            animation: substationPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes substationPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+            }
+        }
+        
+        /* 110kV Substation Icon */
+        .icon-110kv-substation {
+            border-color: #f39c12 !important;
+            background: rgba(243, 156, 18, 0.1) !important;
+        }
+        
+        .icon-110kv-substation:hover {
+            border-color: #e67e22 !important;
+            background: rgba(243, 156, 18, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
+        
+        /* Hydro Power Plant Icon */
+        .icon-hydro-plant {
+            border-color: #3498db !important;
+            background: rgba(52, 152, 219, 0.1) !important;
+        }
+        
+        .icon-hydro-plant:hover {
+            border-color: #2980b9 !important;
+            background: rgba(52, 152, 219, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        /* Data Center Icon */
+        .icon-data-center {
+            border-color: #27ae60 !important;
+            background: rgba(39, 174, 96, 0.1) !important;
+        }
+        
+        .icon-data-center:hover {
+            border-color: #229954 !important;
+            background: rgba(39, 174, 96, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+        
+        .icon-data-center.icon-special {
+            animation: dataCenterGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes dataCenterGlow {
+            from {
+                box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(39, 174, 96, 0.8);
+            }
+        }
+        
+        /* Tech Park Boundary */
+        .icon-tech-park {
+            border-color: #2ecc71 !important;
+            background: rgba(46, 204, 113, 0.05) !important;
+            animation: techParkPulse 4s ease-in-out infinite;
+        }
+        
+        .icon-tech-park:hover {
+            border-color: #27ae60 !important;
+            background: rgba(46, 204, 113, 0.1) !important;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        @keyframes techParkPulse {
+            0%, 100% {
+                border-color: #2ecc71;
+                opacity: 0.8;
+            }
+            50% {
+                border-color: #27ae60;
+                opacity: 1;
+            }
+        }
+        
+        /* Transmission Points */
+        .icon-transmission-point {
+            animation: transmissionBlink 2s ease-in-out infinite;
+        }
+        
+        .icon-transmission-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+        
+        @keyframes transmissionBlink {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Special hover effects for map icons */
+        .map-icon-overlay:hover::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid currentColor;
+            border-radius: inherit;
+            opacity: 0.5;
+            animation: iconHoverRing 0.3s ease-out;
+        }
+        
+        @keyframes iconHoverRing {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+        
+        /* ===== POWER TRANSMISSION SYSTEM EFFECTS ===== */
+        /* CSS cho hiệu ứng mạch điện trong Power Transmission System */
+        
+        /* Enhanced transmission line borders */
+        .transmission-line-500kv {
+            border: 2px solid #e74c3c;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .transmission-line-500kv:hover {
+            border-color: #c0392b;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.6);
+        }
+        
+        /* Substation and Data Center borders - Only for Power Transmission System */
+        .substation-box div, .data-center-box {
+            border: 3px solid #e74c3c !important;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .substation-box div:hover, .data-center-box:hover {
+            border-color: #c0392b !important;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        .data-center-box {
+            border: 3px solid #27ae60 !important;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+        }
+        
+        .data-center-box:hover {
+            border-color: #1e8449 !important;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+        }
+        
+        /* Power Transmission System specific icon effects */
+        .power-transmission-diagram .facility-icon {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            margin: 2px;
+        }
+        
+        /* Special animated border for active icons in Power Transmission System */
+        .power-transmission-diagram .icon-active {
+            animation: powerIconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes powerIconPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(231, 76, 60, 0);
+            }
+        }
+        
+        /* Data Center special effects */
+        .power-transmission-diagram .data-center-box.icon-special {
+            animation: dataCenterGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes dataCenterGlow {
+            from {
+                box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+            }
+            to {
+                box-shadow: 0 0 25px rgba(39, 174, 96, 0.8);
+            }
+        }
+        
+        /* Power flow animation for transmission lines */
+        .transmission-line-500kv.icon-active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: powerFlow 2s linear infinite;
+        }
+        
+        @keyframes powerFlow {
+            0% {
+                left: -20px;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        
+        /* Substation pulse effect */
+        .substation-box.icon-active {
+            animation: substationPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes substationPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        /* Data Center power value flickering */
+        .data-center-box.icon-active .power-value {
+            animation: powerValueFlicker 2s ease-in-out infinite;
+        }
+        
+        @keyframes powerValueFlicker {
+            0%, 100% {
+                color: #27ae60;
+            }
+            50% {
+                color: #2ecc71;
+                text-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+            }
+        }
+        
+        /* Responsive adjustments for power transmission system */
+        @media (max-width: 768px) {
+            .power-transmission-diagram .facility-icon {
+                margin: 1px;
+            }
+            
+            .substation-box div, .data-center-box {
+                border-width: 2px !important;
+            }
+        }
+        
+        /* Responsive adjustments for map icons */
+        @media (max-width: 768px) {
+            .map-icon-overlay {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            
+            .map-icon-overlay:hover {
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            
+            .icon-tech-park {
+                transform: translate(-50%, -50%) scale(0.7);
+            }
+        }
+        
+        /* Legend overlay icons */
+        .icon-legend-hydro, .icon-legend-500kv, .icon-legend-110kv {
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .icon-legend-hydro:hover, .icon-legend-500kv:hover, .icon-legend-110kv:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .icon-legend-hydro {
+            border-color: #3498db !important;
+            background: rgba(52, 152, 219, 0.3) !important;
+        }
+        
+        .icon-legend-500kv {
+            border-color: #e74c3c !important;
+            background: rgba(231, 76, 60, 0.3) !important;
+        }
+        
+        .icon-legend-110kv {
+            border-color: #f39c12 !important;
+            background: rgba(243, 156, 18, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="ai-campus-3d-structure.html" class="campus-3d">3D Campus</a>
+                <a href="facilities.html" class="active">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="facilities-overview">
+            <h2 class="overview-title">Creating the Future of AI Innovation</h2>
+            <p class="overview-text">HEART Technology Park features cutting-edge facilities designed to foster innovation, collaboration, and breakthrough research in artificial intelligence. Our world-class infrastructure provides the perfect environment for companies, researchers, and entrepreneurs to thrive.</p>
+        </div>
+
+        <!-- TECH EFFECTS SECTION -->
+        <div class="tech-effects-section">
+            <!-- TURBINE FARM - Container lớn cho turbine lớn -->
+            <div style="position: relative; width: 100%; height: 280px; margin: 2rem 0; padding: 20px;">
+                
+                <!-- Turbine 1 - Thiết kế hoàn toàn mới -->
+                <div class="wind-turbine" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 120px; height: 120px; z-index: 10;">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- Cột trụ turbine dài -->
+                        <line x1="60" y1="55" x2="60" y2="115" stroke="#555" stroke-width="3"/>
+                        <line x1="58" y1="55" x2="58" y2="115" stroke="#777" stroke-width="1"/>
+                        <g style="transform-origin: 60px 55px; animation: turbineRotate 3s linear infinite;">
+                            <!-- Cánh quạt 1 - rất dài -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(0 60 55)"/>
+                            <!-- Cánh quạt 2 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(120 60 55)"/>
+                            <!-- Cánh quạt 3 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(240 60 55)"/>
+                            <!-- Trục trung tâm lớn -->
+                            <circle cx="60" cy="55" r="6" fill="#333"/>
+                            <circle cx="60" cy="55" r="4" fill="#555"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Turbine 2 - Thiết kế hoàn toàn mới -->  
+                <div class="wind-turbine" style="position: absolute; top: 50px; left: 60px; width: 120px; height: 120px; z-index: 10;">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- Cột trụ turbine dài -->
+                        <line x1="60" y1="55" x2="60" y2="115" stroke="#555" stroke-width="3"/>
+                        <line x1="58" y1="55" x2="58" y2="115" stroke="#777" stroke-width="1"/>
+                        <g style="transform-origin: 60px 55px; animation: turbineRotate 3s linear infinite -1s;">
+                            <!-- Cánh quạt 1 - rất dài -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(0 60 55)"/>
+                            <!-- Cánh quạt 2 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(120 60 55)"/>
+                            <!-- Cánh quạt 3 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(240 60 55)"/>
+                            <!-- Trục trung tâm lớn -->
+                            <circle cx="60" cy="55" r="6" fill="#333"/>
+                            <circle cx="60" cy="55" r="4" fill="#555"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Turbine 3 - Thiết kế hoàn toàn mới -->
+                <div class="wind-turbine" style="position: absolute; top: 50px; right: 60px; width: 120px; height: 120px; z-index: 10;">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- Cột trụ turbine dài -->
+                        <line x1="60" y1="55" x2="60" y2="115" stroke="#555" stroke-width="3"/>
+                        <line x1="58" y1="55" x2="58" y2="115" stroke="#777" stroke-width="1"/>
+                        <g style="transform-origin: 60px 55px; animation: turbineRotate 3s linear infinite -2s;">
+                            <!-- Cánh quạt 1 - rất dài -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(0 60 55)"/>
+                            <!-- Cánh quạt 2 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(120 60 55)"/>
+                            <!-- Cánh quạt 3 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(240 60 55)"/>
+                            <!-- Trục trung tâm lớn -->
+                            <circle cx="60" cy="55" r="6" fill="#333"/>
+                            <circle cx="60" cy="55" r="4" fill="#555"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                
+                <!-- Turbine 4 - Thiết kế hoàn toàn mới -->
+                <div class="wind-turbine" style="position: absolute; top: 90px; left: 25%; width: 120px; height: 120px; z-index: 10;">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- Cột trụ turbine dài -->
+                        <line x1="60" y1="55" x2="60" y2="115" stroke="#555" stroke-width="3"/>
+                        <line x1="58" y1="55" x2="58" y2="115" stroke="#777" stroke-width="1"/>
+                        <g style="transform-origin: 60px 55px; animation: turbineRotate 3s linear infinite -0.5s;">
+                            <!-- Cánh quạt 1 - rất dài -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(0 60 55)"/>
+                            <!-- Cánh quạt 2 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(120 60 55)"/>
+                            <!-- Cánh quạt 3 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(240 60 55)"/>
+                            <!-- Trục trung tâm lớn -->
+                            <circle cx="60" cy="55" r="6" fill="#333"/>
+                            <circle cx="60" cy="55" r="4" fill="#555"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <!-- Turbine 5 - Thiết kế hoàn toàn mới -->
+                <div class="wind-turbine" style="position: absolute; top: 90px; right: 25%; width: 120px; height: 120px; z-index: 10;">
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                        <!-- Cột trụ turbine dài -->
+                        <line x1="60" y1="55" x2="60" y2="115" stroke="#555" stroke-width="3"/>
+                        <line x1="58" y1="55" x2="58" y2="115" stroke="#777" stroke-width="1"/>
+                        <g style="transform-origin: 60px 55px; animation: turbineRotate 3s linear infinite -1.5s;">
+                            <!-- Cánh quạt 1 - rất dài -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(0 60 55)"/>
+                            <!-- Cánh quạt 2 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(120 60 55)"/>
+                            <!-- Cánh quạt 3 -->
+                            <path d="M60 55 L58 8 Q60 5 62 8 L60 55 Z" fill="#f8f9fa" stroke="#333" stroke-width="1.5" transform="rotate(240 60 55)"/>
+                            <!-- Trục trung tâm lớn -->
+                            <circle cx="60" cy="55" r="6" fill="#333"/>
+                            <circle cx="60" cy="55" r="4" fill="#555"/>
+                        </g>
+                    </svg>
+                </div>
+                
+            </div>
+            
+            <!-- Tech particles vẫn hoạt động -->
+            <div class="tech-particle particle-1"></div>
+            <div class="tech-particle particle-2"></div>
+            <div class="tech-particle particle-3"></div>
+            <div class="tech-particle particle-4"></div>
+            <div class="tech-particle particle-5"></div>
+            
+            <!-- Thêm particles mới -->
+            <div class="tech-particle particle-6"></div>
+            <div class="tech-particle particle-7"></div>
+            <div class="tech-particle particle-8"></div>
+            <div class="tech-particle particle-9"></div>
+            <div class="tech-particle particle-10"></div>
+            <div class="tech-particle particle-11"></div>
+            <div class="tech-particle particle-12"></div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🔬 Research & Development Centers</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">🧪</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">AI Research Labs</h4>
+                        <p class="facility-description">Advanced laboratories equipped with quantum computing systems, high-performance computing clusters, and specialized AI development tools.</p>
+                        <ul class="facility-features">
+                            <li>Quantum computing infrastructure</li>
+                            <li>GPU clusters for deep learning</li>
+                            <li>Advanced data analytics platforms</li>
+                            <li>Collaborative research spaces</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🤖</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Robotics Innovation Center</h4>
+                        <p class="facility-description">Dedicated spaces for robotics research, prototyping, and testing with industrial-grade equipment and safety systems.</p>
+                        <ul class="facility-features">
+                            <li>Robot testing environments</li>
+                            <li>3D printing and fabrication</li>
+                            <li>Motion capture systems</li>
+                            <li>Safety-certified testing areas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🧠</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Neural Network Institute</h4>
+                        <p class="facility-description">Specialized facility for neural network research, brain-computer interfaces, and cognitive computing studies.</p>
+                        <ul class="facility-features">
+                            <li>Neuromorphic computing systems</li>
+                            <li>EEG and brain imaging labs</li>
+                            <li>Virtual reality research pods</li>
+                            <li>Cognitive testing facilities</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🏢 Business & Collaboration Spaces</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">💼</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Smart Office Buildings</h4>
+                        <p class="facility-description">Intelligent office spaces with IoT integration, automated systems, and flexible layouts for modern businesses.</p>
+                        <ul class="facility-features">
+                            <li>IoT-enabled smart systems</li>
+                            <li>Flexible workspace configurations</li>
+                            <li>High-speed fiber connectivity</li>
+                            <li>Energy-efficient design</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🚀</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Startup Incubator Hub</h4>
+                        <p class="facility-description">Dedicated spaces for startups with mentorship programs, shared resources, and networking opportunities.</p>
+                        <ul class="facility-features">
+                            <li>Coworking spaces</li>
+                            <li>Meeting and presentation rooms</li>
+                            <li>Mentorship programs</li>
+                            <li>Funding and investment support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🎯</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Innovation Commons</h4>
+                        <p class="facility-description">Open collaboration spaces designed to encourage cross-pollination of ideas between different companies and research groups.</p>
+                        <ul class="facility-features">
+                            <li>Open collaboration areas</li>
+                            <li>Interactive digital walls</li>
+                            <li>Brainstorming pods</li>
+                            <li>Community event spaces</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">🎓 Education & Training Centers</h3>
+            <div class="facilities-grid">
+                <div class="facility-card">
+                    <div class="facility-image">🎓</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">AI Academy</h4>
+                        <p class="facility-description">Comprehensive education center offering courses, workshops, and certification programs in AI and related technologies.</p>
+                        <ul class="facility-features">
+                            <li>Modern lecture halls</li>
+                            <li>Hands-on laboratory sessions</li>
+                            <li>Online learning platforms</li>
+                            <li>Industry expert instructors</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="facility-card">
+                    <div class="facility-image">🏋️</div>
+                    <div class="facility-content">
+                        <h4 class="facility-title">Skills Development Center</h4>
+                        <p class="facility-description">Professional training facilities for upskilling workers and preparing them for the AI-driven economy.</p>
+                        <ul class="facility-features">
+                            <li>Simulation environments</li>
+                            <li>Virtual reality training</li>
+                            <li>Certification programs</li>
+                            <li>Career placement services</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="facility-category">
+            <h3 class="category-title">⚡ Infrastructure Systems</h3>
+            <div class="infrastructure-overview">
+                <p style="text-align: center; font-size: 1.1rem; color: #64748b; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                    Our advanced electrical infrastructure ensures reliable, high-capacity power distribution to support intensive AI computing and research operations.
+                </p>
+            </div>
+            
+            <!-- 500kV Power Transmission System Diagram -->
+            <div class="power-system-container">
+                <div class="power-system-header">
+                    <h4 style="font-size: 1.8rem; font-weight: 700; color: #1e40af; margin-bottom: 1rem; text-align: center;">500kV Power Transmission System</h4>
+                    <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">Real-time visualization of our high-voltage power distribution network</p>
+                </div>
+                
+                <div class="power-transmission-diagram" style="background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); border: 1px solid #e2e8f0; overflow: hidden; margin-bottom: 2rem;">
+                    <div class="diagram-container" style="width: 100%; max-width: 1200px; height: 600px; position: relative; background: #f8fafc; padding: 40px; box-sizing: border-box;">
+                        
+                        <!-- Title -->
+                        <div style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); color: #2c3e50; font-size: 20px; font-weight: 700; text-align: center;">SƠ ĐỒ MẠCH ĐIỆN 500kV - HỆ THỐNG TRUYỀN TẢI ĐIỆN</div>
+
+                        <!-- 500kV Bus Lines with Animation -->
+                        <div class="power-line line-01" style="position: absolute; width: 75%; height: 4px; background: #e74c3c; left: 200px; top: 80px; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); z-index: 3;"></div>
+                        <div class="power-line line-02" style="position: absolute; width: 75%; height: 4px; background: #e74c3c; left: 200px; top: 120px; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); z-index: 3;"></div>
+                        <div class="power-line line-03" style="position: absolute; width: 75%; height: 4px; background: #e74c3c; left: 200px; top: 160px; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); z-index: 3;"></div>
+                        <div class="power-line line-04" style="position: absolute; width: 75%; height: 4px; background: #e74c3c; left: 200px; top: 200px; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); z-index: 3;"></div>
+
+                        <!-- Labels đường dây -->
+                        <div class="line-label label-01" style="position: absolute; background: #e74c3c; color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; left: 120px; z-index: 25; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); top: 68px;">500kV LINE 01</div>
+                        <div class="line-label label-02" style="position: absolute; background: #e74c3c; color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; left: 120px; z-index: 25; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); top: 108px;">500kV LINE 02</div>
+                        <div class="line-label label-03" style="position: absolute; background: #e74c3c; color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; left: 120px; z-index: 25; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); top: 148px;">500kV LINE 03</div>
+                        <div class="line-label label-04" style="position: absolute; background: #e74c3c; color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; left: 120px; z-index: 25; box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3); top: 188px;">500kV LINE 04</div>
+
+                        <!-- Hiệu ứng dòng điện chạy -->
+                        <div class="current-dot dot-01-1" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 77px; animation-delay: 0s;"></div>
+                        <div class="current-dot dot-01-2" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 77px; animation-delay: 2s;"></div>
+                        <div class="current-dot dot-02-1" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 117px; animation-delay: 0.5s;"></div>
+                        <div class="current-dot dot-02-2" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 117px; animation-delay: 2.5s;"></div>
+                        <div class="current-dot dot-03-1" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 157px; animation-delay: 1s;"></div>
+                        <div class="current-dot dot-03-2" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 157px; animation-delay: 3s;"></div>
+                        <div class="current-dot dot-04-1" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 197px; animation-delay: 1.5s;"></div>
+                        <div class="current-dot dot-04-2" style="position: absolute; width: 10px; height: 10px; background: white; border: 2px solid #e74c3c; border-radius: 50%; animation: moveDot 4s linear infinite; z-index: 10; top: 197px; animation-delay: 3.5s;"></div>
+
+                        <!-- Điểm kết nối -->
+                        <div class="connection-point connection-left" style="position: absolute; width: 12px; height: 12px; background: #e74c3c; border: 2px solid white; border-radius: 50%; top: 135px; z-index: 15; animation: pulse 2s ease-in-out infinite; left: 320px;"></div>
+                        <div class="connection-point connection-right" style="position: absolute; width: 12px; height: 12px; background: #e74c3c; border: 2px solid white; border-radius: 50%; top: 135px; z-index: 15; animation: pulse 2s ease-in-out infinite; right: 320px;"></div>
+
+
+
+                        <!-- Đường dây dọc -->
+                        <div class="vertical-line vertical-left" style="position: absolute; width: 2px; height: 120px; background: #e74c3c; top: 140px; left: 321px;"></div>
+                        <div class="vertical-line vertical-right" style="position: absolute; width: 2px; height: 120px; background: #e74c3c; top: 140px; right: 321px;"></div>
+
+                        <!-- Trạm biến áp -->
+                        <div class="substation substation-left" style="position: absolute; width: 160px; height: 100px; background: #f8f9fa; border: 2px solid #2c3e50; border-radius: 8px; top: 260px; left: 320px; transform: translateX(-50%); display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #2c3e50; z-index: 10; box-shadow: 0 4px 8px rgba(44, 62, 80, 0.2);">
+                            <div class="substation-title" style="font-size: 12px; color: #e74c3c; margin-bottom: 8px;">SUBSTATION 01</div>
+                            <div class="substation-specs" style="font-size: 18px; color: #e74c3c; text-align: center; line-height: 1.4;">500/220kV<br><span style="font-size: 10px; color: #7f8c8d;">2 x 600MVA</span></div>
+                        </div>
+                        <div class="substation substation-right" style="position: absolute; width: 160px; height: 100px; background: #f8f9fa; border: 2px solid #2c3e50; border-radius: 8px; top: 260px; right: 320px; transform: translateX(50%); display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #2c3e50; z-index: 10; box-shadow: 0 4px 8px rgba(44, 62, 80, 0.2);">
+                            <div class="substation-title" style="font-size: 12px; color: #e74c3c; margin-bottom: 8px;">SUBSTATION 02</div>
+                            <div class="substation-specs" style="font-size: 18px; color: #e74c3c; text-align: center; line-height: 1.4;">500/220kV<br><span style="font-size: 10px; color: #7f8c8d;">2 x 600MVA</span></div>
+                        </div>
+
+                        <!-- Labels 220kV OUT -->
+                        <div class="output-label output-left" style="position: absolute; background: #3498db; color: white; padding: 6px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; top: 400px; z-index: 20; box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3); left: 280px;">220kV OUT</div>
+                        <div class="output-label output-right" style="position: absolute; background: #3498db; color: white; padding: 6px 10px; font-size: 12px; font-weight: bold; border-radius: 4px; top: 400px; z-index: 20; box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3); right: 280px;">220kV OUT</div>
+                        
+                        <!-- Unified 220kV Bus System -->
+                        <div class="main-bus" style="position: absolute; width: 50%; height: 5px; background: #3498db; top: 420px; left: 25%; box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3); z-index: 5;"></div>
+                        <div class="substation-to-bus-left" style="position: absolute; width: 3px; height: 50px; background: #3498db; top: 370px; left: 321px; box-shadow: 0 1px 2px rgba(52, 152, 219, 0.3); z-index: 5;"></div>
+                        <div class="substation-to-bus-right" style="position: absolute; width: 3px; height: 50px; background: #3498db; top: 370px; right: 321px; box-shadow: 0 1px 2px rgba(52, 152, 219, 0.3); z-index: 5;"></div>
+                        
+                        <!-- Bus Connection Points -->
+                        <div class="bus-connection bus-connection-left" style="position: absolute; width: 10px; height: 10px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); left: 33.33%; transform: translateX(-50%); top: 417px;"></div>
+                        <div class="bus-connection bus-connection-center" style="position: absolute; width: 10px; height: 10px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); left: 50%; transform: translateX(-50%); top: 417px;"></div>
+                        <div class="bus-connection bus-connection-right" style="position: absolute; width: 10px; height: 10px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); left: 66.67%; transform: translateX(-50%); top: 417px;"></div>
+                        
+                        <!-- Vertical Drops to Data Centers -->
+                        <div class="datacenter-connection connection-dc01" style="position: absolute; width: 3px; height: 120px; background: #3498db; box-shadow: 0 1px 2px rgba(52, 152, 219, 0.3); z-index: 5; top: 423px; left: 33.33%; transform: translateX(-50%);"></div>
+                        <div class="datacenter-connection connection-dc02" style="position: absolute; width: 3px; height: 120px; background: #3498db; box-shadow: 0 1px 2px rgba(52, 152, 219, 0.3); z-index: 5; top: 423px; left: 50%; transform: translateX(-50%);"></div>
+                        <div class="datacenter-connection connection-dc03" style="position: absolute; width: 3px; height: 120px; background: #3498db; box-shadow: 0 1px 2px rgba(52, 152, 219, 0.3); z-index: 5; top: 423px; left: 66.67%; transform: translateX(-50%);"></div>
+                        
+                        <!-- Data Center Input Terminals -->
+                        <div class="datacenter-input input-dc01" style="position: absolute; width: 12px; height: 12px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 10px rgba(52, 152, 219, 0.6); top: 540px; left: 33.33%; transform: translateX(-50%);"></div>
+                        <div class="datacenter-input input-dc02" style="position: absolute; width: 12px; height: 12px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 10px rgba(52, 152, 219, 0.6); top: 540px; left: 50%; transform: translateX(-50%);"></div>
+                        <div class="datacenter-input input-dc03" style="position: absolute; width: 12px; height: 12px; background: #3498db; border: 2px solid white; border-radius: 50%; z-index: 15; box-shadow: 0 0 10px rgba(52, 152, 219, 0.6); top: 540px; left: 66.67%; transform: translateX(-50%);"></div>
+                        
+                        <!-- Main Bus Horizontal Particles -->
+                        <div class="bus-particle bus-particle-1" style="position: absolute; width: 6px; height: 6px; background: #3498db; border-radius: 50%; animation: moveBusHorizontal 4s linear infinite; z-index: 12; top: 420px; left: 25%; animation-delay: 0s;"></div>
+                        <div class="bus-particle bus-particle-2" style="position: absolute; width: 6px; height: 6px; background: #3498db; border-radius: 50%; animation: moveBusHorizontal 4s linear infinite; z-index: 12; top: 420px; left: 25%; animation-delay: 1s;"></div>
+                        <div class="bus-particle bus-particle-3" style="position: absolute; width: 6px; height: 6px; background: #3498db; border-radius: 50%; animation: moveBusHorizontal 4s linear infinite; z-index: 12; top: 420px; left: 25%; animation-delay: 2s;"></div>
+                        <div class="bus-particle bus-particle-4" style="position: absolute; width: 6px; height: 6px; background: #3498db; border-radius: 50%; animation: moveBusHorizontal 4s linear infinite; z-index: 12; top: 420px; left: 25%; animation-delay: 3s;"></div>
+                        
+                        <!-- Vertical Drop Particles -->
+                        <div class="drop-particle drop-particle-dc01 particle-dc01-1" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter01 4s linear infinite; left: 33.33%; transform: translateX(-50%); top: 423px; animation-delay: 0.5s;"></div>
+                        <div class="drop-particle drop-particle-dc01 particle-dc01-2" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter01 4s linear infinite; left: 33.33%; transform: translateX(-50%); top: 423px; animation-delay: 2.5s;"></div>
+                        <div class="drop-particle drop-particle-dc02 particle-dc02-1" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter02 4s linear infinite; left: 50%; transform: translateX(-50%); top: 423px; animation-delay: 1s;"></div>
+                        <div class="drop-particle drop-particle-dc02 particle-dc02-2" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter02 4s linear infinite; left: 50%; transform: translateX(-50%); top: 423px; animation-delay: 3s;"></div>
+                        <div class="drop-particle drop-particle-dc03 particle-dc03-1" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter03 4s linear infinite; left: 66.67%; transform: translateX(-50%); top: 423px; animation-delay: 1.5s;"></div>
+                        <div class="drop-particle drop-particle-dc03 particle-dc03-2" style="position: absolute; width: 5px; height: 5px; background: #3498db; border-radius: 50%; z-index: 12; animation: dropToDataCenter03 4s linear infinite; left: 66.67%; transform: translateX(-50%); top: 423px; animation-delay: 3.5s;"></div>
+
+                        <!-- Data Centers -->
+                        <div class="data-center datacenter-left" style="position: absolute; width: 140px; height: 80px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; bottom: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #2c3e50; z-index: 10; box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2); left: 33.33%; transform: translateX(-50%);">
+                            <div class="datacenter-title" style="font-size: 11px; color: #3498db; margin-bottom: 8px;">DATA CENTER 01</div>
+                            <div class="datacenter-power power-value" id="power-01" style="font-size: 22px; color: #00CC00; font-weight: bold; margin-bottom: 4px;">99MW</div>
+                            <div class="datacenter-voltage" style="font-size: 9px; color: #666666;">22kV</div>
+                        </div>
+                        <div class="data-center datacenter-center" style="position: absolute; width: 140px; height: 80px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; bottom: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #2c3e50; z-index: 10; box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2); left: 50%; transform: translateX(-50%);">
+                            <div class="datacenter-title" style="font-size: 11px; color: #3498db; margin-bottom: 8px;">DATA CENTER 02</div>
+                            <div class="datacenter-power power-value" id="power-02" style="font-size: 22px; color: #00CC00; font-weight: bold; margin-bottom: 4px;">100MW</div>
+                            <div class="datacenter-voltage" style="font-size: 9px; color: #666666;">22kV</div>
+                        </div>
+                        <div class="data-center datacenter-right" style="position: absolute; width: 140px; height: 80px; background: #ecf0f1; border: 2px solid #3498db; border-radius: 8px; bottom: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 14px; font-weight: bold; color: #2c3e50; z-index: 10; box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2); left: 66.67%; transform: translateX(-50%);">
+                            <div class="datacenter-title" style="font-size: 11px; color: #3498db; margin-bottom: 8px;">DATA CENTER 03</div>
+                            <div class="datacenter-power power-value" id="power-03" style="font-size: 22px; color: #00CC00; font-weight: bold; margin-bottom: 4px;">101MW</div>
+                            <div class="datacenter-voltage" style="font-size: 9px; color: #666666;">22kV</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="power-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">⚡ 1,200 MW Capacity</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Total power capacity to support high-performance computing workloads</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">🔄 99.99% Uptime</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Redundant systems ensure continuous power for critical operations</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">🌱 Green Energy</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Powered by renewable energy sources and smart grid technology</p>
+                    </div>
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <h5 style="color: #1e40af; font-weight: 600; margin-bottom: 0.5rem;">📊 Real-time Monitoring</h5>
+                        <p style="color: #64748b; font-size: 0.9rem;">Advanced SCADA systems for continuous infrastructure monitoring</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ENHANCED POWER GRID MAP WITH ZONE EFFECTS -->
+            <div class="power-grid-section">
+                <div class="grid-header">
+                    <h4 style="font-size: 1.8rem; font-weight: 700; color: #1e40af; margin-bottom: 1rem; text-align: center;">500kV Power Transmission System</h4>
+                    <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">Real-time visualization of our high-voltage power distribution network</p>
+                </div>
+                
+                <div class="power-grid-container">
+                    <div class="grid-map-wrapper">
+                        <div class="grid-background-map" id="powerGridMap">
+                            <!-- Ảnh gốc hoàn toàn nguyên vẹn -->
+                            <img src="assets/images/power-grid-map.jpg" alt="500kV Onsite Power Grid Map" class="grid-map-image">
+                            
+                            <!-- SVG OVERLAY FOR PRECISE POSITIONING -->
+                            <div class="svg-icon-overlay">
+                                <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                                    <!-- Define reusable patterns -->
+                                    <defs>
+                                        <pattern id="grid-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+                                            <rect width="1" height="50" fill="#e0e0e0" opacity="0.3"/>
+                                            <rect width="50" height="1" fill="#e0e0e0" opacity="0.3"/>
+                                        </pattern>
+                                    </defs>
+                                    
+                                    <!-- Tech Park Boundary (bottom layer) -->
+                                    <g class="facility-group" data-facility="tech-park">
+                                        <rect class="facility-border" x="410" y="240" width="180" height="120" rx="12" ry="12"/>
+                                    </g>
+                                    
+                                    <!-- 500kV Substation (Center) -->
+                                    <g class="facility-group active" data-facility="500kv-substation">
+                                        <rect class="facility-border" x="505" y="273" width="30" height="30" rx="6" ry="6"/>
+                                        <text x="520" y="293" text-anchor="middle" font-size="10" fill="#e74c3c" font-weight="bold">500kV</text>
+                                    </g>
+                                    
+                                    <!-- 110kV La Son Substation (Top Right) -->
+                                    <g class="facility-group" data-facility="110kv-substation">
+                                        <rect class="facility-border" x="925" y="158" width="25" height="25" rx="6" ry="6"/>
+                                        <text x="937.5" y="175" text-anchor="middle" font-size="8" fill="#f39c12" font-weight="bold">110kV</text>
+                                    </g>
+                                    
+                                    <!-- Hydro Power Plant (Left) -->
+                                    <g class="facility-group" data-facility="hydro-plant">
+                                        <rect class="facility-border" x="50" y="295" width="35" height="35" rx="6" ry="6"/>
+                                        <text x="67.5" y="317" text-anchor="middle" font-size="9" fill="#3498db" font-weight="bold">HYDRO</text>
+                                    </g>
+                                    
+                                    <!-- Data Center (Right) -->
+                                    <g class="facility-group special" data-facility="data-center">
+                                        <rect class="facility-border" x="870" y="345" width="30" height="30" rx="6" ry="6"/>
+                                        <text x="885" y="365" text-anchor="middle" font-size="8" fill="#27ae60" font-weight="bold">DC</text>
+                                    </g>
+                                    
+                                    <!-- Transmission Points -->
+                                    <g class="facility-group" data-facility="transmission-point">
+                                        <circle class="facility-border" cx="280" cy="228" r="6"/>
+                                    </g>
+                                    
+                                    <g class="facility-group" data-facility="transmission-point">
+                                        <circle class="facility-border" cx="720" cy="252" r="6"/>
+                                    </g>
+                                    
+                                    <g class="facility-group" data-facility="transmission-point">
+                                        <circle class="facility-border" cx="320" cy="408" r="6" style="stroke: #3498db;"/>
+                                    </g>
+                                    
+                                    <g class="facility-group" data-facility="transmission-point">
+                                        <circle class="facility-border" cx="680" cy="432" r="6" style="stroke: #3498db;"/>
+                                    </g>
+                                    
+                                    <!-- Legend Icons -->
+                                    <g transform="translate(150, 460)">
+                                        <!-- 500kV Legend -->
+                                        <g class="facility-group" data-facility="500kv-substation">
+                                            <rect class="facility-border" x="0" y="0" width="20" height="20" rx="4" ry="4"/>
+                                            <text x="30" y="15" font-size="12" fill="#666">500kV Substation</text>
+                                        </g>
+                                        
+                                        <!-- 110kV Legend -->
+                                        <g class="facility-group" data-facility="110kv-substation">
+                                            <rect class="facility-border" x="0" y="25" width="20" height="20" rx="4" ry="4"/>
+                                            <text x="30" y="40" font-size="12" fill="#666">110kV Substation</text>
+                                        </g>
+                                        
+                                        <!-- Hydro Legend -->
+                                        <g class="facility-group" data-facility="hydro-plant">
+                                            <rect class="facility-border" x="0" y="50" width="20" height="20" rx="4" ry="4"/>
+                                            <text x="30" y="65" font-size="12" fill="#666">Hydro Power Plant</text>
+                                        </g>
+                                    </g>
+                                    
+                                    <!-- Power flow lines (optional) -->
+                                    <g opacity="0.3">
+                                        <line x1="85" y1="312" x2="505" y2="288" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5">
+                                            <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                                        </line>
+                                        <line x1="535" y1="288" x2="870" y2="360" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,5">
+                                            <animate attributeName="stroke-dashoffset" from="0" to="10" dur="1s" repeatCount="indefinite"/>
+                                        </line>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- GRID STATS -->
+                    <div class="grid-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-value">500kV</div>
+                            <div class="stat-label">Main Grid Connection</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔌</div>
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">Transmission Lines</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏭</div>
+                            <div class="stat-value">1,000MW</div>
+                            <div class="stat-label">Total Capacity</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🌐</div>
+                            <div class="stat-value">99.99%</div>
+                            <div class="stat-label">Grid Reliability</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="virtual-tour">
+            <h3 class="tour-title">Take a Virtual Tour</h3>
+            <p class="tour-description">Experience our world-class facilities through an immersive 3D virtual tour. Explore our labs, offices, and collaboration spaces from the comfort of your home.</p>
+            <a href="ai-campus-3d-structure.html" class="tour-button">
+                <span>🏢</span>
+                <span>Start Virtual Tour</span>
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        let particlesEnabled = true;
+        let zonesEnabled = true;
+        let particleInterval;
+
+        // Initialize enhanced power grid effects - Cleaned up
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePowerTransmissionNew(); // Initialize new particle system
+            initializeMapOverlayIcons(); // Khởi tạo map overlay icons
+        });
+        
+        // Initialize new particle flow system for Power Transmission Diagram
+        function initializePowerTransmissionNew() {
+            const flowManager = new ParticleFlowManager();
+            enhanceConnectionEffects();
+            
+            // Debug: Add keyboard shortcut to restart animations
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'r' || e.key === 'R') {
+                    flowManager.restartFlow();
+                    console.log('Particle flow restarted');
+                }
+            });
+        }
+
+        // Synchronized Particle Flow System cho Power Transmission Diagram
+        class ParticleFlowManager {
+            constructor() {
+                this.animationSpeed = 4000; // 4 seconds for all particles
+                this.initializeFlow();
+            }
+
+            initializeFlow() {
+                // Synchronize all animations to same speed
+                this.synchronizeAnimations();
+                
+                // Monitor transformer connection points
+                this.monitorTransformerFlow();
+                
+                // Start power value updates
+                this.startPowerUpdates();
+            }
+
+            synchronizeAnimations() {
+                // Ensure all red particles (500kV) flow left-to-right
+                const redParticles = document.querySelectorAll('.current-dot');
+                redParticles.forEach(particle => {
+                    particle.style.animationDuration = this.animationSpeed + 'ms';
+                    particle.style.animationTimingFunction = 'linear';
+                });
+
+                // Ensure all bus and drop particles flow properly
+                const busParticles = document.querySelectorAll('.bus-particle, .drop-particle');
+                busParticles.forEach(particle => {
+                    particle.style.animationDuration = this.animationSpeed + 'ms';
+                    particle.style.animationTimingFunction = 'linear';
+                });
+                
+                // Add glow effect to connection points
+                this.enhanceConnectionPoints();
+            }
+
+            enhanceConnectionPoints() {
+                // Add glow to bus connections
+                const busConnections = document.querySelectorAll('.bus-connection');
+                busConnections.forEach(connection => {
+                    connection.style.boxShadow = '0 0 8px rgba(52, 152, 219, 0.5)';
+                });
+                
+                // Add glow to data center inputs
+                const inputs = document.querySelectorAll('.datacenter-input');
+                inputs.forEach(input => {
+                    input.style.boxShadow = '0 0 10px rgba(52, 152, 219, 0.6)';
+                    input.style.animation = 'pulse 2s ease-in-out infinite';
+                });
+            }
+
+            monitorTransformerFlow() {
+                // Enhanced pulse effect when particles reach transformers
+                const connections = document.querySelectorAll('.connection-point');
+                
+                // Pulse connections every 2 seconds to sync with particle flow
+                setInterval(() => {
+                    connections.forEach(connection => {
+                        connection.style.transform = 'scale(1.3)';
+                        connection.style.boxShadow = '0 0 20px rgba(231, 76, 60, 0.6)';
+                        setTimeout(() => {
+                            connection.style.transform = 'scale(1)';
+                            connection.style.boxShadow = 'none';
+                        }, 300);
+                    });
+                }, 2000);
+            }
+
+            startPowerUpdates() {
+                // Dynamic power value updates
+                setInterval(() => {
+                    const powerElements = ['power-01', 'power-02', 'power-03'];
+                    
+                    powerElements.forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            const randomPower = (Math.random() * 2 + 99).toFixed(0); // 99-101MW
+                            element.textContent = randomPower + 'MW';
+                            
+                            // Flash effect when value changes
+                            element.style.color = '#00CC00';
+                            element.style.transition = 'color 0.3s ease';
+                            setTimeout(() => {
+                                element.style.color = '#00CC00';
+                            }, 200);
+                        }
+                    });
+                }, 3000);
+            }
+
+            // Method to restart all animations (for debugging)
+            restartFlow() {
+                const allParticles = document.querySelectorAll('.current-dot, .bus-particle, .drop-particle');
+                allParticles.forEach(particle => {
+                    particle.style.animationPlayState = 'paused';
+                    setTimeout(() => {
+                        particle.style.animationPlayState = 'running';
+                    }, 100);
+                });
+                
+                // Flash all connection points to show restart
+                const connections = document.querySelectorAll('.connection-point, .bus-connection, .datacenter-input');
+                connections.forEach(connection => {
+                    connection.style.boxShadow = '0 0 20px rgba(52, 152, 219, 1)';
+                    setTimeout(() => {
+                        connection.style.boxShadow = '';
+                    }, 500);
+                });
+            }
+        }
+
+        // Enhanced Connection Point Effects
+        function enhanceConnectionEffects() {
+            const connections = document.querySelectorAll('.connection-point');
+            connections.forEach(connection => {
+                // Add glow effect
+                connection.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.3)';
+                
+                // Enhanced hover effect (if needed for interaction)
+                connection.addEventListener('mouseenter', () => {
+                    connection.style.transform = 'scale(1.5)';
+                    connection.style.boxShadow = '0 0 25px rgba(231, 76, 60, 0.8)';
+                });
+                
+                connection.addEventListener('mouseleave', () => {
+                    connection.style.transform = 'scale(1)';
+                    connection.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.3)';
+                });
+            });
+        }
+        
+        // Initialize map overlay icons interactions
+        function initializeMapOverlayIcons() {
+            // 500kV Substation interaction
+            const substationIcon = document.querySelector('.icon-500kv-substation');
+            if (substationIcon) {
+                substationIcon.addEventListener('click', function() {
+                    showTooltip(this, '500kV SUBSTATION<br>2x600 MVA<br>Status: Active');
+                });
+            }
+            
+            // 110kV Substation interaction
+            const substation110Icon = document.querySelector('.icon-110kv-substation');
+            if (substation110Icon) {
+                substation110Icon.addEventListener('click', function() {
+                    showTooltip(this, '110kV LA SON<br>SUBSTATION<br>40MVA<br>Status: Operational');
+                });
+            }
+            
+            // Hydro Power Plant interaction
+            const hydroIcon = document.querySelector('.icon-hydro-plant');
+            if (hydroIcon) {
+                hydroIcon.addEventListener('click', function() {
+                    showTooltip(this, 'TA TRACH HYDRO<br>POWER PLANT<br>2x10.5MW<br>Status: Generating');
+                });
+            }
+            
+            // Data Center interaction
+            const dataCenterIcon = document.querySelector('.icon-data-center');
+            if (dataCenterIcon) {
+                dataCenterIcon.addEventListener('click', function() {
+                    showTooltip(this, '300MW AI<br>DATA CENTER<br>300 HA<br>Status: Operational');
+                });
+            }
+            
+            // Tech Park interaction
+            const techParkIcon = document.querySelector('.icon-tech-park');
+            if (techParkIcon) {
+                techParkIcon.addEventListener('click', function() {
+                    showTooltip(this, 'HUE HI-TECH PARK<br>1081 HA<br>BOUNDARY<br>Status: Active Development');
+                });
+            }
+            
+            // Transmission Points interactions
+            const transmissionPoints = document.querySelectorAll('.icon-transmission-point');
+            transmissionPoints.forEach((point, index) => {
+                point.addEventListener('click', function() {
+                    const voltage = index < 2 ? '500kV' : '220kV';
+                    showTooltip(this, `${voltage} Connection Point<br>Status: Active`);
+                });
+            });
+            
+            // Legend icons interactions
+            const legendHydro = document.querySelector('.icon-legend-hydro');
+            if (legendHydro) {
+                legendHydro.addEventListener('click', function() {
+                    showTooltip(this, 'HYDRO POWER PLANT<br>Legend Icon');
+                });
+            }
+            
+            const legend500kv = document.querySelector('.icon-legend-500kv');
+            if (legend500kv) {
+                legend500kv.addEventListener('click', function() {
+                    showTooltip(this, '500kV SUBSTATION<br>Legend Icon');
+                });
+            }
+            
+            const legend110kv = document.querySelector('.icon-legend-110kv');
+            if (legend110kv) {
+                legend110kv.addEventListener('click', function() {
+                    showTooltip(this, '110kV SUBSTATION<br>Legend Icon');
+                });
+            }
+        }
+        
+        // Show tooltip function
+        function showTooltip(element, content) {
+            // Remove existing tooltips
+            const existingTooltips = document.querySelectorAll('.map-tooltip');
+            existingTooltips.forEach(tooltip => tooltip.remove());
+            
+            // Create new tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'map-tooltip';
+            tooltip.innerHTML = content;
+            tooltip.style.cssText = `
+                position: absolute;
+                background: rgba(0, 0, 0, 0.9);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 12px;
+                line-height: 1.4;
+                z-index: 1000;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+                pointer-events: none;
+                white-space: nowrap;
+                animation: tooltipFadeIn 0.3s ease-out;
+                backdrop-filter: blur(10px);
+            `;
+            
+            // Position tooltip
+            const rect = element.getBoundingClientRect();
+            const mapRect = document.querySelector('.grid-background-map').getBoundingClientRect();
+            
+            tooltip.style.left = (rect.left - mapRect.left + rect.width / 2) + 'px';
+            tooltip.style.top = (rect.top - mapRect.top - 50) + 'px';
+            tooltip.style.transform = 'translateX(-50%)';
+            
+            // Add tooltip to map
+            document.querySelector('.grid-background-map').appendChild(tooltip);
+            
+            // Add pulse effect to clicked icon
+            element.style.animation = 'iconClickPulse 0.5s ease-out';
+            
+            // Remove tooltip after 3 seconds
+            setTimeout(() => {
+                if (tooltip.parentNode) {
+                    tooltip.style.animation = 'tooltipFadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        tooltip.remove();
+                    }, 300);
+                }
+            }, 3000);
+        }
+        
+        // Add tooltip animations
+        const tooltipStyle = document.createElement('style');
+        tooltipStyle.textContent = `
+            @keyframes tooltipFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+            
+            @keyframes tooltipFadeOut {
+                from {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-10px);
+                }
+            }
+            
+            @keyframes iconClickPulse {
+                0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                50% { transform: translate(-50%, -50%) scale(1.2); }
+            }
+        `;
+        document.head.appendChild(tooltipStyle);
+
+
+
+
+
+
+
+
+
+        // POWER TRANSMISSION DIAGRAM EFFECTS
+        // Animate power values in data centers
+        function animatePowerValues() {
+            const powerValues = document.querySelectorAll('.power-value');
+            powerValues.forEach((value, index) => {
+                const basePower = index === 2 ? 101 : 99; // DATA CENTER 03 has 101MW
+                const variation = Math.floor(Math.random() * 3 - 1); // -1, 0, or 1
+                const newPower = basePower + variation;
+                value.textContent = newPower + 'MW';
+                
+                // Add flash effect for changes
+                if (variation !== 0) {
+                    value.style.color = variation > 0 ? '#27ae60' : '#e74c3c';
+                    setTimeout(() => {
+                        value.style.color = '#27ae60';
+                    }, 500);
+                }
+            });
+        }
+
+        // Connection point enhanced pulse effect
+        function enhanceConnectionPoints() {
+            const connectionPoints = document.querySelectorAll('.connection-point');
+            connectionPoints.forEach((point, index) => {
+                setTimeout(() => {
+                    point.style.transform = 'translateX(-50%) scale(1.5)';
+                    point.style.boxShadow = '0 0 25px rgba(231, 76, 60, 1)';
+                    
+                    setTimeout(() => {
+                        point.style.transform = 'translateX(-50%) scale(1)';
+                        point.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.6)';
+                    }, 300);
+                }, index * 500);
+            });
+        }
+
+        // Add dynamic transmission line effects
+        function addTransmissionEffects() {
+            const transmissionLines = document.querySelectorAll('.transmission-line-500kv');
+            transmissionLines.forEach((line, index) => {
+                // Add random intensity variations
+                setTimeout(() => {
+                    line.style.boxShadow = '0 2px 8px rgba(231, 76, 60, 0.6), 0 0 15px rgba(231, 76, 60, 0.4)';
+                    
+                    setTimeout(() => {
+                        line.style.boxShadow = '0 2px 4px rgba(231, 76, 60, 0.3)';
+                    }, 1000);
+                }, index * 300);
+            });
+        }
+
+        // Data Center interaction effects
+        function setupDataCenterInteractions() {
+            const dataCenters = document.querySelectorAll('.data-center-box');
+            dataCenters.forEach((center, index) => {
+                center.addEventListener('click', function() {
+                    // Create energy pulse effect
+                    const pulse = document.createElement('div');
+                    pulse.style.position = 'absolute';
+                    pulse.style.width = '100%';
+                    pulse.style.height = '100%';
+                    pulse.style.border = '2px solid #27ae60';
+                    pulse.style.borderRadius = '8px';
+                    pulse.style.top = '0';
+                    pulse.style.left = '0';
+                    pulse.style.animation = 'energyPulse 0.6s ease-out';
+                    pulse.style.pointerEvents = 'none';
+                    
+                    this.style.position = 'relative';
+                    this.appendChild(pulse);
+                    
+                    setTimeout(() => {
+                        pulse.remove();
+                    }, 600);
+                    
+                    // Show power info
+                    const powerInfo = `Data Center ${index + 1}: ${index === 2 ? '101MW' : '99MW'} - Operating at optimal efficiency`;
+                    console.log(powerInfo);
+                });
+            });
+        }
+
+        // Initialize power transmission when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePowerTransmissionNew();
+        });
+    </script>
+    
+</body>
+</html>

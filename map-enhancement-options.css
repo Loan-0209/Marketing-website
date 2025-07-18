@@ -1,0 +1,63 @@
+/* 🎯 FINE-TUNING OPTIONS - Dựa trên kết quả hiện tại */
+
+/* Option 1: Tăng độ nổi bật cho map */
+.location-map {
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+    border: 2px solid rgba(255, 167, 38, 0.3) !important;
+}
+
+/* Option 2: Tối ưu responsive cho tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .location-grid {
+        grid-template-columns: 1fr 1.2fr !important;
+    }
+    
+    .location-map {
+        aspect-ratio: 3/2 !important;
+    }
+}
+
+/* Option 3: Thêm interactive elements */
+.map-image:hover {
+    transform: scale(1.02) !important;
+    filter: brightness(1.05) !important;
+}
+
+/* Option 4: Tối ưu cho màn hình lớn */
+@media (min-width: 1400px) {
+    .location-map {
+        aspect-ratio: 18/10 !important; /* Wider aspect ratio */
+        max-height: 700px !important;
+    }
+}
+
+/* Option 5: Highlight cho Data Center */
+.map-overlay::after {
+    content: "🔥 300MW Data Center - Core Infrastructure";
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    background: linear-gradient(45deg, #FF6B35, #FFA726);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+/* Option 6: Animation khi scroll vào view */
+.location-map.fade-in {
+    animation: mapZoomIn 1.2s ease-out;
+}
+
+@keyframes mapZoomIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0.8;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

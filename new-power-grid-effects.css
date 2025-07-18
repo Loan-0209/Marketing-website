@@ -1,0 +1,385 @@
+/* 🎯 NEW POWER GRID EFFECTS - ZONE & PULSE BASED */
+/* Better approach than trying to trace individual lines */
+
+/* Remove old line animations */
+.transmission-line,
+.power-dot,
+.line-500kv,
+.line-220kv, 
+.line-110kv {
+    display: none !important;
+}
+
+/* 🌟 ZONE-BASED POWER DENSITY AREAS */
+.power-zone {
+    position: absolute;
+    border-radius: 20px;
+    pointer-events: none;
+    opacity: 0.1;
+    animation: powerPulse 4s ease-in-out infinite;
+}
+
+.zone-500kv {
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 45%;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(231, 76, 60, 0.3) 30%, 
+        rgba(231, 76, 60, 0.1) 70%, 
+        transparent 100%);
+    animation-delay: 0s;
+}
+
+.zone-220kv {
+    top: 25%;
+    left: 35%;
+    width: 60%;
+    height: 50%;
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(52, 152, 219, 0.25) 40%, 
+        rgba(52, 152, 219, 0.1) 80%, 
+        transparent 100%);
+    animation-delay: 1.5s;
+}
+
+.zone-110kv {
+    top: 45%;
+    left: 75%;
+    width: 25%;
+    height: 40%;
+    background: linear-gradient(225deg, 
+        transparent 0%, 
+        rgba(155, 89, 182, 0.2) 50%, 
+        transparent 100%);
+    animation-delay: 3s;
+}
+
+/* ⚡ INFRASTRUCTURE PULSE POINTS */
+.infrastructure-point {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.substation-main {
+    top: 25%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+}
+
+.substation-future {
+    top: 32%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+}
+
+.heart-datacenter {
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hitech-park {
+    bottom: 20%;
+    right: 15%;
+    transform: translate(50%, 50%);
+}
+
+.pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid;
+    opacity: 1;
+    animation: pulseRing 3s ease-out infinite;
+}
+
+.pulse-500kv {
+    border-color: #e74c3c;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+}
+
+.pulse-500kv-future {
+    border-color: #f39c12;
+    box-shadow: 0 0 15px rgba(243, 156, 18, 0.5);
+    animation-duration: 4s;
+}
+
+.pulse-heart {
+    border-color: #27ae60;
+    box-shadow: 0 0 25px rgba(39, 174, 96, 0.7);
+    animation-duration: 2.5s;
+}
+
+.pulse-park {
+    border-color: #3498db;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+    animation-duration: 3.5s;
+}
+
+/* 💫 FLOATING ENERGY PARTICLES */
+.energy-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.particle-500kv {
+    background: #e74c3c;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.8);
+}
+
+.particle-220kv {
+    background: #3498db;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+}
+
+.particle-110kv {
+    background: #9b59b6;
+    box-shadow: 0 0 6px rgba(155, 89, 182, 0.6);
+}
+
+.particle-1 {
+    top: 30%;
+    left: 20%;
+    animation: floatParticle1 8s linear infinite;
+}
+
+.particle-2 {
+    top: 25%;
+    left: 80%;
+    animation: floatParticle2 10s linear infinite;
+}
+
+.particle-3 {
+    top: 50%;
+    left: 40%;
+    animation: floatParticle3 7s linear infinite;
+}
+
+.particle-4 {
+    top: 35%;
+    left: 60%;
+    animation: floatParticle4 9s linear infinite;
+}
+
+.particle-5 {
+    top: 60%;
+    left: 85%;
+    animation: floatParticle5 6s linear infinite;
+}
+
+.particle-6 {
+    top: 70%;
+    left: 15%;
+    animation: floatParticle6 11s linear infinite;
+}
+
+/* 🎨 INTERACTIVE LEGEND HIGHLIGHTS */
+.transmission-highlights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.highlight-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.highlight-500kv {
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(231, 76, 60, 0.15) 20%, 
+        rgba(231, 76, 60, 0.25) 50%, 
+        rgba(231, 76, 60, 0.15) 80%, 
+        transparent 100%);
+}
+
+.highlight-220kv {
+    background: linear-gradient(135deg, 
+        transparent 0%, 
+        rgba(52, 152, 219, 0.12) 25%, 
+        rgba(52, 152, 219, 0.2) 50%, 
+        rgba(52, 152, 219, 0.12) 75%, 
+        transparent 100%);
+}
+
+.highlight-110kv {
+    background: linear-gradient(225deg, 
+        transparent 0%, 
+        rgba(155, 89, 182, 0.1) 30%, 
+        rgba(155, 89, 182, 0.18) 50%, 
+        rgba(155, 89, 182, 0.1) 70%, 
+        transparent 100%);
+}
+
+/* 🎬 ANIMATIONS */
+@keyframes powerPulse {
+    0%, 100% { 
+        opacity: 0.05;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.15;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes pulseRing {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes floatParticle1 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 1; }
+    50% { transform: translate(200px, -50px); opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(400px, -100px); opacity: 0; }
+}
+
+@keyframes floatParticle2 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    15% { opacity: 1; }
+    60% { transform: translate(-150px, 80px); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate(-300px, 160px); opacity: 0; }
+}
+
+@keyframes floatParticle3 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    20% { opacity: 1; }
+    70% { transform: translate(100px, -120px); opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(200px, -240px); opacity: 0; }
+}
+
+@keyframes floatParticle4 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    12% { opacity: 1; }
+    55% { transform: translate(-100px, 60px); opacity: 1; }
+    88% { opacity: 1; }
+    100% { transform: translate(-200px, 120px); opacity: 0; }
+}
+
+@keyframes floatParticle5 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    18% { opacity: 1; }
+    65% { transform: translate(-200px, -40px); opacity: 1; }
+    92% { opacity: 1; }
+    100% { transform: translate(-400px, -80px); opacity: 0; }
+}
+
+@keyframes floatParticle6 {
+    0% { transform: translate(0, 0); opacity: 0; }
+    8% { opacity: 1; }
+    45% { transform: translate(300px, -150px); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate(600px, -300px); opacity: 0; }
+}
+
+/* 🎯 INTERACTIVE LEGEND HOVER EFFECTS */
+.legend-item:hover ~ .grid-background-map .highlight-500kv {
+    opacity: 1;
+}
+
+.legend-item:nth-child(1):hover ~ .grid-background-map .highlight-500kv {
+    opacity: 1;
+}
+
+.legend-item:nth-child(2):hover ~ .grid-background-map .highlight-220kv {
+    opacity: 1;
+}
+
+.legend-item:nth-child(3):hover ~ .grid-background-map .highlight-110kv {
+    opacity: 1;
+}
+
+/* Alternative approach using data attributes */
+.grid-legend:hover .legend-item[data-voltage="500"]:hover ~ .transmission-highlights .highlight-500kv,
+.grid-legend .legend-item[data-voltage="500"]:hover ~ .grid-background-map .highlight-500kv {
+    opacity: 1 !important;
+}
+
+.grid-legend .legend-item[data-voltage="220"]:hover ~ .grid-background-map .highlight-220kv {
+    opacity: 1 !important;
+}
+
+.grid-legend .legend-item[data-voltage="110"]:hover ~ .grid-background-map .highlight-110kv {
+    opacity: 1 !important;
+}
+
+/* 📱 RESPONSIVE OPTIMIZATION */
+@media (max-width: 1024px) {
+    .power-zone {
+        animation-duration: 6s; /* Slower on mobile */
+    }
+    
+    .pulse-ring {
+        animation-duration: 4s;
+    }
+    
+    .particle {
+        width: 4px;
+        height: 4px;
+    }
+    
+    /* Hide some particles on mobile for performance */
+    .particle-4, .particle-5, .particle-6 {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .infrastructure-point {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .power-zone {
+        opacity: 0.08; /* Reduce intensity on small screens */
+    }
+}
+
+/* 🎯 ENHANCED VISUAL FEEDBACK */
+.infrastructure-point:hover .pulse-ring {
+    animation-duration: 1s !important;
+}
+
+.power-zone:hover {
+    opacity: 0.2 !important;
+    animation-duration: 2s !important;
+}

@@ -1,0 +1,12 @@
+
+/* 🔄 SOLUTION 3: ADAPTIVE HEIGHT - Smart Viewport Usage */
+.location-map.adaptive-solution {
+    height: 80vh !important;
+    max-height: none !important;
+    aspect-ratio: unset !important;
+}
+
+.map-image.adaptive-solution {
+    object-fit: cover !important;
+    object-position: center 30% !important; /* Show more bottom content */
+}

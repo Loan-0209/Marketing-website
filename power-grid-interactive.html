@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Power Grid Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main Container */
+        .power-grid-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: url('assets/images/power-grid-map.jpg') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+        }
+
+        .power-grid-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        /* Zone-Based Highlighting */
+        .zone-overlay {
+            position: absolute;
+            border-radius: 10px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        /* 500kV Zones - Red */
+        .zone-500kv {
+            background: radial-gradient(circle at center, rgba(231, 76, 60, 0.4) 0%, rgba(231, 76, 60, 0.2) 50%, transparent 100%);
+            border: 2px solid rgba(231, 76, 60, 0.6);
+            animation: zonePulse 4s ease-in-out infinite;
+        }
+
+        .zone-500kv.highlighted {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+        }
+
+        /* 220kV Zones - Blue */
+        .zone-220kv {
+            background: radial-gradient(circle at center, rgba(52, 152, 219, 0.4) 0%, rgba(52, 152, 219, 0.2) 50%, transparent 100%);
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+            animation: zonePulse 5s ease-in-out infinite;
+        }
+
+        .zone-220kv.highlighted {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(52, 152, 219, 0.9);
+        }
+
+        /* 110kV Zones - Purple */
+        .zone-110kv {
+            background: radial-gradient(circle at center, rgba(155, 89, 182, 0.4) 0%, rgba(155, 89, 182, 0.2) 50%, transparent 100%);
+            backdrop-filter: blur(2px);
+            animation: zonePulse 6s ease-in-out infinite;
+        }
+
+        .zone-110kv.highlighted {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(155, 89, 182, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Zone Pulse Animation */
+        @keyframes zonePulse {
+            0%, 100% { 
+                opacity: 0.4; 
+                transform: scale(1); 
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.02); 
+            }
+        }
+
+        /* Infrastructure Pulse Points */
+        .infrastructure-point {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        /* Substation Points */
+        .substation-point {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #f39c12 0%, #e67e22 100%);
+            box-shadow: 0 0 20px rgba(243, 156, 18, 0.6);
+            animation: infraPulse 2s ease-in-out infinite;
+        }
+
+        /* Data Center */
+        .datacenter-point {
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, #27ae60 0%, #2ecc71 100%);
+            box-shadow: 0 0 30px rgba(46, 204, 113, 0.8);
+            animation: infraPulse 2s ease-in-out infinite;
+        }
+
+        /* Hydro Plant */
+        .hydro-point {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #3498db 0%, #2980b9 100%);
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.7);
+            animation: infraPulse 2s ease-in-out infinite;
+        }
+
+        /* Infrastructure Pulse Animation */
+        @keyframes infraPulse {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.2); 
+            }
+        }
+
+        /* Hover Effects */
+        .infrastructure-point:hover {
+            transform: scale(1.5);
+            z-index: 20;
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            from {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            to {
+                width: 100px;
+                height: 100px;
+                opacity: 0;
+            }
+        }
+
+        /* Interactive Legend */
+        .legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .legend-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .legend-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+            transform: translateX(3px);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .legend-500kv { background: #e74c3c; }
+        .legend-220kv { background: #3498db; }
+        .legend-110kv { background: #9b59b6; }
+
+        .legend-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .icon-substation { background: radial-gradient(circle, #f39c12, #e67e22); }
+        .icon-datacenter { background: radial-gradient(circle, #27ae60, #2ecc71); }
+        .icon-hydro { background: radial-gradient(circle, #3498db, #2980b9); }
+
+        .legend-text {
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        /* Particle Flow System */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: flowParticle 3s linear infinite;
+        }
+
+        .particle-500kv { background: #e74c3c; }
+        .particle-220kv { background: #3498db; }
+        .particle-110kv { background: #9b59b6; }
+        .particle-data { background: #27ae60; }
+
+        @keyframes flowParticle {
+            0% { 
+                opacity: 0; 
+                transform: translateX(0) translateY(0); 
+            }
+            10% { 
+                opacity: 1; 
+            }
+            90% { 
+                opacity: 1; 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translateX(150px) translateY(-30px); 
+            }
+        }
+
+        /* Control Features */
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .control-btn {
+            display: block;
+            width: 150px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .control-btn.active {
+            background: #27ae60;
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Grid Stats */
+        .grid-stats {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            gap: 30px;
+            z-index: 100;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .legend {
+                top: 10px;
+                left: 10px;
+                padding: 15px;
+            }
+
+            .controls {
+                top: auto;
+                bottom: 100px;
+                right: 10px;
+                padding: 15px;
+            }
+
+            .control-btn {
+                width: 120px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .infrastructure-point {
+                transform: scale(0.8);
+            }
+
+            .grid-stats {
+                flex-wrap: wrap;
+                gap: 15px;
+                padding: 15px;
+                max-width: 90%;
+            }
+
+            .stat-item {
+                flex: 1 1 45%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .grid-stats {
+                gap: 40px;
+            }
+        }
+
+        /* Info Tooltip */
+        .info-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .info-tooltip.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="power-grid-container">
+        <!-- Zone Overlays -->
+        <!-- 500kV Zones -->
+        <div class="zone-overlay zone-500kv" style="top: 15%; left: 10%; width: 35%; height: 20%;"></div>
+        <div class="zone-overlay zone-500kv" style="top: 25%; left: 55%; width: 30%; height: 15%;"></div>
+        <div class="zone-overlay zone-500kv" style="top: 45%; left: 20%; width: 60%; height: 10%;"></div>
+        
+        <!-- 220kV Zones -->
+        <div class="zone-overlay zone-220kv" style="top: 35%; left: 15%; width: 25%; height: 18%;"></div>
+        <div class="zone-overlay zone-220kv" style="top: 40%; left: 60%; width: 25%; height: 20%;"></div>
+        <div class="zone-overlay zone-220kv" style="top: 60%; left: 30%; width: 40%; height: 12%;"></div>
+        
+        <!-- 110kV Zones -->
+        <div class="zone-overlay zone-110kv" style="top: 55%; left: 25%; width: 20%; height: 15%;"></div>
+        <div class="zone-overlay zone-110kv" style="top: 65%; left: 55%; width: 25%; height: 18%;"></div>
+        <div class="zone-overlay zone-110kv" style="top: 75%; left: 35%; width: 30%; height: 10%;"></div>
+
+        <!-- Infrastructure Points -->
+        <!-- Substations -->
+        <div class="infrastructure-point substation-point" style="top: 25%; left: 30%;" data-info="Substation A1 - 500/220kV"></div>
+        <div class="infrastructure-point substation-point" style="top: 30%; left: 70%;" data-info="Substation B2 - 500/220kV"></div>
+        <div class="infrastructure-point substation-point" style="top: 50%; left: 25%;" data-info="Substation C3 - 220/110kV"></div>
+        <div class="infrastructure-point substation-point" style="top: 55%; left: 75%;" data-info="Substation D4 - 220/110kV"></div>
+        
+        <!-- Data Center -->
+        <div class="infrastructure-point datacenter-point" style="top: 60%; left: 50%;" data-info="HEART Data Center - 100MW"></div>
+        
+        <!-- Hydro Plants -->
+        <div class="infrastructure-point hydro-point" style="top: 20%; left: 60%;" data-info="TA TRACH Hydro Plant - 190MW"></div>
+        <div class="infrastructure-point hydro-point" style="top: 70%; left: 40%;" data-info="A LUOI Hydro Plant - 170MW"></div>
+
+        <!-- Interactive Legend -->
+        <div class="legend">
+            <h3 class="legend-title">Power Grid Legend</h3>
+            
+            <div class="legend-section">
+                <div class="legend-item" data-type="zone" data-voltage="500kv">
+                    <div class="legend-color legend-500kv"></div>
+                    <span class="legend-text">500kV Transmission</span>
+                </div>
+                <div class="legend-item" data-type="zone" data-voltage="220kv">
+                    <div class="legend-color legend-220kv"></div>
+                    <span class="legend-text">220kV Distribution</span>
+                </div>
+                <div class="legend-item" data-type="zone" data-voltage="110kv">
+                    <div class="legend-color legend-110kv"></div>
+                    <span class="legend-text">110kV Local Grid</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ecf0f1;">
+                <div class="legend-item" data-type="infra" data-infra="substation">
+                    <div class="legend-icon icon-substation"></div>
+                    <span class="legend-text">Substation</span>
+                </div>
+                <div class="legend-item" data-type="infra" data-infra="datacenter">
+                    <div class="legend-icon icon-datacenter"></div>
+                    <span class="legend-text">Data Center</span>
+                </div>
+                <div class="legend-item" data-type="infra" data-infra="hydro">
+                    <div class="legend-icon icon-hydro"></div>
+                    <span class="legend-text">Hydro Plant</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Features -->
+        <div class="controls">
+            <button class="control-btn active" id="toggleParticles">Toggle Particles</button>
+            <button class="control-btn active" id="toggleZones">Toggle Zones</button>
+            <button class="control-btn" id="resetView">Reset View</button>
+        </div>
+
+        <!-- Grid Stats -->
+        <div class="grid-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="totalPower">560</div>
+                <div class="stat-label">Total MW</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="activeZones">9</div>
+                <div class="stat-label">Active Zones</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="substations">4</div>
+                <div class="stat-label">Substations</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="efficiency">98.5%</div>
+                <div class="stat-label">Efficiency</div>
+            </div>
+        </div>
+
+        <!-- Info Tooltip -->
+        <div class="info-tooltip" id="infoTooltip"></div>
+    </div>
+
+    <script>
+        // Particle System
+        class ParticleSystem {
+            constructor() {
+                this.container = document.querySelector('.power-grid-container');
+                this.particles = [];
+                this.enabled = true;
+                this.particleTypes = ['particle-500kv', 'particle-220kv', 'particle-110kv', 'particle-data'];
+                this.init();
+            }
+
+            init() {
+                setInterval(() => {
+                    if (this.enabled) {
+                        this.createParticle();
+                    }
+                }, 400);
+                
+                setInterval(() => {
+                    this.updateParticles();
+                }, 50);
+            }
+
+            createParticle() {
+                const particle = document.createElement('div');
+                particle.className = `particle ${this.particleTypes[Math.floor(Math.random() * this.particleTypes.length)]}`;
+                
+                // Random starting position
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+                
+                particle.style.left = startX + 'px';
+                particle.style.top = startY + 'px';
+                
+                this.container.appendChild(particle);
+                this.particles.push(particle);
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                    this.particles = this.particles.filter(p => p !== particle);
+                }, 3000);
+            }
+
+            updateParticles() {
+                // Dynamic particle generation based on infrastructure points
+                const points = document.querySelectorAll('.infrastructure-point');
+                if (Math.random() < 0.1 && this.enabled) {
+                    const point = points[Math.floor(Math.random() * points.length)];
+                    const rect = point.getBoundingClientRect();
+                    
+                    const particle = document.createElement('div');
+                    particle.className = 'particle particle-data';
+                    particle.style.left = rect.left + rect.width / 2 + 'px';
+                    particle.style.top = rect.top + rect.height / 2 + 'px';
+                    
+                    this.container.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 3000);
+                }
+            }
+
+            toggle() {
+                this.enabled = !this.enabled;
+                return this.enabled;
+            }
+        }
+
+        // Initialize particle system
+        const particleSystem = new ParticleSystem();
+
+        // Zone visibility state
+        const zoneVisibility = {
+            '500kv': true,
+            '220kv': true,
+            '110kv': true
+        };
+
+        // Legend interactions
+        document.querySelectorAll('.legend-item[data-type="zone"]').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const voltage = item.dataset.voltage;
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.classList.add('highlighted');
+                });
+            });
+
+            item.addEventListener('mouseleave', () => {
+                const voltage = item.dataset.voltage;
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.classList.remove('highlighted');
+                });
+            });
+
+            item.addEventListener('click', () => {
+                const voltage = item.dataset.voltage;
+                zoneVisibility[voltage] = !zoneVisibility[voltage];
+                
+                document.querySelectorAll(`.zone-${voltage}`).forEach(zone => {
+                    zone.style.display = zoneVisibility[voltage] ? 'block' : 'none';
+                });
+                
+                item.style.opacity = zoneVisibility[voltage] ? '1' : '0.4';
+                updateStats();
+            });
+        });
+
+        // Infrastructure interactions
+        document.querySelectorAll('.infrastructure-point').forEach(point => {
+            point.addEventListener('click', (e) => {
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = e.offsetX + 'px';
+                ripple.style.top = e.offsetY + 'px';
+                point.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+
+            point.addEventListener('mouseenter', (e) => {
+                const tooltip = document.getElementById('infoTooltip');
+                tooltip.textContent = e.target.dataset.info;
+                tooltip.classList.add('show');
+                
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
+                tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+            });
+
+            point.addEventListener('mouseleave', () => {
+                const tooltip = document.getElementById('infoTooltip');
+                tooltip.classList.remove('show');
+            });
+        });
+
+        // Control buttons
+        document.getElementById('toggleParticles').addEventListener('click', (e) => {
+            const enabled = particleSystem.toggle();
+            e.target.classList.toggle('active', enabled);
+        });
+
+        document.getElementById('toggleZones').addEventListener('click', (e) => {
+            const zonesVisible = e.target.classList.contains('active');
+            
+            document.querySelectorAll('.zone-overlay').forEach(zone => {
+                zone.style.display = zonesVisible ? 'none' : 'block';
+            });
+            
+            e.target.classList.toggle('active');
+            updateStats();
+        });
+
+        document.getElementById('resetView').addEventListener('click', () => {
+            // Reset all states
+            Object.keys(zoneVisibility).forEach(key => {
+                zoneVisibility[key] = true;
+            });
+            
+            document.querySelectorAll('.zone-overlay').forEach(zone => {
+                zone.style.display = 'block';
+                zone.classList.remove('highlighted');
+            });
+            
+            document.querySelectorAll('.legend-item[data-type="zone"]').forEach(item => {
+                item.style.opacity = '1';
+            });
+            
+            document.getElementById('toggleZones').classList.add('active');
+            
+            if (!particleSystem.enabled) {
+                particleSystem.toggle();
+                document.getElementById('toggleParticles').classList.add('active');
+            }
+            
+            updateStats();
+        });
+
+        // Update stats
+        function updateStats() {
+            const activeZones = document.querySelectorAll('.zone-overlay[style*="display: block"]').length || 
+                               document.querySelectorAll('.zone-overlay:not([style*="display: none"])').length;
+            document.getElementById('activeZones').textContent = activeZones;
+            
+            // Simulate dynamic values
+            const totalPower = 460 + Math.floor(Math.random() * 200);
+            document.getElementById('totalPower').textContent = totalPower;
+            
+            const efficiency = (95 + Math.random() * 4).toFixed(1) + '%';
+            document.getElementById('efficiency').textContent = efficiency;
+        }
+
+        // Periodic stats update
+        setInterval(updateStats, 5000);
+
+        // Infrastructure legend hover effects
+        document.querySelectorAll('.legend-item[data-type="infra"]').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const type = item.dataset.infra;
+                const selector = type === 'substation' ? '.substation-point' : 
+                               type === 'datacenter' ? '.datacenter-point' : '.hydro-point';
+                
+                document.querySelectorAll(selector).forEach(point => {
+                    point.style.transform = 'scale(1.5)';
+                    point.style.zIndex = '30';
+                });
+            });
+
+            item.addEventListener('mouseleave', () => {
+                document.querySelectorAll('.infrastructure-point').forEach(point => {
+                    point.style.transform = '';
+                    point.style.zIndex = '';
+                });
+            });
+        });
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>

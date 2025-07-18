@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Tech Particles Demo</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .demo-content {
+            padding: 4rem 2rem;
+        }
+        
+        .facilities-overview {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* FLOATING TECH PARTICLES SECTION */
+        .floating-particles-container {
+            position: relative;
+            height: 150px;
+            width: 100%;
+            margin: 4rem 0;
+            overflow: hidden;
+            background: transparent;
+        }
+        
+        .tech-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        
+        /* Particle Variants */
+        .particle-1 {
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            opacity: 0.5;
+            left: 10%;
+            top: 20%;
+            animation: float1 12s ease-in-out infinite, fade1 8s ease-in-out infinite;
+        }
+        
+        .particle-2 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.4;
+            left: 25%;
+            top: 60%;
+            animation: float2 15s ease-in-out infinite, fade2 10s ease-in-out infinite;
+        }
+        
+        .particle-3 {
+            width: 3px;
+            height: 3px;
+            background: #06b6d4;
+            opacity: 0.6;
+            left: 45%;
+            top: 30%;
+            animation: float3 10s ease-in-out infinite, fade3 7s ease-in-out infinite;
+        }
+        
+        .particle-4 {
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            opacity: 0.3;
+            left: 60%;
+            top: 70%;
+            animation: float4 14s ease-in-out infinite, fade4 9s ease-in-out infinite;
+        }
+        
+        .particle-5 {
+            width: 2px;
+            height: 2px;
+            background: #1e40af;
+            opacity: 0.7;
+            left: 75%;
+            top: 40%;
+            animation: float5 11s ease-in-out infinite, fade5 6s ease-in-out infinite;
+        }
+        
+        .particle-6 {
+            width: 4px;
+            height: 4px;
+            background: #06b6d4;
+            opacity: 0.4;
+            left: 85%;
+            top: 25%;
+            animation: float6 13s ease-in-out infinite, fade6 8s ease-in-out infinite;
+        }
+        
+        .particle-7 {
+            width: 3px;
+            height: 3px;
+            background: #3b82f6;
+            opacity: 0.5;
+            left: 15%;
+            top: 80%;
+            animation: float7 16s ease-in-out infinite, fade7 11s ease-in-out infinite;
+        }
+        
+        .particle-8 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.3;
+            left: 35%;
+            top: 15%;
+            animation: float8 9s ease-in-out infinite, fade8 7s ease-in-out infinite;
+        }
+        
+        .particle-9 {
+            width: 2px;
+            height: 2px;
+            background: #06b6d4;
+            opacity: 0.6;
+            left: 55%;
+            top: 85%;
+            animation: float9 12s ease-in-out infinite, fade9 9s ease-in-out infinite;
+        }
+        
+        .particle-10 {
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            opacity: 0.4;
+            left: 70%;
+            top: 55%;
+            animation: float10 14s ease-in-out infinite, fade10 10s ease-in-out infinite;
+        }
+        
+        .particle-11 {
+            width: 3px;
+            height: 3px;
+            background: #1e40af;
+            opacity: 0.5;
+            left: 90%;
+            top: 75%;
+            animation: float11 11s ease-in-out infinite, fade11 8s ease-in-out infinite;
+        }
+        
+        .particle-12 {
+            width: 4px;
+            height: 4px;
+            background: #06b6d4;
+            opacity: 0.3;
+            left: 5%;
+            top: 50%;
+            animation: float12 15s ease-in-out infinite, fade12 12s ease-in-out infinite;
+        }
+        
+        .particle-13 {
+            width: 2px;
+            height: 2px;
+            background: #3b82f6;
+            opacity: 0.7;
+            left: 40%;
+            top: 95%;
+            animation: float13 10s ease-in-out infinite, fade13 6s ease-in-out infinite;
+        }
+        
+        .particle-14 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.4;
+            left: 65%;
+            top: 10%;
+            animation: float14 13s ease-in-out infinite, fade14 9s ease-in-out infinite;
+        }
+        
+        .particle-15 {
+            width: 3px;
+            height: 3px;
+            background: #06b6d4;
+            opacity: 0.5;
+            left: 80%;
+            top: 90%;
+            animation: float15 16s ease-in-out infinite, fade15 11s ease-in-out infinite;
+        }
+        
+        .particle-16 {
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            opacity: 0.3;
+            left: 20%;
+            top: 35%;
+            animation: float16 12s ease-in-out infinite, fade16 8s ease-in-out infinite;
+        }
+        
+        .particle-17 {
+            width: 5px;
+            height: 5px;
+            background: #1e40af;
+            opacity: 0.6;
+            left: 50%;
+            top: 65%;
+            animation: float17 14s ease-in-out infinite, fade17 10s ease-in-out infinite;
+        }
+        
+        .particle-18 {
+            width: 2px;
+            height: 2px;
+            background: #06b6d4;
+            opacity: 0.4;
+            left: 95%;
+            top: 45%;
+            animation: float18 11s ease-in-out infinite, fade18 7s ease-in-out infinite;
+        }
+        
+        /* Float Animations */
+        @keyframes float1 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-20px, -15px) rotate(90deg); }
+            50% { transform: translate(15px, -25px) rotate(180deg); }
+            75% { transform: translate(-10px, 10px) rotate(270deg); }
+        }
+        
+        @keyframes float2 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(25px, -20px) rotate(120deg); }
+            66% { transform: translate(-15px, 15px) rotate(240deg); }
+        }
+        
+        @keyframes float3 {
+            0%, 100% { transform: translate(0px, 0px); }
+            50% { transform: translate(-30px, -35px); }
+        }
+        
+        @keyframes float4 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(20px, 25px) rotate(45deg); }
+            50% { transform: translate(-25px, 10px) rotate(90deg); }
+            75% { transform: translate(10px, -20px) rotate(135deg); }
+        }
+        
+        @keyframes float5 {
+            0%, 100% { transform: translate(0px, 0px); }
+            50% { transform: translate(15px, -40px); }
+        }
+        
+        @keyframes float6 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-20px, 30px) rotate(60deg); }
+            66% { transform: translate(25px, -15px) rotate(120deg); }
+        }
+        
+        @keyframes float7 {
+            0%, 100% { transform: translate(0px, 0px); }
+            25% { transform: translate(30px, -10px); }
+            50% { transform: translate(-10px, -30px); }
+            75% { transform: translate(-20px, 20px); }
+        }
+        
+        @keyframes float8 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(-35px, 25px) rotate(180deg); }
+        }
+        
+        @keyframes float9 {
+            0%, 100% { transform: translate(0px, 0px); }
+            25% { transform: translate(-15px, -25px); }
+            50% { transform: translate(20px, -10px); }
+            75% { transform: translate(-25px, 15px); }
+        }
+        
+        @keyframes float10 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(15px, -30px) rotate(90deg); }
+            66% { transform: translate(-30px, -5px) rotate(180deg); }
+        }
+        
+        @keyframes float11 {
+            0%, 100% { transform: translate(0px, 0px); }
+            50% { transform: translate(25px, 35px); }
+        }
+        
+        @keyframes float12 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-25px, 20px) rotate(72deg); }
+            50% { transform: translate(30px, -25px) rotate(144deg); }
+            75% { transform: translate(-10px, -15px) rotate(216deg); }
+        }
+        
+        @keyframes float13 {
+            0%, 100% { transform: translate(0px, 0px); }
+            50% { transform: translate(-20px, -45px); }
+        }
+        
+        @keyframes float14 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-30px, -20px) rotate(108deg); }
+            66% { transform: translate(20px, 30px) rotate(216deg); }
+        }
+        
+        @keyframes float15 {
+            0%, 100% { transform: translate(0px, 0px); }
+            25% { transform: translate(35px, -15px); }
+            50% { transform: translate(-15px, -35px); }
+            75% { transform: translate(-30px, 25px); }
+        }
+        
+        @keyframes float16 {
+            0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(40px, -30px) rotate(180deg); }
+        }
+        
+        @keyframes float17 {
+            0%, 100% { transform: translate(0px, 0px); }
+            33% { transform: translate(-25px, 40px); }
+            66% { transform: translate(35px, 10px); }
+        }
+        
+        @keyframes float18 {
+            0%, 100% { transform: translate(0px, 0px); }
+            50% { transform: translate(-40px, -20px); }
+        }
+        
+        /* Fade Animations */
+        @keyframes fade1 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes fade2 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes fade3 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes fade4 {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes fade5 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes fade6 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes fade7 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes fade8 {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes fade9 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes fade10 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes fade11 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes fade12 {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes fade13 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes fade14 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes fade15 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes fade16 {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes fade17 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes fade18 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        .facility-category {
+            margin-bottom: 4rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .floating-particles-container {
+                height: 120px;
+            }
+            
+            /* Hide some particles on mobile for performance */
+            .particle-9, .particle-10, .particle-11, .particle-12, 
+            .particle-13, .particle-14, .particle-15, .particle-16,
+            .particle-17, .particle-18 {
+                display: none;
+            }
+            
+            /* Scale down remaining particles */
+            .tech-particle {
+                transform: scale(0.8);
+            }
+        }
+        
+        .controls {
+            background: #f8fafc;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .control-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .info-panel {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🌟 Floating Tech Particles Demo</h1>
+            <p>Preview hiệu ứng particles cho facilities.html</p>
+        </div>
+        
+        <div class="demo-content">
+            <div class="facilities-overview">
+                <h2 class="overview-title">Creating the Future of AI Innovation</h2>
+                <p class="overview-text">HEART Technology Park features cutting-edge facilities designed to foster innovation, collaboration, and breakthrough research in artificial intelligence. Our world-class infrastructure provides the perfect environment for companies, researchers, and entrepreneurs to thrive.</p>
+            </div>
+            
+            <!-- FLOATING PARTICLES SECTION -->
+            <div class="floating-particles-container">
+                <div class="tech-particle particle-1"></div>
+                <div class="tech-particle particle-2"></div>
+                <div class="tech-particle particle-3"></div>
+                <div class="tech-particle particle-4"></div>
+                <div class="tech-particle particle-5"></div>
+                <div class="tech-particle particle-6"></div>
+                <div class="tech-particle particle-7"></div>
+                <div class="tech-particle particle-8"></div>
+                <div class="tech-particle particle-9"></div>
+                <div class="tech-particle particle-10"></div>
+                <div class="tech-particle particle-11"></div>
+                <div class="tech-particle particle-12"></div>
+                <div class="tech-particle particle-13"></div>
+                <div class="tech-particle particle-14"></div>
+                <div class="tech-particle particle-15"></div>
+                <div class="tech-particle particle-16"></div>
+                <div class="tech-particle particle-17"></div>
+                <div class="tech-particle particle-18"></div>
+            </div>
+            
+            <div class="facility-category">
+                <h3 class="category-title">🔬 Research & Development Centers</h3>
+                <p style="text-align: center; color: #64748b;">Particles animation hoạt động ở phía trên...</p>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h4>📋 Thông Tin Hiệu Ứng</h4>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li><strong>Particles:</strong> 18 particles (8 trên mobile)</li>
+                <li><strong>Màu sắc:</strong> #3b82f6, #1e40af, #06b6d4</li>
+                <li><strong>Kích thước:</strong> 2-6px</li>
+                <li><strong>Animation:</strong> 8-16 giây/cycle</li>
+                <li><strong>Opacity:</strong> 0.1-0.9 (fade in/out)</li>
+                <li><strong>Performance:</strong> GPU accelerated với will-change</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" onclick="toggleAnimation()">⏸️ Pause/Play</button>
+            <button class="control-btn" onclick="changeSpeed()">⚡ Change Speed</button>
+            <button class="control-btn" onclick="simulateMobile()">📱 Mobile View</button>
+        </div>
+    </div>
+    
+    <script>
+        let animationPaused = false;
+        let currentSpeed = 1;
+        
+        function toggleAnimation() {
+            const particles = document.querySelectorAll('.tech-particle');
+            if (animationPaused) {
+                particles.forEach(particle => {
+                    particle.style.animationPlayState = 'running';
+                });
+                animationPaused = false;
+            } else {
+                particles.forEach(particle => {
+                    particle.style.animationPlayState = 'paused';
+                });
+                animationPaused = true;
+            }
+        }
+        
+        function changeSpeed() {
+            const particles = document.querySelectorAll('.tech-particle');
+            currentSpeed = currentSpeed === 1 ? 0.5 : currentSpeed === 0.5 ? 2 : 1;
+            
+            particles.forEach(particle => {
+                particle.style.animationDuration = `${12 / currentSpeed}s, ${8 / currentSpeed}s`;
+            });
+            
+            console.log(`Speed changed to: ${currentSpeed}x`);
+        }
+        
+        function simulateMobile() {
+            document.body.style.maxWidth = '375px';
+            document.body.style.margin = '0 auto';
+            console.log('Mobile view simulated');
+        }
+        
+        window.addEventListener('load', () => {
+            console.log('🌟 Floating particles demo loaded');
+            console.log('💡 Ready to implement in facilities.html');
+        });
+    </script>
+</body>
+</html>

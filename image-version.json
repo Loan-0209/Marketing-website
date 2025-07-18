@@ -1,0 +1,69 @@
+{
+  "version": "1.0.3",
+  "lastUpdate": "2025-07-16T09:27:51.518002",
+  "images": {
+    "hue-location-map-mobile": {
+      "version": "1.1.6",
+      "timestamp": "1752632871",
+      "size": "21054",
+      "hash": "78c7855dfa103f0421c491abbc3196ed",
+      "lastModified": "2025-07-16T09:27:51.184155"
+    },
+    "hue-location-map-tablet": {
+      "version": "1.1.6",
+      "timestamp": "1752632871",
+      "size": "58242",
+      "hash": "fd2b77c49af15786474c3508921bbfe4",
+      "lastModified": "2025-07-16T09:27:51.221431"
+    },
+    "hue-location-map-desktop": {
+      "version": "1.1.6",
+      "timestamp": "1752632871",
+      "size": "97870",
+      "hash": "66798cb323d6716339c0c209a8a09d3d",
+      "lastModified": "2025-07-16T09:27:51.292742"
+    },
+    "hue-location-map-high": {
+      "version": "1.1.6",
+      "timestamp": "1752632871",
+      "size": "150032",
+      "hash": "cd2756753fa13373366161eca79d28f7",
+      "lastModified": "2025-07-16T09:27:51.415182"
+    },
+    "hue-location-map-enhanced": {
+      "version": "1.0.0",
+      "timestamp": "1752564041",
+      "size": "452151",
+      "hash": "a5562b718c3b721fea95f335ab7307b3",
+      "lastModified": "2025-07-15T14:20:41.661621"
+    },
+    "hue-location-map-incomplete-backup": {
+      "version": "1.0.0",
+      "timestamp": "1752555929",
+      "size": "228448",
+      "hash": "e3e72a6a4943fc0c7e591070003d9b6c",
+      "lastModified": "2025-07-15T12:05:29.715248"
+    },
+    "hue-location-map-original-backup": {
+      "version": "1.0.0",
+      "timestamp": "1752554240",
+      "size": "546759",
+      "hash": "ba7109a3589b9c2f49495c9c49c042d8",
+      "lastModified": "2025-07-15T11:37:20.559890"
+    },
+    "hue-location-map-thumbnail": {
+      "version": "1.0.5",
+      "timestamp": "1752564202",
+      "size": "26986",
+      "hash": "506ecb4e8e8070f73226c02ea0353166",
+      "lastModified": "2025-07-15T14:23:22.016643"
+    },
+    "hue-location-map-high-backup": {
+      "version": "1.0.0",
+      "timestamp": "1752569774",
+      "size": "655713",
+      "hash": "41ae1d33fa93d96fc769ab709fa661e2",
+      "lastModified": "2025-07-15T15:56:14.223161"
+    }
+  }
+}

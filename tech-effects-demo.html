@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Effects Demo - Gradient Cross + Floating Particles</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .demo-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .demo-content {
+            padding: 4rem 2rem;
+        }
+        
+        .facilities-overview {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .overview-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        
+        .overview-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        
+        /* TECH EFFECTS SECTION */
+        .tech-effects-section {
+            position: relative;
+            height: 180px;
+            width: 100%;
+            margin: 4rem 0;
+            overflow: hidden;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* GRADIENT CROSS */
+        .gradient-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        .cross-horizontal {
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #38b2ac 0%, #4299e1 50%, #9f7aea 100%);
+            border-radius: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: crossPulse 3s ease-in-out infinite, crossGlow 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+        }
+        
+        .cross-vertical {
+            position: absolute;
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(180deg, #38b2ac 0%, #4299e1 50%, #9f7aea 100%);
+            border-radius: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: crossPulse 3s ease-in-out infinite 0.5s, crossGlow 4s ease-in-out infinite alternate 0.5s;
+            box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+        }
+        
+        /* FLOATING PARTICLES */
+        .tech-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        
+        /* Particle Variants */
+        .particle-1 {
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            opacity: 0.6;
+            left: 20%;
+            top: 25%;
+            animation: orbit1 12s linear infinite, particleFade1 8s ease-in-out infinite;
+        }
+        
+        .particle-2 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.5;
+            left: 75%;
+            top: 30%;
+            animation: orbit2 15s linear infinite, particleFade2 10s ease-in-out infinite;
+        }
+        
+        .particle-3 {
+            width: 3px;
+            height: 3px;
+            background: #06b6d4;
+            opacity: 0.7;
+            left: 30%;
+            top: 70%;
+            animation: orbit3 10s linear infinite, particleFade3 7s ease-in-out infinite;
+        }
+        
+        .particle-4 {
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            opacity: 0.4;
+            left: 80%;
+            top: 65%;
+            animation: orbit4 14s linear infinite, particleFade4 9s ease-in-out infinite;
+        }
+        
+        .particle-5 {
+            width: 2px;
+            height: 2px;
+            background: #1e40af;
+            opacity: 0.8;
+            left: 15%;
+            top: 55%;
+            animation: orbit5 11s linear infinite, particleFade5 6s ease-in-out infinite;
+        }
+        
+        .particle-6 {
+            width: 4px;
+            height: 4px;
+            background: #06b6d4;
+            opacity: 0.5;
+            left: 85%;
+            top: 20%;
+            animation: orbit6 13s linear infinite, particleFade6 8s ease-in-out infinite;
+        }
+        
+        .particle-7 {
+            width: 3px;
+            height: 3px;
+            background: #3b82f6;
+            opacity: 0.6;
+            left: 25%;
+            top: 15%;
+            animation: orbit7 16s linear infinite, particleFade7 11s ease-in-out infinite;
+        }
+        
+        .particle-8 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.4;
+            left: 70%;
+            top: 80%;
+            animation: orbit8 9s linear infinite, particleFade8 7s ease-in-out infinite;
+        }
+        
+        .particle-9 {
+            width: 2px;
+            height: 2px;
+            background: #06b6d4;
+            opacity: 0.7;
+            left: 10%;
+            top: 35%;
+            animation: orbit9 12s linear infinite, particleFade9 9s ease-in-out infinite;
+        }
+        
+        .particle-10 {
+            width: 5px;
+            height: 5px;
+            background: #3b82f6;
+            opacity: 0.5;
+            left: 90%;
+            top: 50%;
+            animation: orbit10 14s linear infinite, particleFade10 10s ease-in-out infinite;
+        }
+        
+        .particle-11 {
+            width: 3px;
+            height: 3px;
+            background: #1e40af;
+            opacity: 0.6;
+            left: 45%;
+            top: 10%;
+            animation: orbit11 11s linear infinite, particleFade11 8s ease-in-out infinite;
+        }
+        
+        .particle-12 {
+            width: 4px;
+            height: 4px;
+            background: #06b6d4;
+            opacity: 0.4;
+            left: 60%;
+            top: 90%;
+            animation: orbit12 15s linear infinite, particleFade12 12s ease-in-out infinite;
+        }
+        
+        .particle-13 {
+            width: 2px;
+            height: 2px;
+            background: #3b82f6;
+            opacity: 0.8;
+            left: 35%;
+            top: 85%;
+            animation: orbit13 10s linear infinite, particleFade13 6s ease-in-out infinite;
+        }
+        
+        .particle-14 {
+            width: 6px;
+            height: 6px;
+            background: #1e40af;
+            opacity: 0.5;
+            left: 55%;
+            top: 15%;
+            animation: orbit14 13s linear infinite, particleFade14 9s ease-in-out infinite;
+        }
+        
+        .particle-15 {
+            width: 3px;
+            height: 3px;
+            background: #06b6d4;
+            opacity: 0.6;
+            left: 5%;
+            top: 75%;
+            animation: orbit15 16s linear infinite, particleFade15 11s ease-in-out infinite;
+        }
+        
+        /* CROSS ANIMATIONS */
+        @keyframes crossPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes crossGlow {
+            0% { 
+                box-shadow: 0 0 10px rgba(56, 178, 172, 0.3);
+                filter: brightness(1);
+            }
+            100% { 
+                box-shadow: 0 0 20px rgba(56, 178, 172, 0.6), 0 0 40px rgba(66, 153, 225, 0.3);
+                filter: brightness(1.2);
+            }
+        }
+        
+        /* ORBIT ANIMATIONS */
+        @keyframes orbit1 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-30px, -20px) rotate(90deg); }
+            50% { transform: translate(25px, -35px) rotate(180deg); }
+            75% { transform: translate(35px, 15px) rotate(270deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit2 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-40px, 30px) rotate(120deg); }
+            66% { transform: translate(20px, -25px) rotate(240deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit3 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(45px, -15px); }
+            50% { transform: translate(-20px, -40px); }
+            75% { transform: translate(-35px, 25px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit4 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(-25px, 35px) rotate(45deg); }
+            50% { transform: translate(30px, 20px) rotate(90deg); }
+            75% { transform: translate(-15px, -30px) rotate(135deg); }
+            100% { transform: translate(0px, 0px) rotate(180deg); }
+        }
+        
+        @keyframes orbit5 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(25px, -45px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit6 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-35px, 40px) rotate(60deg); }
+            66% { transform: translate(40px, -20px) rotate(120deg); }
+            100% { transform: translate(0px, 0px) rotate(180deg); }
+        }
+        
+        @keyframes orbit7 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(50px, 10px); }
+            50% { transform: translate(-15px, 45px); }
+            75% { transform: translate(-40px, -25px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit8 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(-45px, -35px) rotate(180deg); }
+            100% { transform: translate(0px, 0px) rotate(360deg); }
+        }
+        
+        @keyframes orbit9 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(-20px, 35px); }
+            50% { transform: translate(35px, 20px); }
+            75% { transform: translate(-40px, -15px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit10 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(25px, -40px) rotate(90deg); }
+            66% { transform: translate(-50px, 10px) rotate(180deg); }
+            100% { transform: translate(0px, 0px) rotate(270deg); }
+        }
+        
+        @keyframes orbit11 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(-30px, 50px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit12 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(40px, -30px) rotate(72deg); }
+            50% { transform: translate(-45px, -40px) rotate(144deg); }
+            75% { transform: translate(20px, 35px) rotate(216deg); }
+            100% { transform: translate(0px, 0px) rotate(288deg); }
+        }
+        
+        @keyframes orbit13 {
+            0% { transform: translate(0px, 0px); }
+            50% { transform: translate(-35px, -50px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        @keyframes orbit14 {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            33% { transform: translate(-50px, -25px) rotate(108deg); }
+            66% { transform: translate(30px, 45px) rotate(216deg); }
+            100% { transform: translate(0px, 0px) rotate(324deg); }
+        }
+        
+        @keyframes orbit15 {
+            0% { transform: translate(0px, 0px); }
+            25% { transform: translate(55px, -20px); }
+            50% { transform: translate(-25px, -55px); }
+            75% { transform: translate(-50px, 35px); }
+            100% { transform: translate(0px, 0px); }
+        }
+        
+        /* PARTICLE FADE ANIMATIONS */
+        @keyframes particleFade1 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes particleFade2 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes particleFade3 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes particleFade4 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes particleFade5 {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes particleFade6 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes particleFade7 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1.0; }
+        }
+        
+        @keyframes particleFade8 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes particleFade9 {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 0.3; }
+        }
+        
+        @keyframes particleFade10 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.9; }
+        }
+        
+        @keyframes particleFade11 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 0.2; }
+        }
+        
+        @keyframes particleFade12 {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes particleFade13 {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes particleFade14 {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.1; }
+        }
+        
+        @keyframes particleFade15 {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1.0; }
+        }
+        
+        .facility-category {
+            margin-bottom: 4rem;
+        }
+        
+        .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .tech-effects-section {
+                height: 150px;
+            }
+            
+            .cross-horizontal {
+                width: 60px;
+                height: 3px;
+            }
+            
+            .cross-vertical {
+                width: 3px;
+                height: 60px;
+            }
+            
+            /* Hide some particles on mobile for performance */
+            .particle-6, .particle-7, .particle-8, .particle-9, 
+            .particle-10, .particle-11, .particle-12, .particle-13,
+            .particle-14, .particle-15 {
+                display: none;
+            }
+            
+            /* Scale down remaining particles */
+            .tech-particle {
+                transform: scale(0.8);
+            }
+        }
+        
+        .controls {
+            background: #f8fafc;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .control-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #1d4ed8;
+        }
+        
+        .info-panel {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🌟 Tech Effects Demo</h1>
+            <p>Gradient Cross + Floating Particles Effect</p>
+        </div>
+        
+        <div class="demo-content">
+            <div class="facilities-overview">
+                <h2 class="overview-title">Creating the Future of AI Innovation</h2>
+                <p class="overview-text">HEART Technology Park features cutting-edge facilities designed to foster innovation, collaboration, and breakthrough research in artificial intelligence. Our world-class infrastructure provides the perfect environment for companies, researchers, and entrepreneurs to thrive.</p>
+            </div>
+            
+            <!-- TECH EFFECTS SECTION -->
+            <div class="tech-effects-section">
+                <!-- Gradient Cross -->
+                <div class="gradient-cross">
+                    <div class="cross-horizontal"></div>
+                    <div class="cross-vertical"></div>
+                </div>
+                
+                <!-- Floating Particles -->
+                <div class="tech-particle particle-1"></div>
+                <div class="tech-particle particle-2"></div>
+                <div class="tech-particle particle-3"></div>
+                <div class="tech-particle particle-4"></div>
+                <div class="tech-particle particle-5"></div>
+                <div class="tech-particle particle-6"></div>
+                <div class="tech-particle particle-7"></div>
+                <div class="tech-particle particle-8"></div>
+                <div class="tech-particle particle-9"></div>
+                <div class="tech-particle particle-10"></div>
+                <div class="tech-particle particle-11"></div>
+                <div class="tech-particle particle-12"></div>
+                <div class="tech-particle particle-13"></div>
+                <div class="tech-particle particle-14"></div>
+                <div class="tech-particle particle-15"></div>
+            </div>
+            
+            <div class="facility-category">
+                <h3 class="category-title">🔬 Research & Development Centers</h3>
+                <p style="text-align: center; color: #64748b;">Hiệu ứng kết hợp hoạt động ở phía trên...</p>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h4>🔧 Thông Tin Hiệu Ứng Kết Hợp</h4>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li><strong>Gradient Cross:</strong> Chữ thập gradient ở trung tâm với pulse và glow</li>
+                <li><strong>Floating Particles:</strong> 15 particles (5 trên mobile)</li>
+                <li><strong>Màu sắc Cross:</strong> #38b2ac → #4299e1 → #9f7aea</li>
+                <li><strong>Màu sắc Particles:</strong> #3b82f6, #1e40af, #06b6d4</li>
+                <li><strong>Animation:</strong> Orbit + fade effects, 8-16 giây cycles</li>
+                <li><strong>Performance:</strong> GPU accelerated, mobile optimized</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" onclick="toggleAnimation()">⏸️ Pause/Play</button>
+            <button class="control-btn" onclick="changeSpeed()">⚡ Change Speed</button>
+            <button class="control-btn" onclick="simulateMobile()">📱 Mobile View</button>
+        </div>
+    </div>
+    
+    <script>
+        let animationPaused = false;
+        let currentSpeed = 1;
+        
+        function toggleAnimation() {
+            const allAnimated = document.querySelectorAll('.gradient-cross *, .tech-particle');
+            if (animationPaused) {
+                allAnimated.forEach(element => {
+                    element.style.animationPlayState = 'running';
+                });
+                animationPaused = false;
+            } else {
+                allAnimated.forEach(element => {
+                    element.style.animationPlayState = 'paused';
+                });
+                animationPaused = true;
+            }
+        }
+        
+        function changeSpeed() {
+            const allAnimated = document.querySelectorAll('.gradient-cross *, .tech-particle');
+            currentSpeed = currentSpeed === 1 ? 0.5 : currentSpeed === 0.5 ? 2 : 1;
+            
+            allAnimated.forEach(element => {
+                const currentDuration = element.style.animationDuration || '12s, 8s';
+                const durations = currentDuration.split(', ');
+                const newDurations = durations.map(d => {
+                    const seconds = parseFloat(d);
+                    return `${seconds / currentSpeed}s`;
+                }).join(', ');
+                element.style.animationDuration = newDurations;
+            });
+            
+            console.log(`Speed changed to: ${currentSpeed}x`);
+        }
+        
+        function simulateMobile() {
+            document.body.style.maxWidth = '375px';
+            document.body.style.margin = '0 auto';
+            console.log('Mobile view simulated');
+        }
+        
+        window.addEventListener('load', () => {
+            console.log('🌟 Tech effects demo loaded');
+            console.log('✨ Gradient cross + floating particles ready');
+        });
+    </script>
+</body>
+</html>

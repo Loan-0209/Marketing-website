@@ -1,0 +1,198 @@
+{
+  "timestamp": "2025-07-16T09:29:23.634725",
+  "base_url": "http://localhost:3000",
+  "tests": [
+    {
+      "name": "Image Loading Test",
+      "status": "completed",
+      "results": [
+        {
+          "image": "hue-location-map-mobile.jpg",
+          "url_no_version": "http://localhost:3000/assets/images/hue-location-map-mobile.jpg",
+          "url_with_version": "http://localhost:3000/assets/images/hue-location-map-mobile.jpg?v=1752632871",
+          "status_no_v": 200,
+          "status_with_v": 200,
+          "size_no_v": 26770,
+          "size_with_v": 26770,
+          "cache_headers_no_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "26770",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "cache_headers_with_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "26770",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "content_identical": true
+        },
+        {
+          "image": "hue-location-map-tablet.jpg",
+          "url_no_version": "http://localhost:3000/assets/images/hue-location-map-tablet.jpg",
+          "url_with_version": "http://localhost:3000/assets/images/hue-location-map-tablet.jpg?v=1752632871",
+          "status_no_v": 200,
+          "status_with_v": 200,
+          "size_no_v": 81502,
+          "size_with_v": 81502,
+          "cache_headers_no_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "81502",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "cache_headers_with_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "81502",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "content_identical": true
+        },
+        {
+          "image": "hue-location-map-desktop.jpg",
+          "url_no_version": "http://localhost:3000/assets/images/hue-location-map-desktop.jpg",
+          "url_with_version": "http://localhost:3000/assets/images/hue-location-map-desktop.jpg?v=1752632871",
+          "status_no_v": 200,
+          "status_with_v": 200,
+          "size_no_v": 150689,
+          "size_with_v": 150689,
+          "cache_headers_no_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "150689",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "cache_headers_with_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "150689",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "content_identical": true
+        },
+        {
+          "image": "hue-location-map-high.jpg",
+          "url_no_version": "http://localhost:3000/assets/images/hue-location-map-high.jpg",
+          "url_with_version": "http://localhost:3000/assets/images/hue-location-map-high.jpg?v=1752632871",
+          "status_no_v": 200,
+          "status_with_v": 200,
+          "size_no_v": 237454,
+          "size_with_v": 237454,
+          "cache_headers_no_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "237454",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "cache_headers_with_v": {
+            "Server": "SimpleHTTP/0.6 Python/3.13.3",
+            "Date": "Wed, 16 Jul 2025 02:29:23 GMT",
+            "Content-type": "image/jpeg",
+            "Content-Length": "237454",
+            "Last-Modified": "Wed, 16 Jul 2025 02:27:51 GMT"
+          },
+          "content_identical": true
+        }
+      ]
+    },
+    {
+      "name": "Cache Headers Test",
+      "status": "completed",
+      "results": [
+        {
+          "url": "/index.html",
+          "status": 200,
+          "content_type": "text/html",
+          "cache_control": "",
+          "etag": "",
+          "last_modified": "Tue, 15 Jul 2025 08:36:57 GMT",
+          "expires": "",
+          "expected_type": "text/html",
+          "type_match": true
+        },
+        {
+          "url": "/assets/images/hue-location-map-desktop.jpg",
+          "status": 200,
+          "content_type": "image/jpeg",
+          "cache_control": "",
+          "etag": "",
+          "last_modified": "Wed, 16 Jul 2025 02:27:51 GMT",
+          "expires": "",
+          "expected_type": "image/jpeg",
+          "type_match": true
+        },
+        {
+          "url": "/assets/images/hue-location-map-desktop.jpg?v=123456",
+          "status": 200,
+          "content_type": "image/jpeg",
+          "cache_control": "",
+          "etag": "",
+          "last_modified": "Wed, 16 Jul 2025 02:27:51 GMT",
+          "expires": "",
+          "expected_type": "image/jpeg",
+          "type_match": true
+        },
+        {
+          "url": "/js/cache-buster.js",
+          "status": 200,
+          "content_type": "text/javascript",
+          "cache_control": "",
+          "etag": "",
+          "last_modified": "Tue, 15 Jul 2025 08:36:11 GMT",
+          "expires": "",
+          "expected_type": "application/javascript",
+          "type_match": false
+        },
+        {
+          "url": "/image-version.json",
+          "status": 200,
+          "content_type": "application/json",
+          "cache_control": "",
+          "etag": "",
+          "last_modified": "Wed, 16 Jul 2025 02:27:51 GMT",
+          "expires": "",
+          "expected_type": "application/json",
+          "type_match": true
+        }
+      ]
+    },
+    {
+      "name": "Version Invalidation Test",
+      "status": "completed",
+      "results": [
+        {
+          "image": "hue-location-map-desktop.jpg",
+          "response1_status": 200,
+          "response2_status": 200,
+          "etag1": "",
+          "etag2": "",
+          "content_identical": true,
+          "cache_invalidation_working": true
+        }
+      ]
+    },
+    {
+      "name": "JavaScript Cache Buster Test",
+      "status": "completed",
+      "results": [
+        {
+          "url": "/js/cache-buster.js",
+          "status": 200,
+          "size": 5382,
+          "content_type": "text/javascript",
+          "cache_control": "",
+          "working": true
+        }
+      ]
+    }
+  ]
+}
