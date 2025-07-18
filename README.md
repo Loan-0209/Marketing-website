@@ -1,183 +1,137 @@
-# HEART Technology Website
+# 🌟 Complete Neon Effects Demo
 
-A comprehensive full-stack website for HEART Technology Park featuring backend API and frontend integration.
+## Mô tả
+Bộ sưu tập hiệu ứng neon hoàn chỉnh với nhiều màu sắc và cường độ khác nhau, được thiết kế để tạo ra những giao diện web hiện đại và ấn tượng.
 
-## 🚀 Features
+## File trong dự án
 
-### Frontend
-- Modern responsive design
-- Single-page application with section navigation
-- Dynamic news loading with pagination
-- Admin authentication and news management
-- Contact form with backend integration
-- Real-time notifications
+### 1. `final-test.html`
+- File test cơ bản với hiệu ứng neon cyan
+- Hiển thị power grid map với khung neon
+- Phù hợp cho testing và demo đơn giản
 
-### Backend
-- RESTful API with Express.js
-- MongoDB database with Mongoose ODM
-- JWT-based authentication
-- News management (CRUD operations)
-- Contact form submissions with email notifications
-- File upload support for images
-- Comprehensive security middleware
-- Input validation and sanitization
+### 2. `neon-cyan-demo.html`
+- Demo chuyên biệt cho hiệu ứng neon cyan
+- 4 cấp độ cường độ: Light, Medium, Strong, Extreme
+- Có sẵn CSS code có thể copy
 
-## 🛠️ Technology Stack
+### 3. `complete-neon-demo.html` ⭐ **FILE MỚI**
+- Demo hoàn chỉnh với đầy đủ tính năng
+- 6 màu neon: Cyan, Magenta, Green, Yellow, Red, Blue
+- Hiệu ứng đặc biệt: Pulse, Rotating Border, Extreme Glow
+- Tương tác real-time với color picker
+- Background động và sparkle effects
+- Responsive design cho mobile
 
-### Frontend
-- HTML5, CSS3, JavaScript (ES6+)
-- Fetch API for HTTP requests
-- CSS Grid and Flexbox for layouts
-- Custom toast notifications
+## Tính năng chính
 
-### Backend
-- Node.js with Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- Nodemailer for email notifications
-- Multer for file uploads
-- Express-validator for input validation
-- Helmet for security headers
-- CORS for cross-origin requests
+### 🎨 Màu sắc đa dạng
+- **Cyan** (#00ffff) - Màu xanh lam neon
+- **Magenta** (#ff00ff) - Màu tím hồng neon
+- **Green** (#00ff00) - Màu xanh lá neon
+- **Yellow** (#ffff00) - Màu vàng neon
+- **Red** (#ff0044) - Màu đỏ neon
+- **Blue** (#0088ff) - Màu xanh dương neon
 
-## 📋 Prerequisites
+### ✨ Hiệu ứng đặc biệt
+- **Pulse Effect** - Hiệu ứng nhấp nháy
+- **Rotating Border** - Viền xoay gradient
+- **Shimmer Effect** - Hiệu ứng lấp lánh khi hover
+- **Float Animation** - Animation bay lơ lửng
+- **Sparkle Particles** - Hạt sáng tự động
 
-Before running this project, make sure you have the following installed:
+### 🎮 Tương tác
+- Color picker để thay đổi màu real-time
+- Hover effects mượt mà
+- Copy CSS code với một click
+- Responsive trên mọi thiết bị
 
-- [Node.js](https://nodejs.org/) (v16 or higher)
-- [MongoDB](https://www.mongodb.com/) (v5 or higher)
-- [Git](https://git-scm.com/)
+## Cách sử dụng
 
-## 🚀 Quick Start
+### 1. Xem demo
+Mở file `complete-neon-demo.html` trong trình duyệt để xem demo đầy đủ.
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd Test_WEBSITE_2025.06.18
-```
-
-### 2. Backend Setup
-```bash
-# Navigate to backend directory
-cd backend
-
-# Install dependencies
-npm install
-
-# Copy environment variables
-cp .env.example .env
-
-# Edit .env file with your configuration
-# Important: Update MONGODB_URI, JWT_SECRET, and email settings
-
-# Seed the database with sample data
-npm run seed
-
-# Start the backend server
-npm run dev
-```
-
-### 3. Frontend Setup
-```bash
-# Navigate back to root directory
-cd ..
-
-# Install frontend dependencies
-npm install
-
-# Start the frontend server
-npm start
-```
-
-### 4. Access the Application
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- API Health Check: http://localhost:5000/api/health
-
-## 🔐 Default Login Credentials
-
-After running the seed script, you can login with:
-- **Username:** `admin`
-- **Password:** `heart2024`
-
-## Development
-### HTML Structure
-- Single page application với nhiều sections
-- Navigation sử dụng JavaScript để show/hide sections
-- Responsive design với CSS Grid và Flexbox
-
-### CSS Features
-- CSS Variables cho theming
-- Animations và transitions
-- Mobile-first responsive design
-- Modern CSS features (backdrop-filter, grid, flexbox)
-
-### JavaScript Features
-- Vanilla JavaScript (không cần framework)
-- DOM manipulation
-- Form handling
-- Local authentication simulation
-- Smooth animations
-
-## Customization
-### Thay đổi màu sắc
-Chỉnh sửa CSS variables trong `:root`:
+### 2. Sử dụng CSS trong dự án
 ```css
-:root {
-    --primary-blue: #1e3a8a;
-    --light-blue: #3b82f6;
-    --primary-yellow: #fbbf24;
-    /* ... */
+/* CSS cơ bản cho khung neon */
+.neon-frame {
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid #00ffff;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(0, 255, 255, 0.4),
+        inset 0 0 20px rgba(0, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+.neon-frame:hover {
+    box-shadow: 
+        0 0 30px rgba(0, 255, 255, 0.8),
+        0 0 60px rgba(0, 255, 255, 0.6),
+        inset 0 0 30px rgba(0, 255, 255, 0.2);
+    transform: translateY(-5px);
 }
 ```
 
-### Thêm sections mới
-1. Thêm HTML section trong body
-2. Thêm navigation link
-3. Thêm CSS styles
-4. Update JavaScript navigation function
+### 3. Biến thể màu sắc
+```css
+/* Magenta variant */
+.neon-magenta {
+    border-color: #ff00ff;
+    box-shadow: 
+        0 0 20px rgba(255, 0, 255, 0.6),
+        0 0 40px rgba(255, 0, 255, 0.4),
+        inset 0 0 20px rgba(255, 0, 255, 0.1);
+}
 
-### Thêm tính năng mới
-- Database integration (cần backend)
-- User registration/authentication
-- Content management system
-- Multi-language support
+/* Green variant */
+.neon-green {
+    border-color: #00ff00;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.6),
+        0 0 40px rgba(0, 255, 0, 0.4),
+        inset 0 0 20px rgba(0, 255, 0, 0.1);
+}
+```
+
+## Cấu trúc thư mục
+```
+Test_WEBSITE_2025.06.18/
+├── final-test.html           # Test file cơ bản
+├── neon-cyan-demo.html       # Demo cyan chuyên biệt
+├── complete-neon-demo.html   # Demo hoàn chỉnh ⭐
+└── README.md                 # File hướng dẫn này
+```
+
+## Yêu cầu hệ thống
+- Trình duyệt hiện đại hỗ trợ CSS3
+- Không cần JavaScript framework
+- Hoạt động offline hoàn toàn
+
+## Lưu ý kỹ thuật
+- Sử dụng `box-shadow` để tạo hiệu ứng neon
+- `rgba()` để kiểm soát độ trong suốt
+- `transition` cho animation mượt mà
+- CSS Grid cho layout responsive
+- Pseudo-elements cho hiệu ứng đặc biệt
 
 ## Browser Support
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
+- ✅ Chrome 60+
+- ✅ Firefox 55+
+- ✅ Safari 12+
+- ✅ Edge 79+
 
-## Performance
-- Optimized CSS và JavaScript
-- Minimal external dependencies
-- Fast loading times
-- Mobile optimized
+## Performance Tips
+- Hiệu ứng được tối ưu cho GPU
+- Sử dụng `transform` thay vì thay đổi position
+- Throttled animations để tiết kiệm battery
+- Fallback cho thiết bị yếu
 
-## Security Notes
-- Admin login chỉ là demo (client-side only)
-- Để production cần implement proper authentication
-- Form submissions cần backend validation
+---
 
-## Troubleshooting
-### Website không load
-- Kiểm tra file index.html có tồn tại
-- Đảm bảo Live Server đang chạy
-- Kiểm tra browser console cho errors
-
-### Styles không hiển thị đúng
-- Hard refresh (Ctrl+F5)
-- Kiểm tra CSS syntax
-- Đảm bảo CSS được load đúng cách
-
-### JavaScript không hoạt động
-- Mở Developer Tools (F12)
-- Kiểm tra Console tab cho errors
-- Đảm bảo JavaScript được enable
-
-## License
-Dự án này chỉ dành cho mục đích học tập và demo.
-
-## Contact
-Nếu có vấn đề kỹ thuật, vui lòng tạo issue hoặc liên hệ developer.
+**Tác giả:** Assistant AI  
+**Ngày tạo:** July 2025  
+**Version:** 1.0  
+**License:** MIT
