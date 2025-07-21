@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Grid Debug Integration</title>
+    <style>
+        body {
+            font-family: 'Consolas', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .debug-console {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn:hover {
+            background: #0088ff;
+        }
+        
+        .btn-success {
+            background: #009900;
+        }
+        
+        .btn-warning {
+            background: #ff6600;
+        }
+        
+        .btn-danger {
+            background: #cc0000;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        
+        .status.success {
+            background: #004400;
+            color: #00ff00;
+        }
+        
+        .status.warning {
+            background: #664400;
+            color: #ffaa00;
+        }
+        
+        .status.error {
+            background: #440000;
+            color: #ff4444;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #444;
+            border-radius: 8px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚡ Power Grid Alignment Debug Console</h1>
+    
+    <div class="control-panel">
+        <button class="btn" onclick="runFullDiagnostic()">🔍 Full Diagnostic</button>
+        <button class="btn btn-success" onclick="autoFixIssues()">🔧 Auto Fix</button>
+        <button class="btn btn-warning" onclick="enableInteractive()">🎮 Interactive Mode</button>
+        <button class="btn btn-danger" onclick="restoreOriginal()">🔄 Restore Original</button>
+        <button class="btn" onclick="exportReport()">📄 Export Report</button>
+        <button class="btn" onclick="loadFacilitiesPage()">📱 Load Facilities</button>
+    </div>
+    
+    <div class="debug-console" id="debugConsole">
+        <div class="status success">[READY] Debug console initialized</div>
+    </div>
+    
+    <iframe id="facilitiesFrame" src="facilities.html" style="display: none;"></iframe>
+    
+    <script>
+        let analyzer = null;
+        let fixTool = null;
+        let facilityWindow = null;
+        
+        function log(message, type = 'info') {
+            const console = document.getElementById('debugConsole');
+            const timestamp = new Date().toLocaleTimeString();
+            const statusClass = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : '';
+            
+            console.innerHTML += `<div class="status ${statusClass}">[${timestamp}] ${message}</div>`;
+            console.scrollTop = console.scrollHeight;
+        }
+        
+        function loadFacilitiesPage() {
+            log('Loading facilities page...', 'info');
+            const iframe = document.getElementById('facilitiesFrame');
+            iframe.style.display = 'block';
+            
+            iframe.onload = function() {
+                try {
+                    facilityWindow = iframe.contentWindow;
+                    
+                    // Inject debugging scripts
+                    injectDebugScripts();
+                    
+                    log('✅ Facilities page loaded successfully', 'success');
+                } catch (error) {
+                    log(`❌ Error accessing facilities page: ${error.message}`, 'error');
+                }
+            };
+        }
+        
+        function injectDebugScripts() {
+            if (!facilityWindow) {
+                log('❌ Facilities window not available', 'error');
+                return;
+            }
+            
+            try {
+                // Load coordinate system analyzer
+                const analyzerScript = facilityWindow.document.createElement('script');
+                analyzerScript.src = 'coordinate-system-analyzer.js';
+                facilityWindow.document.head.appendChild(analyzerScript);
+                
+                // Load alignment fix tool
+                const fixScript = facilityWindow.document.createElement('script');
+                fixScript.src = 'alignment-fix-tool.js';
+                facilityWindow.document.head.appendChild(fixScript);
+                
+                setTimeout(() => {
+                    analyzer = facilityWindow.analyzer;
+                    fixTool = facilityWindow.alignmentTool;
+                    
+                    if (analyzer && fixTool) {
+                        log('✅ Debug tools injected successfully', 'success');
+                    } else {
+                        log('⚠️ Debug tools may not be fully loaded', 'warning');
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                log(`❌ Error injecting scripts: ${error.message}`, 'error');
+            }
+        }
+        
+        function runFullDiagnostic() {
+            if (!analyzer) {
+                log('❌ Analyzer not loaded. Load facilities page first.', 'error');
+                return;
+            }
+            
+            log('🔍 Running full diagnostic...', 'info');
+            
+            try {
+                const report = analyzer.generateReport();
+                
+                log('📊 COORDINATE SYSTEM:', 'info');
+                log(`   Container: ${Math.round(report.coordinates.container.width)}x${Math.round(report.coordinates.container.height)}`, 'info');
+                log(`   Scale: X=${report.coordinates.scale.svgToScreenX.toFixed(3)}, Y=${report.coordinates.scale.svgToScreenY.toFixed(3)}`, 'info');
+                
+                log('🎨 CSS ANALYSIS:', 'info');
+                if (report.css.issues.length === 0) {
+                    log('   ✅ No CSS issues detected', 'success');
+                } else {
+                    report.css.issues.forEach(issue => log(`   ⚠️ ${issue}`, 'warning'));
+                }
+                
+                log('📍 FACILITY POSITIONS:', 'info');
+                analyzer.facilities.forEach(facility => {
+                    const element = facilityWindow.document.querySelector(`[data-facility="${facility.id}"]`);
+                    if (element) {
+                        const rect = element.querySelector('.facility-rect, rect');
+                        const actualX = rect.getAttribute('x');
+                        const actualY = rect.getAttribute('y');
+                        log(`   ${facility.name}: (${actualX}, ${actualY})`, 'info');
+                    }
+                });
+                
+                log('✅ Full diagnostic complete', 'success');
+                
+            } catch (error) {
+                log(`❌ Diagnostic error: ${error.message}`, 'error');
+            }
+        }
+        
+        function autoFixIssues() {
+            if (!fixTool) {
+                log('❌ Fix tool not loaded. Load facilities page first.', 'error');
+                return;
+            }
+            
+            log('🔧 Running auto-fix...', 'info');
+            
+            try {
+                const result = fixTool.autoFix();
+                
+                if (result.success) {
+                    log(`✅ Auto-fix successful: ${result.fixesApplied} fixes applied`, 'success');
+                } else {
+                    log(`⚠️ Auto-fix partial: ${result.fixesApplied} applied, ${result.fixesFailed} failed`, 'warning');
+                }
+                
+                // Run verification
+                setTimeout(() => {
+                    const verified = fixTool.verifyFixes();
+                    if (verified) {
+                        log('✅ All fixes verified successfully', 'success');
+                    } else {
+                        log('⚠️ Some issues remain after fixes', 'warning');
+                    }
+                }, 500);
+                
+            } catch (error) {
+                log(`❌ Auto-fix error: ${error.message}`, 'error');
+            }
+        }
+        
+        function enableInteractive() {
+            if (!fixTool) {
+                log('❌ Fix tool not loaded. Load facilities page first.', 'error');
+                return;
+            }
+            
+            log('🎮 Enabling interactive mode...', 'info');
+            
+            try {
+                fixTool.enableInteractiveAdjustment();
+                log('✅ Interactive mode enabled. Click and drag facilities in the page.', 'success');
+                log('💡 Use browser console for coordinate feedback', 'info');
+                
+            } catch (error) {
+                log(`❌ Interactive mode error: ${error.message}`, 'error');
+            }
+        }
+        
+        function restoreOriginal() {
+            if (!fixTool) {
+                log('❌ Fix tool not loaded. Load facilities page first.', 'error');
+                return;
+            }
+            
+            log('🔄 Restoring original coordinates...', 'info');
+            
+            try {
+                const restored = fixTool.restoreOriginal();
+                log(`✅ Restored ${restored} facility coordinates`, 'success');
+                
+            } catch (error) {
+                log(`❌ Restore error: ${error.message}`, 'error');
+            }
+        }
+        
+        function exportReport() {
+            log('📄 Generating export report...', 'info');
+            
+            const report = {
+                timestamp: new Date().toISOString(),
+                debugLog: document.getElementById('debugConsole').innerHTML,
+                facilityUrl: facilityWindow ? facilityWindow.location.href : 'Not loaded'
+            };
+            
+            if (analyzer) {
+                report.coordinateAnalysis = analyzer.generateReport();
+            }
+            
+            if (fixTool) {
+                report.alignmentReport = fixTool.generateReport();
+            }
+            
+            // Download report
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `power-grid-debug-report-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            log('✅ Report exported successfully', 'success');
+        }
+        
+        // Quick diagnostic commands
+        window.quickDiag = () => {
+            if (facilityWindow && facilityWindow.analyzer) {
+                facilityWindow.analyzer.generateReport();
+            }
+        };
+        
+        window.quickFix = () => {
+            if (facilityWindow && facilityWindow.alignmentTool) {
+                facilityWindow.alignmentTool.autoFix();
+            }
+        };
+        
+        window.trackMouse = () => {
+            if (facilityWindow && facilityWindow.analyzer) {
+                facilityWindow.analyzer.enableRealTimeTracking();
+            }
+        };
+        
+        log('🚀 Debug console ready', 'success');
+        log('💡 Load facilities page first, then run diagnostics', 'info');
+        log('📋 Available console commands: quickDiag(), quickFix(), trackMouse()', 'info');
+    </script>
+</body>
+</html>

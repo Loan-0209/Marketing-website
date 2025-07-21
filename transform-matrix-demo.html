@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transform Matrix Demo - Power Grid Alignment</title>
+    <link rel="stylesheet" href="transform-matrix-alignment.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .control-group {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .control-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .control-group input[type="range"] {
+            width: 200px;
+            margin-right: 10px;
+        }
+        
+        .control-group span {
+            display: inline-block;
+            width: 60px;
+            text-align: right;
+            color: #666;
+        }
+        
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2980b9;
+        }
+        
+        button.active {
+            background: #27ae60;
+        }
+        
+        .matrix-display {
+            font-family: 'Courier New', monospace;
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .facility-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .facility-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .facility-card h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        .facility-card .matrix-value {
+            font-size: 12px;
+            color: #7f8c8d;
+            word-break: break-all;
+        }
+        
+        /* Map container styles */
+        .map-demo {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Override for demo */
+        .grid-background-map {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Interactive mode indicator */
+        .interactive-mode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .interactive-mode.active {
+            display: block;
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🎯 Transform Matrix Demo - Power Grid Alignment</h1>
+        
+        <div class="control-panel">
+            <h2>🎛️ Transform Controls</h2>
+            
+            <!-- Facility selector -->
+            <div class="control-group">
+                <label>Select Facility:</label>
+                <select id="facilitySelect">
+                    <option value="hydro-plant">Hydro Power Plant</option>
+                    <option value="500kv-substation">500kV Substation</option>
+                    <option value="110kv-substation">110kV Substation</option>
+                </select>
+            </div>
+            
+            <!-- Transform controls -->
+            <div class="control-group">
+                <label>Translate X: <span id="translateXValue">0</span>px</label>
+                <input type="range" id="translateX" min="-50" max="50" value="0" step="1">
+            </div>
+            
+            <div class="control-group">
+                <label>Translate Y: <span id="translateYValue">0</span>px</label>
+                <input type="range" id="translateY" min="-50" max="50" value="0" step="1">
+            </div>
+            
+            <div class="control-group">
+                <label>Scale: <span id="scaleValue">1.00</span></label>
+                <input type="range" id="scale" min="0.5" max="2" value="1" step="0.05">
+            </div>
+            
+            <div class="control-group">
+                <label>Rotation: <span id="rotationValue">0</span>°</label>
+                <input type="range" id="rotation" min="-45" max="45" value="0" step="1">
+            </div>
+            
+            <div class="control-group">
+                <label>Skew X: <span id="skewXValue">0</span>°</label>
+                <input type="range" id="skewX" min="-30" max="30" value="0" step="1">
+            </div>
+            
+            <!-- Action buttons -->
+            <div style="margin-top: 20px;">
+                <button onclick="applyTransform()">Apply Transform</button>
+                <button onclick="resetCurrent()">Reset Current</button>
+                <button onclick="resetAll()">Reset All</button>
+                <button onclick="autoAdjustAll()">Auto Adjust</button>
+                <button onclick="toggleInteractive()" id="interactiveBtn">Enable Drag Mode</button>
+                <button onclick="exportTransforms()">Export Settings</button>
+            </div>
+            
+            <!-- Matrix display -->
+            <div class="matrix-display" id="matrixDisplay">
+                matrix(1.0000, 0.0000, 0.0000, 1.0000, 0.0000, 0.0000)
+            </div>
+        </div>
+        
+        <!-- Map demo area -->
+        <div class="map-demo">
+            <h2>🗺️ Power Grid Map</h2>
+            <div class="grid-background-map" id="powerGridMap">
+                <img src="assets/images/power-grid-map.jpg" alt="500kV Power Grid Map" class="grid-map-image">
+                
+                <div class="svg-icon-overlay">
+                    <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+                        <!-- Hydro Power Plant -->
+                        <g class="facility-group" data-facility="hydro-plant" data-name="Ta Trach Hydro Power Plant">
+                            <rect class="facility-rect" x="54" y="256" width="30" height="20" rx="3" ry="3" 
+                                  stroke="#3498db" stroke-width="2" fill="rgba(52, 152, 219, 0.1)"/>
+                            <text x="69" y="270" text-anchor="middle" font-size="8" fill="#3498db" font-weight="bold">HYDRO</text>
+                        </g>
+                        
+                        <!-- 500kV Substation -->
+                        <g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
+                            <rect class="facility-rect" x="631" y="263" width="25" height="25" rx="3" ry="3" 
+                                  stroke="#e74c3c" stroke-width="2" fill="rgba(231, 76, 60, 0.15)"/>
+                            <text x="643.5" y="279" text-anchor="middle" font-size="8" fill="#e74c3c" font-weight="bold">500kV</text>
+                        </g>
+                        
+                        <!-- 110kV Substation -->
+                        <g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
+                            <rect class="facility-rect" x="849" y="114" width="25" height="25" rx="3" ry="3" 
+                                  stroke="#f39c12" stroke-width="2" fill="rgba(243, 156, 18, 0.1)"/>
+                            <text x="861.5" y="130" text-anchor="middle" font-size="8" fill="#f39c12" font-weight="bold">110kV</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Facility info display -->
+        <div class="facility-info" id="facilityInfo">
+            <div class="facility-card">
+                <h3>🌊 Hydro Power Plant</h3>
+                <p>Position: (54, 256)</p>
+                <p class="matrix-value">Transform: none</p>
+            </div>
+            <div class="facility-card">
+                <h3>⚡ 500kV Substation</h3>
+                <p>Position: (631, 263)</p>
+                <p class="matrix-value">Transform: none</p>
+            </div>
+            <div class="facility-card">
+                <h3>🔌 110kV Substation</h3>
+                <p>Position: (849, 114)</p>
+                <p class="matrix-value">Transform: none</p>
+            </div>
+        </div>
+        
+        <!-- Interactive mode indicator -->
+        <div class="interactive-mode" id="interactiveIndicator">
+            🎮 Drag Mode Active - Click and drag facilities to reposition
+        </div>
+    </div>
+    
+    <script src="transform-matrix-helper.js"></script>
+    <script>
+        // Initialize helper
+        const matrixHelper = new TransformMatrixHelper();
+        let interactiveMode = false;
+        
+        // Control elements
+        const facilitySelect = document.getElementById('facilitySelect');
+        const translateXSlider = document.getElementById('translateX');
+        const translateYSlider = document.getElementById('translateY');
+        const scaleSlider = document.getElementById('scale');
+        const rotationSlider = document.getElementById('rotation');
+        const skewXSlider = document.getElementById('skewX');
+        
+        // Update value displays
+        translateXSlider.oninput = () => {
+            document.getElementById('translateXValue').textContent = translateXSlider.value;
+            updateMatrixDisplay();
+        };
+        
+        translateYSlider.oninput = () => {
+            document.getElementById('translateYValue').textContent = translateYSlider.value;
+            updateMatrixDisplay();
+        };
+        
+        scaleSlider.oninput = () => {
+            document.getElementById('scaleValue').textContent = parseFloat(scaleSlider.value).toFixed(2);
+            updateMatrixDisplay();
+        };
+        
+        rotationSlider.oninput = () => {
+            document.getElementById('rotationValue').textContent = rotationSlider.value;
+            updateMatrixDisplay();
+        };
+        
+        skewXSlider.oninput = () => {
+            document.getElementById('skewXValue').textContent = skewXSlider.value;
+            updateMatrixDisplay();
+        };
+        
+        // Update matrix display
+        function updateMatrixDisplay() {
+            const scale = parseFloat(scaleSlider.value);
+            const rotation = parseFloat(rotationSlider.value);
+            const translateX = parseFloat(translateXSlider.value);
+            const translateY = parseFloat(translateYSlider.value);
+            const skewX = parseFloat(skewXSlider.value);
+            
+            const matrix = matrixHelper.createMatrix(scale, scale, rotation, translateX, translateY, skewX, 0);
+            const matrixString = matrixHelper.matrixToString(matrix);
+            
+            document.getElementById('matrixDisplay').textContent = matrixString;
+        }
+        
+        // Apply transform to selected facility
+        function applyTransform() {
+            const facilityId = facilitySelect.value;
+            const scale = parseFloat(scaleSlider.value);
+            const rotation = parseFloat(rotationSlider.value);
+            const translateX = parseFloat(translateXSlider.value);
+            const translateY = parseFloat(translateYSlider.value);
+            const skewX = parseFloat(skewXSlider.value);
+            
+            matrixHelper.animateTransform(facilityId, {
+                scaleX: scale,
+                scaleY: scale,
+                rotation: rotation,
+                translateX: translateX,
+                translateY: translateY,
+                skewX: skewX,
+                skewY: 0
+            }, 500);
+            
+            updateFacilityInfo();
+        }
+        
+        // Reset current facility
+        function resetCurrent() {
+            const facilityId = facilitySelect.value;
+            const baseTransform = matrixHelper.baseTransforms[facilityId];
+            
+            if (baseTransform) {
+                translateXSlider.value = baseTransform.x;
+                translateYSlider.value = baseTransform.y;
+                scaleSlider.value = baseTransform.scale;
+                rotationSlider.value = baseTransform.rotation;
+                skewXSlider.value = 0;
+                
+                // Update displays
+                document.getElementById('translateXValue').textContent = baseTransform.x;
+                document.getElementById('translateYValue').textContent = baseTransform.y;
+                document.getElementById('scaleValue').textContent = baseTransform.scale.toFixed(2);
+                document.getElementById('rotationValue').textContent = baseTransform.rotation;
+                document.getElementById('skewXValue').textContent = 0;
+                
+                applyTransform();
+            }
+        }
+        
+        // Reset all facilities
+        function resetAll() {
+            matrixHelper.resetToBase();
+            updateFacilityInfo();
+            resetCurrent();
+        }
+        
+        // Auto adjust all
+        function autoAdjustAll() {
+            matrixHelper.autoAdjustAll();
+            updateFacilityInfo();
+        }
+        
+        // Toggle interactive mode
+        function toggleInteractive() {
+            interactiveMode = !interactiveMode;
+            const btn = document.getElementById('interactiveBtn');
+            const indicator = document.getElementById('interactiveIndicator');
+            
+            if (interactiveMode) {
+                ['hydro-plant', '500kv-substation', '110kv-substation'].forEach(id => {
+                    matrixHelper.enableInteractiveAdjustment(id);
+                });
+                btn.textContent = 'Disable Drag Mode';
+                btn.classList.add('active');
+                indicator.classList.add('active');
+            } else {
+                location.reload(); // Simple way to disable drag mode
+            }
+        }
+        
+        // Export transforms
+        function exportTransforms() {
+            const transforms = matrixHelper.exportTransforms();
+            const blob = new Blob([JSON.stringify(transforms, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transform-settings-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            console.log('✅ Transforms exported:', transforms);
+        }
+        
+        // Update facility info display
+        function updateFacilityInfo() {
+            const facilities = ['hydro-plant', '500kv-substation', '110kv-substation'];
+            const cards = document.querySelectorAll('.facility-card');
+            
+            facilities.forEach((facilityId, index) => {
+                const facilityData = matrixHelper.facilities.get(facilityId);
+                if (facilityData && cards[index]) {
+                    const matrixValue = cards[index].querySelector('.matrix-value');
+                    matrixValue.textContent = `Transform: ${facilityData.matrixString}`;
+                }
+            });
+        }
+        
+        // Load current facility settings when selected
+        facilitySelect.onchange = () => {
+            const facilityId = facilitySelect.value;
+            const facilityData = matrixHelper.facilities.get(facilityId);
+            
+            if (facilityData && facilityData.transforms) {
+                const t = facilityData.transforms;
+                translateXSlider.value = t.translateX || 0;
+                translateYSlider.value = t.translateY || 0;
+                scaleSlider.value = t.scaleX || 1;
+                rotationSlider.value = t.rotation || 0;
+                skewXSlider.value = t.skewX || 0;
+                
+                // Update displays
+                document.getElementById('translateXValue').textContent = t.translateX || 0;
+                document.getElementById('translateYValue').textContent = t.translateY || 0;
+                document.getElementById('scaleValue').textContent = (t.scaleX || 1).toFixed(2);
+                document.getElementById('rotationValue').textContent = t.rotation || 0;
+                document.getElementById('skewXValue').textContent = t.skewX || 0;
+                
+                updateMatrixDisplay();
+            } else {
+                // Load base transforms
+                resetCurrent();
+            }
+        };
+        
+        // Initialize with base transforms
+        resetAll();
+        
+        console.log('✅ Transform Matrix Demo ready!');
+        console.log('🎮 Use controls to adjust facility positions');
+        console.log('📍 Enable drag mode for interactive positioning');
+    </script>
+</body>
+</html>
