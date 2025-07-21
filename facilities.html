@@ -1470,6 +1470,7 @@
             will-change: transform;
         }
         
+        
         /* Precise positioning coordinates for each facility */
         .facility-group[data-facility="hydro-plant"] {
             transform: translate(30px, 244px);
@@ -1491,18 +1492,103 @@
         
         .facility-rect {
             transition: all 0.3s ease;
-            stroke-width: 2;
+            stroke-width: 3;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+            paint-order: stroke fill;
         }
         
-        /* Visual debugging - brighter borders for visibility */
+        /* Level 3 Intense Burst Animation Keyframes */
+        @keyframes intenseBurst {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px currentColor) brightness(1);
+                stroke-width: 3;
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px currentColor) 
+                        drop-shadow(0 0 50px currentColor) 
+                        drop-shadow(0 0 70px currentColor) 
+                        brightness(1.5);
+                stroke-width: 6;
+                transform: scale(1.08);
+            }
+        }
+        
+        @keyframes intenseBurst-blue {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px #0066cc) 
+                        drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3)) 
+                        brightness(1);
+                stroke-width: 3;
+                opacity: 0.95;
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px #0066cc) 
+                        drop-shadow(0 0 50px rgba(0, 102, 204, 0.8)) 
+                        drop-shadow(0 0 70px rgba(0, 102, 204, 0.6))
+                        brightness(1.5);
+                stroke-width: 6;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes intenseBurst-orange {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px #ff8800) 
+                        drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3)) 
+                        brightness(1);
+                stroke-width: 3;
+                opacity: 0.95;
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px #ff8800) 
+                        drop-shadow(0 0 50px rgba(255, 136, 0, 0.8)) 
+                        drop-shadow(0 0 70px rgba(255, 136, 0, 0.6))
+                        brightness(1.5);
+                stroke-width: 6;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes intenseBurst-red {
+            0%, 100% { 
+                filter: drop-shadow(0 0 8px #ff4444) 
+                        drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3)) 
+                        brightness(1);
+                stroke-width: 3;
+                opacity: 0.95;
+            }
+            50% { 
+                filter: drop-shadow(0 0 30px #ff4444) 
+                        drop-shadow(0 0 50px rgba(255, 68, 68, 0.8)) 
+                        drop-shadow(0 0 70px rgba(255, 68, 68, 0.6))
+                        brightness(1.5);
+                stroke-width: 6;
+                opacity: 1;
+            }
+        }
+        
+        /* Enhanced styling with Level 3 Intense Burst animation for facility boundaries */
         .facility-group[data-facility="hydro-plant"] .facility-rect {
-            stroke: #0066ff !important;
-            stroke-width: 2 !important;
+            stroke: #0066cc !important;
+            stroke-width: 3 !important;
+            animation: intenseBurst-blue 2.8s ease-in-out infinite;
+            transform-origin: center center;
         }
         
         .facility-group[data-facility="110kv-substation"] .facility-rect {
-            stroke: #ff6600 !important;
-            stroke-width: 2 !important;
+            stroke: #ff8800 !important;
+            stroke-width: 3 !important;
+            animation: intenseBurst-orange 2.5s ease-in-out infinite;
+            transform-origin: center center;
+        }
+        
+        .facility-group[data-facility="500kv-substation"] .facility-rect {
+            stroke: #ff4444 !important;
+            stroke-width: 3 !important;
+            animation: intenseBurst-red 3.0s ease-in-out infinite;
+            transform-origin: center center;
         }
         
         .facility-group:hover .facility-border {
@@ -1511,8 +1597,13 @@
         }
         
         .facility-group:hover .facility-rect {
-            stroke-width: 4;
-            filter: drop-shadow(0 0 10px currentColor);
+            stroke-width: 7;
+            filter: drop-shadow(0 0 25px currentColor) 
+                    drop-shadow(0 0 45px currentColor)
+                    drop-shadow(0 0 65px currentColor)
+                    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5))
+                    brightness(1.8);
+            animation-duration: 1.5s;
         }
         
         .facility-group:hover {
@@ -2384,19 +2475,19 @@
                                     <!-- TA TRACH HYDRO POWER PLANT -->
                                     <g class="facility-group" data-facility="hydro-plant" data-name="Ta Trach Hydro Power Plant">
                                         <rect class="facility-rect" x="0" y="0" width="32" height="30" rx="3" ry="3" 
-                                              stroke="#3498db" stroke-width="2" fill="rgba(52, 152, 219, 0.1)"/>
+                                              stroke="#0066cc" stroke-width="3" fill="rgba(0, 102, 204, 0.15)"/>
                                     </g>
                                     
                                     <!-- 500kV SUBSTATION -->
                                     <g class="facility-group active" data-facility="500kv-substation" data-name="500kV Main Substation">
                                         <rect class="facility-rect" x="0" y="0" width="25" height="25" rx="3" ry="3" 
-                                              stroke="#e74c3c" stroke-width="2" fill="rgba(231, 76, 60, 0.15)"/>
+                                              stroke="#ff4444" stroke-width="3" fill="rgba(255, 68, 68, 0.15)"/>
                                     </g>
                                     
                                     <!-- 110kV LA SON SUBSTATION -->
                                     <g class="facility-group" data-facility="110kv-substation" data-name="110kV La Son Substation">
                                         <rect class="facility-rect" x="0" y="0" width="22" height="22" rx="3" ry="3" 
-                                              stroke="#f39c12" stroke-width="2" fill="rgba(243, 156, 18, 0.1)"/>
+                                              stroke="#ff8800" stroke-width="3" fill="rgba(255, 136, 0, 0.15)"/>
                                     </g>
                                     
                                 </svg>
@@ -2431,486 +2522,108 @@
             </div>
         </div>
 
-        <div class="virtual-tour">
-            <h3 class="tour-title">Take a Virtual Tour</h3>
-            <p class="tour-description">Experience our world-class facilities through an immersive 3D virtual tour. Explore our labs, offices, and collaboration spaces from the comfort of your home.</p>
-            <a href="ai-campus-3d-structure.html" class="tour-button">
-                <span>🏢</span>
-                <span>Start Virtual Tour</span>
-            </a>
+        <!-- SUBMARINE CABLE SYSTEMS MAP SECTION -->
+        <div class="power-grid-section">
+            <div class="grid-header">
+                <h3 class="category-title">🌊 Submarine Cable Systems Network</h3>
+                <p style="text-align: center; color: #64748b; margin-bottom: 2rem;">Advanced underwater connectivity infrastructure supporting Hue AI-Robotics Town</p>
+            </div>
+
+            <div class="power-grid-container">
+                <div class="grid-map-wrapper">
+                    <div class="grid-background-map" id="submarineCableMap">
+                        <!-- Submarine Cable Systems Map Image -->
+                        <img src="assets/images/submarine-cable-systems-map.jpg" alt="Submarine Cable Systems Network Map" class="grid-map-image">
+
+                        <!-- Interactive Legend for Submarine Cables -->
+                        <div class="interactive-legend">
+                            <div class="legend-title">Submarine Cable Systems Legend</div>
+                            <div class="legend-item" data-target="apg">
+                                <div class="legend-line legend-500kv"></div>
+                                <span>APG (140 Tbps)</span>
+                            </div>
+                            <div class="legend-item" data-target="smw3">
+                                <div class="legend-line legend-220kv"></div>
+                                <span>SMW3 (Decommissioned 2024)</span>
+                            </div>
+                            <div class="legend-item" data-target="alc">
+                                <div class="legend-line legend-110kv"></div>
+                                <span>ALC (336 Tbps - Ready 2026)</span>
+                            </div>
+                            <div class="legend-item" data-target="adc">
+                                <div class="legend-point legend-500kv"></div>
+                                <span>ADC (160 Tbps)</span>
+                            </div>
+                            <div class="legend-item" data-target="sjc2">
+                                <div class="legend-point legend-220kv"></div>
+                                <span>SJC2 (144 Tbps - Under construction)</span>
+                            </div>
+                            <div class="legend-item" data-target="ame1">
+                                <div class="legend-point legend-110kv"></div>
+                                <span>AME-1 (100+ Tbps)</span>
+                            </div>
+                        </div>
+
+                        <!-- Hue Location Indicator -->
+                        <div style="position: absolute; top: 18%; left: 50.5%; transform: translate(-50%, -50%); z-index: 15;">
+                            <div style="background: #1e40af; color: white; padding: 14px 32px; border-radius: 26px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4); border: 2px solid #fbbf24; min-width: 180px; text-align: center; line-height: 1.3;">
+                                Hue - 300MW DC<br>
+                                <span style="font-size: 12px; color: #fbbf24;">80 km to Da Nang</span>
+                            </div>
+                        </div>
+
+                        <!-- Cable Landing Points -->
+                        <div class="cable-landing-point" style="position: absolute; top: 35%; left: 85%; transform: translate(-50%, -50%); z-index: 10;">
+                            <div style="width: 12px; height: 12px; background: #e74c3c; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 15px rgba(231, 76, 60, 0.6); animation: pulseEffect 2s infinite;"></div>
+                        </div>
+
+                        <div class="cable-landing-point" style="position: absolute; top: 60%; left: 75%; transform: translate(-50%, -50%); z-index: 10;">
+                            <div style="width: 12px; height: 12px; background: #3498db; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 15px rgba(52, 152, 219, 0.6); animation: pulseEffect 2s infinite 0.5s;"></div>
+                        </div>
+
+                        <div class="cable-landing-point" style="position: absolute; top: 25%; left: 70%; transform: translate(-50%, -50%); z-index: 10;">
+                            <div style="width: 12px; height: 12px; background: #9b59b6; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 15px rgba(155, 89, 182, 0.6); animation: pulseEffect 2s infinite 1s;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submarine Cable Stats -->
+            <div class="grid-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">🌊</div>
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Cable Systems</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value">980+</div>
+                    <div class="stat-label">Total Tbps Capacity</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Landing Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🌐</div>
+                    <div class="stat-value">99.99%</div>
+                    <div class="stat-label">Network Reliability</div>
+                </div>
+            </div>
+
+            <!-- Footer với branding HEART -->
+            <div style="background: rgba(30, 41, 59, 0.5); border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid rgba(56, 189, 248, 0.2); margin-top: 3rem; padding: 2rem; text-align: center;">
+                <div style="margin-bottom: 1rem;">
+                    <span style="color: #fbbf24; font-size: 1.8rem; font-weight: 900; margin-right: 1rem; text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);">**HEART**</span>
+                    <span style="color: #38bdf8; font-size: 1.2rem; font-weight: 700; text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);">POWERING AI WITH 500KV ONSITE GRID</span>
+                </div>
+                <div style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+                    © 2025 Hue Ecological AI-Robotics Town | Hue Hi-Tech Park (Project Code: HUE-DC-300MW-2024). All Rights Reserved.
+                </div>
+            </div>
         </div>
-    </div>
-    
-    <script>
-        let particlesEnabled = true;
-        let zonesEnabled = true;
-        let particleInterval;
-
-        // Initialize enhanced power grid effects - Cleaned up
-        document.addEventListener('DOMContentLoaded', function() {
-            initializePowerTransmissionNew(); // Initialize new particle system
-            initializeMapOverlayIcons(); // Khởi tạo map overlay icons
-            initializeFacilityRectangles(); // Initialize new facility rectangle interactions
-        });
-        
-        // Initialize facility rectangle interactions
-        function initializeFacilityRectangles() {
-            const facilityGroups = document.querySelectorAll('.facility-group');
-            
-            facilityGroups.forEach(group => {
-                const facilityName = group.getAttribute('data-name');
-                const facilityType = group.getAttribute('data-facility');
-                
-                // Click event for facility rectangles
-                group.addEventListener('click', function() {
-                    // Remove active class from all facilities
-                    facilityGroups.forEach(g => g.classList.remove('active'));
-                    
-                    // Add active class to clicked facility
-                    this.classList.add('active');
-                    
-                    // Show tooltip with facility information
-                    showFacilityTooltip(this, facilityName, facilityType);
-                    
-                    console.log(`Clicked facility: ${facilityName} (${facilityType})`);
-                });
-                
-                // Hover effects
-                group.addEventListener('mouseenter', function() {
-                    console.log(`Hovering: ${facilityName}`);
-                });
-            });
-        }
-        
-        // Show facility tooltip
-        function showFacilityTooltip(element, name, type) {
-            const tooltipData = {
-                'hydro-plant': 'TA TRACH HYDRO<br>POWER PLANT<br>2x10.5MW<br>Status: Generating',
-                '500kv-substation': '500kV MAIN<br>SUBSTATION<br>2x600 MVA<br>Status: Active',
-                '110kv-substation': '110kV LA SON<br>SUBSTATION<br>40MVA<br>Status: Operational',
-                'data-center': '300MW AI<br>DATA CENTER<br>300 HA<br>Status: Operational'
-            };
-            
-            const tooltipContent = tooltipData[type] || `${name}<br>Status: Active`;
-            showTooltip(element, tooltipContent);
-        }
-        
-        // Initialize new particle flow system for Power Transmission Diagram
-        function initializePowerTransmissionNew() {
-            const flowManager = new ParticleFlowManager();
-            enhanceConnectionEffects();
-            
-            // Debug: Add keyboard shortcut to restart animations
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'r' || e.key === 'R') {
-                    flowManager.restartFlow();
-                    console.log('Particle flow restarted');
-                }
-            });
-        }
-
-        // Synchronized Particle Flow System cho Power Transmission Diagram
-        class ParticleFlowManager {
-            constructor() {
-                this.animationSpeed = 4000; // 4 seconds for all particles
-                this.initializeFlow();
-            }
-
-            initializeFlow() {
-                // Synchronize all animations to same speed
-                this.synchronizeAnimations();
-                
-                // Monitor transformer connection points
-                this.monitorTransformerFlow();
-                
-                // Start power value updates
-                this.startPowerUpdates();
-            }
-
-            synchronizeAnimations() {
-                // Ensure all red particles (500kV) flow left-to-right
-                const redParticles = document.querySelectorAll('.current-dot');
-                redParticles.forEach(particle => {
-                    particle.style.animationDuration = this.animationSpeed + 'ms';
-                    particle.style.animationTimingFunction = 'linear';
-                });
-
-                // Ensure all bus and drop particles flow properly
-                const busParticles = document.querySelectorAll('.bus-particle, .drop-particle');
-                busParticles.forEach(particle => {
-                    particle.style.animationDuration = this.animationSpeed + 'ms';
-                    particle.style.animationTimingFunction = 'linear';
-                });
-                
-                // Add glow effect to connection points
-                this.enhanceConnectionPoints();
-            }
-
-            enhanceConnectionPoints() {
-                // Add glow to bus connections
-                const busConnections = document.querySelectorAll('.bus-connection');
-                busConnections.forEach(connection => {
-                    connection.style.boxShadow = '0 0 8px rgba(52, 152, 219, 0.5)';
-                });
-                
-                // Add glow to data center inputs
-                const inputs = document.querySelectorAll('.datacenter-input');
-                inputs.forEach(input => {
-                    input.style.boxShadow = '0 0 10px rgba(52, 152, 219, 0.6)';
-                    input.style.animation = 'pulse 2s ease-in-out infinite';
-                });
-            }
-
-            monitorTransformerFlow() {
-                // Enhanced pulse effect when particles reach transformers
-                const connections = document.querySelectorAll('.connection-point');
-                
-                // Pulse connections every 2 seconds to sync with particle flow
-                setInterval(() => {
-                    connections.forEach(connection => {
-                        connection.style.transform = 'scale(1.3)';
-                        connection.style.boxShadow = '0 0 20px rgba(231, 76, 60, 0.6)';
-                        setTimeout(() => {
-                            connection.style.transform = 'scale(1)';
-                            connection.style.boxShadow = 'none';
-                        }, 300);
-                    });
-                }, 2000);
-            }
-
-            startPowerUpdates() {
-                // Dynamic power value updates
-                setInterval(() => {
-                    const powerElements = ['power-01', 'power-02', 'power-03'];
-                    
-                    powerElements.forEach(id => {
-                        const element = document.getElementById(id);
-                        if (element) {
-                            const randomPower = (Math.random() * 2 + 99).toFixed(0); // 99-101MW
-                            element.textContent = randomPower + 'MW';
-                            
-                            // Flash effect when value changes
-                            element.style.color = '#00CC00';
-                            element.style.transition = 'color 0.3s ease';
-                            setTimeout(() => {
-                                element.style.color = '#00CC00';
-                            }, 200);
-                        }
-                    });
-                }, 3000);
-            }
-
-            // Method to restart all animations (for debugging)
-            restartFlow() {
-                const allParticles = document.querySelectorAll('.current-dot, .bus-particle, .drop-particle');
-                allParticles.forEach(particle => {
-                    particle.style.animationPlayState = 'paused';
-                    setTimeout(() => {
-                        particle.style.animationPlayState = 'running';
-                    }, 100);
-                });
-                
-                // Flash all connection points to show restart
-                const connections = document.querySelectorAll('.connection-point, .bus-connection, .datacenter-input');
-                connections.forEach(connection => {
-                    connection.style.boxShadow = '0 0 20px rgba(52, 152, 219, 1)';
-                    setTimeout(() => {
-                        connection.style.boxShadow = '';
-                    }, 500);
-                });
-            }
-        }
-
-        // Enhanced Connection Point Effects
-        function enhanceConnectionEffects() {
-            const connections = document.querySelectorAll('.connection-point');
-            connections.forEach(connection => {
-                // Add glow effect
-                connection.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.3)';
-                
-                // Enhanced hover effect (if needed for interaction)
-                connection.addEventListener('mouseenter', () => {
-                    connection.style.transform = 'scale(1.5)';
-                    connection.style.boxShadow = '0 0 25px rgba(231, 76, 60, 0.8)';
-                });
-                
-                connection.addEventListener('mouseleave', () => {
-                    connection.style.transform = 'scale(1)';
-                    connection.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.3)';
-                });
-            });
-        }
-        
-        // Initialize map overlay icons interactions
-        function initializeMapOverlayIcons() {
-            // 500kV Substation interaction
-            const substationIcon = document.querySelector('.icon-500kv-substation');
-            if (substationIcon) {
-                substationIcon.addEventListener('click', function() {
-                    showTooltip(this, '500kV SUBSTATION<br>2x600 MVA<br>Status: Active');
-                });
-            }
-            
-            // 110kV Substation interaction
-            const substation110Icon = document.querySelector('.icon-110kv-substation');
-            if (substation110Icon) {
-                substation110Icon.addEventListener('click', function() {
-                    showTooltip(this, '110kV LA SON<br>SUBSTATION<br>40MVA<br>Status: Operational');
-                });
-            }
-            
-            // Hydro Power Plant interaction
-            const hydroIcon = document.querySelector('.icon-hydro-plant');
-            if (hydroIcon) {
-                hydroIcon.addEventListener('click', function() {
-                    showTooltip(this, 'TA TRACH HYDRO<br>POWER PLANT<br>2x10.5MW<br>Status: Generating');
-                });
-            }
-            
-            // Data Center interaction
-            const dataCenterIcon = document.querySelector('.icon-data-center');
-            if (dataCenterIcon) {
-                dataCenterIcon.addEventListener('click', function() {
-                    showTooltip(this, '300MW AI<br>DATA CENTER<br>300 HA<br>Status: Operational');
-                });
-            }
-            
-            // Tech Park interaction
-            const techParkIcon = document.querySelector('.icon-tech-park');
-            if (techParkIcon) {
-                techParkIcon.addEventListener('click', function() {
-                    showTooltip(this, 'HUE HI-TECH PARK<br>1081 HA<br>BOUNDARY<br>Status: Active Development');
-                });
-            }
-            
-            // Transmission Points interactions
-            const transmissionPoints = document.querySelectorAll('.icon-transmission-point');
-            transmissionPoints.forEach((point, index) => {
-                point.addEventListener('click', function() {
-                    const voltage = index < 2 ? '500kV' : '220kV';
-                    showTooltip(this, `${voltage} Connection Point<br>Status: Active`);
-                });
-            });
-            
-            // Legend icons interactions
-            const legendHydro = document.querySelector('.icon-legend-hydro');
-            if (legendHydro) {
-                legendHydro.addEventListener('click', function() {
-                    showTooltip(this, 'HYDRO POWER PLANT<br>Legend Icon');
-                });
-            }
-            
-            const legend500kv = document.querySelector('.icon-legend-500kv');
-            if (legend500kv) {
-                legend500kv.addEventListener('click', function() {
-                    showTooltip(this, '500kV SUBSTATION<br>Legend Icon');
-                });
-            }
-            
-            const legend110kv = document.querySelector('.icon-legend-110kv');
-            if (legend110kv) {
-                legend110kv.addEventListener('click', function() {
-                    showTooltip(this, '110kV SUBSTATION<br>Legend Icon');
-                });
-            }
-        }
-        
-        // Show tooltip function
-        function showTooltip(element, content) {
-            // Remove existing tooltips
-            const existingTooltips = document.querySelectorAll('.map-tooltip');
-            existingTooltips.forEach(tooltip => tooltip.remove());
-            
-            // Create new tooltip
-            const tooltip = document.createElement('div');
-            tooltip.className = 'map-tooltip';
-            tooltip.innerHTML = content;
-            tooltip.style.cssText = `
-                position: absolute;
-                background: rgba(0, 0, 0, 0.9);
-                color: white;
-                padding: 10px 15px;
-                border-radius: 8px;
-                font-size: 12px;
-                line-height: 1.4;
-                z-index: 1000;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-                pointer-events: none;
-                white-space: nowrap;
-                animation: tooltipFadeIn 0.3s ease-out;
-                backdrop-filter: blur(10px);
-            `;
-            
-            // Position tooltip
-            const rect = element.getBoundingClientRect();
-            const mapRect = document.querySelector('.grid-background-map').getBoundingClientRect();
-            
-            tooltip.style.left = (rect.left - mapRect.left + rect.width / 2) + 'px';
-            tooltip.style.top = (rect.top - mapRect.top - 50) + 'px';
-            tooltip.style.transform = 'translateX(-50%)';
-            
-            // Add tooltip to map
-            document.querySelector('.grid-background-map').appendChild(tooltip);
-            
-            // Add pulse effect to clicked icon
-            element.style.animation = 'iconClickPulse 0.5s ease-out';
-            
-            // Remove tooltip after 3 seconds
-            setTimeout(() => {
-                if (tooltip.parentNode) {
-                    tooltip.style.animation = 'tooltipFadeOut 0.3s ease-out';
-                    setTimeout(() => {
-                        tooltip.remove();
-                    }, 300);
-                }
-            }, 3000);
-        }
-        
-        // Add tooltip animations
-        const tooltipStyle = document.createElement('style');
-        tooltipStyle.textContent = `
-            @keyframes tooltipFadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateX(-50%) translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(-50%) translateY(0);
-                }
-            }
-            
-            @keyframes tooltipFadeOut {
-                from {
-                    opacity: 1;
-                    transform: translateX(-50%) translateY(0);
-                }
-                to {
-                    opacity: 0;
-                    transform: translateX(-50%) translateY(-10px);
-                }
-            }
-            
-            @keyframes iconClickPulse {
-                0%, 100% { transform: translate(-50%, -50%) scale(1); }
-                50% { transform: translate(-50%, -50%) scale(1.2); }
-            }
-        `;
-        document.head.appendChild(tooltipStyle);
 
 
-
-
-
-
-
-
-
-        // POWER TRANSMISSION DIAGRAM EFFECTS
-        // Animate power values in data centers
-        function animatePowerValues() {
-            const powerValues = document.querySelectorAll('.power-value');
-            powerValues.forEach((value, index) => {
-                const basePower = index === 2 ? 101 : 99; // DATA CENTER 03 has 101MW
-                const variation = Math.floor(Math.random() * 3 - 1); // -1, 0, or 1
-                const newPower = basePower + variation;
-                value.textContent = newPower + 'MW';
-                
-                // Add flash effect for changes
-                if (variation !== 0) {
-                    value.style.color = variation > 0 ? '#27ae60' : '#e74c3c';
-                    setTimeout(() => {
-                        value.style.color = '#27ae60';
-                    }, 500);
-                }
-            });
-        }
-
-        // Connection point enhanced pulse effect
-        function enhanceConnectionPoints() {
-            const connectionPoints = document.querySelectorAll('.connection-point');
-            connectionPoints.forEach((point, index) => {
-                setTimeout(() => {
-                    point.style.transform = 'translateX(-50%) scale(1.5)';
-                    point.style.boxShadow = '0 0 25px rgba(231, 76, 60, 1)';
-                    
-                    setTimeout(() => {
-                        point.style.transform = 'translateX(-50%) scale(1)';
-                        point.style.boxShadow = '0 0 10px rgba(231, 76, 60, 0.6)';
-                    }, 300);
-                }, index * 500);
-            });
-        }
-
-        // Add dynamic transmission line effects
-        function addTransmissionEffects() {
-            const transmissionLines = document.querySelectorAll('.transmission-line-500kv');
-            transmissionLines.forEach((line, index) => {
-                // Add random intensity variations
-                setTimeout(() => {
-                    line.style.boxShadow = '0 2px 8px rgba(231, 76, 60, 0.6), 0 0 15px rgba(231, 76, 60, 0.4)';
-                    
-                    setTimeout(() => {
-                        line.style.boxShadow = '0 2px 4px rgba(231, 76, 60, 0.3)';
-                    }, 1000);
-                }, index * 300);
-            });
-        }
-
-        // Data Center interaction effects
-        function setupDataCenterInteractions() {
-            const dataCenters = document.querySelectorAll('.data-center-box');
-            dataCenters.forEach((center, index) => {
-                center.addEventListener('click', function() {
-                    // Create energy pulse effect
-                    const pulse = document.createElement('div');
-                    pulse.style.position = 'absolute';
-                    pulse.style.width = '100%';
-                    pulse.style.height = '100%';
-                    pulse.style.border = '2px solid #27ae60';
-                    pulse.style.borderRadius = '8px';
-                    pulse.style.top = '0';
-                    pulse.style.left = '0';
-                    pulse.style.animation = 'energyPulse 0.6s ease-out';
-                    pulse.style.pointerEvents = 'none';
-                    
-                    this.style.position = 'relative';
-                    this.appendChild(pulse);
-                    
-                    setTimeout(() => {
-                        pulse.remove();
-                    }, 600);
-                    
-                    // Show power info
-                    const powerInfo = `Data Center ${index + 1}: ${index === 2 ? '101MW' : '99MW'} - Operating at optimal efficiency`;
-                    console.log(powerInfo);
-                });
-            });
-        }
-
-        // Initialize power transmission when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializePowerTransmissionNew();
-            
-            console.log('✅ Power transmission system initialized');
-            
-            // Visual debugging - log transform positions
-            setTimeout(() => {
-                const hydro = document.querySelector('[data-facility="hydro-plant"]');
-                const kv110 = document.querySelector('[data-facility="110kv-substation"]');
-                const kv500 = document.querySelector('[data-facility="500kv-substation"]');
-                
-                console.log('🔵 HYDRO transform:', getComputedStyle(hydro).transform);
-                console.log('🟠 110kV transform:', getComputedStyle(kv110).transform);
-                console.log('🔴 500kV transform (reference):', getComputedStyle(kv500).transform);
-                
-                // Highlight boundaries with bright colors
-                hydro.style.boxShadow = '0 0 8px #0066ff';
-                kv110.style.boxShadow = '0 0 8px #ff6600';
-                kv500.style.boxShadow = '0 0 8px #ff0000';
-            }, 1000);
-        });
-    </script>
-    
 </body>
 </html>
