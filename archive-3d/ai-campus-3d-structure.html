@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AI Campus 3D - Khu Công Nghệ Cao</title>
+    <title>AI Campus 3D - Professional Master Plan Architecture</title>
     
     <!-- Three.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <!-- Master Plan 3D - Professional Architecture -->
+    <script src="../js/master-plan-3d.js"></script>
     
     <style>
         /* Reset CSS */
@@ -29,29 +32,31 @@
             width: 100vw;
         }
         
-        /* Container for Three.js canvas */
-        #container {
+        /* Master Plan 3D Container */
+        #threejs-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
         }
         
-        /* Loading Screen */
-        #loading-screen {
+        /* Loading Overlay - Master Plan Compatible */
+        #loadingOverlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(10, 15, 30, 0.9);
+            background-color: rgba(10, 15, 30, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
             transition: opacity 0.5s;
+            backdrop-filter: blur(10px);
         }
         
         .loading-text {
@@ -184,6 +189,93 @@
             font-size: 14px;
             margin-bottom: 5px;
         }
+
+        /* Timeline Controls for Master Plan */
+        .timeline-controls {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .timeline-item {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 2px solid #4fc3f7;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-item:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+
+        .timeline-item.active {
+            background: #4fc3f7;
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        /* View Controls */
+        .view-controls {
+            position: absolute;
+            top: 140px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .control-btn[data-view] {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 1px solid #4fc3f7;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            backdrop-filter: blur(10px);
+            min-width: 100px;
+        }
+
+        .control-btn[data-view]:hover {
+            background: rgba(79, 195, 247, 0.3);
+            transform: translateX(-2px);
+        }
+
+        .control-btn[data-view].active {
+            background: #4fc3f7;
+            color: #1a1a1a;
+        }
+
+        /* Performance Indicator */
+        .performance-indicator {
+            position: absolute;
+            top: 100px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #10b981;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            border: 1px solid #10b981;
+            z-index: 100;
+        }
         
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -209,25 +301,34 @@
     </style>
 </head>
 <body>
-    <!-- Main Container for Three.js -->
-    <div id="container"></div>
+    <!-- Master Plan 3D Container -->
+    <div id="threejs-container"></div>
     
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loading-text">Đang tải AI Campus 3D...</div>
+    <!-- Loading Overlay - Master Plan Compatible -->
+    <div id="loadingOverlay">
+        <div class="loading-text">🏗️ Đang tải Professional AI Campus Architecture...</div>
         <div class="spinner"></div>
-    </div>
-    
-    <!-- Control Panel -->
-    <div id="control-panel">
-        <h3>Điều khiển</h3>
-        <div class="control-buttons">
-            <button class="btn" id="toggle-animation">Toggle Animation</button>
-            <button class="btn" id="change-view">Change View</button>
-            <button class="btn" id="toggle-lights">Toggle Lights</button>
-            <button class="btn" id="reset-camera">Reset Camera</button>
+        <div style="margin-top: 15px; font-size: 14px; color: #4fc3f7;">
+            Master Plan 3D - High Performance Version
         </div>
     </div>
+    
+    <!-- Timeline Controls for Phase Management -->
+    <div class="timeline-controls">
+        <div class="timeline-item active" data-phase="phase1">Phase 1: Foundation</div>
+        <div class="timeline-item" data-phase="phase2">Phase 2: Expansion</div>
+        <div class="timeline-item" data-phase="phase3">Phase 3: Integration</div>
+    </div>
+
+    <!-- View Controls -->
+    <div class="view-controls">
+        <button class="control-btn active" data-view="overview">Overview</button>
+        <button class="control-btn" data-view="aerial">Aerial View</button>
+        <button class="control-btn" data-view="ground">Ground Level</button>
+    </div>
+
+    <!-- Performance Indicator -->
+    <div class="performance-indicator">60 FPS</div>
     
     <!-- Stats Panel -->
     <div id="stats-panel">
@@ -255,18 +356,162 @@
         <p>📱 Vuốt màn hình để điều khiển trên thiết bị di động</p>
     </div>
     
-    <!-- Placeholder for JavaScript (will be added later) -->
+    <!-- Master Plan 3D Integration -->
     <script>
-        // Đây chỉ là cấu trúc HTML và CSS cơ bản
-        // JavaScript logic sẽ được thêm vào sau
+        // Master Plan 3D Instance
+        let masterPlanInstance = null;
+        let isInitialized = false;
         
-        // Giả lập việc tải xong để ẩn loading screen sau 2 giây
-        setTimeout(() => {
-            document.getElementById('loading-screen').style.opacity = 0;
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.display = 'none';
-            }, 500);
-        }, 2000);
+        // Initialize Master Plan 3D
+        async function initializeMasterPlan() {
+            try {
+                console.log('🚀 Initializing Master Plan 3D Professional Architecture...');
+                
+                // Check if MasterPlan3D class is available
+                if (typeof MasterPlan3D === 'undefined') {
+                    throw new Error('MasterPlan3D class not found. Check if js/master-plan-3d.js is loaded.');
+                }
+                
+                // Create Master Plan instance
+                masterPlanInstance = new MasterPlan3D();
+                
+                // Initialize the master plan
+                await masterPlanInstance.init();
+                
+                console.log('✅ Master Plan 3D initialized successfully');
+                isInitialized = true;
+                
+                // Setup additional event listeners for UI integration
+                setupUIIntegration();
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize Master Plan 3D:', error);
+                showErrorMessage('Không thể khởi tạo 3D Campus: ' + error.message);
+            }
+        }
+        
+        // Setup UI Integration with Master Plan
+        function setupUIIntegration() {
+            // Timeline phase controls
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const phase = this.dataset.phase;
+                    
+                    // Update active state
+                    document.querySelectorAll('.timeline-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update master plan phase
+                    if (masterPlanInstance && masterPlanInstance.updatePhaseVisibility) {
+                        masterPlanInstance.updatePhaseVisibility(phase);
+                        console.log('🔄 Switched to', phase);
+                    }
+                });
+            });
+            
+            // View controls
+            document.querySelectorAll('.control-btn[data-view]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    
+                    // Update active state
+                    document.querySelectorAll('.control-btn[data-view]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update master plan camera view
+                    if (masterPlanInstance && masterPlanInstance.setCameraView) {
+                        masterPlanInstance.setCameraView(view);
+                        console.log('📷 Switched to', view, 'view');
+                    }
+                });
+            });
+        }
+        
+        // Error display function
+        function showErrorMessage(message) {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.innerHTML = `
+                    <div style="color: #ff6b6b; text-align: center; background: rgba(0,0,0,0.9); padding: 30px; border-radius: 15px;">
+                        <div style="font-size: 24px; margin-bottom: 15px;">⚠️ Lỗi Khởi Tạo</div>
+                        <div style="font-size: 16px; margin-bottom: 15px;">${message}</div>
+                        <div style="font-size: 14px; color: #ccc;">
+                            Kiểm tra Console (F12) để xem chi tiết<br>
+                            Refresh trang để thử lại
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        
+        // WebGL compatibility check
+        function checkWebGLSupport() {
+            if (!window.WebGLRenderingContext) {
+                showErrorMessage('Browser không support WebGL');
+                return false;
+            }
+            
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            
+            if (!gl) {
+                showErrorMessage('WebGL context không thể tạo');
+                return false;
+            }
+            
+            console.log('✅ WebGL supported -', gl.getParameter(gl.RENDERER));
+            return true;
+        }
+        
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🌟 DOM loaded, starting Master Plan 3D initialization...');
+            
+            try {
+                // Check WebGL support
+                if (!checkWebGLSupport()) {
+                    return;
+                }
+                
+                // Check Three.js availability
+                if (typeof THREE === 'undefined') {
+                    throw new Error('Three.js library not loaded');
+                }
+                
+                // Check Master Plan 3D class
+                if (typeof MasterPlan3D === 'undefined') {
+                    throw new Error('MasterPlan3D class not loaded. Check js/master-plan-3d.js file.');
+                }
+                
+                console.log('📚 Dependencies loaded successfully');
+                console.log('🎯 Three.js version:', THREE.REVISION);
+                
+                // Initialize Master Plan with delay for smooth loading
+                setTimeout(async () => {
+                    await initializeMasterPlan();
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Initialization failed:', error);
+                showErrorMessage('Lỗi khởi tạo: ' + error.message);
+            }
+        });
+        
+        // Handle errors
+        window.addEventListener('error', function(event) {
+            console.error('❌ Runtime error:', event.error);
+            if (!isInitialized) {
+                showErrorMessage('Lỗi runtime: ' + event.message);
+            }
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (masterPlanInstance && masterPlanInstance.handleResize) {
+                masterPlanInstance.handleResize();
+            }
+        });
     </script>
 </body>
 </html>
