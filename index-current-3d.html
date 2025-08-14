@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART Technology Park - AI Innovation Hub</title>
+    <meta name="description" content="Vietnam's premier AI Technology Park - Complete ecosystem for innovation">
+    
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #4f5bd5, #6366f1);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .rocket {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            background: #F5C842;
+            color: #4A5FD1;
+            padding: 12px 20px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(245, 200, 66, 0.2);
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item:hover {
+            background: #F2C040;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .nav-menu {
+                gap: 6px;
+            }
+            
+            .nav-item {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                justify-content: center;
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                width: 100%;
+            }
+            
+            .nav-item {
+                text-align: center;
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-menu {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-container {
+                padding: 0 15px;
+            }
+        }
+        
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 80px);
+            padding: 40px 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #4A5FD1;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+        
+        .title-underline {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #F5C842, #feca57);
+            margin-bottom: 30px;
+            border-radius: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(245, 200, 66, 0.5); }
+            to { box-shadow: 0 0 20px rgba(245, 200, 66, 0.8); }
+        }
+        
+        .section-text {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4A5FD1;
+            margin: 30px 0 15px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #F5C842, #feca57);
+            border-radius: 2px;
+        }
+        
+        .section p {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            text-align: justify;
+        }
+        
+        /* Right Sidebar */
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .sidebar-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .sidebar-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .sidebar-features {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .sidebar-features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .sidebar-features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            top: 8px;
+        }
+        
+        .cta-button {
+            background: #F5C842;
+            color: #4A5FD1;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 200, 66, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 200, 66, 0.5);
+            background: #F2C040;
+        }
+        
+        /* Responsive Main Content */
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 30px 25px;
+            }
+            
+            .page-title {
+                font-size: 2.8rem;
+            }
+            
+            .sidebar {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 0;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .content-section {
+                padding: 25px 20px;
+            }
+            
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-text {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Animation Effects */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Accessibility */
+        .nav-item:focus {
+            outline: 2px solid #ffffff;
+            outline-offset: 2px;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <div class="rocket">🚀</div>
+                    HEART
+                </a>
+                
+                <div class="nav-menu">
+                    <a href="index.html" class="nav-item">Home</a>
+                    <a href="about.html" class="nav-item">About Us</a>
+                    <a href="master-plan.html" class="nav-item">Master Plan</a>
+                    <a href="3d-smart-city.html" class="nav-item">3D Smart City</a>
+                    <a href="facilities.html" class="nav-item">Facilities</a>
+                    <a href="investment.html" class="nav-item">Investment</a>
+                    <a href="technology.html" class="nav-item">Technology</a>
+                    <a href="news.html" class="nav-item">News</a>
+                    <a href="contact.html" class="nav-item">Contact</a>
+                    <a href="login.html" class="nav-item">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-section fade-in">
+                    <h1 class="page-title">About HEART</h1>
+                    <div class="title-underline"></div>
+                    
+                    <div class="section">
+                        <p class="section-text">
+                            HEART Technology Park represents Vietnam's most ambitious leap into the future of artificial intelligence and technological innovation. Situated in the heart of Ho Chi Minh City, our 50-hectare campus is designed to be the epicenter of AI research, development, and commercialization in Southeast Asia.
+                        </p>
+                        
+                        <h2>Our Vision</h2>
+                        <p>
+                            To establish Vietnam as a global leader in artificial intelligence research and development, fostering innovation that benefits humanity while driving economic growth and technological advancement across the region.
+                        </p>
+                        
+                        <h2>Our Mission</h2>
+                        <p>
+                            We are committed to creating an ecosystem where brilliant minds collaborate to solve the world's most challenging problems through AI innovation. Our mission encompasses research excellence, talent development, and the creation of breakthrough technologies that will shape the future of industries worldwide.
+                        </p>
+                        
+                        <h2>Innovation Ecosystem</h2>
+                        <p>
+                            HEART Technology Park brings together leading researchers, innovative startups, established corporations, and venture capital in a dynamic environment designed for collaboration and breakthrough innovation. Our facilities include state-of-the-art research laboratories, modern office spaces, and cutting-edge technology infrastructure.
+                        </p>
+                        
+                        <h2>Global Impact</h2>
+                        <p>
+                            With partnerships spanning across major technology hubs in Silicon Valley, London, Tokyo, and Singapore, HEART serves as a bridge connecting Vietnamese innovation with global markets and opportunities. Our initiatives focus on developing AI solutions that address real-world challenges in healthcare, education, sustainable development, and economic growth.
+                        </p>
+                    </div>
+                </div>
+                
+                <aside class="sidebar fade-in">
+                    <h3 class="sidebar-title">HEART TECHNOLOGY</h3>
+                    <p class="sidebar-subtitle">AI Innovation Hub</p>
+                    
+                    <ul class="sidebar-features">
+                        <li>Advanced AI Research Labs</li>
+                        <li>Startup Incubation Program</li>
+                        <li>Industry Partnerships</li>
+                        <li>Global Collaboration Network</li>
+                        <li>Cutting-edge Infrastructure</li>
+                        <li>Talent Development Center</li>
+                    </ul>
+                    
+                    <a href="master-plan.html" class="cta-button">Explore Master Plan</a>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Navigation active state management
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                const href = item.getAttribute('href');
+                if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll animation for fade-in elements
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0s';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Enhanced console logging for debugging
+        console.log('🚀 HEART Technology Park - Website Loaded Successfully!');
+        console.log('📱 Responsive navigation: ✅');
+        console.log('🎨 Unified styling: ✅');
+        console.log('⚡ Interactive features: ✅');
+        console.log('🔧 Debug functions available: window.debugNavigation()');
+
+        // Debug function for navigation
+        window.debugNavigation = function() {
+            const navInfo = {
+                totalButtons: document.querySelectorAll('.nav-item').length,
+                yellowButtons: document.querySelectorAll('.nav-item:not(.campus-3d)').length,
+                greenButtons: document.querySelectorAll('.nav-item.campus-3d').length,
+                activeButton: document.querySelector('.nav-item.active')?.textContent,
+                responsiveBreakpoints: {
+                    desktop: window.innerWidth > 992,
+                    tablet: window.innerWidth <= 992 && window.innerWidth > 768,
+                    mobile: window.innerWidth <= 768
+                }
+            };
+            
+            console.log('🔍 Navigation Debug:', navInfo);
+            return navInfo;
+        };
+    </script>
+</body>
+</html>

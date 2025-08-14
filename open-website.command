@@ -1,0 +1,2 @@
+#!/bin/bash
+cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/ && pkill -f "python.*http.server" 2>/dev/null; sleep 2 && python3 -m http.server 9999 > /dev/null 2>&1 & echo "Server PID: $!" && sleep 3 && open "http://localhost:9999/" && echo "✅ Emergency server started at http://localhost:9999/"

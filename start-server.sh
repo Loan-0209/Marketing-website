@@ -1,40 +1,43 @@
 #!/bin/bash
 
-echo "🚀 Starting HEART Website Server..."
+# HEART AI Campus - Auto Start Server Script
+echo "🚀 Khởi động HEART AI Campus..."
 
-# Kill any existing servers
-pkill -f "python.*http.server" 2>/dev/null
-pkill -f "SimpleHTTPServer" 2>/dev/null
+# Kiểm tra xem đã có server chạy chưa
+if lsof -i :8000 >/dev/null 2>&1; then
+    echo "❌ Port 8000 đang được sử dụng. Dừng server cũ..."
+    pkill -f "python3 -m http.server 8000"
+    sleep 2
+fi
 
-# Try different ports
-for port in 3000 8000 8080 9000; do
-    if ! lsof -i :$port >/dev/null 2>&1; then
-        echo "✅ Port $port is available"
-        echo "🌐 Starting server on http://localhost:$port"
-        cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18
-        python3 -m http.server $port &
-        SERVER_PID=$!
-        echo "🔧 Server PID: $SERVER_PID"
-        echo "📂 Serving from: $(pwd)"
-        echo ""
-        echo "🔗 Open these URLs to test:"
-        echo "   • Main site: http://localhost:$port"
-        echo "   • Fixed login: http://localhost:$port/login-fixed-final.html?redirect=about.html"
-        echo "   • Debug login: http://localhost:$port/production-login.html?redirect=about.html"
-        echo "   • Test dashboard: http://localhost:$port/test-login-flow.html"
-        echo ""
-        echo "🛑 To stop server: kill $SERVER_PID"
-        break
-    else
-        echo "❌ Port $port is busy"
-    fi
-done
+# Chuyển đến thư mục project
+cd "$(dirname "$0")"
+echo "📁 Thư mục hiện tại: $(pwd)"
 
-# Keep script running to show server status
+# Khởi động server
+echo "🌐 Khởi động server trên http://localhost:8000"
+python3 -m http.server 8000 &
+SERVER_PID=$!
+
+# Chờ server khởi động
 sleep 2
-if ps -p $SERVER_PID > /dev/null 2>&1; then
-    echo "✅ Server is running successfully!"
-    echo "🌐 Access the website at http://localhost:$port"
+
+# Kiểm tra server có chạy không
+if ps -p $SERVER_PID > /dev/null; then
+    echo "✅ Server đã khởi động thành công!"
+    echo "🌍 Truy cập: http://localhost:8000"
+    echo "📱 3D Campus: http://localhost:8000/3d-campus-with-navigation.html"
+    
+    # Mở browser tự động
+    open http://localhost:8000
+    
+    echo ""
+    echo "💡 Để dừng server, nhấn Ctrl+C hoặc chạy:"
+    echo "   pkill -f 'python3 -m http.server 8000'"
+    
+    # Giữ script chạy
+    wait $SERVER_PID
 else
-    echo "❌ Failed to start server"
+    echo "❌ Không thể khởi động server!"
+    exit 1
 fi

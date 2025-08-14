@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔧 Debug 3D Campus Errors</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            background: #0f172a; 
+            color: #10b981; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .debug-panel { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+            border-left: 4px solid #ef4444;
+        }
+        .success { border-left-color: #10b981; }
+        .warning { border-left-color: #f59e0b; }
+        h1 { color: #3b82f6; }
+        h2 { color: #8b5cf6; }
+        #console { 
+            background: #000; 
+            color: #0f0; 
+            padding: 15px; 
+            height: 200px; 
+            overflow-y: auto; 
+            border: 1px solid #333;
+            font-size: 12px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug 3D Campus Errors</h1>
+    
+    <div class="debug-panel">
+        <h2>🚨 Error Detection</h2>
+        <button onclick="checkMainPage()">Check Main Page</button>
+        <button onclick="checkThreeJS()">Check Three.js</button>
+        <button onclick="checkConsole()">Capture Console</button>
+        <button onclick="runDiagnostics()">Full Diagnostics</button>
+    </div>
+
+    <div class="debug-panel">
+        <h2>📋 Console Output</h2>
+        <div id="console"></div>
+    </div>
+
+    <div class="debug-panel">
+        <h2>📊 Status Check</h2>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const consoleDiv = document.getElementById('console');
+        const statusDiv = document.getElementById('status');
+        
+        function log(message, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff0000' : type === 'warning' ? '#ffff00' : '#00ff00';
+            consoleDiv.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function checkMainPage() {
+            log('🔍 Checking main 3D Campus page...', 'info');
+            
+            fetch('/3d-campus-smart-city.html')
+                .then(response => {
+                    if (response.ok) {
+                        log(`✅ Page loads: ${response.status} ${response.statusText}`, 'info');
+                        return response.text();
+                    } else {
+                        log(`❌ Page error: ${response.status} ${response.statusText}`, 'error');
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                })
+                .then(html => {
+                    log(`📄 HTML content: ${html.length} characters`, 'info');
+                    
+                    // Check for key elements
+                    if (html.includes('AI3DCampusWithNav')) {
+                        log('✅ Main class found: AI3DCampusWithNav', 'info');
+                    } else {
+                        log('❌ Main class missing: AI3DCampusWithNav', 'error');
+                    }
+                    
+                    if (html.includes('createProceduralCity')) {
+                        log('✅ City creation function found', 'info');
+                    } else {
+                        log('❌ City creation function missing', 'error');
+                    }
+                    
+                    if (html.includes('canvas-container')) {
+                        log('✅ Canvas container found', 'info');
+                    } else {
+                        log('❌ Canvas container missing', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Fetch error: ${error.message}`, 'error');
+                });
+        }
+
+        function checkThreeJS() {
+            log('🔍 Checking Three.js dependencies...', 'info');
+            
+            const scripts = [
+                'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+                'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'
+            ];
+            
+            scripts.forEach(url => {
+                fetch(url, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            log(`✅ CDN available: ${url}`, 'info');
+                        } else {
+                            log(`❌ CDN error: ${url} (${response.status})`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        log(`❌ CDN unreachable: ${url}`, 'error');
+                    });
+            });
+        }
+
+        function checkConsole() {
+            log('🔍 Opening main page to capture console...', 'info');
+            
+            // Create iframe to load main page and capture errors
+            const iframe = document.createElement('iframe');
+            iframe.src = '/3d-campus-smart-city.html';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            iframe.onload = () => {
+                log('✅ Page loaded in iframe', 'info');
+                setTimeout(() => {
+                    try {
+                        const iframeWindow = iframe.contentWindow;
+                        if (iframeWindow.console && iframeWindow.console.log) {
+                            log('✅ Console accessible in iframe', 'info');
+                        }
+                        
+                        // Check if Three.js loaded
+                        if (iframeWindow.THREE) {
+                            log('✅ THREE.js loaded successfully', 'info');
+                        } else {
+                            log('❌ THREE.js not loaded', 'error');
+                        }
+                        
+                        // Check if main class exists
+                        if (iframeWindow.AI3DCampusWithNav) {
+                            log('✅ AI3DCampusWithNav class available', 'info');
+                        } else {
+                            log('❌ AI3DCampusWithNav class not found', 'error');
+                        }
+                        
+                    } catch (error) {
+                        log(`⚠️ Cross-origin restriction: ${error.message}`, 'warning');
+                    }
+                    
+                    document.body.removeChild(iframe);
+                }, 2000);
+            };
+            
+            iframe.onerror = () => {
+                log('❌ Failed to load page in iframe', 'error');
+            };
+        }
+
+        function runDiagnostics() {
+            log('🚀 Running full diagnostics...', 'info');
+            
+            checkMainPage();
+            setTimeout(() => checkThreeJS(), 1000);
+            setTimeout(() => checkConsole(), 2000);
+            
+            // Check server status
+            log('🔍 Checking server status...', 'info');
+            fetch('/')
+                .then(response => {
+                    if (response.ok) {
+                        log(`✅ Server running: localhost:8000`, 'info');
+                    } else {
+                        log(`⚠️ Server issue: ${response.status}`, 'warning');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Server unreachable: ${error.message}`, 'error');
+                });
+        }
+
+        // Override console methods to capture errors
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.error = function(...args) {
+            log(`❌ Console Error: ${args.join(' ')}`, 'error');
+            originalError.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            log(`⚠️ Console Warning: ${args.join(' ')}`, 'warning');
+            originalWarn.apply(console, args);
+        };
+
+        // Capture window errors
+        window.addEventListener('error', (e) => {
+            log(`❌ Global Error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+        });
+
+        // Initial status
+        log('🔧 Debug console ready', 'info');
+        log('👆 Click buttons above to run diagnostics', 'info');
+        
+    </script>
+</body>
+</html>

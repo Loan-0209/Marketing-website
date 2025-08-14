@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Three.js Loading</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <h1>Three.js Loading Test</h1>
+    <div id="status"></div>
+    <div id="canvas-container" style="width: 800px; height: 600px; border: 1px solid #ccc;"></div>
+
+    <script>
+        const status = document.getElementById('status');
+        
+        // Check Three.js
+        if (typeof THREE !== 'undefined') {
+            status.innerHTML += '<p style="color: green;">✅ Three.js loaded successfully</p>';
+            status.innerHTML += '<p>Three.js version: ' + THREE.REVISION + '</p>';
+        } else {
+            status.innerHTML += '<p style="color: red;">❌ Three.js NOT loaded</p>';
+        }
+        
+        // Check OrbitControls
+        setTimeout(() => {
+            if (typeof OrbitControls !== 'undefined') {
+                status.innerHTML += '<p style="color: green;">✅ OrbitControls loaded (global)</p>';
+            } else if (typeof THREE !== 'undefined' && typeof THREE.OrbitControls !== 'undefined') {
+                status.innerHTML += '<p style="color: green;">✅ OrbitControls loaded (THREE.OrbitControls)</p>';
+            } else {
+                status.innerHTML += '<p style="color: red;">❌ OrbitControls NOT loaded</p>';
+            }
+            
+            // Try to create a simple scene
+            try {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, 800/600, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer();
+                renderer.setSize(800, 600);
+                document.getElementById('canvas-container').appendChild(renderer.domElement);
+                
+                const geometry = new THREE.BoxGeometry();
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+                
+                camera.position.z = 5;
+                
+                // Try OrbitControls
+                let controls;
+                if (typeof OrbitControls !== 'undefined') {
+                    controls = new OrbitControls(camera, renderer.domElement);
+                } else if (typeof THREE.OrbitControls !== 'undefined') {
+                    controls = new THREE.OrbitControls(camera, renderer.domElement);
+                }
+                
+                function animate() {
+                    requestAnimationFrame(animate);
+                    cube.rotation.x += 0.01;
+                    cube.rotation.y += 0.01;
+                    if (controls) controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+                
+                status.innerHTML += '<p style="color: green;">✅ Scene created and rendering!</p>';
+            } catch (error) {
+                status.innerHTML += '<p style="color: red;">❌ Error creating scene: ' + error.message + '</p>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

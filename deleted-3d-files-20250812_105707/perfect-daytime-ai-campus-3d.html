@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Daytime AI Campus 3D</title>
+    
+    <!-- Three.js và các thư viện liên quan -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/stats.min.js"></script>
+    
+    <!-- Các module tùy chỉnh -->
+    <script src="buildings.js"></script>
+    <script src="bridges.js"></script>
+    <script src="led-system.js"></script>
+    <script src="reflections.js"></script>
+    <script src="particles.js"></script>
+    <script src="diagnostic-model-loader.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #87CEEB; /* Màu xanh da trời cho ban ngày */
+            font-family: Arial, sans-serif;
+        }
+        
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #87CEEB;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        #loading-bar {
+            width: 50%;
+            height: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        #loading-progress {
+            width: 0%;
+            height: 100%;
+            background-color: #0088ff;
+            transition: width 0.3s ease;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+        }
+        
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0088ff;
+        }
+        
+        button.active {
+            background-color: #00aa00;
+        }
+    </style>
+</head>
+<body>
+    <!-- Màn hình loading -->
+    <div id="loading-screen">
+        <h1>Loading Perfect Daytime AI Campus 3D</h1>
+        <div id="loading-bar">
+            <div id="loading-progress"></div>
+        </div>
+        <p id="loading-text">Initializing scene...</p>
+    </div>
+    
+    <!-- Thông tin -->
+    <div id="info">Perfect Daytime AI Campus 3D</div>
+    
+    <!-- Điều khiển -->
+    <div id="controls">
+        <button id="toggle-wireframe">Wireframe</button>
+        <button id="toggle-solid" class="active">Solid</button>
+        <button id="toggle-reflections" class="active">Reflections</button>
+        <button id="toggle-led" class="active">LED Lights</button>
+        <button id="toggle-animation" class="active">Animation</button>
+        <button id="toggle-particles" class="active">Particles</button>
+    </div>
+    
+    <script>
+        // Biến toàn cục
+        let scene, camera, renderer, controls;
+        let stats;
+        let clock;
+        let mixer, animationMixers = [];
+        let modelLoader;
+        let ledSystem;
+        let reflectionSystem;
+        let particleSystem;
+        let cubeRenderTarget, cubeCamera;
+        
+        // Cờ hiệu cho các tính năng
+        const flags = {
+            wireframe: false,
+            solid: true,
+            reflections: true,
+            led: true,
+            animation: true,
+            particles: true,
+            shadows: true
+        };
+        
+        // Khởi tạo
+        init();
+        
+        function init() {
+            // Khởi tạo scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // Màu xanh da trời cho ban ngày
+            
+            // Khởi tạo camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(30, 30, 30);
+            camera.lookAt(0, 0, 0);
+            
+            // Khởi tạo renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+            
+            // Khởi tạo controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Khởi tạo stats
+            stats = new Stats();
+            document.body.appendChild(stats.dom);
+            
+            // Khởi tạo clock
+            clock = new THREE.Clock();
+            
+            // Khởi tạo model loader
+            modelLoader = new DiagnosticModelLoader(scene);
+            
+            // Thiết lập ánh sáng ban ngày
+            setupDaytimeLighting();
+            
+            // Tạo mặt đất
+            createGround();
+            
+            // Tạo cây cối
+            createTrees();
+            
+            // Tải scene
+            loadScene();
+            
+            // Thiết lập các nút điều khiển
+            setupControlButtons();
+            
+            // Xử lý sự kiện resize
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // Bắt đầu animation loop
+            animate();
+        }
+        
+        function setupDaytimeLighting() {
+            // Ánh sáng ambient cho toàn bộ scene
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            // Ánh sáng mặt trời (directional light)
+            const sunLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            sunLight.position.set(50, 100, 50);
+            sunLight.castShadow = true;
+            
+            // Cấu hình shadow cho ánh sáng mặt trời
+            sunLight.shadow.mapSize.width = 2048;
+            sunLight.shadow.mapSize.height = 2048;
+            sunLight.shadow.camera.near = 0.5;
+            sunLight.shadow.camera.far = 500;
+            sunLight.shadow.camera.left = -100;
+            sunLight.shadow.camera.right = 100;
+            sunLight.shadow.camera.top = 100;
+            sunLight.shadow.camera.bottom = -100;
+            sunLight.shadow.bias = -0.0001;
+            
+            scene.add(sunLight);
+            
+            // Ánh sáng bổ sung từ các hướng khác để giảm bóng đổ quá mạnh
+            const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight1.position.set(-50, 50, -50);
+            scene.add(fillLight1);
+            
+            const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight2.position.set(50, 50, -50);
+            scene.add(fillLight2);
+        }
+        
+        function createGround() {
+            // Tạo mặt đất màu xanh lá cây cho ban ngày
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshStandardMaterial({
+                color: 0x4CAF50,  // Màu xanh lá cây
+                roughness: 0.8,
+                metalness: 0.2,
+                side: THREE.DoubleSide
+            });
+            
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Tạo lưới tham chiếu
+            const gridHelper = new THREE.GridHelper(200, 50, 0x000000, 0x000000);
+            gridHelper.material.opacity = 0.2;
+            gridHelper.material.transparent = true;
+            scene.add(gridHelper);
+        }
+        
+        function createTrees() {
+            // Tạo một số cây ngẫu nhiên xung quanh khu vực
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * 180 - 90;
+                const z = Math.random() * 180 - 90;
+                
+                // Không đặt cây ở trung tâm nơi có các tòa nhà
+                if (Math.abs(x) > 30 || Math.abs(z) > 30) {
+                    createTree(x, 0, z);
+                }
+            }
+        }
+        
+        function createTree(x, y, z) {
+            // Tạo thân cây
+            const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 5, 8);
+            const trunkMaterial = new THREE.MeshStandardMaterial({
+                color: 0x8B4513,  // Màu nâu
+                roughness: 0.9,
+                metalness: 0.1
+            });
+            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+            trunk.position.set(x, y + 2.5, z);
+            trunk.castShadow = true;
+            trunk.receiveShadow = true;
+            scene.add(trunk);
+            
+            // Tạo tán lá
+            const leavesGeometry = new THREE.ConeGeometry(3, 7, 8);
+            const leavesMaterial = new THREE.MeshStandardMaterial({
+                color: 0x228B22,  // Màu xanh lá đậm
+                roughness: 0.8,
+                metalness: 0.1
+            });
+            const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+            leaves.position.set(x, y + 7.5, z);
+            leaves.castShadow = true;
+            leaves.receiveShadow = true;
+            scene.add(leaves);
+        }
+        
+        function loadScene() {
+            // Hiển thị thông báo tải
+            simulateLoading(10, "Initializing scene...");
+            
+            // Tạo các tòa nhà
+            setTimeout(() => {
+                simulateLoading(30, "Creating buildings...");
+                
+                // Sử dụng hàm từ buildings.js nếu có, nếu không thì sử dụng hàm fallback
+                if (typeof createBuildings === 'function') {
+                    createBuildings(scene, modelLoader);
+                } else {
+                    // Sử dụng DiagnosticModelLoader để tạo các tòa nhà
+                    const building1 = modelLoader.createFallbackBuilding('skyscraper', 10, 30, 10);
+                    building1.position.set(-15, 0, -15);
+                    scene.add(building1);
+                    
+                    const building2 = modelLoader.createFallbackBuilding('office', 12, 20, 12);
+                    building2.position.set(15, 0, -15);
+                    scene.add(building2);
+                    
+                    const building3 = modelLoader.createFallbackBuilding('residential', 10, 25, 10);
+                    building3.position.set(15, 0, 15);
+                    scene.add(building3);
+                    
+                    const building4 = modelLoader.createFallbackBuilding('commercial', 12, 18, 12);
+                    building4.position.set(-15, 0, 15);
+                    scene.add(building4);
+                }
+                
+                // Tạo các cầu nối
+                setTimeout(() => {
+                    simulateLoading(50, "Creating bridges...");
+                    
+                    if (typeof createBridges === 'function') {
+                        createBridges(scene);
+                    }
+                    
+                    // Tạo hệ thống LED
+                    setTimeout(() => {
+                        simulateLoading(70, "Setting up LED system...");
+                        
+                        if (typeof createLEDSystem === 'function') {
+                            ledSystem = createLEDSystem(scene);
+                        }
+                        
+                        // Thiết lập phản chiếu
+                        setTimeout(() => {
+                            simulateLoading(85, "Setting up reflections...");
+                            
+                            if (typeof setupReflectionSystem === 'function') {
+                                reflectionSystem = setupReflectionSystem(scene, renderer);
+                            } else {
+                                reflectionSystem = setupReflections();
+                            }
+                            
+                            // Tạo hệ thống hạt
+                            setTimeout(() => {
+                                simulateLoading(95, "Creating particle effects...");
+                                
+                                if (typeof createParticleSystem === 'function') {
+                                    particleSystem = createParticleSystem(scene);
+                                }
+                                
+                                // Hoàn thành
+                                setTimeout(() => {
+                                    simulateLoading(100, "Loading complete!");
+                                    finishLoading();
+                                }, 500);
+                            }, 500);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+        
+        function setupReflections() {
+            // Tạo cube camera cho phản chiếu
+            const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
+                format: THREE.RGBFormat,
+                generateMipmaps: true,
+                minFilter: THREE.LinearMipmapLinearFilter
+            });
+            
+            const cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget);
+            cubeCamera.position.set(0, 10, 0);
+            scene.add(cubeCamera);
+            
+            // Áp dụng texture phản chiếu cho các vật liệu
+            scene.traverse((object) => {
+                if (object.isMesh && object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            if (mat.type.includes('Physical') || mat.type.includes('Standard')) {
+                                mat.envMap = cubeRenderTarget.texture;
+                                mat.envMapIntensity = 1;
+                                mat.needsUpdate = true;
+                            }
+                        });
+                    } else if (object.material.type.includes('Physical') || object.material.type.includes('Standard')) {
+                        object.material.envMap = cubeRenderTarget.texture;
+                        object.material.envMapIntensity = 1;
+                        object.material.needsUpdate = true;
+                    }
+                }
+            });
+            
+            // Trả về đối tượng reflectionSystem
+            return {
+                cubeCamera: cubeCamera,
+                cubeRenderTarget: cubeRenderTarget,
+                update: function() {
+                    // Ẩn các đối tượng phản chiếu tạm thời để tránh phản chiếu vô hạn
+                    const reflectiveObjects = [];
+                    scene.traverse((object) => {
+                        if (object.isMesh && object.material && object.material.envMap) {
+                            reflectiveObjects.push({
+                                object: object,
+                                visible: object.visible
+                            });
+                            object.visible = false;
+                        }
+                    });
+                    
+                    // Cập nhật cube camera
+                    cubeCamera.update(renderer, scene);
+                    
+                    // Khôi phục hiển thị các đối tượng phản chiếu
+                    reflectiveObjects.forEach(item => {
+                        item.object.visible = item.visible;
+                    });
+                }
+            };
+        }
+        
+        function simulateLoading(progress, text) {
+            document.getElementById('loading-progress').style.width = progress + '%';
+            document.getElementById('loading-text').textContent = text;
+        }
+        
+        function finishLoading() {
+            // Ẩn màn hình loading
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.transition = 'opacity 1s ease';
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 1000);
+            
+            // Cập nhật trạng thái ban đầu của các vật liệu
+            updateMaterials();
+        }
+        
+        function setupControlButtons() {
+            document.getElementById('toggle-wireframe').addEventListener('click', function() {
+                flags.wireframe = !flags.wireframe;
+                this.classList.toggle('active');
+                updateMaterials();
+            });
+            
+            document.getElementById('toggle-solid').addEventListener('click', function() {
+                flags.solid = !flags.solid;
+                this.classList.toggle('active');
+                updateMaterials();
+            });
+            
+            document.getElementById('toggle-reflections').addEventListener('click', function() {
+                flags.reflections = !flags.reflections;
+                this.classList.toggle('active');
+                
+                // Bật/tắt phản chiếu trên các vật liệu
+                scene.traverse((object) => {
+                    if (object.isMesh && object.material) {
+                        if (Array.isArray(object.material)) {
+                            object.material.forEach(mat => {
+                                if (mat.envMap) {
+                                    mat.envMapIntensity = flags.reflections ? 1 : 0;
+                                    mat.needsUpdate = true;
+                                }
+                            });
+                        } else if (object.material.envMap) {
+                            object.material.envMapIntensity = flags.reflections ? 1 : 0;
+                            object.material.needsUpdate = true;
+                        }
+                    }
+                });
+            });
+            
+            document.getElementById('toggle-led').addEventListener('click', function() {
+                flags.led = !flags.led;
+                this.classList.toggle('active');
+                
+                // Bật/tắt hệ thống LED
+                if (ledSystem) {
+                    if (typeof ledSystem.setVisible === 'function') {
+                        ledSystem.setVisible(flags.led);
+                    } else if (ledSystem.visible !== undefined) {
+                        ledSystem.visible = flags.led;
+                    }
+                }
+            });
+            
+            document.getElementById('toggle-animation').addEventListener('click', function() {
+                flags.animation = !flags.animation;
+                this.classList.toggle('active');
+            });
+            
+            document.getElementById('toggle-particles').addEventListener('click', function() {
+                flags.particles = !flags.particles;
+                this.classList.toggle('active');
+                
+                // Bật/tắt hệ thống hạt
+                if (particleSystem) {
+                    if (typeof particleSystem.setVisible === 'function') {
+                        particleSystem.setVisible(flags.particles);
+                    } else if (particleSystem.visible !== undefined) {
+                        particleSystem.visible = flags.particles;
+                    }
+                }
+            });
+        }
+        
+        function updateMaterials() {
+            // Cập nhật tất cả các vật liệu trong scene
+            scene.traverse(function(object) {
+                if (object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach(mat => {
+                            if (mat.wireframe !== undefined) {
+                                mat.wireframe = flags.wireframe;
+                            }
+                            if (mat.transparent !== undefined) {
+                                mat.transparent = flags.solid ? true : false;
+                                mat.opacity = flags.solid ? (mat.userData.originalOpacity || 0.8) : 0.3;
+                            }
+                        });
+                    } else if (object.material.wireframe !== undefined) {
+                        object.material.wireframe = flags.wireframe;
+                        if (object.material.transparent !== undefined) {
+                            object.material.transparent = flags.solid ? true : false;
+                            object.material.opacity = flags.solid ? (object.material.userData.originalOpacity || 0.8) : 0.3;
+                        }
+                    }
+                }
+            });
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const delta = clock.getDelta();
+            
+            // Cập nhật controls
+            controls.update();
+            
+            // Cập nhật animation mixers
+            if (flags.animation) {
+                if (mixer) {
+                    mixer.update(delta);
+                }
+                
+                animationMixers.forEach(mixer => {
+                    if (mixer && mixer.update) {
+                        mixer.update(delta);
+                    }
+                });
+            }
+            
+            // Cập nhật hệ thống LED
+            if (flags.led && ledSystem && ledSystem.update) {
+                ledSystem.update(delta);
+            }
+            
+            // Cập nhật hệ thống phản chiếu
+            if (flags.reflections && reflectionSystem && reflectionSystem.update) {
+                reflectionSystem.update();
+            }
+            
+            // Cập nhật hệ thống hạt
+            if (flags.particles && particleSystem && particleSystem.update) {
+                particleSystem.update(delta);
+            }
+            
+            // Cập nhật stats
+            stats.update();
+            
+            // Render scene
+            renderer.render(scene, camera);
+        }
+    </script>
+    
+    <!-- Tích hợp force-render-loop.js để đảm bảo render liên tục -->
+    <script src="force-render-loop.js"></script>
+</body>
+</html>

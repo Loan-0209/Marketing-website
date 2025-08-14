@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Emergency Diagnostic</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f0f0f0; 
+        }
+        .diagnostic { 
+            background: white; 
+            padding: 20px; 
+            margin: 10px 0; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        .pass { color: #16a085; font-weight: bold; }
+        .fail { color: #e74c3c; font-weight: bold; }
+        .warn { color: #f39c12; font-weight: bold; }
+        pre { 
+            background: #f8f9fa; 
+            padding: 10px; 
+            border-radius: 4px; 
+            overflow-x: auto; 
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2980b9; }
+        #canvas { border: 1px solid #ddd; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔍 WebGL Emergency Diagnostic Tool</h1>
+    
+    <div class="diagnostic">
+        <h2>Basic WebGL Support</h2>
+        <div id="webgl-support"></div>
+    </div>
+    
+    <div class="diagnostic">
+        <h2>Browser Information</h2>
+        <div id="browser-info"></div>
+    </div>
+    
+    <div class="diagnostic">
+        <h2>WebGL Context Test</h2>
+        <div id="context-test"></div>
+        <canvas id="canvas" width="400" height="300"></canvas>
+    </div>
+    
+    <div class="diagnostic">
+        <h2>Three.js Loading Test</h2>
+        <div id="threejs-test"></div>
+        <button onclick="testThreeJS()">Test Three.js Loading</button>
+    </div>
+    
+    <div class="diagnostic">
+        <h2>Performance Information</h2>
+        <div id="performance-info"></div>
+    </div>
+    
+    <div class="diagnostic">
+        <h2>System Diagnostics</h2>
+        <div id="system-diagnostics"></div>
+    </div>
+
+    <script>
+        // Browser info
+        function getBrowserInfo() {
+            const nav = navigator;
+            return {
+                userAgent: nav.userAgent,
+                platform: nav.platform,
+                language: nav.language,
+                cookieEnabled: nav.cookieEnabled,
+                onLine: nav.onLine,
+                hardwareConcurrency: nav.hardwareConcurrency
+            };
+        }
+
+        // WebGL support check
+        function checkWebGLSupport() {
+            const result = document.getElementById('webgl-support');
+            
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const gl2 = canvas.getContext('webgl2');
+                
+                if (gl) {
+                    result.innerHTML = `
+                        <p class="pass">✅ WebGL 1.0: Supported</p>
+                        <p class="${gl2 ? 'pass' : 'warn'}">${gl2 ? '✅' : '⚠️'} WebGL 2.0: ${gl2 ? 'Supported' : 'Not Supported'}</p>
+                        <p><strong>Vendor:</strong> ${gl.getParameter(gl.VENDOR)}</p>
+                        <p><strong>Renderer:</strong> ${gl.getParameter(gl.RENDERER)}</p>
+                        <p><strong>Version:</strong> ${gl.getParameter(gl.VERSION)}</p>
+                        <p><strong>Shading Language:</strong> ${gl.getParameter(gl.SHADING_LANGUAGE_VERSION)}</p>
+                    `;
+                } else {
+                    result.innerHTML = '<p class="fail">❌ WebGL: Not Supported</p>';
+                }
+            } catch (e) {
+                result.innerHTML = `<p class="fail">❌ WebGL Error: ${e.message}</p>`;
+            }
+        }
+
+        // WebGL context test
+        function testWebGLContext() {
+            const result = document.getElementById('context-test');
+            const canvas = document.getElementById('canvas');
+            
+            try {
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                
+                if (!gl) {
+                    result.innerHTML = '<p class="fail">❌ Cannot create WebGL context</p>';
+                    return;
+                }
+
+                // Create a simple shader
+                const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+                gl.shaderSource(vertexShader, `
+                    attribute vec2 position;
+                    void main() {
+                        gl_Position = vec4(position, 0.0, 1.0);
+                    }
+                `);
+                gl.compileShader(vertexShader);
+
+                const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+                gl.shaderSource(fragmentShader, `
+                    precision mediump float;
+                    void main() {
+                        gl_FragColor = vec4(0.2, 0.8, 0.2, 1.0);
+                    }
+                `);
+                gl.compileShader(fragmentShader);
+
+                // Create program
+                const program = gl.createProgram();
+                gl.attachShader(program, vertexShader);
+                gl.attachShader(program, fragmentShader);
+                gl.linkProgram(program);
+
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    throw new Error('Shader program failed to link');
+                }
+
+                // Draw a triangle
+                const vertices = new Float32Array([
+                    -0.5, -0.5,
+                     0.5, -0.5,
+                     0.0,  0.5
+                ]);
+
+                const buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+                gl.useProgram(program);
+                const positionLocation = gl.getAttribLocation(program, 'position');
+                gl.enableVertexAttribArray(positionLocation);
+                gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+                gl.clearColor(0.1, 0.1, 0.3, 1.0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+                result.innerHTML = '<p class="pass">✅ WebGL context and rendering: Working</p>';
+            } catch (e) {
+                result.innerHTML = `<p class="fail">❌ WebGL Context Error: ${e.message}</p>`;
+            }
+        }
+
+        // Test Three.js loading
+        function testThreeJS() {
+            const result = document.getElementById('threejs-test');
+            result.innerHTML = '<p>Loading Three.js...</p>';
+            
+            // Load Three.js
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/three@0.157.0/build/three.min.js';
+            script.onload = function() {
+                if (typeof THREE !== 'undefined') {
+                    result.innerHTML = `
+                        <p class="pass">✅ Three.js: Loaded successfully</p>
+                        <p><strong>Version:</strong> ${THREE.REVISION}</p>
+                    `;
+                    
+                    // Test basic Three.js functionality
+                    try {
+                        const scene = new THREE.Scene();
+                        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                        const renderer = new THREE.WebGLRenderer();
+                        
+                        result.innerHTML += '<p class="pass">✅ Three.js basic objects: Created successfully</p>';
+                        
+                        // Cleanup
+                        renderer.dispose();
+                    } catch (e) {
+                        result.innerHTML += `<p class="fail">❌ Three.js Error: ${e.message}</p>`;
+                    }
+                } else {
+                    result.innerHTML = '<p class="fail">❌ Three.js: Failed to load</p>';
+                }
+            };
+            script.onerror = function() {
+                result.innerHTML = '<p class="fail">❌ Three.js: Failed to load from CDN</p>';
+            };
+            document.head.appendChild(script);
+        }
+
+        // Performance info
+        function getPerformanceInfo() {
+            const result = document.getElementById('performance-info');
+            
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl');
+                
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    const memoryInfo = performance.memory;
+                    
+                    let html = '<h3>GPU Information</h3>';
+                    if (debugInfo) {
+                        html += `
+                            <p><strong>GPU Vendor:</strong> ${gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)}</p>
+                            <p><strong>GPU Renderer:</strong> ${gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)}</p>
+                        `;
+                    } else {
+                        html += '<p class="warn">⚠️ Detailed GPU info not available</p>';
+                    }
+                    
+                    html += '<h3>Memory Information</h3>';
+                    if (memoryInfo) {
+                        html += `
+                            <p><strong>Used Memory:</strong> ${(memoryInfo.usedJSHeapSize / 1048576).toFixed(2)} MB</p>
+                            <p><strong>Total Memory:</strong> ${(memoryInfo.totalJSHeapSize / 1048576).toFixed(2)} MB</p>
+                            <p><strong>Memory Limit:</strong> ${(memoryInfo.jsHeapSizeLimit / 1048576).toFixed(2)} MB</p>
+                        `;
+                    } else {
+                        html += '<p class="warn">⚠️ Memory info not available</p>';
+                    }
+                    
+                    // WebGL limits
+                    html += '<h3>WebGL Limits</h3>';
+                    html += `
+                        <p><strong>Max Texture Size:</strong> ${gl.getParameter(gl.MAX_TEXTURE_SIZE)}</p>
+                        <p><strong>Max Renderbuffer Size:</strong> ${gl.getParameter(gl.MAX_RENDERBUFFER_SIZE)}</p>
+                        <p><strong>Max Vertex Attributes:</strong> ${gl.getParameter(gl.MAX_VERTEX_ATTRIBS)}</p>
+                        <p><strong>Max Varying Vectors:</strong> ${gl.getParameter(gl.MAX_VARYING_VECTORS)}</p>
+                    `;
+                    
+                    result.innerHTML = html;
+                } else {
+                    result.innerHTML = '<p class="fail">❌ Cannot get performance info: WebGL not available</p>';
+                }
+            } catch (e) {
+                result.innerHTML = `<p class="fail">❌ Performance Error: ${e.message}</p>`;
+            }
+        }
+
+        // System diagnostics
+        function getSystemDiagnostics() {
+            const result = document.getElementById('system-diagnostics');
+            
+            const diagnostics = {
+                timestamp: new Date().toISOString(),
+                url: window.location.href,
+                screen: {
+                    width: screen.width,
+                    height: screen.height,
+                    colorDepth: screen.colorDepth,
+                    pixelDepth: screen.pixelDepth
+                },
+                window: {
+                    innerWidth: window.innerWidth,
+                    innerHeight: window.innerHeight,
+                    devicePixelRatio: window.devicePixelRatio
+                },
+                support: {
+                    webgl: !!window.WebGLRenderingContext,
+                    webgl2: !!window.WebGL2RenderingContext,
+                    worker: !!window.Worker,
+                    webAssembly: !!window.WebAssembly
+                }
+            };
+            
+            result.innerHTML = `<pre>${JSON.stringify(diagnostics, null, 2)}</pre>`;
+        }
+
+        // Run all diagnostics
+        function runAllDiagnostics() {
+            // Browser info
+            const browserInfo = getBrowserInfo();
+            document.getElementById('browser-info').innerHTML = `<pre>${JSON.stringify(browserInfo, null, 2)}</pre>`;
+            
+            // Run tests
+            checkWebGLSupport();
+            testWebGLContext();
+            getPerformanceInfo();
+            getSystemDiagnostics();
+        }
+
+        // Run diagnostics when page loads
+        window.addEventListener('load', runAllDiagnostics);
+        
+        // Export diagnostic data
+        window.exportDiagnostics = function() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                browser: getBrowserInfo(),
+                webglSupport: document.getElementById('webgl-support').textContent,
+                contextTest: document.getElementById('context-test').textContent,
+                performance: document.getElementById('performance-info').textContent
+            };
+            
+            console.log('🔍 Complete Diagnostic Data:', data);
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'webgl-diagnostic.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        console.log('🔍 WebGL Diagnostic Tool Ready. Call window.exportDiagnostics() to download full report.');
+    </script>
+</body>
+</html>

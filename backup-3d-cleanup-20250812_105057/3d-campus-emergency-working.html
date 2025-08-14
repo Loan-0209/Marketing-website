@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Smart City Campus - HEART Data Center</title>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f0f8ff;
+            font-family: Arial, sans-serif;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .stats-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            z-index: 100;
+        }
+
+        .control-buttons {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #059669;
+        }
+
+        .error-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="stats-panel">
+        <h3 style="margin: 0 0 10px 0;">3D Campus Stats</h3>
+        <div>FPS: <span id="fps">60</span></div>
+        <div>Objects: <span id="objects">0</span></div>
+        <div>Status: <span id="status">Initializing...</span></div>
+    </div>
+
+    <div class="control-buttons">
+        <button onclick="resetScene()">Reset Scene</button>
+        <button onclick="toggleBuildings()">Toggle Buildings</button>
+        <button onclick="changeView()">Change View</button>
+    </div>
+
+    <div class="error-message" id="error-message">
+        <h3>Error Loading 3D Scene</h3>
+        <p id="error-detail">Unknown error occurred</p>
+    </div>
+
+    <script>
+        // Global variables
+        let scene, camera, renderer, controls;
+        let buildings = [];
+        let currentView = 0;
+        let buildingsVisible = true;
+        let frameCount = 0;
+        let lastTime = Date.now();
+
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e);
+            showError(e.message);
+        });
+
+        function showError(message) {
+            document.getElementById('error-detail').textContent = message;
+            document.getElementById('error-message').style.display = 'block';
+            document.getElementById('status').textContent = 'Error';
+        }
+
+        // Initialize scene
+        function init() {
+            try {
+                console.log('Initializing 3D scene...');
+                document.getElementById('status').textContent = 'Loading...';
+
+                // Check if Three.js is loaded
+                if (typeof THREE === 'undefined') {
+                    throw new Error('Three.js not loaded');
+                }
+
+                // Create scene
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xf0f8ff);
+
+                // Create camera
+                const container = document.getElementById('canvas-container');
+                camera = new THREE.PerspectiveCamera(
+                    75,
+                    container.clientWidth / container.clientHeight,
+                    0.1,
+                    1000
+                );
+                camera.position.set(100, 80, 100);
+                camera.lookAt(0, 0, 0);
+
+                // Create renderer
+                renderer = new THREE.WebGLRenderer({ 
+                    antialias: true,
+                    alpha: true 
+                });
+                renderer.setSize(container.clientWidth, container.clientHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                container.appendChild(renderer.domElement);
+
+                // Add lights
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(50, 100, 50);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.camera.near = 0.1;
+                directionalLight.shadow.camera.far = 500;
+                directionalLight.shadow.camera.left = -100;
+                directionalLight.shadow.camera.right = 100;
+                directionalLight.shadow.camera.top = 100;
+                directionalLight.shadow.camera.bottom = -100;
+                scene.add(directionalLight);
+
+                // Create controls
+                if (typeof THREE.OrbitControls !== 'undefined') {
+                    controls = new THREE.OrbitControls(camera, renderer.domElement);
+                    controls.enableDamping = true;
+                    controls.dampingFactor = 0.05;
+                    controls.minDistance = 30;
+                    controls.maxDistance = 300;
+                }
+
+                // Create ground
+                const groundGeometry = new THREE.PlaneGeometry(200, 200);
+                const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xe8e8e8 });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                scene.add(ground);
+
+                // Create grid
+                const gridHelper = new THREE.GridHelper(200, 20, 0x888888, 0xcccccc);
+                scene.add(gridHelper);
+
+                // Create buildings
+                createBuildings();
+
+                // Start animation
+                animate();
+
+                // Update status
+                document.getElementById('status').textContent = 'Running';
+                updateStats();
+
+                console.log('Scene initialized successfully');
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showError(error.message);
+            }
+        }
+
+        // Create simple buildings
+        function createBuildings() {
+            const colors = [0x4a90e2, 0xe74c3c, 0xf39c12, 0x9b59b6, 0x2ecc71, 0x34495e];
+            
+            for (let i = 0; i < 12; i++) {
+                const width = 10 + Math.random() * 10;
+                const height = 20 + Math.random() * 40;
+                const depth = 10 + Math.random() * 10;
+                
+                const geometry = new THREE.BoxGeometry(width, height, depth);
+                const material = new THREE.MeshLambertMaterial({ 
+                    color: colors[i % colors.length] 
+                });
+                
+                const building = new THREE.Mesh(geometry, material);
+                building.position.set(
+                    (Math.random() - 0.5) * 150,
+                    height / 2,
+                    (Math.random() - 0.5) * 150
+                );
+                building.castShadow = true;
+                building.receiveShadow = true;
+                
+                scene.add(building);
+                buildings.push(building);
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            try {
+                requestAnimationFrame(animate);
+
+                // Update controls
+                if (controls) {
+                    controls.update();
+                }
+
+                // Simple rotation animation
+                buildings.forEach((building, index) => {
+                    building.rotation.y += 0.001 * (index % 2 === 0 ? 1 : -1);
+                });
+
+                // Render scene
+                renderer.render(scene, camera);
+
+                // Update FPS
+                frameCount++;
+                const currentTime = Date.now();
+                if (currentTime - lastTime > 1000) {
+                    document.getElementById('fps').textContent = frameCount;
+                    frameCount = 0;
+                    lastTime = currentTime;
+                }
+
+            } catch (error) {
+                console.error('Animation error:', error);
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            let objectCount = 0;
+            scene.traverse(() => objectCount++);
+            document.getElementById('objects').textContent = objectCount;
+        }
+
+        // Control functions
+        function resetScene() {
+            // Remove all buildings
+            buildings.forEach(building => {
+                scene.remove(building);
+                if (building.geometry) building.geometry.dispose();
+                if (building.material) building.material.dispose();
+            });
+            buildings = [];
+
+            // Recreate buildings
+            createBuildings();
+            updateStats();
+        }
+
+        function toggleBuildings() {
+            buildingsVisible = !buildingsVisible;
+            buildings.forEach(building => {
+                building.visible = buildingsVisible;
+            });
+            updateStats();
+        }
+
+        function changeView() {
+            currentView = (currentView + 1) % 3;
+            switch(currentView) {
+                case 0:
+                    camera.position.set(100, 80, 100);
+                    break;
+                case 1:
+                    camera.position.set(0, 150, 0);
+                    break;
+                case 2:
+                    camera.position.set(150, 50, 0);
+                    break;
+            }
+            camera.lookAt(0, 0, 0);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Start when page loads
+        window.addEventListener('load', () => {
+            setTimeout(init, 100); // Small delay to ensure everything is loaded
+        });
+
+        // Fallback if load event doesn't fire
+        setTimeout(() => {
+            if (!scene) {
+                console.log('Fallback initialization...');
+                init();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

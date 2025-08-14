@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEART - Data Center (Standalone)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+        .nav a:hover, .nav a.active {
+            background: rgba(255,255,255,0.2);
+        }
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 30px;
+            font-weight: bold;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            to { text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        }
+        .hero p {
+            font-size: 1.3em;
+            margin-bottom: 50px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #f59e0b;
+            color: white;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.9);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid #00ff00;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .section {
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+        .feature h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .success-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,255,0,0.9);
+            color: black;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; flex-direction: column; gap: 20px; }
+            .nav { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .hero h1 { font-size: 2.5em; }
+            .buttons { flex-direction: column; align-items: center; }
+            .section { padding: 40px 20px; }
+            .status { font-size: 10px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="status">
+        ✅ STANDALONE MODE<br>
+        📁 FILE PROTOCOL<br>
+        🌐 NETWORK BYPASS<br>
+        🚀 NO SERVER REQUIRED
+    </div>
+    
+    <header class="header">
+        <div class="logo">
+            🚀 HEART
+        </div>
+        <nav class="nav">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#masterplan">Master Plan</a>
+            <a href="#campus">3D Campus</a>
+            <a href="#facilities">Facilities</a>
+            <a href="#investment">Investment</a>
+            <a href="#technology">Technology</a>
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    
+    <main id="home" class="hero">
+        <h1>HEART</h1>
+        <p>
+            Vietnam's First 300MW AI-Optimized Hyperscale Data Center<br>
+            Strategically positioned in Central Vietnam with 500kV onsite grid and<br>
+            international connectivity for global AI workloads
+        </p>
+        
+        <div class="buttons">
+            <a href="#about" class="btn btn-primary">Explore Our Vision</a>
+            <a href="#masterplan" class="btn btn-secondary">View Master Plan</a>
+        </div>
+    </main>
+    
+    <section id="about" class="section">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">About HEART Project</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>🏗️ 300MW Capacity</h3>
+                <p>Massive hyperscale data center designed for AI workloads with unprecedented power capacity for Southeast Asia.</p>
+            </div>
+            <div class="feature">
+                <h3>🤖 AI-Optimized</h3>
+                <p>Purpose-built infrastructure optimized for artificial intelligence and machine learning applications.</p>
+            </div>
+            <div class="feature">
+                <h3>🌍 Strategic Location</h3>
+                <p>Located in Hue Hi-Tech State-owned Park with excellent connectivity and infrastructure.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="masterplan" class="section">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">Master Plan Development</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>📋 Phase 1: Foundation</h3>
+                <p>Initial infrastructure, administration buildings, and core data center facilities with foundational power systems.</p>
+            </div>
+            <div class="feature">
+                <h3>🚀 Phase 2: Expansion</h3>
+                <p>Additional data halls, startup incubators, commercial facilities, and enhanced connectivity infrastructure.</p>
+            </div>
+            <div class="feature">
+                <h3>🌐 Phase 3: Integration</h3>
+                <p>Complete ecosystem with residential areas, transport hub, energy optimization, and full campus integration.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="campus" class="section">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">3D Campus Visualization</h2>
+        <p style="text-align: center; font-size: 1.2em; margin-bottom: 30px;">
+            Experience our virtual campus in immersive 3D with interactive master plan visualization
+        </p>
+        <div style="text-align: center;">
+            <div class="feature" style="display: inline-block; max-width: 500px;">
+                <h3>🏛️ Virtual Campus Tour</h3>
+                <p>Interactive 3D model showcasing the complete HEART development with realistic building layouts, infrastructure connections, and environmental integration.</p>
+                <br>
+                <a href="3d-campus-interactive.html" class="btn btn-primary" style="margin: 5px;">Launch 3D Campus</a>
+                <a href="project-dashboard.html" class="btn btn-secondary" style="margin: 5px;">Project Dashboard</a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="facilities" class="section">
+        <h2 style="text-align: center; font-size: 2.5em; margin-bottom: 30px;">World-Class Facilities</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>⚡ 500kV Grid Connection</h3>
+                <p>Direct connection to Vietnam's national power grid ensuring 99.99% uptime and reliable electricity supply for continuous AI operations.</p>
+            </div>
+            <div class="feature">
+                <h3>🌐 International Connectivity</h3>
+                <p>Multiple submarine cable landings, terrestrial fiber connections, and low-latency links to major global internet exchanges.</p>
+            </div>
+            <div class="feature">
+                <h3>❄️ Advanced Cooling Systems</h3>
+                <p>State-of-the-art liquid cooling and environmental control systems optimized for tropical climate efficiency and sustainability.</p>
+            </div>
+        </div>
+    </section>
+    
+    <div class="success-message" id="successMessage" style="display: none;">
+        🎉 HEART Website Loaded Successfully - File Protocol Mode!
+    </div>
+    
+    <script>
+        console.log('🏠 HEART Standalone Website loaded successfully!');
+        console.log('📁 Running in file:// protocol mode');
+        console.log('✅ All network issues bypassed');
+        console.log('🌐 Current URL:', window.location.href);
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Smooth scroll to section
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Status indicator with live updates
+        setInterval(() => {
+            const status = document.getElementById('status');
+            const time = new Date().toLocaleTimeString();
+            status.innerHTML = `✅ STANDALONE MODE<br>📁 FILE PROTOCOL<br>🌐 NETWORK BYPASS<br>🚀 NO SERVER REQUIRED<br>⏰ ${time}`;
+        }, 1000);
+        
+        // Show success message
+        setTimeout(() => {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 4000);
+            
+            // Also show alert
+            alert('🎉 HEART Website Successfully Loaded!\n\n✅ Running in standalone mode\n📁 Using file:// protocol\n🌐 Network bypass successful\n🚀 No server required!\n\nYou can now navigate through all sections using the menu above.');
+        }, 1500);
+        
+        // Add click tracking for all buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                console.log('🔗 Button clicked:', this.textContent);
+                
+                // If it's an external link, show info
+                if (this.href && (this.href.includes('.html') || this.href.includes('dashboard'))) {
+                    e.preventDefault();
+                    alert(`🔗 Navigation to: ${this.textContent}\n\nIn the full project, this would open:\n${this.href}\n\nNote: This standalone version focuses on the main website content.`);
+                }
+            });
+        });
+        
+        // Add scroll spy effect
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section, main');
+            const navLinks = document.querySelectorAll('.nav a');
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    const id = section.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

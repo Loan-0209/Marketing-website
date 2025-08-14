@@ -1,0 +1,68 @@
+FOG-RELATED LINES IN 3d-campus-smart-city-complete.html:
+
+Based on my search through the file, here are all the fog-related lines I found:
+
+1. Line 495: // REMOVED: this.scene.fog = new THREE.Fog(0x87CEEB, 100, 400); // Fog effect disabled for crystal clear view
+   - This is a COMMENT showing that fog was already removed
+
+2. Line 3368: // FOG VERIFICATION SYSTEM
+   - This is a comment header for the fog verification system
+
+3. Line 3370: window.verifyNoFog = function() {
+   - Function name that verifies no fog exists
+
+4. Line 3371: console.log('🌫️ VERIFYING FOG REMOVAL...');
+   - Console log message
+
+5. Line 3373: let fogFound = 0;
+   - Variable name
+
+6. Line 3375: if (window.scene && window.scene.fog) {
+   - Checking if window.scene.fog exists
+
+7. Line 3376: console.log('⚠️ Main scene still has fog - removing...');
+   - Console log message
+
+8. Line 3377: window.scene.fog = null;
+   - Setting fog to null
+
+9. Line 3378: fogFound++;
+   - Incrementing counter
+
+10. Line 3381: if (window.campus && window.campus.scene && window.campus.scene.fog) {
+    - Checking if window.campus.scene.fog exists
+
+11. Line 3382: console.log('⚠️ Campus scene still has fog - removing...');
+    - Console log message
+
+12. Line 3383: window.campus.scene.fog = null;
+    - Setting fog to null
+
+13. Line 3384: fogFound++;
+    - Incrementing counter
+
+14. Line 3387: if (fogFound === 0) {
+    - Checking if no fog was found
+
+15. Line 3388: console.log('✅ VERIFICATION PASSED - No fog detected');
+    - Console log message
+
+16. Line 3413: console.log(`🔧 Fixed ${fogFound} remaining fog effects`);
+    - Console log message
+
+17. Line 3416: return fogFound === 0;
+    - Return statement
+
+18. Line 3421: if (window.verifyNoFog) {
+    - Calling the verification function
+
+19. Line 3422: window.verifyNoFog();
+    - Function call
+
+SUMMARY:
+- The fog was already disabled (line 495 shows it's commented out)
+- There's a verification system in place (lines 3370-3417) that checks and removes any fog
+- The verification runs automatically after 3 seconds
+- No active fog creation code was found - all fog references are either:
+  1. Comments showing fog was removed
+  2. Code to verify and remove any remaining fog

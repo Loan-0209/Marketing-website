@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Campus - Working Version</title>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #container { width: 100vw; height: 100vh; }
+        .info { position: fixed; top: 10px; left: 10px; color: white; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 5px; font-family: Arial; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div class="info">
+        <div>3D Campus Grid Layout</div>
+        <div>Status: <span id="status">Loading...</span></div>
+        <div>Objects: <span id="objects">0</span></div>
+    </div>
+
+    <script>
+        // Basic Three.js setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf0f8ff);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(100, 80, 100);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('container').appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(50, 50, 50);
+        scene.add(directionalLight);
+
+        // Create grid
+        const gridSize = 10;
+        const cellSize = 20;
+
+        // White cells
+        for (let x = 0; x < gridSize; x++) {
+            for (let z = 0; z < gridSize; z++) {
+                const geometry = new THREE.PlaneGeometry(cellSize - 1, cellSize - 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                const cell = new THREE.Mesh(geometry, material);
+                cell.rotation.x = -Math.PI / 2;
+                cell.position.set(
+                    (x - gridSize/2) * cellSize,
+                    0.1,
+                    (z - gridSize/2) * cellSize
+                );
+                scene.add(cell);
+            }
+        }
+
+        // Colorful buildings
+        const buildingData = [
+            {x: 1, z: 3, color: 0x4a90e2, height: 25},
+            {x: 7, z: 1, color: 0x5dade2, height: 30},
+            {x: 3, z: 6, color: 0x3498db, height: 20},
+            {x: 5, z: 2, color: 0xe74c3c, height: 35},
+            {x: 1, z: 7, color: 0xf39c12, height: 15},
+            {x: 8, z: 4, color: 0xff6b9d, height: 20},
+            {x: 6, z: 8, color: 0x9b59b6, height: 28},
+            {x: 2, z: 8, color: 0x27ae60, height: 22},
+            {x: 8, z: 7, color: 0x2ecc71, height: 18},
+            {x: 9, z: 3, color: 0x34495e, height: 40}
+        ];
+
+        buildingData.forEach(data => {
+            const geometry = new THREE.BoxGeometry(8, data.height, 8);
+            const material = new THREE.MeshLambertMaterial({ color: data.color });
+            const building = new THREE.Mesh(geometry, material);
+            building.position.set(
+                (data.x - gridSize/2) * cellSize,
+                data.height / 2,
+                (data.z - gridSize/2) * cellSize
+            );
+            scene.add(building);
+        });
+
+        // Trees
+        const treePositions = [
+            {x: 0.5, z: 1.5}, {x: 2.5, z: 0.5}, {x: 4.5, z: 3.5},
+            {x: 6.5, z: 2.5}, {x: 3.5, z: 7.5}, {x: 7.5, z: 6.5}
+        ];
+
+        treePositions.forEach(pos => {
+            // Trunk
+            const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 4);
+            const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+            trunk.position.set(
+                (pos.x - gridSize/2) * cellSize,
+                2,
+                (pos.z - gridSize/2) * cellSize
+            );
+            scene.add(trunk);
+
+            // Leaves
+            const leavesGeometry = new THREE.SphereGeometry(3, 8, 6);
+            const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x228b22 });
+            const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+            leaves.position.set(
+                (pos.x - gridSize/2) * cellSize,
+                6,
+                (pos.z - gridSize/2) * cellSize
+            );
+            scene.add(leaves);
+        });
+
+        // Update status
+        document.getElementById('status').textContent = 'Running';
+        document.getElementById('objects').textContent = scene.children.length;
+
+        // Simple mouse control
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate camera around center
+            camera.position.x = 100 * Math.cos(mouseX * Math.PI);
+            camera.position.z = 100 * Math.sin(mouseX * Math.PI);
+            camera.position.y = 80 + mouseY * 40;
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HEART Data Center</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            background: linear-gradient(135deg, #4f46e5, #7c3aed); 
+            color: white; 
+            margin: 0; 
+            min-height: 100vh; 
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 20px 50px; 
+            background: rgba(255,255,255,0.1); 
+        }
+        .logo { 
+            font-size: 1.8em; 
+            font-weight: bold; 
+        }
+        .nav { 
+            display: flex; 
+            gap: 30px; 
+        }
+        .nav a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border-radius: 25px; 
+        }
+        .nav a:hover { 
+            background: rgba(255,255,255,0.2); 
+        }
+        .hero { 
+            text-align: center; 
+            padding: 100px 20px; 
+        }
+        .hero h1 { 
+            font-size: 4em; 
+            margin-bottom: 30px; 
+        }
+        .hero p { 
+            font-size: 1.3em; 
+            margin-bottom: 50px; 
+            opacity: 0.9; 
+        }
+        .btn { 
+            padding: 15px 40px; 
+            background: #f59e0b; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 30px; 
+            margin: 10px; 
+        }
+        .btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .section {
+            padding: 80px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .feature h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="status">✅ NO SERVER NEEDED</div>
+    
+    <div class="header">
+        <div class="logo">🚀 HEART</div>
+        <div class="nav">
+            <a href="#home">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#masterplan">Master Plan</a>
+            <a href="#campus">3D Campus</a>
+            <a href="#facilities">Facilities</a>
+        </div>
+    </div>
+    
+    <div class="hero" id="home">
+        <h1>HEART</h1>
+        <p>Vietnam's First 300MW AI-Optimized Hyperscale Data Center</p>
+        <a href="#masterplan" class="btn">Explore Our Vision</a>
+        <a href="#campus" class="btn">View Master Plan</a>
+    </div>
+    
+    <div class="section" id="about">
+        <h2>About HEART Project</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>🏗️ 300MW Capacity</h3>
+                <p>Massive hyperscale data center designed for AI workloads with unprecedented power capacity.</p>
+            </div>
+            <div class="feature">
+                <h3>🤖 AI-Optimized</h3>
+                <p>Purpose-built infrastructure optimized for artificial intelligence and machine learning applications.</p>
+            </div>
+            <div class="feature">
+                <h3>🌍 Strategic Location</h3>
+                <p>Located in Hue Hi-Tech State-owned Park with excellent connectivity and infrastructure.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section" id="masterplan">
+        <h2>Master Plan</h2>
+        <p>Our comprehensive development plan includes multiple phases of construction and expansion:</p>
+        <div class="features">
+            <div class="feature">
+                <h3>Phase 1: Foundation</h3>
+                <p>Initial infrastructure, administration buildings, and core data center facilities.</p>
+            </div>
+            <div class="feature">
+                <h3>Phase 2: Expansion</h3>
+                <p>Additional data halls, startup incubators, and commercial facilities.</p>
+            </div>
+            <div class="feature">
+                <h3>Phase 3: Integration</h3>
+                <p>Complete ecosystem with residential, transport, and energy infrastructure.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section" id="campus">
+        <h2>3D Campus Visualization</h2>
+        <p>Experience our virtual campus in 3D with interactive master plan visualization.</p>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="3d-campus-interactive.html" class="btn">Launch 3D Campus</a>
+            <a href="project-dashboard.html" class="btn">Project Dashboard</a>
+        </div>
+    </div>
+    
+    <div class="section" id="facilities">
+        <h2>World-Class Facilities</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>⚡ 500kV Grid Connection</h3>
+                <p>Direct connection to Vietnam's national power grid ensuring reliable electricity supply.</p>
+            </div>
+            <div class="feature">
+                <h3>🌐 International Connectivity</h3>
+                <p>Multiple submarine cable landings and terrestrial fiber connections.</p>
+            </div>
+            <div class="feature">
+                <h3>❄️ Advanced Cooling</h3>
+                <p>State-of-the-art cooling systems optimized for tropical climate efficiency.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        console.log('✅ HEART website loaded successfully!');
+        console.log('🎉 Standalone version - No server required!');
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
+        // Welcome message
+        setTimeout(() => {
+            alert('🎉 HEART Website working perfectly!\n\n✅ No server needed\n🌐 File-based access\n🚀 Fully functional');
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug 3D Loading Issue</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .log {
+            background: #000;
+            padding: 10px;
+            border: 1px solid #333;
+            height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        .status {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .success { background: #004400; }
+        .warning { background: #444400; }
+        .error { background: #440000; }
+        button {
+            background: #333;
+            color: #00ff00;
+            border: 1px solid #666;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #555; }
+    </style>
+</head>
+<body>
+    <h1>🔍 3D Campus Loading Debugger</h1>
+    
+    <div class="status" id="webgl-status">
+        🔄 Checking WebGL support...
+    </div>
+    
+    <div class="status" id="threejs-status">
+        🔄 Checking Three.js availability...
+    </div>
+    
+    <div class="status" id="files-status">
+        🔄 Checking 3D files...
+    </div>
+    
+    <button onclick="testBasicLoading()">Test Basic Loading</button>
+    <button onclick="testAllPaths()">Test All Paths</button>
+    <button onclick="clearLog()">Clear Log</button>
+    
+    <div class="log" id="debug-log"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <script>
+        const log = document.getElementById('debug-log');
+        
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            if (type === 'error') logEntry.style.color = '#ff4444';
+            if (type === 'success') logEntry.style.color = '#44ff44';
+            if (type === 'warning') logEntry.style.color = '#ffff44';
+            log.appendChild(logEntry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            log.innerHTML = '';
+        }
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        // Check WebGL support
+        function checkWebGL() {
+            addLog('🔍 Checking WebGL support...');
+            
+            if (!window.WebGLRenderingContext) {
+                updateStatus('webgl-status', '❌ Browser không support WebGL', 'error');
+                addLog('❌ WebGL not supported by browser', 'error');
+                return false;
+            }
+            
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            
+            if (!gl) {
+                updateStatus('webgl-status', '❌ WebGL context không thể tạo', 'error');
+                addLog('❌ WebGL context creation failed', 'error');
+                return false;
+            }
+            
+            const renderer = gl.getParameter(gl.RENDERER);
+            const version = gl.getParameter(gl.VERSION);
+            
+            updateStatus('webgl-status', '✅ WebGL supported', 'success');
+            addLog(`✅ WebGL supported - Renderer: ${renderer}`, 'success');
+            addLog(`🔧 WebGL Version: ${version}`, 'info');
+            
+            return true;
+        }
+        
+        // Check Three.js
+        function checkThreeJS() {
+            addLog('🔍 Checking Three.js availability...');
+            
+            if (typeof THREE === 'undefined') {
+                updateStatus('threejs-status', '❌ Three.js không load được', 'error');
+                addLog('❌ THREE is undefined', 'error');
+                return false;
+            }
+            
+            addLog(`✅ Three.js version: ${THREE.REVISION}`, 'success');
+            
+            if (typeof THREE.GLTFLoader === 'undefined') {
+                updateStatus('threejs-status', '⚠️ GLTFLoader không có', 'warning');
+                addLog('⚠️ GLTFLoader not available', 'warning');
+                return false;
+            }
+            
+            updateStatus('threejs-status', '✅ Three.js & GLTFLoader OK', 'success');
+            addLog('✅ GLTFLoader available', 'success');
+            return true;
+        }
+        
+        // Test file existence
+        async function checkFiles() {
+            addLog('🔍 Checking 3D model files...');
+            
+            const paths = [
+                './models/building1.gltf',
+                '../models/building1.gltf',
+                './assets/models/building1.gltf',
+                './building1.gltf',
+                './models/campus.gltf'
+            ];
+            
+            let foundFiles = 0;
+            
+            for (const path of paths) {
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    if (response.ok) {
+                        addLog(`✅ Found: ${path} (${response.status})`, 'success');
+                        foundFiles++;
+                    } else {
+                        addLog(`❌ Not found: ${path} (${response.status})`, 'error');
+                    }
+                } catch (error) {
+                    addLog(`❌ Error checking ${path}: ${error.message}`, 'error');
+                }
+            }
+            
+            if (foundFiles > 0) {
+                updateStatus('files-status', `✅ Found ${foundFiles} file(s)`, 'success');
+            } else {
+                updateStatus('files-status', '❌ No 3D files found', 'error');
+            }
+        }
+        
+        // Test basic Three.js scene
+        function testBasicLoading() {
+            addLog('🚀 Testing basic Three.js scene creation...');
+            
+            try {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer();
+                
+                addLog('✅ Scene, Camera, Renderer created successfully', 'success');
+                
+                // Test basic geometry
+                const geometry = new THREE.BoxGeometry();
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+                
+                addLog('✅ Basic cube created and added to scene', 'success');
+                addLog(`📊 Scene children count: ${scene.children.length}`, 'info');
+                
+            } catch (error) {
+                addLog(`❌ Basic scene creation failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test all model paths
+        function testAllPaths() {
+            addLog('🔍 Testing all model loading paths...');
+            
+            const paths = [
+                './models/building1.gltf',
+                '../models/building1.gltf',
+                './assets/models/building1.gltf',
+                './building1.gltf'
+            ];
+            
+            const loader = new THREE.GLTFLoader();
+            let pathIndex = 0;
+            
+            function tryNextPath() {
+                if (pathIndex >= paths.length) {
+                    addLog('❌ All paths failed', 'error');
+                    return;
+                }
+                
+                const currentPath = paths[pathIndex];
+                addLog(`📁 Trying path ${pathIndex + 1}/${paths.length}: ${currentPath}`);
+                
+                loader.load(
+                    currentPath,
+                    function(gltf) {
+                        addLog(`✅ SUCCESS! Model loaded from: ${currentPath}`, 'success');
+                        addLog(`📊 Model info: ${gltf.scene.children.length} objects`, 'info');
+                    },
+                    function(progress) {
+                        const percent = (progress.loaded / progress.total) * 100;
+                        addLog(`📥 Loading progress: ${percent.toFixed(1)}%`);
+                    },
+                    function(error) {
+                        addLog(`❌ Failed ${currentPath}: ${error.message}`, 'error');
+                        pathIndex++;
+                        setTimeout(tryNextPath, 100);
+                    }
+                );
+            }
+            
+            tryNextPath();
+        }
+        
+        // Initialize checks
+        window.addEventListener('load', function() {
+            addLog('🌟 Debug tool loaded, running initial checks...');
+            
+            setTimeout(() => {
+                const webglOK = checkWebGL();
+                const threejsOK = checkThreeJS();
+                
+                if (webglOK && threejsOK) {
+                    checkFiles();
+                    addLog('✅ All basic checks passed', 'success');
+                } else {
+                    addLog('❌ Some basic checks failed', 'error');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

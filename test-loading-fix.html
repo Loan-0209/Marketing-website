@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔄 Test Loading Fix</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            background: #0f172a; 
+            color: #10b981; 
+            padding: 20px; 
+        }
+        .test-panel { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+            border-left: 4px solid #10b981;
+        }
+        .warning { border-left-color: #f59e0b; }
+        .error { border-left-color: #ef4444; }
+        iframe { 
+            width: 100%; 
+            height: 500px; 
+            border: 2px solid #3b82f6; 
+            border-radius: 8px; 
+            margin-top: 20px;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+        #log { 
+            background: #000; 
+            color: #0f0; 
+            padding: 15px; 
+            height: 200px; 
+            overflow-y: auto; 
+            font-size: 12px;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔄 Test Loading Fix</h1>
+    
+    <div class="test-panel">
+        <h2>✅ Loading Fixes Applied</h2>
+        <ul>
+            <li>✅ Added simulateLoading() function with progress bar</li>
+            <li>✅ Added hideLoadingScreen() method to AI3DCampusWithNav class</li>
+            <li>✅ Loading screen hides after initialization completes</li>
+            <li>✅ Error handling for failed Three.js loading</li>
+            <li>✅ Progress simulation with random increments</li>
+        </ul>
+    </div>
+
+    <div class="test-panel warning">
+        <h2>🧪 Test Controls</h2>
+        <button onclick="testMainPage()">Test Main Page</button>
+        <button onclick="testLoadingSpeed()">Test Loading Speed</button>
+        <button onclick="refreshTest()">Refresh Test</button>
+        <button onclick="openInNewTab()">Open in New Tab</button>
+    </div>
+
+    <div class="test-panel">
+        <h2>📋 Test Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <iframe src="3d-campus-smart-city.html" id="testFrame"></iframe>
+
+    <script>
+        const logDiv = document.getElementById('log');
+        const frame = document.getElementById('testFrame');
+        
+        function log(message, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'success' ? '#00ff00' : type === 'error' ? '#ff0000' : type === 'warning' ? '#ffff00' : '#00ffff';
+            logDiv.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function testMainPage() {
+            log('🧪 Testing main page loading...', 'info');
+            
+            const startTime = Date.now();
+            let loadingVisible = true;
+            let loadingHidden = false;
+            
+            // Monitor loading screen
+            const checkLoading = setInterval(() => {
+                try {
+                    const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                    const loadingScreen = frameDoc.getElementById('loadingScreen');
+                    
+                    if (loadingScreen) {
+                        const isHidden = loadingScreen.classList.contains('hidden');
+                        const opacity = window.getComputedStyle(loadingScreen).opacity;
+                        
+                        if (loadingVisible && (isHidden || opacity == '0')) {
+                            loadingVisible = false;
+                            loadingHidden = true;
+                            const loadTime = Date.now() - startTime;
+                            log(`✅ Loading screen hidden after ${loadTime}ms`, 'success');
+                            clearInterval(checkLoading);
+                        }
+                        
+                        if (!isHidden && opacity != '0') {
+                            log(`🔄 Loading screen still visible (opacity: ${opacity})`, 'info');
+                        }
+                    }
+                } catch (error) {
+                    log(`⚠️ Cross-origin check failed: ${error.message}`, 'warning');
+                    clearInterval(checkLoading);
+                }
+            }, 500);
+            
+            // Timeout after 10 seconds
+            setTimeout(() => {
+                if (loadingVisible) {
+                    log('❌ Loading screen failed to hide within 10 seconds', 'error');
+                    clearInterval(checkLoading);
+                }
+            }, 10000);
+        }
+
+        function testLoadingSpeed() {
+            log('⚡ Testing loading speed...', 'info');
+            
+            const testUrl = '3d-campus-smart-city.html?test=' + Date.now();
+            const startTime = Date.now();
+            
+            fetch(testUrl)
+                .then(response => {
+                    const loadTime = Date.now() - startTime;
+                    log(`📊 Page fetch time: ${loadTime}ms`, 'info');
+                    
+                    if (loadTime < 1000) {
+                        log('✅ Fast loading (< 1s)', 'success');
+                    } else if (loadTime < 3000) {
+                        log('⚠️ Moderate loading (1-3s)', 'warning');
+                    } else {
+                        log('❌ Slow loading (> 3s)', 'error');
+                    }
+                    
+                    return response.text();
+                })
+                .then(html => {
+                    // Check for key loading elements
+                    if (html.includes('simulateLoading')) {
+                        log('✅ simulateLoading function found', 'success');
+                    } else {
+                        log('❌ simulateLoading function missing', 'error');
+                    }
+                    
+                    if (html.includes('hideLoadingScreen')) {
+                        log('✅ hideLoadingScreen method found', 'success');
+                    } else {
+                        log('❌ hideLoadingScreen method missing', 'error');
+                    }
+                    
+                    if (html.includes('loading-screen')) {
+                        log('✅ Loading screen HTML found', 'success');
+                    } else {
+                        log('❌ Loading screen HTML missing', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Fetch error: ${error.message}`, 'error');
+                });
+        }
+
+        function refreshTest() {
+            log('🔄 Refreshing test frame...', 'info');
+            frame.src = '3d-campus-smart-city.html?refresh=' + Date.now();
+            
+            setTimeout(() => {
+                testMainPage();
+            }, 1000);
+        }
+
+        function openInNewTab() {
+            log('🌐 Opening in new tab...', 'info');
+            window.open('3d-campus-smart-city.html', '_blank');
+        }
+
+        // Monitor frame loading
+        frame.onload = () => {
+            log('✅ Frame loaded successfully', 'success');
+            setTimeout(() => {
+                testMainPage();
+            }, 500);
+        };
+        
+        frame.onerror = () => {
+            log('❌ Frame failed to load', 'error');
+        };
+
+        // Initial log
+        log('🔄 Loading fix test ready', 'info');
+        log('📊 Monitoring loading screen behavior...', 'info');
+    </script>
+</body>
+</html>

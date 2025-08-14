@@ -1,0 +1,4375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Smart City Campus - HEART Technology Park</title>
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+    <script>
+        // Wait for THREE to be defined before loading OrbitControls
+        function loadOrbitControls() {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js';
+            script.onload = function() {
+                if (typeof THREE !== 'undefined' && typeof OrbitControls !== 'undefined') {
+                    THREE.OrbitControls = OrbitControls;
+                    console.log('✅ OrbitControls loaded and attached to THREE');
+                }
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Check if THREE is already loaded
+        if (typeof THREE !== 'undefined') {
+            loadOrbitControls();
+        } else {
+            // Wait for THREE to load
+            window.addEventListener('load', loadOrbitControls);
+        }
+    </script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #F0F8FF 100%);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* BULLETPROOF CANVAS CONTAINER */
+        #canvas-container {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 1 !important;
+            overflow: hidden !important;
+            background: transparent !important;
+            pointer-events: all !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        #canvas-container canvas {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* UI OVERLAY */
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            pointer-events: all;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav a:hover, .nav .active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav a.contact-btn {
+            background: #f59e0b;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .nav a.contact-btn:hover {
+            background: #d97706;
+        }
+
+        /* HIDDEN STATE FOR SPECIFIC UI PANELS */
+        .ui-hidden .stats-panel,
+        .ui-hidden .info-panel,
+        .ui-hidden .loading-message {
+            display: none !important;
+        }
+
+        /* DEFAULT HIDDEN STATE - Hide specific annotation panels only */
+        body.ui-default-hidden .stats-panel,
+        body.ui-default-hidden .info-panel {
+            display: none !important;
+        }
+
+        /* CONTROL PANELS */
+        .control-panel {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            color: white;
+            pointer-events: all;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .camera-controls {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            min-width: 150px;
+            max-width: 170px;
+        }
+
+        .camera-controls h3 {
+            color: #3b82f6;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .camera-btn {
+            display: block;
+            width: 100%;
+            padding: 6px 10px;
+            margin-bottom: 4px;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 5px;
+            background: rgba(59, 130, 246, 0.1);
+            color: white;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .camera-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .camera-btn.active {
+            background: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .stats-panel {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            min-width: 200px;
+        }
+
+        .stats-panel h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stat-value {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .phase-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .phase-btn {
+            padding: 12px 25px;
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 25px;
+            background: rgba(59, 130, 246, 0.1);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .phase-btn:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.3);
+        }
+
+        .phase-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .info-panel {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            max-width: 300px;
+        }
+
+        .info-panel h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .feature-list li::before {
+            content: "▶ ";
+            color: #10b981;
+        }
+
+        /* ERROR MESSAGE */
+        .error-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 9999;
+            font-size: 1.1em;
+            max-width: 500px;
+        }
+
+        .loading-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(59, 130, 246, 0.95);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 9999;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .camera-controls, .stats-panel {
+                min-width: 130px;
+                padding: 10px;
+                font-size: 0.8em;
+            }
+            
+            .camera-controls h3 {
+                font-size: 0.85em;
+                margin-bottom: 6px;
+            }
+            
+            .camera-btn {
+                padding: 5px 8px;
+                margin-bottom: 3px;
+                font-size: 0.7em;
+            }
+            
+            .phase-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Message -->
+    <div id="loading-message" class="loading-message">
+        <h3>🚀 Loading 3D Smart City...</h3>
+        <p>Please wait a moment</p>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">🚀 HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="#" class="active">3D Smart City</a>
+                <a href="facilities.html">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Enhanced Loading Screen -->
+    <div id="loading-screen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #001122 0%, #002244 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; font-family: 'Inter', sans-serif;">
+        <div style="text-align: center; max-width: 400px; padding: 20px;">
+            <!-- Animated Logo -->
+            <div style="margin-bottom: 30px;">
+                <div style="width: 80px; height: 80px; border: 4px solid rgba(255,255,255,0.1); border-left: 4px solid #3b82f6; border-top: 4px solid #60a5fa; border-radius: 50%; animation: spin 1.5s linear infinite; margin: 0 auto;"></div>
+            </div>
+            
+            <!-- Title -->
+            <h2 style="margin: 0 0 15px 0; font-size: 28px; font-weight: 700; background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏙️ Loading Smart City</h2>
+            
+            <!-- Status -->
+            <p id="loading-status" style="margin: 0 0 25px 0; color: #94a3b8; font-size: 16px; min-height: 24px;">Initializing WebGL...</p>
+            
+            <!-- Progress Bar -->
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                <div id="loading-progress" style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%); border-radius: 3px; transition: width 0.3s ease;"></div>
+            </div>
+            
+            <!-- Tips -->
+            <div style="margin-top: 25px; font-size: 14px; color: #64748b; line-height: 1.4;">
+                💡 First load may take a few moments<br>
+                🖱️ Drag to rotate • 🔄 Scroll to zoom<br>
+                📱 Use camera controls on the left
+            </div>
+        </div>
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+    </div>
+
+    <!-- 3D Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <!-- Camera Controls -->
+        <div class="control-panel camera-controls">
+            <h3>📷 Camera</h3>
+            <button class="camera-btn active" data-mode="overview" id="overview-btn">🌍 Overview</button>
+            <button class="camera-btn" data-mode="aerial" id="aerial-btn">🚁 Aerial</button>
+            <button class="camera-btn" data-mode="ground" id="ground-btn">👁️ Ground</button>
+            <button class="camera-btn" data-mode="orbit" id="orbit-btn">🔄 Free</button>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(59, 130, 246, 0.3);">
+                <small style="color: #94a3b8; font-size: 0.7em;">Current: <span id="current-view-mode">Overview</span></small>
+            </div>
+            <div style="margin-top: 10px; padding-top: 6px; border-top: 1px solid rgba(59, 130, 246, 0.3);">
+                <button class="camera-btn" id="water-toggle" style="background: rgba(65, 105, 225, 0.3);">💧 Water: ON</button>
+            </div>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="control-panel stats-panel">
+            <h3>📊 3D Statistics</h3>
+            <div class="stat-item">
+                <span>FPS:</span>
+                <span class="stat-value" id="fps-counter">60</span>
+            </div>
+            <div class="stat-item">
+                <span>Objects:</span>
+                <span class="stat-value" id="object-counter">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Triangles:</span>
+                <span class="stat-value" id="triangle-counter">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Phase:</span>
+                <span class="stat-value" id="current-phase">1</span>
+            </div>
+            <div class="stat-item">
+                <span>Camera:</span>
+                <span class="stat-value" id="camera-mode">Overview</span>
+            </div>
+        </div>
+
+        <!-- Phase Controls -->
+        <div class="control-panel phase-controls">
+            <button class="phase-btn active" data-phase="1">Phase 1: Foundation</button>
+            <button class="phase-btn" data-phase="2">Phase 2: Expansion</button>
+            <button class="phase-btn" data-phase="3">Phase 3: Smart City</button>
+        </div>
+
+        <!-- Info Panel -->
+        <div class="control-panel info-panel">
+            <h3>🏛️ Smart City Features</h3>
+            <ul class="feature-list">
+                <li>🏗️ Interactive 3D smart city</li>
+                <li>🎮 Drag to rotate, scroll to zoom</li>
+                <li>📷 Switch camera views</li>
+                <li>🌳 Smart parks with IoT sensors</li>
+                <li>🚗 AI-powered parking systems</li>
+                <li>⚡ EV charging stations</li>
+                <li>🏛️ Interactive digital plazas</li>
+                <li>📶 5G communication network</li>
+                <li>☀️ Solar energy systems</li>
+                <li>🌤️ Environmental monitoring</li>
+                <li>🚦 Smart traffic management</li>
+                <li>💡 LED smart lighting</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // BULLETPROOF 3D SMART CITY
+        class BulletproofSmartCity {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.animationId = null;
+                this.currentPhase = 1;
+                this.currentView = 'overview';
+                this.clickableObjects = [];
+                this.isInitialized = false;
+                this.frameCount = 0;
+                
+                // Water animation arrays
+                this.animatedWaterStreams = [];
+                this.animatedJets = [];
+                this.animatedWaterSurfaces = [];
+                this.waterEffectsEnabled = true;
+                
+                // Camera positions
+                this.cameraPositions = {
+                    overview: { position: { x: 100, y: 80, z: 100 }, target: { x: 0, y: 0, z: 0 }, fov: 75 },
+                    aerial: { position: { x: 0, y: 150, z: 50 }, target: { x: 0, y: 0, z: 0 }, fov: 60 },
+                    ground: { position: { x: 80, y: 20, z: 80 }, target: { x: 0, y: 20, z: 0 }, fov: 85 },
+                    orbit: { position: { x: 120, y: 100, z: 120 }, target: { x: 0, y: 0, z: 0 }, fov: 70 }
+                };
+            }
+
+            // WebGL Detection
+            detectWebGL() {
+                try {
+                    const canvas = document.createElement('canvas');
+                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                    return !!gl;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            // Show error message
+            showError(message) {
+                // Hide loading screen first
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'none';
+                }
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+                    color: white;
+                    padding: 30px;
+                    border-radius: 15px;
+                    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3);
+                    text-align: center;
+                    z-index: 10000;
+                    max-width: 450px;
+                    font-family: 'Inter', sans-serif;
+                `;
+                errorDiv.innerHTML = `
+                    <h3 style="margin: 0 0 15px 0; font-size: 1.5em;">⚠️ 3D Loading Error</h3>
+                    <p style="margin: 0 0 20px 0; line-height: 1.5;">${message}</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="location.reload()" style="padding: 12px 24px; background: rgba(255,255,255,0.9); color: #dc2626; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🔄 Reload Page</button>
+                        <button onclick="this.parentElement.parentElement.remove()" style="padding: 12px 24px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; cursor: pointer;">✕ Close</button>
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.3); font-size: 0.9em; opacity: 0.8;">
+                        💡 Try refreshing or use a modern browser like Chrome, Firefox, or Edge
+                    </div>
+                `;
+                document.body.appendChild(errorDiv);
+                
+                console.error('💥 3D Error:', message);
+            }
+
+            // Hide loading screen
+            hideLoading() {
+                const loading = document.getElementById('loading-screen');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    loading.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                    }, 500);
+                }
+                console.log('✅ Loading screen hidden');
+            }
+
+            // Update loading status with progress
+            updateLoadingStatus(message, progress = 0) {
+                const statusElement = document.getElementById('loading-status');
+                const progressElement = document.getElementById('loading-progress');
+                
+                if (statusElement) {
+                    statusElement.textContent = message;
+                }
+                
+                if (progressElement && progress > 0) {
+                    progressElement.style.width = progress + '%';
+                }
+                
+                console.log('📋 Loading:', message, progress > 0 ? `(${progress}%)` : '');
+            }
+
+            // Initialize
+            async init() {
+                console.log('🚀 BULLETPROOF Smart City initializing...');
+                
+                // Set a timeout for the entire init process
+                const initTimeout = setTimeout(() => {
+                    console.error('❌ Init timeout after 10 seconds');
+                    throw new Error('Initialization timeout - taking too long to load');
+                }, 10000);
+                
+                try {
+                    // 1. Check WebGL support
+                    this.updateLoadingStatus('Checking WebGL support...', 10);
+                    console.log('🔍 Checking WebGL support...');
+                    if (!this.detectWebGL()) {
+                        throw new Error('Browser does not support WebGL. Please use Chrome, Firefox or Edge.');
+                    }
+                    console.log('✅ WebGL support confirmed');
+
+                    // 2. Wait for Three.js to load
+                    this.updateLoadingStatus('Loading Three.js library...', 25);
+                    if (typeof THREE === 'undefined') {
+                        await this.waitForThreeJS();
+                    }
+                    
+                    // Ensure OrbitControls is available
+                    if (typeof THREE.OrbitControls === 'undefined' && typeof window.OrbitControls !== 'undefined') {
+                        THREE.OrbitControls = window.OrbitControls;
+                        console.log('✅ OrbitControls manually attached');
+                    }
+
+                    // 3. Create scene components
+                    this.updateLoadingStatus('Creating 3D scene...', 40);
+                    console.log('🎨 Creating 3D scene...');
+                    this.createScene();
+                    
+                    this.updateLoadingStatus('Setting up lighting...', 55);
+                    console.log('💡 Setting up lighting...');
+                    this.setupLighting();
+                    
+                    this.updateLoadingStatus('Building smart city...', 70);
+                    console.log('🏢 Building smart city...');
+                    this.createCity();
+                    
+                    this.updateLoadingStatus('Setting up controls...', 85);
+                    console.log('🎮 Setting up controls...');
+                    this.setupControls();
+                    
+                    this.updateLoadingStatus('Initializing UI...', 95);
+                    console.log('📱 Initializing UI...');
+                    this.setupUI();
+                    
+                    this.updateLoadingStatus('Starting render loop...', 100);
+                    console.log('🔄 Starting render loop...');
+                    this.startRenderLoop();
+                    
+                    // 4. Expose globally
+                    window.campus = this;
+                    window.smartCity = this;
+                    window.scene = this.scene;
+                    window.camera = this.camera;
+                    window.renderer = this.renderer;
+                    
+                    this.isInitialized = true;
+                    
+                    // Clear both timeouts
+                    clearTimeout(initTimeout);
+                    if (window.loadingTimeoutId) {
+                        clearTimeout(window.loadingTimeoutId);
+                        window.loadingTimeoutId = null;
+                        console.log('✅ Cleared loading timeout');
+                    }
+                    
+                    this.hideLoading();
+                    
+                    console.log('✅ BULLETPROOF Smart City initialized successfully!');
+                    
+                } catch (error) {
+                    console.error('❌ Initialization failed:', error);
+                    this.showError(error.message);
+                }
+            }
+
+            // Wait for Three.js to load
+            waitForThreeJS() {
+                return new Promise((resolve, reject) => {
+                    let attempts = 0;
+                    const maxAttempts = 50; // 5 seconds
+                    
+                    const check = () => {
+                        if (typeof THREE !== 'undefined') {
+                            resolve();
+                        } else if (attempts >= maxAttempts) {
+                            reject(new Error('Three.js failed to load'));
+                        } else {
+                            attempts++;
+                            setTimeout(check, 100);
+                        }
+                    };
+                    
+                    check();
+                });
+            }
+
+            // Create scene
+            createScene() {
+                console.log('🎨 Creating scene...');
+                const container = document.getElementById('canvas-container');
+                if (!container) {
+                    console.error('❌ Canvas container not found!');
+                    throw new Error('Canvas container not found');
+                }
+                console.log('✅ Canvas container found:', container);
+
+                // Scene
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x87CEEB);
+
+                // Camera
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                this.camera.position.set(100, 80, 100);
+                this.camera.lookAt(0, 0, 0);
+
+                // Renderer with error handling
+                try {
+                    this.renderer = new THREE.WebGLRenderer({ 
+                        antialias: true,
+                        alpha: true,
+                        powerPreference: "high-performance",
+                        failIfMajorPerformanceCaveat: false
+                    });
+                    console.log('✅ WebGL renderer created successfully');
+                } catch (rendererError) {
+                    console.error('❌ WebGL renderer creation failed:', rendererError);
+                    throw new Error('Failed to create WebGL renderer. Please check your browser supports WebGL.');
+                }
+                
+                this.renderer.setSize(width, height);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setClearColor(0x87CEEB, 1.0);
+
+                // Force canvas styling
+                const canvas = this.renderer.domElement;
+                canvas.style.cssText = `
+                    display: block !important;
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                `;
+
+                container.appendChild(canvas);
+                console.log('✅ Canvas appended to container');
+                
+                // Immediate test render with error handling
+                try {
+                    this.renderer.render(this.scene, this.camera);
+                    console.log('✅ Test render successful');
+                } catch (renderError) {
+                    console.error('❌ Test render failed:', renderError);
+                    throw new Error('WebGL rendering failed. Please check your GPU drivers.');
+                }
+                
+                console.log('✅ Scene created and test rendered');
+            }
+
+            // Setup lighting
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                this.scene.add(ambientLight);
+
+                // Directional light (sun)
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+                directionalLight.position.set(200, 200, 100);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                directionalLight.shadow.camera.near = 0.5;
+                directionalLight.shadow.camera.far = 500;
+                directionalLight.shadow.camera.left = -200;
+                directionalLight.shadow.camera.right = 200;
+                directionalLight.shadow.camera.top = 200;
+                directionalLight.shadow.camera.bottom = -200;
+                this.scene.add(directionalLight);
+
+                console.log('✅ Lighting setup complete');
+            }
+
+            // Create city
+            createCity() {
+                console.log('🏗️ Creating city - step 1: Clearing existing objects...');
+                // Clear existing city
+                const objectsToRemove = [];
+                this.scene.traverse((child) => {
+                    if (child.userData && (child.userData.type === 'building' || child.userData.type === 'ground' || child.userData.type === 'road' || child.userData.type === 'tree' || child.userData.type === 'fountain' || child.userData.type === 'water-stream' || child.userData.type === 'central-jet' || child.userData.type === 'splash')) {
+                        objectsToRemove.push(child);
+                    }
+                });
+                objectsToRemove.forEach(obj => this.scene.remove(obj));
+                console.log('🧹 Cleared', objectsToRemove.length, 'existing objects');
+
+                // Clear water animation arrays
+                this.animatedWaterStreams = [];
+                this.animatedJets = [];
+                this.animatedWaterSurfaces = [];
+
+                console.log('🏗️ Creating city - step 2: Creating ground...');
+                // Create ground
+                const groundGeometry = new THREE.PlaneGeometry(400, 400);
+                const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.position.y = -2;
+                ground.receiveShadow = true;
+                ground.userData = { type: 'ground' };
+                this.scene.add(ground);
+
+                console.log('🏗️ Creating city - step 3: Creating roads...');
+                // Create roads
+                this.createRoads();
+
+                console.log('🏗️ Creating city - step 4: Creating buildings...');
+                // Create buildings
+                this.createBuildings();
+
+                console.log('🌳 Creating city - step 5: Creating parks...');
+                // Create modern landscapes
+                this.createParks();
+                console.log('🅿️ Creating city - step 6: Creating parking lots...');
+                this.createParkingLots();
+                console.log('🏛️ Creating city - step 7: Creating plazas...');
+                this.createPlazas();
+                console.log('🤖 Creating city - step 8: Creating smart city elements...');
+                this.createSmartCityElements();
+
+                console.log('🌲 Creating city - step 9: Creating trees...');
+                // Create trees
+                this.createTrees();
+
+                console.log(`✅ City created successfully with ${this.scene.children.length} objects`);
+            }
+
+            // Create roads
+            createRoads() {
+                const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x2c2c2c });
+
+                // Main roads
+                for (let i = -150; i <= 150; i += 50) {
+                    // Horizontal roads
+                    const roadH = new THREE.Mesh(
+                        new THREE.PlaneGeometry(300, 8),
+                        roadMaterial
+                    );
+                    roadH.rotation.x = -Math.PI / 2;
+                    roadH.position.set(0, 0.1, i);
+                    roadH.userData = { type: 'road' };
+                    this.scene.add(roadH);
+
+                    // Vertical roads
+                    const roadV = new THREE.Mesh(
+                        new THREE.PlaneGeometry(8, 300),
+                        roadMaterial
+                    );
+                    roadV.rotation.x = -Math.PI / 2;
+                    roadV.position.set(i, 0.1, 0);
+                    roadV.userData = { type: 'road' };
+                    this.scene.add(roadV);
+                }
+            }
+
+            // Check if position conflicts with roads
+            isOnRoad(x, z, buildingWidth, buildingDepth) {
+                const roadWidth = 8;
+                const roadPositions = [-150, -100, -50, 0, 50, 100, 150];
+                
+                // Check horizontal roads (along Z axis)
+                for (let roadZ of roadPositions) {
+                    if (Math.abs(z - roadZ) <= (roadWidth/2 + buildingDepth/2 + 2)) {
+                        return true;
+                    }
+                }
+                
+                // Check vertical roads (along X axis)  
+                for (let roadX of roadPositions) {
+                    if (Math.abs(x - roadX) <= (roadWidth/2 + buildingWidth/2 + 2)) {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            // Get safe building position away from roads
+            getSafeBuildingPosition(baseX, baseZ, width, depth) {
+                const roadPositions = [-150, -100, -50, 0, 50, 100, 150];
+                const minDistance = 12; // Minimum distance from road center
+                
+                // Try original position first
+                let x = baseX;
+                let z = baseZ;
+                
+                // Adjust X position if too close to vertical roads
+                for (let roadX of roadPositions) {
+                    if (Math.abs(x - roadX) < minDistance) {
+                        // Move away from road
+                        if (x < roadX) {
+                            x = roadX - minDistance - width/2;
+                        } else {
+                            x = roadX + minDistance + width/2;
+                        }
+                    }
+                }
+                
+                // Adjust Z position if too close to horizontal roads
+                for (let roadZ of roadPositions) {
+                    if (Math.abs(z - roadZ) < minDistance) {
+                        // Move away from road
+                        if (z < roadZ) {
+                            z = roadZ - minDistance - depth/2;
+                        } else {
+                            z = roadZ + minDistance + depth/2;
+                        }
+                    }
+                }
+                
+                return { x, z };
+            }
+
+            // Create buildings
+            createBuildings() {
+                const buildingColors = [0x8B7355, 0xA0A0A0, 0x6B8E23, 0x4682B4, 0x8B4513, 0x708090];
+                let buildingCount = 0;
+                const maxBuildings = this.currentPhase * 20;
+
+                // Create a more distributed grid that avoids road intersections
+                for (let gridX = -4; gridX <= 4; gridX++) {
+                    for (let gridZ = -4; gridZ <= 4; gridZ++) {
+                        if (buildingCount >= maxBuildings) break;
+                        
+                        if (Math.random() > 0.5) { // 50% building density
+                            const height = 20 + Math.random() * 60;
+                            const width = 8 + Math.random() * 8;
+                            const depth = 8 + Math.random() * 8;
+
+                            // Calculate base position (offset grid to avoid road centers)
+                            const baseX = gridX * 35 + (Math.random() - 0.5) * 15;
+                            const baseZ = gridZ * 35 + (Math.random() - 0.5) * 15;
+                            
+                            // Get safe position away from roads
+                            const safePos = this.getSafeBuildingPosition(baseX, baseZ, width, depth);
+                            
+                            // Double-check that the position is not on roads
+                            if (!this.isOnRoad(safePos.x, safePos.z, width, depth)) {
+                                const geometry = new THREE.BoxGeometry(width, height, depth);
+                                const material = new THREE.MeshLambertMaterial({
+                                    color: buildingColors[Math.floor(Math.random() * buildingColors.length)]
+                                });
+
+                                const building = new THREE.Mesh(geometry, material);
+                                building.position.set(
+                                    safePos.x,
+                                    height / 2,
+                                    safePos.z
+                                );
+                                building.castShadow = true;
+                                building.receiveShadow = true;
+                                building.userData = { 
+                                    type: 'building',
+                                    name: `Building ${buildingCount + 1}`,
+                                    phase: this.currentPhase
+                                };
+
+                                this.scene.add(building);
+                                this.clickableObjects.push(building);
+                                buildingCount++;
+                            }
+                        }
+                    }
+                    if (buildingCount >= maxBuildings) break;
+                }
+
+                console.log(`✅ Created ${buildingCount} buildings for Phase ${this.currentPhase} (roads avoided)`);
+            }
+
+            // Create realistic trees with natural appearance
+            createTrees() {
+                const treeColors = [0x228B22, 0x32CD32, 0x006400, 0x9ACD32, 0x8FBC8F];
+                let treeCount = 0;
+                const maxTrees = this.currentPhase * 15; // More trees in later phases
+
+                for (let x = -180; x <= 180; x += 45) {
+                    for (let z = -180; z <= 180; z += 45) {
+                        if (Math.random() > 0.6 && treeCount < maxTrees) {
+                            // Generate random position within grid cell
+                            const treeX = x + (Math.random() - 0.5) * 25;
+                            const treeZ = z + (Math.random() - 0.5) * 25;
+                            
+                            // Check if tree position conflicts with roads
+                            if (!this.isOnRoad(treeX, treeZ, 6, 6)) {
+                                // Random tree type
+                                const treeType = Math.random();
+                                
+                                if (treeType < 0.4) {
+                                    this.createOakTree(treeX, treeZ, treeColors);
+                                } else if (treeType < 0.7) {
+                                    this.createPineTree(treeX, treeZ);
+                                } else {
+                                    this.createPalmTree(treeX, treeZ);
+                                }
+                                
+                                treeCount++;
+                            }
+                        }
+                    }
+                }
+
+                console.log(`✅ Created ${treeCount} realistic trees for Phase ${this.currentPhase} (roads avoided)`);
+            }
+
+            // Create realistic oak tree with multiple branches
+            createOakTree(x, z, treeColors) {
+                const trunkHeight = 8 + Math.random() * 4;
+                const trunkRadius = 0.8 + Math.random() * 0.4;
+                
+                // Main trunk with natural taper
+                const trunkGeometry = new THREE.CylinderGeometry(
+                    trunkRadius * 0.6, 
+                    trunkRadius, 
+                    trunkHeight
+                );
+                const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                trunk.position.set(x, trunkHeight / 2, z);
+                trunk.userData = { type: 'tree', phase: this.currentPhase };
+                trunk.castShadow = true;
+                trunk.receiveShadow = true;
+                this.scene.add(trunk);
+
+                // Root flare at base
+                const rootFlare = new THREE.Mesh(
+                    new THREE.CylinderGeometry(trunkRadius * 1.2, trunkRadius * 1.8, 1.5),
+                    trunkMaterial
+                );
+                rootFlare.position.set(x, 0.75, z);
+                rootFlare.userData = { type: 'tree', phase: this.currentPhase };
+                this.scene.add(rootFlare);
+
+                // Multiple branches
+                const numBranches = 5 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < numBranches; i++) {
+                    const branchAngle = (i * Math.PI * 2) / numBranches + Math.random() * 0.5;
+                    const branchLength = 3 + Math.random() * 2;
+                    const branchHeight = trunkHeight * 0.6 + Math.random() * trunkHeight * 0.3;
+                    
+                    const branch = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.2, 0.4, branchLength),
+                        trunkMaterial
+                    );
+                    
+                    const branchX = x + Math.cos(branchAngle) * branchLength * 0.3;
+                    const branchZ = z + Math.sin(branchAngle) * branchLength * 0.3;
+                    
+                    branch.position.set(branchX, branchHeight, branchZ);
+                    branch.rotation.z = Math.cos(branchAngle) * 0.5;
+                    branch.rotation.x = Math.sin(branchAngle) * 0.5;
+                    branch.userData = { type: 'tree', phase: this.currentPhase };
+                    this.scene.add(branch);
+
+                    // Foliage clusters on branches
+                    const foliageSize = 2.5 + Math.random() * 1.5;
+                    const foliage = new THREE.Mesh(
+                        new THREE.SphereGeometry(foliageSize, 8, 6),
+                        new THREE.MeshLambertMaterial({
+                            color: treeColors[Math.floor(Math.random() * treeColors.length)]
+                        })
+                    );
+                    foliage.position.set(
+                        branchX + Math.cos(branchAngle) * branchLength * 0.4,
+                        branchHeight + 1,
+                        branchZ + Math.sin(branchAngle) * branchLength * 0.4
+                    );
+                    foliage.userData = { type: 'tree', phase: this.currentPhase };
+                    foliage.castShadow = true;
+                    this.scene.add(foliage);
+                }
+
+                // Main crown foliage
+                const crownSize = 4 + Math.random() * 2;
+                const crown = new THREE.Mesh(
+                    new THREE.SphereGeometry(crownSize, 12, 8),
+                    new THREE.MeshLambertMaterial({
+                        color: treeColors[Math.floor(Math.random() * treeColors.length)]
+                    })
+                );
+                crown.position.set(x, trunkHeight + 2, z);
+                crown.userData = { type: 'tree', phase: this.currentPhase };
+                crown.castShadow = true;
+                this.scene.add(crown);
+            }
+
+            // Create realistic pine/conifer tree
+            createPineTree(x, z) {
+                const treeHeight = 12 + Math.random() * 8;
+                
+                // Straight trunk
+                const trunk = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.4, 0.6, treeHeight),
+                    new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                );
+                trunk.position.set(x, treeHeight / 2, z);
+                trunk.userData = { type: 'tree', phase: this.currentPhase };
+                trunk.castShadow = true;
+                this.scene.add(trunk);
+
+                // Conical foliage layers
+                const numLayers = 6 + Math.floor(Math.random() * 3);
+                for (let i = 0; i < numLayers; i++) {
+                    const layerHeight = treeHeight * 0.3 + (i / numLayers) * treeHeight * 0.6;
+                    const layerRadius = 3 - (i / numLayers) * 2;
+                    
+                    const layer = new THREE.Mesh(
+                        new THREE.ConeGeometry(layerRadius, 3, 8),
+                        new THREE.MeshLambertMaterial({ color: 0x006400 })
+                    );
+                    layer.position.set(x, layerHeight, z);
+                    layer.userData = { type: 'tree', phase: this.currentPhase };
+                    layer.castShadow = true;
+                    this.scene.add(layer);
+                }
+
+                // Tree top
+                const top = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.8, 2, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x228B22 })
+                );
+                top.position.set(x, treeHeight + 1, z);
+                top.userData = { type: 'tree', phase: this.currentPhase };
+                this.scene.add(top);
+            }
+
+            // Create palm tree (tropical/modern look)
+            createPalmTree(x, z) {
+                const trunkHeight = 10 + Math.random() * 5;
+                
+                // Curved palm trunk
+                const trunkSegments = 8;
+                for (let i = 0; i < trunkSegments; i++) {
+                    const segmentHeight = trunkHeight / trunkSegments;
+                    const curvature = Math.sin((i / trunkSegments) * Math.PI) * 1.5;
+                    
+                    const segment = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.6, 0.8, segmentHeight),
+                        new THREE.MeshLambertMaterial({ color: 0xDEB887 })
+                    );
+                    segment.position.set(
+                        x + curvature,
+                        segmentHeight * i + segmentHeight / 2,
+                        z
+                    );
+                    segment.userData = { type: 'tree', phase: this.currentPhase };
+                    segment.castShadow = true;
+                    this.scene.add(segment);
+                }
+
+                // Palm fronds
+                const numFronds = 8 + Math.floor(Math.random() * 4);
+                for (let i = 0; i < numFronds; i++) {
+                    const frondAngle = (i * Math.PI * 2) / numFronds + Math.random() * 0.3;
+                    const frondLength = 4 + Math.random() * 2;
+                    
+                    // Frond stem
+                    const stem = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.1, 0.15, frondLength),
+                        new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                    );
+                    stem.position.set(
+                        x + Math.cos(frondAngle) * frondLength * 0.3,
+                        trunkHeight + frondLength * 0.3,
+                        z + Math.sin(frondAngle) * frondLength * 0.3
+                    );
+                    stem.rotation.z = Math.cos(frondAngle) * 0.8;
+                    stem.rotation.x = Math.sin(frondAngle) * 0.8;
+                    stem.userData = { type: 'tree', phase: this.currentPhase };
+                    this.scene.add(stem);
+
+                    // Frond leaves
+                    for (let j = 0; j < 12; j++) {
+                        const leafAngle = (j < 6 ? -1 : 1) * (j % 6) * 0.3;
+                        const leafDistance = (j % 6) * 0.6;
+                        
+                        const leaf = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.1, 0.8, 0.05),
+                            new THREE.MeshLambertMaterial({ color: 0x228B22 })
+                        );
+                        
+                        const leafX = x + Math.cos(frondAngle) * (frondLength * 0.3 + leafDistance) + Math.cos(frondAngle + leafAngle) * 0.8;
+                        const leafY = trunkHeight + frondLength * 0.3 + leafDistance * 0.5;
+                        const leafZ = z + Math.sin(frondAngle) * (frondLength * 0.3 + leafDistance) + Math.sin(frondAngle + leafAngle) * 0.8;
+                        
+                        leaf.position.set(leafX, leafY, leafZ);
+                        leaf.rotation.y = frondAngle + leafAngle;
+                        leaf.rotation.z = 0.3;
+                        leaf.userData = { type: 'tree', phase: this.currentPhase };
+                        leaf.castShadow = true;
+                        this.scene.add(leaf);
+                    }
+                }
+
+                // Coconuts (optional)
+                if (Math.random() > 0.7) {
+                    for (let i = 0; i < 3; i++) {
+                        const coconut = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.3, 8, 6),
+                            new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                        );
+                        const coconutAngle = Math.random() * Math.PI * 2;
+                        coconut.position.set(
+                            x + Math.cos(coconutAngle) * 1.5,
+                            trunkHeight - 1,
+                            z + Math.sin(coconutAngle) * 1.5
+                        );
+                        coconut.userData = { type: 'tree', phase: this.currentPhase };
+                        this.scene.add(coconut);
+                    }
+                }
+            }
+
+            // Create modern parks with smart features
+            createParks() {
+                const parksToCreate = Math.min(this.currentPhase * 2, 6); // Max 6 parks
+                const parkLocations = [
+                    { x: -120, z: -120, size: 40 },
+                    { x: 120, z: -120, size: 35 },
+                    { x: -120, z: 120, size: 45 },
+                    { x: 120, z: 120, size: 40 },
+                    { x: 0, z: -160, size: 30 },
+                    { x: 0, z: 160, size: 35 }
+                ];
+
+                for (let i = 0; i < parksToCreate; i++) {
+                    const park = parkLocations[i];
+                    this.createSinglePark(park.x, park.z, park.size, i + 1);
+                }
+
+                console.log(`✅ Created ${parksToCreate} modern parks for Phase ${this.currentPhase}`);
+            }
+
+            // Create individual park with modern features
+            createSinglePark(centerX, centerZ, size, parkId) {
+                // Park base (grass area)
+                const parkGeometry = new THREE.PlaneGeometry(size, size);
+                const parkMaterial = new THREE.MeshLambertMaterial({ color: 0x32CD32 });
+                const parkBase = new THREE.Mesh(parkGeometry, parkMaterial);
+                parkBase.rotation.x = -Math.PI / 2;
+                parkBase.position.set(centerX, 0.2, centerZ);
+                parkBase.userData = { type: 'park', id: parkId };
+                this.scene.add(parkBase);
+
+                // Walking paths (modern concrete)
+                this.createParkPaths(centerX, centerZ, size);
+
+                // Modern fountain (if Phase 2+)
+                if (this.currentPhase >= 2) {
+                    this.createModernFountain(centerX, centerZ);
+                }
+
+                // Smart benches
+                this.createSmartBenches(centerX, centerZ, size);
+
+                // Solar-powered lights
+                this.createSolarLights(centerX, centerZ, size);
+
+                // Playground (if Phase 3)
+                if (this.currentPhase >= 3 && parkId <= 2) {
+                    this.createModernPlayground(centerX + size/3, centerZ + size/3);
+                }
+            }
+
+            // Create park walking paths
+            createParkPaths(centerX, centerZ, size) {
+                const pathMaterial = new THREE.MeshLambertMaterial({ color: 0xCCCCCC });
+                const pathWidth = 2;
+
+                // Cross paths
+                const pathH = new THREE.Mesh(
+                    new THREE.PlaneGeometry(size, pathWidth),
+                    pathMaterial
+                );
+                pathH.rotation.x = -Math.PI / 2;
+                pathH.position.set(centerX, 0.3, centerZ);
+                pathH.userData = { type: 'park-path' };
+                this.scene.add(pathH);
+
+                const pathV = new THREE.Mesh(
+                    new THREE.PlaneGeometry(pathWidth, size),
+                    pathMaterial
+                );
+                pathV.rotation.x = -Math.PI / 2;
+                pathV.position.set(centerX, 0.3, centerZ);
+                pathV.userData = { type: 'park-path' };
+                this.scene.add(pathV);
+            }
+
+            // Create modern fountain with realistic details
+            createModernFountain(x, z) {
+                // Multi-tier granite base
+                const baseGeometry1 = new THREE.CylinderGeometry(12, 14, 1);
+                const graniteBase1 = new THREE.Mesh(baseGeometry1, new THREE.MeshLambertMaterial({ color: 0x696969 }));
+                graniteBase1.position.set(x, 0.5, z);
+                graniteBase1.userData = { type: 'fountain' };
+                this.scene.add(graniteBase1);
+
+                const baseGeometry2 = new THREE.CylinderGeometry(9, 11, 1.5);
+                const graniteBase2 = new THREE.Mesh(baseGeometry2, new THREE.MeshLambertMaterial({ color: 0x708090 }));
+                graniteBase2.position.set(x, 1.75, z);
+                this.scene.add(graniteBase2);
+
+                const baseGeometry3 = new THREE.CylinderGeometry(6, 8, 2);
+                const graniteBase3 = new THREE.Mesh(baseGeometry3, new THREE.MeshLambertMaterial({ color: 0x778899 }));
+                graniteBase3.position.set(x, 3.5, z);
+                this.scene.add(graniteBase3);
+
+                // Main water basin with realistic water
+                const basinGeometry = new THREE.CylinderGeometry(10.5, 13, 0.8);
+                const basinMaterial = new THREE.MeshLambertMaterial({ color: 0x2F4F4F });
+                const basin = new THREE.Mesh(basinGeometry, basinMaterial);
+                basin.position.set(x, 1.4, z);
+                this.scene.add(basin);
+
+                // Realistic water surface with transparency
+                const waterGeometry = new THREE.CylinderGeometry(10, 12.5, 0.3);
+                const waterMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x4169E1, 
+                    transparent: true, 
+                    opacity: 0.6 
+                });
+                const water = new THREE.Mesh(waterGeometry, waterMaterial);
+                water.position.set(x, 1.85, z);
+                water.userData = { type: 'fountain-water' };
+                this.scene.add(water);
+
+                // Central sculptural pillar with details
+                const pillarGeometry = new THREE.CylinderGeometry(1.2, 1.8, 6);
+                const pillarMaterial = new THREE.MeshLambertMaterial({ color: 0x2F4F4F });
+                const pillar = new THREE.Mesh(pillarGeometry, pillarMaterial);
+                pillar.position.set(x, 7, z);
+                this.scene.add(pillar);
+
+                // Decorative rings around pillar
+                for (let i = 0; i < 3; i++) {
+                    const ring = new THREE.Mesh(
+                        new THREE.TorusGeometry(1.5 + i * 0.3, 0.2, 8, 16),
+                        new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+                    );
+                    ring.position.set(x, 4 + i * 2, z);
+                    ring.rotation.x = Math.PI / 2;
+                    this.scene.add(ring);
+                }
+
+                // Water spouts (nozzles) with animated water streams
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI * 2) / 8;
+                    const spoutX = x + Math.cos(angle) * 8;
+                    const spoutZ = z + Math.sin(angle) * 8;
+                    
+                    const spout = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.3, 0.4, 1),
+                        new THREE.MeshLambertMaterial({ color: 0x4682B4 })
+                    );
+                    spout.position.set(spoutX, 2.5, spoutZ);
+                    spout.rotation.x = -Math.PI / 4;
+                    this.scene.add(spout);
+
+                    // Create animated water stream from each spout
+                    this.createWaterStream(spoutX, spoutZ, 2.8, angle, i);
+                }
+
+                // Create animated central water jet
+                this.createCentralWaterJet(x, z, 10);
+
+                // Animate the main water surface with waves
+                this.animateWaterSurface(water, x, z);
+
+                // LED underwater lights
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i * Math.PI * 2) / 6;
+                    const lightX = x + Math.cos(angle) * 5;
+                    const lightZ = z + Math.sin(angle) * 5;
+                    
+                    const light = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.5, 0.5, 0.2),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0xFFFFE0,
+                            emissive: 0x404040
+                        })
+                    );
+                    light.position.set(lightX, 1.6, lightZ);
+                    this.scene.add(light);
+                }
+
+                // Control panel
+                const controlPanel = new THREE.Mesh(
+                    new THREE.BoxGeometry(1, 1.5, 0.3),
+                    new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                );
+                controlPanel.position.set(x + 15, 0.75, z);
+                this.scene.add(controlPanel);
+
+                // Control screen
+                const screen = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.8, 1, 0.1),
+                    new THREE.MeshLambertMaterial({ color: 0x000080 })
+                );
+                screen.position.set(x + 15.2, 1, z);
+                this.scene.add(screen);
+            }
+
+            // Create animated water stream from fountain spouts
+            createWaterStream(x, z, startHeight, angle, index) {
+                const streamSegments = 12;
+                const streamHeight = 6;
+                const waterStreams = [];
+
+                for (let i = 0; i < streamSegments; i++) {
+                    const segment = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.15 - i * 0.01, 6, 4),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x4169E1,
+                            transparent: true,
+                            opacity: 0.8 - i * 0.05
+                        })
+                    );
+
+                    // Calculate parabolic trajectory
+                    const t = i / streamSegments;
+                    const segmentX = x + Math.cos(angle) * (3 - t * 3);
+                    const segmentY = startHeight + streamHeight * (t - t * t * 1.5);
+                    const segmentZ = z + Math.sin(angle) * (3 - t * 3);
+
+                    segment.position.set(segmentX, segmentY, segmentZ);
+                    segment.userData = { 
+                        type: 'water-stream',
+                        streamIndex: index,
+                        segmentIndex: i,
+                        basePosition: { x: segmentX, y: segmentY, z: segmentZ },
+                        angle: angle
+                    };
+
+                    this.scene.add(segment);
+                    waterStreams.push(segment);
+                }
+
+                // Animate water stream
+                this.animateWaterStream(waterStreams, angle, index);
+            }
+
+            // Create central water jet animation
+            createCentralWaterJet(x, z, maxHeight) {
+                const jetSegments = 20;
+                const jetStream = [];
+
+                for (let i = 0; i < jetSegments; i++) {
+                    const segment = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.2 - i * 0.008, 0.25 - i * 0.008, 0.5),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x87CEEB,
+                            transparent: true,
+                            opacity: 0.9 - i * 0.03
+                        })
+                    );
+
+                    const segmentY = 4 + (i * 0.8);
+                    segment.position.set(x, segmentY, z);
+                    segment.userData = { 
+                        type: 'central-jet',
+                        segmentIndex: i,
+                        baseHeight: segmentY,
+                        maxHeight: maxHeight
+                    };
+
+                    this.scene.add(segment);
+                    jetStream.push(segment);
+                }
+
+                // Animate central jet
+                this.animateCentralJet(jetStream);
+            }
+
+            // Animate water surface with realistic waves
+            animateWaterSurface(waterMesh, centerX, centerZ) {
+                if (!waterMesh || !waterMesh.geometry) return;
+
+                const originalPositions = waterMesh.geometry.attributes.position.array.slice();
+                waterMesh.userData.originalPositions = originalPositions;
+                waterMesh.userData.waveTime = 0;
+
+                // Store reference for animation
+                if (!this.animatedWaterSurfaces) {
+                    this.animatedWaterSurfaces = [];
+                }
+                this.animatedWaterSurfaces.push({
+                    mesh: waterMesh,
+                    centerX: centerX,
+                    centerZ: centerZ
+                });
+            }
+
+            // Water stream animation function
+            animateWaterStream(streamSegments, baseAngle, streamIndex) {
+                if (!this.animatedWaterStreams) {
+                    this.animatedWaterStreams = [];
+                }
+
+                this.animatedWaterStreams.push({
+                    segments: streamSegments,
+                    baseAngle: baseAngle,
+                    streamIndex: streamIndex,
+                    time: Math.random() * Math.PI * 2 // Random phase
+                });
+            }
+
+            // Central jet animation function
+            animateCentralJet(jetSegments) {
+                if (!this.animatedJets) {
+                    this.animatedJets = [];
+                }
+
+                this.animatedJets.push({
+                    segments: jetSegments,
+                    time: 0
+                });
+            }
+
+            // Update all water animations (called in render loop)
+            updateWaterAnimations() {
+                // Skip water animations if disabled
+                if (!this.waterEffectsEnabled) return;
+                
+                const time = Date.now() * 0.002;
+
+                // Animate water streams
+                if (this.animatedWaterStreams) {
+                    this.animatedWaterStreams.forEach(stream => {
+                        stream.segments.forEach((segment, i) => {
+                            if (segment.userData) {
+                                const streamTime = time + stream.time + i * 0.1;
+                                const basePos = segment.userData.basePosition;
+                                
+                                // Add subtle movement and timing
+                                const offset = Math.sin(streamTime * 3) * 0.1;
+                                const heightVariation = Math.sin(streamTime * 2) * 0.3;
+                                
+                                segment.position.x = basePos.x + offset;
+                                segment.position.y = basePos.y + heightVariation;
+                                segment.position.z = basePos.z + offset * 0.5;
+                                
+                                // Fade in/out effect
+                                const fadeEffect = Math.abs(Math.sin(streamTime + i * 0.2));
+                                segment.material.opacity = (0.8 - i * 0.05) * fadeEffect;
+                            }
+                        });
+                    });
+                }
+
+                // Animate central jets
+                if (this.animatedJets) {
+                    this.animatedJets.forEach(jet => {
+                        jet.time += 0.02;
+                        
+                        jet.segments.forEach((segment, i) => {
+                            const segmentTime = jet.time + i * 0.1;
+                            const baseHeight = segment.userData.baseHeight;
+                            
+                            // Pulsing height effect
+                            const heightPulse = Math.sin(segmentTime * 2) * 2;
+                            const turbulence = Math.sin(segmentTime * 8) * 0.1;
+                            
+                            segment.position.y = baseHeight + heightPulse + turbulence;
+                            
+                            // Slight swaying motion
+                            segment.position.x += Math.sin(segmentTime * 1.5) * 0.05;
+                            segment.position.z += Math.cos(segmentTime * 1.2) * 0.05;
+                            
+                            // Opacity variation
+                            const opacityWave = Math.abs(Math.sin(segmentTime));
+                            segment.material.opacity = (0.9 - i * 0.03) * opacityWave;
+                        });
+                    });
+                }
+
+                // Animate water surface waves
+                if (this.animatedWaterSurfaces) {
+                    this.animatedWaterSurfaces.forEach(surface => {
+                        const mesh = surface.mesh;
+                        if (mesh.userData.originalPositions) {
+                            mesh.userData.waveTime += 0.02;
+                            const waveTime = mesh.userData.waveTime;
+                            
+                            const positions = mesh.geometry.attributes.position.array;
+                            const originalPositions = mesh.userData.originalPositions;
+                            
+                            // Create ripple effect from center
+                            for (let i = 0; i < positions.length; i += 3) {
+                                const x = originalPositions[i];
+                                const z = originalPositions[i + 2];
+                                
+                                // Distance from center
+                                const distance = Math.sqrt(
+                                    (x - surface.centerX) * (x - surface.centerX) + 
+                                    (z - surface.centerZ) * (z - surface.centerZ)
+                                );
+                                
+                                // Multiple wave frequencies for realistic effect
+                                const wave1 = Math.sin(waveTime * 3 + distance * 0.5) * 0.1;
+                                const wave2 = Math.sin(waveTime * 5 - distance * 0.3) * 0.05;
+                                const wave3 = Math.sin(waveTime * 7 + distance * 0.8) * 0.03;
+                                
+                                positions[i + 1] = originalPositions[i + 1] + wave1 + wave2 + wave3;
+                            }
+                            
+                            mesh.geometry.attributes.position.needsUpdate = true;
+                        }
+                    });
+                }
+
+                // Add splash effects randomly
+                if (Math.random() < 0.02) { // 2% chance per frame
+                    this.createSplashEffect();
+                }
+            }
+
+            // Create random splash effects
+            createSplashEffect() {
+                if (!this.animatedWaterSurfaces || this.animatedWaterSurfaces.length === 0) return;
+
+                const surface = this.animatedWaterSurfaces[Math.floor(Math.random() * this.animatedWaterSurfaces.length)];
+                const splashX = surface.centerX + (Math.random() - 0.5) * 15;
+                const splashZ = surface.centerZ + (Math.random() - 0.5) * 15;
+
+                // Create splash particles
+                for (let i = 0; i < 8; i++) {
+                    const splash = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.1, 4, 4),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x87CEEB,
+                            transparent: true,
+                            opacity: 0.6
+                        })
+                    );
+
+                    splash.position.set(
+                        splashX + (Math.random() - 0.5) * 2,
+                        2.2,
+                        splashZ + (Math.random() - 0.5) * 2
+                    );
+
+                    splash.userData = {
+                        type: 'splash',
+                        velocity: {
+                            x: (Math.random() - 0.5) * 2,
+                            y: Math.random() * 3 + 1,
+                            z: (Math.random() - 0.5) * 2
+                        },
+                        life: 1.0
+                    };
+
+                    this.scene.add(splash);
+
+                    // Remove splash after animation
+                    setTimeout(() => {
+                        if (splash.parent) {
+                            this.scene.remove(splash);
+                        }
+                    }, 1500);
+                }
+
+                // Animate splash particles
+                this.animateSplashParticles();
+            }
+
+            // Animate splash particles
+            animateSplashParticles() {
+                this.scene.traverse((child) => {
+                    if (child.userData.type === 'splash' && child.userData.life > 0) {
+                        // Apply physics
+                        child.position.x += child.userData.velocity.x * 0.02;
+                        child.position.y += child.userData.velocity.y * 0.02;
+                        child.position.z += child.userData.velocity.z * 0.02;
+
+                        // Gravity effect
+                        child.userData.velocity.y -= 0.05;
+
+                        // Fade out
+                        child.userData.life -= 0.015;
+                        child.material.opacity = child.userData.life * 0.6;
+
+                        // Scale down
+                        const scale = child.userData.life;
+                        child.scale.set(scale, scale, scale);
+                    }
+                });
+            }
+
+            // Toggle water effects visibility
+            toggleWaterEffects(enabled) {
+                console.log(`💧 ${enabled ? 'Enabling' : 'Disabling'} water effects...`);
+                
+                this.scene.traverse((child) => {
+                    if (child.userData.type && (
+                        child.userData.type.includes('water') ||
+                        child.userData.type.includes('fountain') ||
+                        child.userData.type.includes('jet') ||
+                        child.userData.type.includes('splash')
+                    )) {
+                        child.visible = enabled;
+                    }
+                });
+                
+                // Also control animations
+                if (enabled) {
+                    // Re-enable water animations in render loop
+                    this.waterEffectsEnabled = true;
+                } else {
+                    // Clear animation arrays to stop processing
+                    this.waterEffectsEnabled = false;
+                }
+                
+                console.log(`✅ Water effects ${enabled ? 'enabled' : 'disabled'}`);
+            }
+
+            // Create smart benches with realistic modern design
+            createSmartBenches(centerX, centerZ, parkSize) {
+                const benchPositions = [
+                    { x: centerX - parkSize/3, z: centerZ - parkSize/3, rotation: 0 },
+                    { x: centerX + parkSize/3, z: centerZ - parkSize/3, rotation: Math.PI },
+                    { x: centerX - parkSize/3, z: centerZ + parkSize/3, rotation: Math.PI/2 },
+                    { x: centerX + parkSize/3, z: centerZ + parkSize/3, rotation: -Math.PI/2 }
+                ];
+
+                benchPositions.forEach((pos, index) => {
+                    // Concrete base foundation
+                    const foundation = new THREE.Mesh(
+                        new THREE.BoxGeometry(5, 0.3, 2.5),
+                        new THREE.MeshLambertMaterial({ color: 0xC0C0C0 })
+                    );
+                    foundation.position.set(pos.x, 0.15, pos.z);
+                    foundation.rotation.y = pos.rotation;
+                    this.scene.add(foundation);
+
+                    // Modern metal frame legs
+                    const legPositions = [
+                        { x: -1.8, z: -0.6 }, { x: 1.8, z: -0.6 },
+                        { x: -1.8, z: 0.6 }, { x: 1.8, z: 0.6 }
+                    ];
+
+                    legPositions.forEach(legPos => {
+                        // Vertical leg
+                        const leg = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.15, 1.5, 0.15),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        leg.position.set(pos.x + legPos.x, 1.05, pos.z + legPos.z);
+                        leg.rotation.y = pos.rotation;
+                        this.scene.add(leg);
+
+                        // Foot cap
+                        const footCap = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.2, 0.2, 0.1),
+                            new THREE.MeshLambertMaterial({ color: 0x000000 })
+                        );
+                        footCap.position.set(pos.x + legPos.x, 0.35, pos.z + legPos.z);
+                        footCap.rotation.y = pos.rotation;
+                        this.scene.add(footCap);
+                    });
+
+                    // Seat planks (wood texture simulation)
+                    for (let i = 0; i < 5; i++) {
+                        const plank = new THREE.Mesh(
+                            new THREE.BoxGeometry(4, 0.15, 0.3),
+                            new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                        );
+                        plank.position.set(pos.x, 1.75, pos.z - 0.6 + i * 0.35);
+                        plank.rotation.y = pos.rotation;
+                        this.scene.add(plank);
+                    }
+
+                    // Backrest planks
+                    for (let i = 0; i < 8; i++) {
+                        const backPlank = new THREE.Mesh(
+                            new THREE.BoxGeometry(4, 0.15, 0.2),
+                            new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                        );
+                        backPlank.position.set(pos.x, 2.2 + i * 0.2, pos.z - 1.2);
+                        backPlank.rotation.y = pos.rotation;
+                        backPlank.rotation.x = Math.PI / 12; // Slight angle for comfort
+                        this.scene.add(backPlank);
+                    }
+
+                    // Armrests
+                    [-2, 2].forEach(side => {
+                        const armrest = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.3, 0.2, 1.5),
+                            new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                        );
+                        armrest.position.set(pos.x + side, 2.5, pos.z - 0.3);
+                        armrest.rotation.y = pos.rotation;
+                        this.scene.add(armrest);
+
+                        // Armrest support
+                        const support = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.1, 0.1, 1.2),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        support.position.set(pos.x + side, 2, pos.z - 0.3);
+                        support.rotation.y = pos.rotation;
+                        this.scene.add(support);
+                    });
+
+                    // Smart features (Phase 3)
+                    if (this.currentPhase >= 3) {
+                        // Solar panel integrated into backrest
+                        const solarPanel = new THREE.Mesh(
+                            new THREE.BoxGeometry(3.5, 1.2, 0.1),
+                            new THREE.MeshLambertMaterial({ color: 0x191970 })
+                        );
+                        solarPanel.position.set(pos.x, 4.2, pos.z - 1.3);
+                        solarPanel.rotation.y = pos.rotation;
+                        solarPanel.rotation.x = -Math.PI / 6;
+                        this.scene.add(solarPanel);
+
+                        // USB charging ports in armrest
+                        const chargingPort = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.2, 0.05, 0.3),
+                            new THREE.MeshLambertMaterial({ color: 0x000000 })
+                        );
+                        chargingPort.position.set(pos.x + 2.05, 2.55, pos.z - 0.3);
+                        chargingPort.rotation.y = pos.rotation;
+                        this.scene.add(chargingPort);
+
+                        // LED indicator
+                        const ledIndicator = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.05),
+                            new THREE.MeshLambertMaterial({ 
+                                color: 0x00FF00,
+                                emissive: 0x002200
+                            })
+                        );
+                        ledIndicator.position.set(pos.x + 2.05, 2.6, pos.z - 0.1);
+                        ledIndicator.rotation.y = pos.rotation;
+                        this.scene.add(ledIndicator);
+
+                        // WiFi antenna hidden in backrest
+                        const antenna = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.02, 0.02, 0.5),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        antenna.position.set(pos.x, 4.8, pos.z - 1.3);
+                        antenna.rotation.y = pos.rotation;
+                        this.scene.add(antenna);
+                    }
+
+                    // Bench nameplate
+                    const nameplate = new THREE.Mesh(
+                        new THREE.BoxGeometry(1, 0.3, 0.05),
+                        new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+                    );
+                    nameplate.position.set(pos.x, 2, pos.z + 1.3);
+                    nameplate.rotation.y = pos.rotation;
+                    this.scene.add(nameplate);
+                });
+            }
+
+            // Create realistic solar-powered LED lights
+            createSolarLights(centerX, centerZ, parkSize) {
+                const lightPositions = [
+                    { x: centerX - parkSize/2 + 8, z: centerZ - parkSize/2 + 8 },
+                    { x: centerX + parkSize/2 - 8, z: centerZ - parkSize/2 + 8 },
+                    { x: centerX - parkSize/2 + 8, z: centerZ + parkSize/2 - 8 },
+                    { x: centerX + parkSize/2 - 8, z: centerZ + parkSize/2 - 8 }
+                ];
+
+                lightPositions.forEach(pos => {
+                    // Concrete foundation
+                    const foundation = new THREE.Mesh(
+                        new THREE.CylinderGeometry(1.2, 1.5, 0.5),
+                        new THREE.MeshLambertMaterial({ color: 0xC0C0C0 })
+                    );
+                    foundation.position.set(pos.x, 0.25, pos.z);
+                    this.scene.add(foundation);
+
+                    // Main light pole (modern tapered design)
+                    const poleGeometry = new THREE.CylinderGeometry(0.15, 0.35, 10);
+                    const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x2F4F4F });
+                    const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                    pole.position.set(pos.x, 5.5, pos.z);
+                    pole.userData = { type: 'smart-light' };
+                    this.scene.add(pole);
+
+                    // Access panel at base
+                    const accessPanel = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.6, 1, 0.15),
+                        new THREE.MeshLambertMaterial({ color: 0x696969 })
+                    );
+                    accessPanel.position.set(pos.x, 1.5, pos.z + 0.4);
+                    this.scene.add(accessPanel);
+
+                    // Panel handle
+                    const handle = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.05, 0.05, 0.3),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    handle.position.set(pos.x + 0.2, 1.5, pos.z + 0.48);
+                    handle.rotation.z = Math.PI / 2;
+                    this.scene.add(handle);
+
+                    // Modern LED light head (multiple units)
+                    const lightHead = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.8, 0.8, 1.2),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    lightHead.position.set(pos.x, 10.2, pos.z);
+                    this.scene.add(lightHead);
+
+                    // LED panels (4 directions)
+                    const ledDirections = [
+                        { x: 0.9, z: 0, rotY: 0 },
+                        { x: -0.9, z: 0, rotY: Math.PI },
+                        { x: 0, z: 0.6, rotY: Math.PI/2 },
+                        { x: 0, z: -0.6, rotY: -Math.PI/2 }
+                    ];
+
+                    ledDirections.forEach(dir => {
+                        const ledPanel = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.05, 0.6, 0.8),
+                            new THREE.MeshLambertMaterial({ 
+                                color: 0xFFFFE0,
+                                emissive: 0x404040
+                            })
+                        );
+                        ledPanel.position.set(pos.x + dir.x, 10.2, pos.z + dir.z);
+                        ledPanel.rotation.y = dir.rotY;
+                        this.scene.add(ledPanel);
+                    });
+
+                    // Heat sink fins on top
+                    for (let i = 0; i < 8; i++) {
+                        const fin = new THREE.Mesh(
+                            new THREE.BoxGeometry(1.6, 0.05, 0.1),
+                            new THREE.MeshLambertMaterial({ color: 0x1C1C1C })
+                        );
+                        fin.position.set(pos.x, 10.8 + i * 0.08, pos.z);
+                        this.scene.add(fin);
+                    }
+
+                    // Modern solar panel with realistic frame
+                    const solarFrame = new THREE.Mesh(
+                        new THREE.BoxGeometry(2.2, 0.15, 2.2),
+                        new THREE.MeshLambertMaterial({ color: 0x696969 })
+                    );
+                    solarFrame.position.set(pos.x, 11.5, pos.z);
+                    this.scene.add(solarFrame);
+
+                    // Solar cells pattern
+                    for (let row = 0; row < 6; row++) {
+                        for (let col = 0; col < 6; col++) {
+                            const cell = new THREE.Mesh(
+                                new THREE.BoxGeometry(0.3, 0.05, 0.3),
+                                new THREE.MeshLambertMaterial({ color: 0x191970 })
+                            );
+                            cell.position.set(
+                                pos.x - 0.75 + col * 0.3,
+                                11.6,
+                                pos.z - 0.75 + row * 0.3
+                            );
+                            this.scene.add(cell);
+                        }
+                    }
+
+                    // Junction box
+                    const junctionBox = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.4, 0.2, 0.3),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    junctionBox.position.set(pos.x + 1.2, 11.4, pos.z + 1.2);
+                    this.scene.add(junctionBox);
+
+                    // Tilt mechanism
+                    const tiltSupport = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.1, 0.1, 1),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    tiltSupport.position.set(pos.x, 11, pos.z);
+                    this.scene.add(tiltSupport);
+
+                    // Motion sensor
+                    const motionSensor = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.2),
+                        new THREE.MeshLambertMaterial({ color: 0xFF0000 })
+                    );
+                    motionSensor.position.set(pos.x, 9.5, pos.z + 0.3);
+                    this.scene.add(motionSensor);
+
+                    // Control cables (conduit)
+                    const conduit = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.08, 0.08, 8),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    conduit.position.set(pos.x + 0.3, 5, pos.z);
+                    this.scene.add(conduit);
+
+                    // Warning/status LED
+                    const statusLED = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.08, 0.08, 0.1),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x00FF00,
+                            emissive: 0x002200
+                        })
+                    );
+                    statusLED.position.set(pos.x, 3, pos.z + 0.4);
+                    this.scene.add(statusLED);
+                });
+            }
+
+            // Create modern playground
+            createModernPlayground(x, z) {
+                // Playground base
+                const playgroundBase = new THREE.Mesh(
+                    new THREE.PlaneGeometry(20, 20),
+                    new THREE.MeshLambertMaterial({ color: 0xFFB347 })
+                );
+                playgroundBase.rotation.x = -Math.PI / 2;
+                playgroundBase.position.set(x, 0.1, z);
+                playgroundBase.userData = { type: 'playground' };
+                this.scene.add(playgroundBase);
+
+                // Modern slide
+                const slideGeometry = new THREE.BoxGeometry(3, 4, 8);
+                const slideMaterial = new THREE.MeshLambertMaterial({ color: 0xFF6347 });
+                const slide = new THREE.Mesh(slideGeometry, slideMaterial);
+                slide.position.set(x - 6, 2, z - 4);
+                slide.userData = { type: 'playground-equipment' };
+                this.scene.add(slide);
+
+                // Climbing structure
+                const climbGeometry = new THREE.BoxGeometry(4, 6, 4);
+                const climbMaterial = new THREE.MeshLambertMaterial({ color: 0x32CD32 });
+                const climb = new THREE.Mesh(climbGeometry, climbMaterial);
+                climb.position.set(x + 4, 3, z + 2);
+                climb.userData = { type: 'playground-equipment' };
+                this.scene.add(climb);
+
+                // Swings
+                for (let i = 0; i < 3; i++) {
+                    const swingPole = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.2, 0.2, 6),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    swingPole.position.set(x - 2 + i * 2, 3, z + 6);
+                    swingPole.userData = { type: 'playground-equipment' };
+                    this.scene.add(swingPole);
+                }
+            }
+
+            // Create smart parking lots
+            createParkingLots() {
+                const parkingToCreate = Math.min(this.currentPhase * 2, 4);
+                const parkingLocations = [
+                    { x: -80, z: -80, width: 30, depth: 20 },
+                    { x: 80, z: -80, width: 30, depth: 20 },
+                    { x: -80, z: 80, width: 35, depth: 25 },
+                    { x: 80, z: 80, width: 35, depth: 25 }
+                ];
+
+                for (let i = 0; i < parkingToCreate; i++) {
+                    const parking = parkingLocations[i];
+                    this.createSingleParkingLot(parking.x, parking.z, parking.width, parking.depth, i + 1);
+                }
+
+                console.log(`✅ Created ${parkingToCreate} smart parking lots for Phase ${this.currentPhase}`);
+            }
+
+            // Create individual parking lot
+            createSingleParkingLot(x, z, width, depth, lotId) {
+                // Parking surface
+                const surfaceGeometry = new THREE.PlaneGeometry(width, depth);
+                const surfaceMaterial = new THREE.MeshLambertMaterial({ color: 0x696969 });
+                const surface = new THREE.Mesh(surfaceGeometry, surfaceMaterial);
+                surface.rotation.x = -Math.PI / 2;
+                surface.position.set(x, 0.1, z);
+                surface.userData = { type: 'parking-lot', id: lotId };
+                this.scene.add(surface);
+
+                // Parking lines
+                this.createParkingLines(x, z, width, depth);
+
+                // Smart parking sensors (Phase 2+)
+                if (this.currentPhase >= 2) {
+                    this.createParkingSensors(x, z, width, depth);
+                }
+
+                // Electric charging stations (Phase 3)
+                if (this.currentPhase >= 3) {
+                    this.createChargingStations(x, z, width, depth);
+                }
+
+                // LED entrance sign
+                this.createParkingSign(x, z - depth/2 - 3, lotId);
+            }
+
+            // Create parking lines
+            createParkingLines(centerX, centerZ, width, depth) {
+                const lineMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                const spotsX = Math.floor(width / 3);
+                const spotsZ = Math.floor(depth / 6);
+
+                for (let i = 0; i < spotsX; i++) {
+                    for (let j = 0; j < spotsZ; j++) {
+                        // Parking spot outline
+                        const lineGeometry = new THREE.PlaneGeometry(2.8, 5.8);
+                        const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                        line.rotation.x = -Math.PI / 2;
+                        line.position.set(
+                            centerX - width/2 + i * 3 + 1.5,
+                            0.15,
+                            centerZ - depth/2 + j * 6 + 3
+                        );
+                        line.userData = { type: 'parking-line' };
+                        this.scene.add(line);
+                    }
+                }
+            }
+
+            // Create smart parking sensors
+            createParkingSensors(centerX, centerZ, width, depth) {
+                const spotsX = Math.floor(width / 3);
+                const spotsZ = Math.floor(depth / 6);
+
+                for (let i = 0; i < spotsX; i += 2) {
+                    for (let j = 0; j < spotsZ; j += 2) {
+                        // Smart sensor pole
+                        const sensorPole = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.1, 0.1, 3),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        sensorPole.position.set(
+                            centerX - width/2 + i * 3 + 1.5,
+                            1.5,
+                            centerZ - depth/2 + j * 6 + 3
+                        );
+                        sensorPole.userData = { type: 'parking-sensor' };
+                        this.scene.add(sensorPole);
+
+                        // Sensor device
+                        const sensor = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.5, 0.3, 0.3),
+                            new THREE.MeshLambertMaterial({ color: 0x00FF00 })
+                        );
+                        sensor.position.set(
+                            centerX - width/2 + i * 3 + 1.5,
+                            3.2,
+                            centerZ - depth/2 + j * 6 + 3
+                        );
+                        sensor.userData = { type: 'iot-sensor' };
+                        this.scene.add(sensor);
+                    }
+                }
+            }
+
+            // Create realistic electric charging stations (Tesla Supercharger style)
+            createChargingStations(centerX, centerZ, width, depth) {
+                const chargingSpots = [
+                    { x: centerX - width/4, z: centerZ - depth/4, rotation: 0 },
+                    { x: centerX + width/4, z: centerZ + depth/4, rotation: Math.PI }
+                ];
+
+                chargingSpots.forEach((spot, index) => {
+                    // Concrete foundation pad
+                    const foundation = new THREE.Mesh(
+                        new THREE.BoxGeometry(3, 0.3, 4),
+                        new THREE.MeshLambertMaterial({ color: 0xC0C0C0 })
+                    );
+                    foundation.position.set(spot.x, 0.15, spot.z);
+                    this.scene.add(foundation);
+
+                    // Main charging pedestal (modern rounded design)
+                    const pedestalGeometry = new THREE.CylinderGeometry(0.4, 0.5, 5);
+                    const pedestalMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                    const pedestal = new THREE.Mesh(pedestalGeometry, pedestalMaterial);
+                    pedestal.position.set(spot.x, 2.8, spot.z);
+                    pedestal.userData = { type: 'charging-station' };
+                    this.scene.add(pedestal);
+
+                    // Red accent stripe (Tesla style)
+                    const stripe = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.41, 0.51, 1),
+                        new THREE.MeshLambertMaterial({ color: 0xFF0000 })
+                    );
+                    stripe.position.set(spot.x, 4, spot.z);
+                    this.scene.add(stripe);
+
+                    // Touch screen display (large, modern)
+                    const screenFrame = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.2, 1.8, 0.15),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    screenFrame.position.set(spot.x + 0.5, 4, spot.z);
+                    screenFrame.rotation.y = spot.rotation;
+                    this.scene.add(screenFrame);
+
+                    // Active screen
+                    const screen = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.1, 1.6, 0.05),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x000080,
+                            emissive: 0x000040
+                        })
+                    );
+                    screen.position.set(spot.x + 0.58, 4, spot.z);
+                    screen.rotation.y = spot.rotation;
+                    screen.userData = { type: 'charging-screen' };
+                    this.scene.add(screen);
+
+                    // Charging cable management system
+                    const cableBox = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.8, 1.2, 0.4),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    cableBox.position.set(spot.x - 0.4, 3, spot.z + 0.3);
+                    cableBox.rotation.y = spot.rotation;
+                    this.scene.add(cableBox);
+
+                    // Charging cable (coiled)
+                    const cableCoil = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.3, 0.05, 8, 16),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    cableCoil.position.set(spot.x - 0.4, 2.5, spot.z + 0.3);
+                    cableCoil.rotation.x = Math.PI / 2;
+                    this.scene.add(cableCoil);
+
+                    // Charging connector (CCS/Tesla style)
+                    const connector = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.15, 0.3, 0.1),
+                        new THREE.MeshLambertMaterial({ color: 0xFF4500 })
+                    );
+                    connector.position.set(spot.x - 0.4, 2.2, spot.z + 0.3);
+                    this.scene.add(connector);
+
+                    // Cable extending to ground
+                    const cableExtension = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.03, 0.03, 1.5),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    cableExtension.position.set(spot.x - 0.4, 1.4, spot.z + 0.3);
+                    this.scene.add(cableExtension);
+
+                    // Payment/card reader
+                    const cardReader = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.3, 0.2, 0.1),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    cardReader.position.set(spot.x + 0.35, 3, spot.z);
+                    cardReader.rotation.y = spot.rotation;
+                    this.scene.add(cardReader);
+
+                    // RFID/NFC reader
+                    const rfidReader = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.08, 0.08, 0.05),
+                        new THREE.MeshLambertMaterial({ color: 0x4169E1 })
+                    );
+                    rfidReader.position.set(spot.x + 0.35, 3.5, spot.z);
+                    rfidReader.rotation.y = spot.rotation;
+                    this.scene.add(rfidReader);
+
+                    // Status LED indicators
+                    const statusColors = [0x00FF00, 0xFFFF00, 0xFF0000]; // Available, Charging, Error
+                    statusColors.forEach((color, i) => {
+                        const statusLED = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.05),
+                            new THREE.MeshLambertMaterial({ 
+                                color: i === 0 ? color : 0x333333, // Only green is lit
+                                emissive: i === 0 ? 0x002200 : 0x000000
+                            })
+                        );
+                        statusLED.position.set(spot.x + 0.35, 2.3 + i * 0.15, spot.z);
+                        statusLED.rotation.y = spot.rotation;
+                        this.scene.add(statusLED);
+                    });
+
+                    // Ventilation grilles (cooling system)
+                    for (let i = 0; i < 6; i++) {
+                        const grille = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.6, 0.05, 0.02),
+                            new THREE.MeshLambertMaterial({ color: 0x666666 })
+                        );
+                        grille.position.set(spot.x - 0.45, 1.5 + i * 0.2, spot.z);
+                        grille.rotation.y = spot.rotation;
+                        this.scene.add(grille);
+                    }
+
+                    // Emergency stop button
+                    const emergencyStop = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.08, 0.08, 0.1),
+                        new THREE.MeshLambertMaterial({ color: 0xFF0000 })
+                    );
+                    emergencyStop.position.set(spot.x + 0.35, 1.8, spot.z);
+                    emergencyStop.rotation.y = spot.rotation;
+                    this.scene.add(emergencyStop);
+
+                    // Branding/logo area
+                    const logoArea = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.8, 0.4, 0.05),
+                        new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                    );
+                    logoArea.position.set(spot.x + 0.55, 5.2, spot.z);
+                    logoArea.rotation.y = spot.rotation;
+                    this.scene.add(logoArea);
+
+                    // Power rating label
+                    const powerLabel = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.5, 0.2, 0.02),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    powerLabel.position.set(spot.x + 0.55, 1.2, spot.z);
+                    powerLabel.rotation.y = spot.rotation;
+                    this.scene.add(powerLabel);
+
+                    // Cable management hook
+                    const cableHook = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.1, 0.02, 8, 16),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    cableHook.position.set(spot.x - 0.4, 3.8, spot.z + 0.3);
+                    cableHook.rotation.y = Math.PI / 4;
+                    this.scene.add(cableHook);
+                });
+            }
+
+            // Create parking entrance sign
+            createParkingSign(x, z, lotId) {
+                // Sign pole
+                const signPole = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.2, 0.2, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                );
+                signPole.position.set(x, 3, z);
+                signPole.userData = { type: 'parking-sign' };
+                this.scene.add(signPole);
+
+                // LED sign panel
+                const signPanel = new THREE.Mesh(
+                    new THREE.BoxGeometry(4, 2, 0.2),
+                    new THREE.MeshLambertMaterial({ 
+                        color: 0x000080,
+                        emissive: 0x000040
+                    })
+                );
+                signPanel.position.set(x, 6.5, z);
+                signPanel.userData = { type: 'led-sign', text: `PARKING ${lotId}` };
+                this.scene.add(signPanel);
+            }
+
+            // Create modern plazas and public squares
+            createPlazas() {
+                const plazasToCreate = Math.min(this.currentPhase, 3);
+                const plazaLocations = [
+                    { x: 0, z: 0, size: 60, type: 'central' },
+                    { x: -120, z: 0, size: 40, type: 'tech' },
+                    { x: 120, z: 0, size: 45, type: 'green' }
+                ];
+
+                for (let i = 0; i < plazasToCreate; i++) {
+                    const plaza = plazaLocations[i];
+                    this.createSinglePlaza(plaza.x, plaza.z, plaza.size, plaza.type, i + 1);
+                }
+
+                console.log(`✅ Created ${plazasToCreate} modern plazas for Phase ${this.currentPhase}`);
+            }
+
+            // Create individual plaza
+            createSinglePlaza(x, z, size, type, plazaId) {
+                // Plaza base (stone/concrete)
+                const plazaGeometry = new THREE.PlaneGeometry(size, size);
+                const plazaMaterial = new THREE.MeshLambertMaterial({ 
+                    color: type === 'green' ? 0x90EE90 : 0xC0C0C0 
+                });
+                const plazaBase = new THREE.Mesh(plazaGeometry, plazaMaterial);
+                plazaBase.rotation.x = -Math.PI / 2;
+                plazaBase.position.set(x, 0.1, z);
+                plazaBase.userData = { type: 'plaza', subtype: type, id: plazaId };
+                this.scene.add(plazaBase);
+
+                // Create different plaza types
+                switch(type) {
+                    case 'central':
+                        this.createCentralPlaza(x, z, size);
+                        break;
+                    case 'tech':
+                        this.createTechPlaza(x, z, size);
+                        break;
+                    case 'green':
+                        this.createGreenPlaza(x, z, size);
+                        break;
+                }
+
+                // Add smart lighting around plaza
+                this.createPlazaLighting(x, z, size);
+            }
+
+            // Create central plaza with monuments
+            createCentralPlaza(x, z, size) {
+                // Central monument/sculpture
+                const monumentBase = new THREE.Mesh(
+                    new THREE.CylinderGeometry(8, 10, 3),
+                    new THREE.MeshLambertMaterial({ color: 0x708090 })
+                );
+                monumentBase.position.set(x, 1.5, z);
+                monumentBase.userData = { type: 'monument' };
+                this.scene.add(monumentBase);
+
+                // Modern art sculpture
+                const sculpture = new THREE.Mesh(
+                    new THREE.ConeGeometry(3, 12, 8),
+                    new THREE.MeshLambertMaterial({ color: 0x4169E1 })
+                );
+                sculpture.position.set(x, 9, z);
+                sculpture.userData = { type: 'art-sculpture' };
+                this.scene.add(sculpture);
+
+                // Decorative rings around monument
+                for (let i = 1; i <= 3; i++) {
+                    const ring = new THREE.Mesh(
+                        new THREE.RingGeometry(12 + i * 8, 13 + i * 8, 32),
+                        new THREE.MeshLambertMaterial({ color: 0xDDDDDD })
+                    );
+                    ring.rotation.x = -Math.PI / 2;
+                    ring.position.set(x, 0.2, z);
+                    ring.userData = { type: 'decorative-ring' };
+                    this.scene.add(ring);
+                }
+
+                // Smart info kiosks
+                this.createInfoKiosks(x, z, size);
+            }
+
+            // Create technology plaza with digital elements
+            createTechPlaza(x, z, size) {
+                // Digital display wall
+                const displayWall = new THREE.Mesh(
+                    new THREE.BoxGeometry(15, 8, 1),
+                    new THREE.MeshLambertMaterial({ 
+                        color: 0x000080,
+                        emissive: 0x000040
+                    })
+                );
+                displayWall.position.set(x, 4, z - size/3);
+                displayWall.userData = { type: 'digital-display' };
+                this.scene.add(displayWall);
+
+                // Tech pillars with sensors
+                const pillarPositions = [
+                    { x: x - 15, z: z },
+                    { x: x + 15, z: z },
+                    { x: x, z: z - 15 },
+                    { x: x, z: z + 15 }
+                ];
+
+                pillarPositions.forEach(pos => {
+                    // Main pillar
+                    const pillar = new THREE.Mesh(
+                        new THREE.CylinderGeometry(1, 1.5, 10),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    pillar.position.set(pos.x, 5, pos.z);
+                    pillar.userData = { type: 'tech-pillar' };
+                    this.scene.add(pillar);
+
+                    // IoT sensors on pillars
+                    const sensor = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.8),
+                        new THREE.MeshLambertMaterial({ color: 0x00FF00 })
+                    );
+                    sensor.position.set(pos.x, 10.5, pos.z);
+                    sensor.userData = { type: 'iot-sensor' };
+                    this.scene.add(sensor);
+
+                    // Communication antenna
+                    const antenna = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.1, 0.1, 3),
+                        new THREE.MeshLambertMaterial({ color: 0xFF0000 })
+                    );
+                    antenna.position.set(pos.x, 13, pos.z);
+                    antenna.userData = { type: 'communication-antenna' };
+                    this.scene.add(antenna);
+                });
+
+                // Interactive touch screens
+                this.createInteractiveScreens(x, z);
+            }
+
+            // Create green plaza with environmental features
+            createGreenPlaza(x, z, size) {
+                // Central green area
+                const greenArea = new THREE.Mesh(
+                    new THREE.CircleGeometry(12, 32),
+                    new THREE.MeshLambertMaterial({ color: 0x228B22 })
+                );
+                greenArea.rotation.x = -Math.PI / 2;
+                greenArea.position.set(x, 0.3, z);
+                greenArea.userData = { type: 'green-area' };
+                this.scene.add(greenArea);
+
+                // Environmental monitoring station
+                const monitoringStation = new THREE.Mesh(
+                    new THREE.BoxGeometry(3, 6, 3),
+                    new THREE.MeshLambertMaterial({ color: 0x32CD32 })
+                );
+                monitoringStation.position.set(x, 3, z);
+                monitoringStation.userData = { type: 'environmental-station' };
+                this.scene.add(monitoringStation);
+
+                // Air quality sensors
+                const airSensor = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.5, 0.5, 2),
+                    new THREE.MeshLambertMaterial({ color: 0x00CED1 })
+                );
+                airSensor.position.set(x, 7, z);
+                airSensor.userData = { type: 'air-quality-sensor' };
+                this.scene.add(airSensor);
+
+                // Solar panel array
+                this.createSolarPanelArray(x + size/3, z, 8, 6);
+
+                // Rain water collection system
+                this.createRainWaterSystem(x - size/3, z);
+            }
+
+            // Create info kiosks
+            createInfoKiosks(centerX, centerZ, plazaSize) {
+                const kioskPositions = [
+                    { x: centerX - plazaSize/3, z: centerZ + plazaSize/3 },
+                    { x: centerX + plazaSize/3, z: centerZ + plazaSize/3 }
+                ];
+
+                kioskPositions.forEach(pos => {
+                    // Kiosk base
+                    const base = new THREE.Mesh(
+                        new THREE.CylinderGeometry(1.5, 2, 3),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    base.position.set(pos.x, 1.5, pos.z);
+                    base.userData = { type: 'info-kiosk' };
+                    this.scene.add(base);
+
+                    // Touch screen
+                    const screen = new THREE.Mesh(
+                        new THREE.BoxGeometry(1.2, 1.8, 0.1),
+                        new THREE.MeshLambertMaterial({ color: 0x000080 })
+                    );
+                    screen.position.set(pos.x, 4, pos.z);
+                    screen.userData = { type: 'touch-screen' };
+                    this.scene.add(screen);
+                });
+            }
+
+            // Create interactive screens
+            createInteractiveScreens(centerX, centerZ) {
+                const screenPositions = [
+                    { x: centerX - 10, z: centerZ + 10 },
+                    { x: centerX + 10, z: centerZ + 10 }
+                ];
+
+                screenPositions.forEach(pos => {
+                    // Screen support
+                    const support = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.3, 0.5, 4),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    support.position.set(pos.x, 2, pos.z);
+                    support.userData = { type: 'screen-support' };
+                    this.scene.add(support);
+
+                    // Interactive screen
+                    const screen = new THREE.Mesh(
+                        new THREE.BoxGeometry(3, 2, 0.2),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x000080,
+                            emissive: 0x000020
+                        })
+                    );
+                    screen.position.set(pos.x, 5, pos.z);
+                    screen.rotation.x = -Math.PI / 12;
+                    screen.userData = { type: 'interactive-screen' };
+                    this.scene.add(screen);
+                });
+            }
+
+            // Create plaza lighting
+            createPlazaLighting(centerX, centerZ, size) {
+                const lightSpacing = size / 4;
+                for (let x = -1; x <= 1; x++) {
+                    for (let z = -1; z <= 1; z++) {
+                        if (x === 0 && z === 0) continue; // Skip center
+
+                        const lightX = centerX + x * lightSpacing;
+                        const lightZ = centerZ + z * lightSpacing;
+
+                        // Modern LED street light
+                        const lightPole = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.3, 0.4, 12),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        lightPole.position.set(lightX, 6, lightZ);
+                        lightPole.userData = { type: 'plaza-light' };
+                        this.scene.add(lightPole);
+
+                        // LED fixture
+                        const ledFixture = new THREE.Mesh(
+                            new THREE.BoxGeometry(1.5, 0.5, 1.5),
+                            new THREE.MeshLambertMaterial({ 
+                                color: 0xFFFFE0,
+                                emissive: 0x202020
+                            })
+                        );
+                        ledFixture.position.set(lightX, 12.5, lightZ);
+                        ledFixture.userData = { type: 'led-fixture' };
+                        this.scene.add(ledFixture);
+                    }
+                }
+            }
+
+            // Create smart city elements
+            createSmartCityElements() {
+                // Create 5G towers
+                this.create5GTowers();
+
+                // Create smart traffic lights
+                this.createSmartTrafficLights();
+
+                // Create weather stations
+                this.createWeatherStations();
+
+                // Create digital billboards
+                this.createDigitalBillboards();
+
+                console.log(`✅ Created smart city elements for Phase ${this.currentPhase}`);
+            }
+
+            // Create realistic 5G communication towers
+            create5GTowers() {
+                if (this.currentPhase < 3) return;
+
+                const towerLocations = [
+                    { x: -150, z: -150 },
+                    { x: 150, z: -150 },
+                    { x: -150, z: 150 },
+                    { x: 150, z: 150 }
+                ];
+
+                towerLocations.forEach(pos => {
+                    // Concrete foundation with rebar
+                    const foundation = new THREE.Mesh(
+                        new THREE.CylinderGeometry(8, 10, 2),
+                        new THREE.MeshLambertMaterial({ color: 0xC0C0C0 })
+                    );
+                    foundation.position.set(pos.x, 1, pos.z);
+                    this.scene.add(foundation);
+
+                    // Security fence around base
+                    const fenceRadius = 12;
+                    for (let i = 0; i < 16; i++) {
+                        const angle = (i * Math.PI * 2) / 16;
+                        const fencePost = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.1, 0.1, 4),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        fencePost.position.set(
+                            pos.x + Math.cos(angle) * fenceRadius,
+                            2,
+                            pos.z + Math.sin(angle) * fenceRadius
+                        );
+                        this.scene.add(fencePost);
+
+                        // Chain link fence sections
+                        if (i < 15) {
+                            const nextAngle = ((i + 1) * Math.PI * 2) / 16;
+                            const fencePanel = new THREE.Mesh(
+                                new THREE.BoxGeometry(0.1, 3, 4.8),
+                                new THREE.MeshLambertMaterial({ 
+                                    color: 0x696969,
+                                    transparent: true,
+                                    opacity: 0.7
+                                })
+                            );
+                            const midAngle = (angle + nextAngle) / 2;
+                            fencePanel.position.set(
+                                pos.x + Math.cos(midAngle) * fenceRadius,
+                                2,
+                                pos.z + Math.sin(midAngle) * fenceRadius
+                            );
+                            fencePanel.rotation.y = midAngle;
+                            this.scene.add(fencePanel);
+                        }
+                    }
+
+                    // Equipment shelter/building
+                    const shelter = new THREE.Mesh(
+                        new THREE.BoxGeometry(6, 4, 4),
+                        new THREE.MeshLambertMaterial({ color: 0x8B7355 })
+                    );
+                    shelter.position.set(pos.x + 8, 2, pos.z);
+                    shelter.userData = { type: '5g-equipment-shelter' };
+                    this.scene.add(shelter);
+
+                    // Shelter door
+                    const door = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.1, 3, 1.5),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    door.position.set(pos.x + 5, 1.5, pos.z);
+                    this.scene.add(door);
+
+                    // Air conditioning units
+                    for (let i = 0; i < 2; i++) {
+                        const ac = new THREE.Mesh(
+                            new THREE.BoxGeometry(1.5, 1, 1),
+                            new THREE.MeshLambertMaterial({ color: 0x696969 })
+                        );
+                        ac.position.set(pos.x + 8, 4.5, pos.z - 1.5 + i * 3);
+                        this.scene.add(ac);
+
+                        // AC fan
+                        const fan = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.4, 0.4, 0.1),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        fan.position.set(pos.x + 8.8, 4.5, pos.z - 1.5 + i * 3);
+                        fan.rotation.z = Math.PI / 2;
+                        this.scene.add(fan);
+                    }
+
+                    // Main tower base (steel lattice style)
+                    const towerBase = new THREE.Mesh(
+                        new THREE.CylinderGeometry(4, 6, 12),
+                        new THREE.MeshLambertMaterial({ color: 0x708090 })
+                    );
+                    towerBase.position.set(pos.x, 8, pos.z);
+                    towerBase.userData = { type: '5g-tower-base' };
+                    this.scene.add(towerBase);
+
+                    // Tower lattice structure simulation
+                    for (let level = 0; level < 8; level++) {
+                        const levelHeight = 15 + level * 5;
+                        const levelRadius = 3.5 - level * 0.3;
+                        
+                        // Horizontal rings
+                        const ring = new THREE.Mesh(
+                            new THREE.TorusGeometry(levelRadius, 0.1, 8, 16),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        ring.position.set(pos.x, levelHeight, pos.z);
+                        ring.rotation.x = Math.PI / 2;
+                        this.scene.add(ring);
+
+                        // Vertical supports
+                        for (let i = 0; i < 4; i++) {
+                            const angle = (i * Math.PI * 2) / 4;
+                            const support = new THREE.Mesh(
+                                new THREE.CylinderGeometry(0.08, 0.08, 5),
+                                new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                            );
+                            support.position.set(
+                                pos.x + Math.cos(angle) * levelRadius,
+                                levelHeight + 2.5,
+                                pos.z + Math.sin(angle) * levelRadius
+                            );
+                            this.scene.add(support);
+                        }
+                    }
+
+                    // Main antenna mast
+                    const mast = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.2, 0.3, 20),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    mast.position.set(pos.x, 65, pos.z);
+                    mast.userData = { type: '5g-tower' };
+                    this.scene.add(mast);
+
+                    // 5G antenna arrays at different levels
+                    const antennaLevels = [45, 50, 55];
+                    antennaLevels.forEach((height, levelIndex) => {
+                        // Platform for antennas
+                        const platform = new THREE.Mesh(
+                            new THREE.CylinderGeometry(2.5, 2.5, 0.5),
+                            new THREE.MeshLambertMaterial({ color: 0x696969 })
+                        );
+                        platform.position.set(pos.x, height, pos.z);
+                        this.scene.add(platform);
+
+                        // Multiple antenna panels (120° apart for full coverage)
+                        for (let i = 0; i < 3; i++) {
+                            const angle = (i * Math.PI * 2) / 3;
+                            
+                            // Antenna panel mount
+                            const mount = new THREE.Mesh(
+                                new THREE.BoxGeometry(0.3, 2, 0.2),
+                                new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                            );
+                            mount.position.set(
+                                pos.x + Math.cos(angle) * 2,
+                                height + 1,
+                                pos.z + Math.sin(angle) * 2
+                            );
+                            mount.rotation.y = angle;
+                            this.scene.add(mount);
+
+                            // 5G antenna panel (realistic size)
+                            const antenna = new THREE.Mesh(
+                                new THREE.BoxGeometry(0.2, 3, 1.2),
+                                new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                            );
+                            antenna.position.set(
+                                pos.x + Math.cos(angle) * 2.2,
+                                height + 1.5,
+                                pos.z + Math.sin(angle) * 2.2
+                            );
+                            antenna.rotation.y = angle;
+                            antenna.userData = { type: '5g-antenna' };
+                            this.scene.add(antenna);
+
+                            // RRU (Remote Radio Unit)
+                            const rru = new THREE.Mesh(
+                                new THREE.BoxGeometry(0.4, 1, 0.6),
+                                new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                            );
+                            rru.position.set(
+                                pos.x + Math.cos(angle) * 1.8,
+                                height - 0.5,
+                                pos.z + Math.sin(angle) * 1.8
+                            );
+                            rru.rotation.y = angle;
+                            this.scene.add(rru);
+
+                            // Coaxial cables
+                            const cable = new THREE.Mesh(
+                                new THREE.CylinderGeometry(0.05, 0.05, 3),
+                                new THREE.MeshLambertMaterial({ color: 0x000000 })
+                            );
+                            cable.position.set(
+                                pos.x + Math.cos(angle) * 1.9,
+                                height - 1,
+                                pos.z + Math.sin(angle) * 1.9
+                            );
+                            this.scene.add(cable);
+                        }
+
+                        // Microwave dishes for backhaul
+                        if (levelIndex === 1) {
+                            for (let i = 0; i < 2; i++) {
+                                const dishAngle = i * Math.PI;
+                                const dish = new THREE.Mesh(
+                                    new THREE.SphereGeometry(1, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
+                                    new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                                );
+                                dish.position.set(
+                                    pos.x + Math.cos(dishAngle) * 3,
+                                    height + 2,
+                                    pos.z + Math.sin(dishAngle) * 3
+                                );
+                                dish.rotation.y = dishAngle;
+                                this.scene.add(dish);
+                            }
+                        }
+                    });
+
+                    // Aviation warning lights (red LEDs)
+                    const warningLights = [30, 45, 60, 75];
+                    warningLights.forEach(height => {
+                        const light = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.3),
+                            new THREE.MeshLambertMaterial({ 
+                                color: 0xFF0000,
+                                emissive: 0x400000
+                            })
+                        );
+                        light.position.set(pos.x, height, pos.z);
+                        light.userData = { type: 'warning-light' };
+                        this.scene.add(light);
+
+                        // Light housing
+                        const housing = new THREE.Mesh(
+                            new THREE.CylinderGeometry(0.4, 0.4, 0.2),
+                            new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                        );
+                        housing.position.set(pos.x, height - 0.2, pos.z);
+                        this.scene.add(housing);
+                    });
+
+                    // Lightning rod
+                    const lightningRod = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.05, 0.05, 5),
+                        new THREE.MeshLambertMaterial({ color: 0xFFD700 })
+                    );
+                    lightningRod.position.set(pos.x, 77.5, pos.z);
+                    this.scene.add(lightningRod);
+
+                    // Grounding system
+                    const groundWire = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.02, 0.02, 75),
+                        new THREE.MeshLambertMaterial({ color: 0x8B4513 })
+                    );
+                    groundWire.position.set(pos.x + 0.3, 37.5, pos.z);
+                    this.scene.add(groundWire);
+                });
+            }
+
+            // Create smart traffic lights
+            createSmartTrafficLights() {
+                if (this.currentPhase < 2) return;
+
+                const intersections = [
+                    { x: 0, z: -100 },
+                    { x: -100, z: 0 },
+                    { x: 100, z: 0 },
+                    { x: 0, z: 100 }
+                ];
+
+                intersections.forEach(pos => {
+                    // Traffic light pole
+                    const pole = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.2, 0.3, 8),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    pole.position.set(pos.x + 5, 4, pos.z + 5);
+                    pole.userData = { type: 'traffic-light-pole' };
+                    this.scene.add(pole);
+
+                    // Traffic light housing
+                    const housing = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.8, 2, 0.5),
+                        new THREE.MeshLambertMaterial({ color: 0x000000 })
+                    );
+                    housing.position.set(pos.x + 5, 8.5, pos.z + 5);
+                    housing.userData = { type: 'traffic-light' };
+                    this.scene.add(housing);
+
+                    // Smart sensors on traffic light
+                    const sensor = new THREE.Mesh(
+                        new THREE.BoxGeometry(0.3, 0.3, 0.3),
+                        new THREE.MeshLambertMaterial({ color: 0x00FF00 })
+                    );
+                    sensor.position.set(pos.x + 5, 9.5, pos.z + 5);
+                    sensor.userData = { type: 'traffic-sensor' };
+                    this.scene.add(sensor);
+                });
+            }
+
+            // Create weather monitoring stations
+            createWeatherStations() {
+                if (this.currentPhase < 2) return;
+
+                const stationLocations = [
+                    { x: -100, z: -100 },
+                    { x: 100, z: 100 }
+                ];
+
+                stationLocations.forEach(pos => {
+                    // Weather station base
+                    const base = new THREE.Mesh(
+                        new THREE.CylinderGeometry(2, 2.5, 4),
+                        new THREE.MeshLambertMaterial({ color: 0xFFFFFF })
+                    );
+                    base.position.set(pos.x, 2, pos.z);
+                    base.userData = { type: 'weather-station' };
+                    this.scene.add(base);
+
+                    // Sensor mast
+                    const mast = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.1, 0.1, 12),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    mast.position.set(pos.x, 10, pos.z);
+                    mast.userData = { type: 'sensor-mast' };
+                    this.scene.add(mast);
+
+                    // Various sensors
+                    const sensors = [
+                        { y: 8, color: 0x00CED1, type: 'humidity-sensor' },
+                        { y: 12, color: 0xFF6347, type: 'temperature-sensor' },
+                        { y: 14, color: 0x32CD32, type: 'wind-sensor' },
+                        { y: 16, color: 0xFFD700, type: 'solar-sensor' }
+                    ];
+
+                    sensors.forEach(sensorData => {
+                        const sensor = new THREE.Mesh(
+                            new THREE.BoxGeometry(0.5, 0.5, 0.5),
+                            new THREE.MeshLambertMaterial({ color: sensorData.color })
+                        );
+                        sensor.position.set(pos.x, sensorData.y, pos.z);
+                        sensor.userData = { type: sensorData.type };
+                        this.scene.add(sensor);
+                    });
+                });
+            }
+
+            // Create digital billboards
+            createDigitalBillboards() {
+                if (this.currentPhase < 3) return;
+
+                const billboardLocations = [
+                    { x: -75, z: -25, rotation: 0 },
+                    { x: 75, z: 25, rotation: Math.PI }
+                ];
+
+                billboardLocations.forEach(billboard => {
+                    // Billboard support structure
+                    const support1 = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.3, 0.5, 15),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    support1.position.set(billboard.x - 4, 7.5, billboard.z);
+                    support1.userData = { type: 'billboard-support' };
+                    this.scene.add(support1);
+
+                    const support2 = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.3, 0.5, 15),
+                        new THREE.MeshLambertMaterial({ color: 0x2F4F4F })
+                    );
+                    support2.position.set(billboard.x + 4, 7.5, billboard.z);
+                    support2.userData = { type: 'billboard-support' };
+                    this.scene.add(support2);
+
+                    // Digital screen
+                    const screen = new THREE.Mesh(
+                        new THREE.BoxGeometry(12, 6, 0.3),
+                        new THREE.MeshLambertMaterial({ 
+                            color: 0x000080,
+                            emissive: 0x000040
+                        })
+                    );
+                    screen.position.set(billboard.x, 12, billboard.z);
+                    screen.rotation.y = billboard.rotation;
+                    screen.userData = { type: 'digital-billboard' };
+                    this.scene.add(screen);
+                });
+            }
+
+            // Create solar panel arrays
+            createSolarPanelArray(centerX, centerZ, rows, cols) {
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const panel = new THREE.Mesh(
+                            new THREE.BoxGeometry(2, 0.1, 3),
+                            new THREE.MeshLambertMaterial({ color: 0x191970 })
+                        );
+                        panel.position.set(
+                            centerX + (col - cols/2) * 2.5,
+                            1 + Math.sin(row * 0.2) * 0.5,
+                            centerZ + (row - rows/2) * 3.5
+                        );
+                        panel.rotation.x = -Math.PI / 6;
+                        panel.userData = { type: 'solar-panel' };
+                        this.scene.add(panel);
+                    }
+                }
+            }
+
+            // Create rain water collection system
+            createRainWaterSystem(x, z) {
+                // Collection tank
+                const tank = new THREE.Mesh(
+                    new THREE.CylinderGeometry(4, 4, 6),
+                    new THREE.MeshLambertMaterial({ color: 0x4682B4 })
+                );
+                tank.position.set(x, 3, z);
+                tank.userData = { type: 'water-tank' };
+                this.scene.add(tank);
+
+                // Filtration unit
+                const filter = new THREE.Mesh(
+                    new THREE.BoxGeometry(2, 3, 2),
+                    new THREE.MeshLambertMaterial({ color: 0x32CD32 })
+                );
+                filter.position.set(x + 5, 1.5, z);
+                filter.userData = { type: 'water-filter' };
+                this.scene.add(filter);
+
+                // Monitoring display
+                const display = new THREE.Mesh(
+                    new THREE.BoxGeometry(1, 0.8, 0.1),
+                    new THREE.MeshLambertMaterial({ color: 0x000080 })
+                );
+                display.position.set(x, 6.5, z + 4.1);
+                display.userData = { type: 'water-monitor' };
+                this.scene.add(display);
+            }
+
+            // Setup controls
+            setupControls() {
+                try {
+                    // Check both possible locations for OrbitControls
+                    const OrbitControlsClass = THREE.OrbitControls || window.OrbitControls;
+                    if (OrbitControlsClass) {
+                        this.controls = new OrbitControlsClass(this.camera, this.renderer.domElement);
+                        this.controls.enableDamping = true;
+                        this.controls.dampingFactor = 0.05;
+                        this.controls.maxDistance = 500;
+                        this.controls.minDistance = 10;
+                        this.controls.maxPolarAngle = Math.PI / 2;
+                        this.controls.target.set(0, 0, 0);
+                        console.log('✅ Orbit controls enabled');
+                    } else {
+                        console.warn('⚠️ OrbitControls not available - using basic camera');
+                        // Fallback: Basic mouse controls
+                        this.setupBasicControls();
+                    }
+                } catch (error) {
+                    console.warn('⚠️ OrbitControls setup failed:', error.message);
+                    this.setupBasicControls();
+                }
+            }
+
+            // Fallback basic controls
+            setupBasicControls() {
+                let mouseDown = false;
+                let mouseX = 0, mouseY = 0;
+                
+                this.renderer.domElement.addEventListener('mousedown', (e) => {
+                    mouseDown = true;
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+                
+                this.renderer.domElement.addEventListener('mouseup', () => {
+                    mouseDown = false;
+                });
+                
+                this.renderer.domElement.addEventListener('mousemove', (e) => {
+                    if (mouseDown) {
+                        const deltaX = e.clientX - mouseX;
+                        const deltaY = e.clientY - mouseY;
+                        
+                        // Simple rotation around Y axis
+                        this.camera.position.x = Math.cos(deltaX * 0.01) * 100;
+                        this.camera.position.z = Math.sin(deltaX * 0.01) * 100;
+                        this.camera.lookAt(0, 0, 0);
+                        
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                    }
+                });
+                
+                console.log('✅ Basic mouse controls enabled');
+            }
+
+            // Setup UI
+            setupUI() {
+                // Camera controls
+                const cameraButtons = document.querySelectorAll('.camera-btn');
+                cameraButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
+                        this.setCameraView(mode);
+                        
+                        cameraButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        document.getElementById('current-view-mode').textContent = this.getViewName(mode);
+                        document.getElementById('camera-mode').textContent = this.getViewName(mode);
+                    });
+                });
+
+                // Phase controls
+                const phaseButtons = document.querySelectorAll('.phase-btn');
+                phaseButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const phase = parseInt(btn.dataset.phase);
+                        this.switchPhase(phase);
+                        
+                        phaseButtons.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        document.getElementById('current-phase').textContent = phase;
+                    });
+                });
+
+                // Water effects toggle
+                this.waterEffectsEnabled = true;
+                const waterToggleBtn = document.getElementById('water-toggle');
+                if (waterToggleBtn) {
+                    waterToggleBtn.addEventListener('click', () => {
+                        this.waterEffectsEnabled = !this.waterEffectsEnabled;
+                        waterToggleBtn.textContent = this.waterEffectsEnabled ? '💧 Water: ON' : '💧 Water: OFF';
+                        waterToggleBtn.style.background = this.waterEffectsEnabled ? 
+                            'rgba(65, 105, 225, 0.3)' : 'rgba(128, 128, 128, 0.3)';
+                        
+                        // Hide/show water effects
+                        this.toggleWaterEffects(this.waterEffectsEnabled);
+                    });
+                }
+
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.onWindowResize();
+                });
+
+                // Mouse click for object interaction (DISABLED)
+                // window.addEventListener('click', (event) => {
+                //     this.onMouseClick(event);
+                // });
+
+                console.log('✅ UI controls setup complete');
+            }
+
+            // Get view name in English
+            getViewName(mode) {
+                const names = {
+                    overview: 'Overview',
+                    aerial: 'Aerial',
+                    ground: 'Ground',
+                    orbit: 'Free'
+                };
+                return names[mode] || mode;
+            }
+
+            // Set camera view
+            setCameraView(mode) {
+                if (!this.cameraPositions[mode]) return;
+
+                const pos = this.cameraPositions[mode];
+                this.currentView = mode;
+
+                this.camera.fov = pos.fov;
+                this.camera.updateProjectionMatrix();
+
+                if (this.controls) {
+                    this.controls.enabled = false;
+
+                    const startPos = this.camera.position.clone();
+                    const startTarget = this.controls.target.clone();
+                    const endPos = new THREE.Vector3(pos.position.x, pos.position.y, pos.position.z);
+                    const endTarget = new THREE.Vector3(pos.target.x, pos.target.y, pos.target.z);
+
+                    let progress = 0;
+                    const duration = 1000;
+                    const startTime = Date.now();
+
+                    const animate = () => {
+                        const elapsed = Date.now() - startTime;
+                        progress = Math.min(elapsed / duration, 1);
+
+                        const eased = this.easeInOutCubic(progress);
+
+                        this.camera.position.lerpVectors(startPos, endPos, eased);
+                        this.controls.target.lerpVectors(startTarget, endTarget, eased);
+                        this.controls.update();
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            this.controls.enabled = mode === 'orbit';
+                        }
+                    };
+
+                    animate();
+                }
+
+                console.log(`📷 Camera set to ${mode} view`);
+            }
+
+            // Easing function
+            easeInOutCubic(t) {
+                return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+            }
+
+            // Switch phase
+            switchPhase(phase) {
+                if (phase === this.currentPhase) return;
+                
+                this.currentPhase = phase;
+                this.createCity(); // Recreate city with new phase
+                console.log(`🏗️ Switched to Phase ${phase}`);
+            }
+
+            // Window resize
+            onWindowResize() {
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+
+                this.camera.aspect = width / height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(width, height);
+
+                console.log(`🔄 Resized to ${width}x${height}`);
+            }
+
+            // Handle mouse click for object interaction (DISABLED)
+            onMouseClick(event) {
+                // Popup system disabled - no interaction
+                return;
+                
+                const mouse = new THREE.Vector2();
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                const raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, this.camera);
+
+                const intersects = raycaster.intersectObjects(this.scene.children);
+
+                if (intersects.length > 0) {
+                    const clickedObject = intersects[0].object;
+                    this.showObjectInfo(clickedObject);
+                }
+            }
+
+            // Show information about clicked object
+            showObjectInfo(object) {
+                const userData = object.userData;
+                if (!userData || !userData.type) return;
+
+                let info = this.getObjectInfo(userData);
+                if (info) {
+                    this.displayInfoPanel(info);
+                }
+            }
+
+            // Get detailed information about different object types
+            getObjectInfo(userData) {
+                const type = userData.type;
+                const phase = userData.phase || this.currentPhase;
+
+                switch(type) {
+                    case 'building':
+                        return {
+                            title: `🏢 ${userData.name || 'Smart Building'}`,
+                            details: [
+                                `📍 Phase: ${phase}`,
+                                `🔋 Energy: Smart Grid Connected`,
+                                `🌡️ Climate: Auto-controlled`,
+                                `📡 IoT: Fully integrated`,
+                                `♿ Accessibility: Universal design`
+                            ]
+                        };
+
+                    case 'park':
+                        return {
+                            title: `🌳 Smart Park ${userData.id || ''}`,
+                            details: [
+                                `📍 Phase: ${phase}`,
+                                `💡 Lighting: Solar-powered LED`,
+                                `🌱 Irrigation: Smart water system`,
+                                `📊 Monitoring: Environmental sensors`,
+                                `🚶 Accessibility: Universal paths`
+                            ]
+                        };
+
+                    case 'parking-lot':
+                        return {
+                            title: `🚗 Smart Parking ${userData.id || ''}`,
+                            details: [
+                                `📍 Phase: ${phase}`,
+                                `🔍 Detection: Real-time sensors`,
+                                `⚡ Charging: EV stations available`,
+                                `📱 App: Mobile payment system`,
+                                `🚧 Capacity: 85% occupied`
+                            ]
+                        };
+
+                    case 'plaza':
+                        return {
+                            title: `🏛️ ${userData.subtype || 'Modern'} Plaza`,
+                            details: [
+                                `📍 Phase: ${phase}`,
+                                `💡 Lighting: Smart LED arrays`,
+                                `📺 Displays: Interactive screens`,
+                                `🌐 WiFi: Free public access`,
+                                `🎭 Events: Cultural activities`
+                            ]
+                        };
+
+                    case 'fountain':
+                        return {
+                            title: `⛲ Smart Fountain`,
+                            details: [
+                                `📍 Phase: ${phase}`,
+                                `💧 Water: Recycled system`,
+                                `🌈 Lighting: RGB LED effects`,
+                                `⏰ Schedule: Automated timing`,
+                                `🔧 Maintenance: Self-monitoring`
+                            ]
+                        };
+
+                    case 'charging-station':
+                        return {
+                            title: `⚡ EV Charging Station`,
+                            details: [
+                                `🔋 Power: 150kW fast charging`,
+                                `💳 Payment: Contactless`,
+                                `📊 Status: Available`,
+                                `🌱 Energy: 100% renewable`,
+                                `🔌 Connectors: Universal types`
+                            ]
+                        };
+
+                    case 'iot-sensor':
+                        return {
+                            title: `📡 IoT Smart Sensor`,
+                            details: [
+                                `📊 Data: Real-time monitoring`,
+                                `🌡️ Temperature: 22°C`,
+                                `💨 Air Quality: Good (AQI: 45)`,
+                                `🔊 Noise: 35dB`,
+                                `📶 Connectivity: 5G enabled`
+                            ]
+                        };
+
+                    case '5g-tower':
+                        return {
+                            title: `📶 5G Communication Tower`,
+                            details: [
+                                `📡 Coverage: 2km radius`,
+                                `⚡ Speed: Up to 10Gbps`,
+                                `🔗 Latency: <1ms`,
+                                `🌐 Devices: 1M+ connected`,
+                                `🔒 Security: End-to-end encryption`
+                            ]
+                        };
+
+                    case 'solar-panel':
+                        return {
+                            title: `☀️ Solar Energy System`,
+                            details: [
+                                `⚡ Output: 95% efficiency`,
+                                `🔋 Storage: Battery backup`,
+                                `📊 Today: 847 kWh generated`,
+                                `🌱 CO2 Saved: 324kg today`,
+                                `🔧 Status: Optimal performance`
+                            ]
+                        };
+
+                    case 'weather-station':
+                        return {
+                            title: `🌤️ Weather Monitoring Station`,
+                            details: [
+                                `🌡️ Temperature: 24°C`,
+                                `💧 Humidity: 65%`,
+                                `💨 Wind: 12 km/h NE`,
+                                `☀️ UV Index: 6 (High)`,
+                                `📊 Data: Updated every 10s`
+                            ]
+                        };
+
+                    case 'digital-billboard':
+                        return {
+                            title: `📺 Digital Billboard`,
+                            details: [
+                                `📱 Content: Dynamic advertising`,
+                                `👁️ Views: 15,000+ daily`,
+                                `🎯 Targeting: AI-powered`,
+                                `⚡ Power: Solar + grid`,
+                                `📊 Analytics: Real-time`
+                            ]
+                        };
+
+                    case 'traffic-light':
+                        return {
+                            title: `🚦 Smart Traffic Light`,
+                            details: [
+                                `🤖 AI: Adaptive timing`,
+                                `📷 Cameras: Traffic monitoring`,
+                                `🚗 Flow: Optimized routes`,
+                                `🚨 Emergency: Priority override`,
+                                `📊 Data: Live traffic analysis`
+                            ]
+                        };
+
+                    default:
+                        return null;
+                }
+            }
+
+            // Display information panel
+            displayInfoPanel(info) {
+                // Remove existing info popup
+                const existingPopup = document.getElementById('object-info-popup');
+                if (existingPopup) {
+                    existingPopup.remove();
+                }
+
+                // Create new info popup
+                const popup = document.createElement('div');
+                popup.id = 'object-info-popup';
+                popup.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+                    color: white;
+                    padding: 25px;
+                    border-radius: 15px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    z-index: 10000;
+                    max-width: 400px;
+                    font-family: 'Inter', sans-serif;
+                    border: 2px solid rgba(255,255,255,0.2);
+                `;
+
+                const title = document.createElement('h3');
+                title.textContent = info.title;
+                title.style.cssText = `
+                    margin: 0 0 15px 0;
+                    font-size: 1.3em;
+                    color: #fbbf24;
+                `;
+
+                const detailsList = document.createElement('ul');
+                detailsList.style.cssText = `
+                    list-style: none;
+                    padding: 0;
+                    margin: 0 0 20px 0;
+                `;
+
+                info.details.forEach(detail => {
+                    const li = document.createElement('li');
+                    li.textContent = detail;
+                    li.style.cssText = `
+                        margin: 8px 0;
+                        padding: 5px 0;
+                        border-bottom: 1px solid rgba(255,255,255,0.2);
+                        font-size: 0.9em;
+                    `;
+                    detailsList.appendChild(li);
+                });
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = '✕ Close';
+                closeBtn.style.cssText = `
+                    background: rgba(255,255,255,0.2);
+                    border: 1px solid rgba(255,255,255,0.3);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 0.9em;
+                    transition: all 0.3s ease;
+                `;
+                closeBtn.addEventListener('mouseenter', () => {
+                    closeBtn.style.background = 'rgba(255,255,255,0.3)';
+                });
+                closeBtn.addEventListener('mouseleave', () => {
+                    closeBtn.style.background = 'rgba(255,255,255,0.2)';
+                });
+                closeBtn.addEventListener('click', () => {
+                    popup.remove();
+                });
+
+                popup.appendChild(title);
+                popup.appendChild(detailsList);
+                popup.appendChild(closeBtn);
+                document.body.appendChild(popup);
+
+                // Auto-close after 8 seconds
+                setTimeout(() => {
+                    if (popup.parentNode) {
+                        popup.remove();
+                    }
+                }, 8000);
+            }
+
+            // Enhanced render loop with bulletproof error handling
+            startRenderLoop() {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+
+                let lastTime = Date.now();
+                let lastFPSUpdate = lastTime;
+                let frames = 0;
+                let renderErrors = 0;
+                let maxErrors = 10;
+
+                const animate = () => {
+                    this.animationId = requestAnimationFrame(animate);
+                    
+                    try {
+                        const currentTime = Date.now();
+                        frames++;
+                        this.frameCount++;
+
+                        // Verify critical components exist
+                        if (!this.renderer || !this.scene || !this.camera) {
+                            console.warn('⚠️ Critical rendering components missing, attempting recovery...');
+                            if (renderErrors < maxErrors) {
+                                renderErrors++;
+                                window.emergencyFix();
+                                return;
+                            }
+                        }
+
+                        // Update controls with error handling
+                        if (this.controls) {
+                            try {
+                                this.controls.update();
+                            } catch (controlError) {
+                                console.warn('⚠️ Controls update error:', controlError.message);
+                                // Continue without controls update
+                            }
+                        }
+
+                        // Update water animations
+                        if (this.updateWaterAnimations) {
+                            this.updateWaterAnimations();
+                        }
+
+                        // Render scene with error handling
+                        if (this.renderer && this.scene && this.camera) {
+                            this.renderer.render(this.scene, this.camera);
+                            
+                            // Reset error counter on successful render
+                            if (renderErrors > 0) {
+                                renderErrors = Math.max(0, renderErrors - 1);
+                            }
+                        }
+
+                        // Update FPS counter
+                        if (currentTime - lastFPSUpdate >= 1000) {
+                            const fps = Math.round(frames * 1000 / (currentTime - lastFPSUpdate));
+                            const fpsElement = document.getElementById('fps-counter');
+                            if (fpsElement) {
+                                fpsElement.textContent = fps;
+                            }
+                            frames = 0;
+                            lastFPSUpdate = currentTime;
+                        }
+
+                        // Update object counters
+                        if (this.frameCount % 60 === 0) { // Every second at 60fps
+                            const objectElement = document.getElementById('object-counter');
+                            const triangleElement = document.getElementById('triangle-counter');
+                            
+                            if (objectElement && this.scene) {
+                                objectElement.textContent = this.scene.children.length;
+                            }
+                            if (triangleElement) {
+                                // Count different object types for better statistics
+                                let totalTriangles = 0;
+                                this.scene.traverse((child) => {
+                                    if (child.geometry) {
+                                        if (child.geometry.index) {
+                                            totalTriangles += child.geometry.index.count / 3;
+                                        } else if (child.geometry.attributes.position) {
+                                            totalTriangles += child.geometry.attributes.position.count / 3;
+                                        }
+                                    }
+                                });
+                                triangleElement.textContent = Math.floor(totalTriangles);
+                            }
+
+                            // Remove any popup that might appear
+                            const popups = document.querySelectorAll('#object-info-popup');
+                            popups.forEach(popup => popup.remove());
+                        }
+
+                        // Enhanced debug logging every 5 seconds
+                        if (this.frameCount % 300 === 0) {
+                            console.log(`🎬 Render loop: Frame ${this.frameCount}, Objects: ${this.scene?.children?.length || 0}, FPS: ${Math.round(1000/(currentTime - lastTime))}`);
+                            
+                            // Canvas visibility check
+                            if (this.renderer?.domElement) {
+                                const canvas = this.renderer.domElement;
+                                const isVisible = canvas.offsetParent !== null && 
+                                                window.getComputedStyle(canvas).display !== 'none' &&
+                                                window.getComputedStyle(canvas).visibility !== 'hidden';
+                                if (!isVisible) {
+                                    console.warn('⚠️ Canvas not visible, forcing styles...');
+                                    canvas.style.cssText = `
+                                        display: block !important;
+                                        position: absolute !important;
+                                        top: 0 !important;
+                                        left: 0 !important;
+                                        width: 100% !important;
+                                        height: 100% !important;
+                                        visibility: visible !important;
+                                        opacity: 1 !important;
+                                        z-index: 1 !important;
+                                    `;
+                                }
+                            }
+                        }
+
+                        lastTime = currentTime;
+
+                    } catch (error) {
+                        console.error('❌ Render loop error:', error);
+                        renderErrors++;
+                        
+                        // Skip this frame but continue
+                        if (renderErrors < maxErrors) {
+                            // Continue animation despite error
+                            this.animationId = requestAnimationFrame(animate);
+                            return;
+                        }
+                        
+                        if (renderErrors >= maxErrors) {
+                            console.error('🚨 Too many render errors, stopping animation');
+                            if (this.animationId) {
+                                cancelAnimationFrame(this.animationId);
+                                this.animationId = null;
+                            }
+                            
+                            // Attempt recovery after delay
+                            setTimeout(() => {
+                                console.log('🔄 Attempting render loop recovery...');
+                                renderErrors = 0;
+                                this.startRenderLoop();
+                            }, 2000);
+                            return;
+                        }
+                    }
+                };
+
+                animate();
+                console.log('✅ BULLETPROOF render loop started with enhanced error handling');
+                
+                // Force first render
+                setTimeout(() => {
+                    if (this.renderer && this.scene && this.camera) {
+                        for (let i = 0; i < 5; i++) {
+                            this.renderer.render(this.scene, this.camera);
+                        }
+                        console.log('🚀 Initial render burst completed');
+                    }
+                }, 100);
+            }
+        }
+
+        // GLOBAL FUNCTIONS FOR DEBUGGING
+        window.testWebGL = function() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            console.log('WebGL Support:', !!gl);
+            if (gl) {
+                console.log('WebGL Vendor:', gl.getParameter(gl.VENDOR));
+                console.log('WebGL Renderer:', gl.getParameter(gl.RENDERER));
+                console.log('WebGL Version:', gl.getParameter(gl.VERSION));
+            }
+            return !!gl;
+        };
+
+        window.diagnoseScene = function() {
+            if (!window.campus) {
+                console.log('❌ Campus not initialized');
+                return;
+            }
+            
+            console.log('🔍 === SCENE DIAGNOSTIC ===');
+            console.log('Scene children:', campus.scene.children.length);
+            console.log('Camera position:', campus.camera.position);
+            console.log('Renderer size:', campus.renderer.getSize(new THREE.Vector2()));
+            console.log('Canvas in DOM:', document.body.contains(campus.renderer.domElement));
+            console.log('Canvas display:', campus.renderer.domElement.style.display);
+            
+            // List objects by type
+            const objects = {};
+            campus.scene.traverse((child) => {
+                const type = child.userData?.type || child.type || 'unknown';
+                objects[type] = (objects[type] || 0) + 1;
+            });
+            console.log('Objects by type:', objects);
+            console.log('🔍 === END DIAGNOSTIC ===');
+        };
+
+        window.forceRender = function() {
+            const instance = window.campus || window.smartCity;
+            if (instance && instance.renderer && instance.scene && instance.camera) {
+                for (let i = 0; i < 10; i++) {
+                    instance.renderer.render(instance.scene, instance.camera);
+                }
+                console.log('✅ Forced 10 renders');
+            }
+        };
+
+        window.recreateCity = function() {
+            const instance = window.campus || window.smartCity;
+            if (instance) {
+                instance.createCity();
+                console.log('✅ City recreated');
+            }
+        };
+
+        // 🚨 EMERGENCY SCENE CREATOR
+        window.createEmergencyScene = function() {
+            console.log('🚨 Creating emergency minimal 3D scene...');
+            
+            try {
+                // Hide loading screen immediately
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.display = 'none';
+                }
+                
+                // Get container
+                const container = document.getElementById('canvas-container');
+                if (!container) {
+                    console.error('❌ No canvas container found');
+                    return;
+                }
+                
+                // Clear container
+                container.innerHTML = '';
+                
+                // Check THREE.js
+                if (typeof THREE === 'undefined') {
+                    throw new Error('THREE.js not loaded');
+                }
+                
+                // Create basic scene
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x87CEEB);
+                
+                // Camera
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(10, 10, 10);
+                camera.lookAt(0, 0, 0);
+                
+                // Renderer
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.shadowMap.enabled = true;
+                container.appendChild(renderer.domElement);
+                
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                scene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(10, 10, 5);
+                directionalLight.castShadow = true;
+                scene.add(directionalLight);
+                
+                // Ground
+                const groundGeometry = new THREE.PlaneGeometry(20, 20);
+                const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                ground.rotation.x = -Math.PI / 2;
+                ground.receiveShadow = true;
+                scene.add(ground);
+                
+                // Simple buildings
+                for (let i = 0; i < 5; i++) {
+                    const building = new THREE.Mesh(
+                        new THREE.BoxGeometry(1 + Math.random(), 2 + Math.random() * 3, 1 + Math.random()),
+                        new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+                    );
+                    building.position.set(
+                        (Math.random() - 0.5) * 15,
+                        building.geometry.parameters.height / 2,
+                        (Math.random() - 0.5) * 15
+                    );
+                    building.castShadow = true;
+                    scene.add(building);
+                }
+                
+                // Basic controls (no OrbitControls dependency)
+                let mouseDown = false;
+                let mouseX = 0, mouseY = 0;
+                
+                renderer.domElement.addEventListener('mousedown', (e) => {
+                    mouseDown = true;
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                });
+                
+                renderer.domElement.addEventListener('mousemove', (e) => {
+                    if (mouseDown) {
+                        const deltaX = e.clientX - mouseX;
+                        const deltaY = e.clientY - mouseY;
+                        camera.position.x = 10 * Math.cos(deltaX * 0.01);
+                        camera.position.z = 10 * Math.sin(deltaX * 0.01);
+                        camera.position.y = Math.max(2, 10 + deltaY * 0.1);
+                        camera.lookAt(0, 0, 0);
+                        mouseX = e.clientX;
+                        mouseY = e.clientY;
+                    }
+                });
+                
+                renderer.domElement.addEventListener('mouseup', () => {
+                    mouseDown = false;
+                });
+                
+                // Render loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    renderer.render(scene, camera);
+                }
+                animate();
+                
+                // Store globally
+                window.emergencyScene = { scene, camera, renderer };
+                
+                console.log('✅ Emergency scene created successfully!');
+                
+                // Show success message
+                const msg = document.createElement('div');
+                msg.style.cssText = `
+                    position: fixed; top: 20px; left: 20px; z-index: 1000;
+                    background: rgba(16, 185, 129, 0.9); color: white;
+                    padding: 15px; border-radius: 8px; font-family: Arial;
+                `;
+                msg.textContent = '✅ Emergency 3D scene loaded! Drag to rotate camera.';
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 5000);
+                
+            } catch (error) {
+                console.error('❌ Emergency scene failed:', error);
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <h3 style="color: #ef4444;">❌ Critical Error</h3>
+                            <p style="color: #fbbf24;">Unable to create 3D scene</p>
+                            <p style="color: #94a3b8; font-size: 14px;">${error.message}</p>
+                            <button onclick="location.reload()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; margin: 10px;">🔄 Reload</button>
+                        </div>
+                    `;
+                }
+            }
+        };
+
+        // ENHANCED DIAGNOSTIC FUNCTIONS
+        window.fullDiagnostic = function() {
+            console.log('🔍 === FULL DIAGNOSTIC REPORT ===');
+            
+            // 1. Basic checks
+            console.log('📦 THREE.js loaded:', typeof THREE !== 'undefined');
+            console.log('🏗️ Campus object exists:', !!window.campus);
+            console.log('📱 Device pixel ratio:', window.devicePixelRatio);
+            console.log('📐 Window size:', window.innerWidth + 'x' + window.innerHeight);
+            
+            // 2. DOM checks
+            const container = document.getElementById('canvas-container');
+            console.log('📦 Canvas container exists:', !!container);
+            if (container) {
+                console.log('📦 Container computed style:', window.getComputedStyle(container).display);
+                console.log('📦 Container dimensions:', container.clientWidth + 'x' + container.clientHeight);
+            }
+            
+            // 3. Campus checks
+            if (window.campus) {
+                console.log('🎭 Scene exists:', !!campus.scene);
+                console.log('📷 Camera exists:', !!campus.camera);
+                console.log('🖼️ Renderer exists:', !!campus.renderer);
+                console.log('🎮 Controls exists:', !!campus.controls);
+                console.log('✅ Is initialized:', campus.isInitialized);
+                console.log('🎬 Frame count:', campus.frameCount);
+                
+                if (campus.scene) {
+                    console.log('📊 Scene children:', campus.scene.children.length);
+                    
+                    // Count objects by type
+                    const objects = {};
+                    campus.scene.traverse((child) => {
+                        const type = child.userData?.type || child.type || 'unknown';
+                        objects[type] = (objects[type] || 0) + 1;
+                    });
+                    console.log('🏗️ Objects by type:', objects);
+                }
+                
+                if (campus.camera) {
+                    console.log('📷 Camera position:', campus.camera.position);
+                    console.log('📷 Camera rotation:', campus.camera.rotation);
+                    console.log('📷 Camera FOV:', campus.camera.fov);
+                    console.log('📷 Camera aspect:', campus.camera.aspect);
+                }
+                
+                if (campus.renderer) {
+                    const size = campus.renderer.getSize(new THREE.Vector2());
+                    console.log('🖼️ Renderer size:', size.x + 'x' + size.y);
+                    console.log('🖼️ Renderer pixel ratio:', campus.renderer.getPixelRatio());
+                    console.log('🖼️ Renderer clear color:', '#' + campus.renderer.getClearColor().getHexString());
+                    
+                    const canvas = instance.renderer.domElement;
+                    if (canvas) {
+                        console.log('🖼️ Canvas exists:', !!canvas);
+                        console.log('🖼️ Canvas in DOM:', document.body.contains(canvas));
+                        console.log('🖼️ Canvas display style:', canvas.style.display || 'default');
+                        console.log('🖼️ Canvas visibility:', canvas.style.visibility || 'default');
+                        console.log('🖼️ Canvas opacity:', canvas.style.opacity || 'default');
+                        console.log('🖼️ Canvas dimensions:', canvas.width + 'x' + canvas.height);
+                        console.log('🖼️ Canvas client dimensions:', canvas.clientWidth + 'x' + canvas.clientHeight);
+                    }
+                }
+            }
+            
+            console.log('🔍 === END DIAGNOSTIC REPORT ===');
+        };
+
+        window.emergencyFix = function() {
+            console.log('🚨 === EMERGENCY FIX PROCEDURE ===');
+            
+            if (!window.campus) {
+                console.error('❌ No campus object, attempting initialization...');
+                attemptInitialization();
+                return;
+            }
+            
+            // 1. Fix renderer size
+            if (campus.renderer) {
+                console.log('🔧 Fixing renderer size...');
+                campus.renderer.setSize(window.innerWidth, window.innerHeight);
+                campus.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            }
+            
+            // 2. Fix camera
+            if (campus.camera) {
+                console.log('🔧 Fixing camera...');
+                campus.camera.aspect = window.innerWidth / window.innerHeight;
+                campus.camera.updateProjectionMatrix();
+                campus.camera.position.set(100, 80, 100);
+                campus.camera.lookAt(0, 0, 0);
+            }
+            
+            // 3. Fix canvas styling
+            if (campus.renderer && campus.renderer.domElement) {
+                console.log('🔧 Forcing canvas styling...');
+                const canvas = campus.renderer.domElement;
+                const container = document.getElementById('canvas-container');
+                
+                // Remove from current parent
+                if (canvas.parentNode) {
+                    canvas.parentNode.removeChild(canvas);
+                }
+                
+                // Force styling
+                canvas.style.cssText = `
+                    display: block !important;
+                    position: absolute !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    z-index: 1 !important;
+                    pointer-events: all !important;
+                `;
+                
+                // Re-append to container
+                if (container) {
+                    container.appendChild(canvas);
+                    console.log('✅ Canvas re-attached to container');
+                }
+            }
+            
+            // 4. Recreate city if empty
+            if (campus.scene && campus.scene.children.length < 5) {
+                console.log('🔧 Recreating city (scene appears empty)...');
+                campus.createCity();
+            }
+            
+            // 5. Force multiple renders
+            console.log('🔧 Forcing renders...');
+            for (let i = 0; i < 20; i++) {
+                if (campus.renderer && campus.scene && campus.camera) {
+                    campus.renderer.render(campus.scene, campus.camera);
+                }
+            }
+            
+            // 6. Update controls
+            if (campus.controls) {
+                campus.controls.target.set(0, 0, 0);
+                campus.controls.update();
+            }
+            
+            console.log('🚨 === EMERGENCY FIX COMPLETE ===');
+            
+            // Run diagnostic after fix
+            setTimeout(() => {
+                window.fullDiagnostic();
+            }, 1000);
+        };
+
+        // INITIALIZATION
+        let smartCity;\n        let campus;
+
+        async function initializeSmartCity() {
+            console.log('🎯 Starting BULLETPROOF Smart City initialization...');
+            console.log('📊 Current state:');
+            console.log('  - THREE defined:', typeof THREE !== 'undefined');
+            console.log('  - THREE.OrbitControls:', typeof THREE !== 'undefined' && typeof THREE.OrbitControls !== 'undefined');
+            console.log('  - Canvas container:', !!document.getElementById('canvas-container'));
+            
+            try {
+                
+            // CLEANUP: Remove any existing canvas elements
+            const existingCanvases = document.querySelectorAll('#canvas-container canvas');
+            existingCanvases.forEach(canvas => {
+                console.log('🧹 Removing existing canvas');
+                canvas.parentNode.removeChild(canvas);
+            });
+            
+            // CLEANUP: Cancel any existing animation frames
+            if (window.campus && window.campus.animationId) {
+                cancelAnimationFrame(window.campus.animationId);
+                console.log('🛑 Cancelled previous animation frame');
+            }
+            
+            // CLEANUP: Clear global references
+            if (window.campus) {
+                window.campus = null;
+                window.scene = null;
+                window.camera = null;
+                window.renderer = null;
+                console.log('🧹 Cleared global references');
+            }
+                console.log('🏗️ Creating BulletproofSmartCity instance...');
+                window.smartCity = new BulletproofSmartCity();
+                window.campus = window.smartCity;
+                console.log('🚀 Calling init() method...');
+                await window.smartCity.init();
+                console.log('✅ Smart City initialization completed successfully!');
+            } catch (error) {
+                console.error('❌ Critical initialization error:', error);
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.innerHTML = `
+                        <div style="text-align: center; padding: 40px;">
+                            <h3 style="color: #ef4444; margin-bottom: 20px;">⚠️ Initialization Error</h3>
+                            <p style="color: #fbbf24; margin-bottom: 20px;">${error.message}</p>
+                            <button onclick="location.reload()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">🔄 Reload Page</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // ENHANCED INITIALIZATION SEQUENCE WITH COMPREHENSIVE CHECKS
+        function attemptInitialization() {
+            console.log('🔄 Attempting initialization...');
+            
+            // 1. Check if Three.js is loaded
+            if (typeof THREE === 'undefined') {
+                console.warn('⚠️ Three.js not loaded yet, retrying...');
+                setTimeout(attemptInitialization, 500);
+                return;
+            }
+            
+            // 2. Check if OrbitControls is available
+            if (typeof THREE.OrbitControls === 'undefined') {
+                console.warn('⚠️ OrbitControls not loaded yet, retrying...');
+                setTimeout(attemptInitialization, 500);
+                return;
+            }
+            
+            // 3. Check if DOM is ready
+            if (!document.getElementById('canvas-container')) {
+                console.warn('⚠️ Canvas container not found, retrying...');
+                setTimeout(attemptInitialization, 100);
+                return;
+            }
+            
+            // 4. WebGL support check
+            if (!window.testWebGL()) {
+                console.error('❌ WebGL not supported on this device');
+                document.getElementById('loading-message').innerHTML = `
+                    <h3>⚠️ WebGL Not Supported</h3>
+                    <p>Your browser does not support WebGL. Please update your browser or use a different browser.</p>
+                `;
+                return;
+            }
+            
+            // 5. Check if already initialized
+            if (window.smartCity && smartCity.isInitialized) {
+                console.log('✅ Smart City already initialized');
+                return;
+            }
+            
+            console.log('✅ All prerequisites met, initializing Smart City...');
+            initializeSmartCity();
+        }
+        
+        // Enhanced canvas visibility checker
+        window.checkCanvasVisibility = function() {
+            console.log('🔍 === CANVAS VISIBILITY CHECK ===');
+            
+            const container = document.getElementById('canvas-container');
+            if (!container) {
+                console.error('❌ Canvas container not found');
+                return false;
+            }
+            
+            const containerStyle = window.getComputedStyle(container);
+            console.log('📦 Container display:', containerStyle.display);
+            console.log('📦 Container visibility:', containerStyle.visibility);
+            console.log('📦 Container opacity:', containerStyle.opacity);
+            console.log('📦 Container z-index:', containerStyle.zIndex);
+            
+            if (window.campus && campus.renderer && campus.renderer.domElement) {
+                const canvas = campus.renderer.domElement;
+                const canvasStyle = window.getComputedStyle(canvas);
+                
+                console.log('🖼️ Canvas display:', canvasStyle.display);
+                console.log('🖼️ Canvas visibility:', canvasStyle.visibility);
+                console.log('🖼️ Canvas opacity:', canvasStyle.opacity);
+                console.log('🖼️ Canvas position:', canvasStyle.position);
+                console.log('🖼️ Canvas z-index:', canvasStyle.zIndex);
+                console.log('🖼️ Canvas in DOM:', document.body.contains(canvas));
+                console.log('🖼️ Canvas parent:', canvas.parentElement?.id || 'none');
+                
+                const rect = canvas.getBoundingClientRect();
+                console.log('🖼️ Canvas rect:', rect);
+                
+                const isVisible = rect.width > 0 && rect.height > 0 && 
+                                canvasStyle.display !== 'none' && 
+                                canvasStyle.visibility !== 'hidden' &&
+                                parseFloat(canvasStyle.opacity) > 0;
+                
+                console.log('✅ Canvas is visible:', isVisible);
+                return isVisible;
+            } else {
+                console.error('❌ Canvas element not found');
+                return false;
+            }
+        };
+
+        // Loading status helper
+        function updateLoadingStatus(message) {
+            const statusEl = document.getElementById('loading-status');
+            if (statusEl) {
+                statusEl.textContent = message;
+            }
+            console.log(`🔄 ${message}`);
+        }
+
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        // Enhanced initialization with loading feedback
+        function initWithLoading() {
+            updateLoadingStatus('Checking Three.js...');
+            
+            if (typeof THREE === 'undefined') {
+                updateLoadingStatus('Loading Three.js...');
+                setTimeout(initWithLoading, 500);
+                return;
+            }
+            
+            updateLoadingStatus('Checking OrbitControls...');
+            // Try multiple locations for OrbitControls
+            if (typeof THREE.OrbitControls === 'undefined') {
+                // Try to attach from global scope
+                if (typeof OrbitControls !== 'undefined') {
+                    THREE.OrbitControls = OrbitControls;
+                    console.log('✅ Attached global OrbitControls to THREE');
+                } else if (typeof window.OrbitControls !== 'undefined') {
+                    THREE.OrbitControls = window.OrbitControls;
+                    console.log('✅ Attached window.OrbitControls to THREE');
+                } else {
+                    // Still not found, wait more
+                    updateLoadingStatus('Loading OrbitControls...');
+                    setTimeout(initWithLoading, 500);
+                    return;
+                }
+            }
+            
+            updateLoadingStatus('Checking DOM...');
+            if (!document.getElementById('canvas-container')) {
+                updateLoadingStatus('Waiting for DOM...');
+                setTimeout(initWithLoading, 100);
+                return;
+            }
+            
+            updateLoadingStatus('Initializing 3D Smart City...');
+            // Make sure we call the correct initialization function
+            initializeSmartCity();
+        }
+
+        // Start initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Hide 3 annotation panels by default when page loads
+                document.body.classList.add('ui-hidden');
+                
+                // Remove any existing popups
+                const existingPopups = document.querySelectorAll('#object-info-popup');
+                existingPopups.forEach(popup => popup.remove());
+                
+                initWithLoading();
+            });
+        } else {
+            // Hide 3 annotation panels by default when page loads
+            document.body.classList.add('ui-hidden');
+            
+            // Remove any existing popups
+            const existingPopups = document.querySelectorAll('#object-info-popup');
+            existingPopups.forEach(popup => popup.remove());
+            
+            initWithLoading();
+        }
+
+        // SINGLE RETRY MECHANISM
+        let initAttempts = 0;
+        const maxAttempts = 3;
+        
+        function retryInit() {
+            if (initAttempts < maxAttempts && (!window.smartCity || !smartCity.isInitialized)) {
+                initAttempts++;
+                console.log(`🔄 Retry attempt ${initAttempts}/${maxAttempts}`);
+                setTimeout(attemptInitialization, 1000 * initAttempts);
+            }
+        }
+        
+        setTimeout(retryInit, 1000);
+
+        // 🚨 EMERGENCY FALLBACK: Force initialization after 2 seconds
+        setTimeout(() => {
+            console.log('🚨 Emergency fallback activation...');
+            
+            if ((window.campus && window.campus.isInitialized) || (window.smartCity && window.smartCity.isInitialized)) {
+                console.log('✅ Campus/SmartCity initialized, forcing render check...');
+                window.forceRender();
+            } else {
+                console.log('🚨 EMERGENCY: Creating minimal 3D scene...');
+                window.createEmergencyScene();
+            }
+                
+                // Force canvas visibility
+                const instance = window.campus || window.smartCity;
+                if (instance && instance.renderer && instance.renderer.domElement) {
+                    const canvas = instance.renderer.domElement;
+                    canvas.style.cssText = `
+                        display: block !important;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        z-index: 1 !important;
+                    `;
+                    console.log('🔧 Forced canvas styling');
+                }
+                
+            } else {
+                console.error('❌ Campus not initialized after 3 seconds, attempting emergency init...');
+                attemptInitialization();
+            }
+        }, 2000);
+
+        // FINAL BACKUP: Emergency scene after 4 seconds
+        setTimeout(() => {
+            if ((!window.campus || !window.campus.isInitialized) && (!window.smartCity || !window.smartCity.isInitialized)) {
+                console.error('🚨 FINAL EMERGENCY: Creating emergency scene...');
+                window.createEmergencyScene();
+            }
+        }, 4000);
+    </script>
+</body>
+</html>

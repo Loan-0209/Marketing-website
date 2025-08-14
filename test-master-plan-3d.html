@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Master Plan 3D</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            background: #4fc3f7;
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .button:hover {
+            background: #29b6f6;
+            transform: translateY(-2px);
+        }
+        .info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .error {
+            color: #ff6b6b;
+            background: rgba(255,0,0,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #51cf66;
+            background: rgba(0,255,0,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        code {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏗️ Master Plan 3D Test Page</h1>
+        
+        <div class="info">
+            <h2>Quick Test Links</h2>
+            <a href="archive-3d/ai-campus-3d-structure.html" class="button">
+                📁 Open Master Plan 3D (Direct File)
+            </a>
+            <p style="margin-top: 20px;">
+                <strong>Note:</strong> If you see "MasterPlan3D class not found" error,<br>
+                you need to use HTTP server instead (see below).
+            </p>
+        </div>
+
+        <div class="info">
+            <h2>🔍 What to Check</h2>
+            <ol style="text-align: left; display: inline-block;">
+                <li>Open Developer Console (F12)</li>
+                <li>Look for initialization messages:
+                    <ul>
+                        <li>✅ "🚀 Initializing Master Plan 3D..."</li>
+                        <li>✅ "📚 Dependencies loaded successfully"</li>
+                        <li>✅ "✅ Master Plan 3D initialized successfully"</li>
+                    </ul>
+                </li>
+                <li>Check UI elements:
+                    <ul>
+                        <li>Timeline controls (Phase 1, 2, 3)</li>
+                        <li>Camera view buttons (Overview, Aerial, Ground)</li>
+                        <li>FPS counter in top-right</li>
+                    </ul>
+                </li>
+                <li>Verify 3D scene loads with buildings</li>
+            </ol>
+        </div>
+
+        <div class="info">
+            <h2>🚀 If Direct File Doesn't Work</h2>
+            <p>Run HTTP server using one of these commands:</p>
+            <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <code>python3 quick-open.py</code><br><br>
+                <strong>OR</strong><br><br>
+                <code>python3 fix-master-plan-integration.py</code><br><br>
+                <strong>OR</strong><br><br>
+                <code>python3 -m http.server 8080</code>
+            </div>
+            <p>Then open: <a href="http://localhost:8080/archive-3d/ai-campus-3d-structure.html" style="color: #4fc3f7;">
+                http://localhost:8080/archive-3d/ai-campus-3d-structure.html
+            </a></p>
+        </div>
+
+        <div class="info">
+            <h2>📊 Test Results</h2>
+            <div class="success">
+                <strong>✅ SUCCESS:</strong> Professional 3D campus loads with multiple buildings,
+                timeline controls work, camera views switch properly
+            </div>
+            <div class="error">
+                <strong>❌ FAIL:</strong> "MasterPlan3D class not found" error in console,
+                empty 3D scene, or loading stuck
+            </div>
+        </div>
+
+        <div class="info">
+            <h2>🛠️ Troubleshooting</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li><strong>Clear browser cache:</strong> Ctrl+Shift+R (or Cmd+Shift+R on Mac)</li>
+                <li><strong>Check WebGL support:</strong> Visit <a href="https://get.webgl.org" target="_blank" style="color: #4fc3f7;">get.webgl.org</a></li>
+                <li><strong>Try different browser:</strong> Chrome, Firefox, or Edge</li>
+                <li><strong>Check Network tab:</strong> Ensure js/master-plan-3d.js loads (200 status)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

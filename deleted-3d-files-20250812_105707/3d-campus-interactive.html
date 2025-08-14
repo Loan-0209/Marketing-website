@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Campus - HEART Data Center</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Particles Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle.green { background: rgba(76, 175, 80, 0.6); }
+        .particle.blue { background: rgba(33, 150, 243, 0.6); }
+        .particle.yellow { background: rgba(255, 193, 7, 0.6); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            min-width: 150px;
+        }
+
+        .stats-panel h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        /* AI Campus Panel */
+        .ai-campus-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-width: 280px;
+        }
+
+        .ai-campus-panel h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-list li::before {
+            content: "▶";
+            color: #3498db;
+            font-size: 0.8em;
+        }
+
+        /* Phase Buttons */
+        .phase-controls {
+            position: fixed;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .phase-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .phase-btn.phase1 {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .phase-btn.phase2 {
+            background: #34495e;
+            color: white;
+        }
+
+        .phase-btn.phase3 {
+            background: #3498db;
+            color: white;
+        }
+
+        .phase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .phase-btn.active {
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+        }
+
+        /* View Controls */
+        .view-controls {
+            position: fixed;
+            top: 20px;
+            right: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .view-btn:hover {
+            background: rgba(52, 152, 219, 0.9);
+        }
+
+        .view-btn.active {
+            background: #3498db;
+        }
+
+        /* 3D Canvas Area */
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23e3f2fd" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>') repeat;
+        }
+
+        /* Navigation Back */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+
+        .nav-back a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .nav-back a:hover {
+            background: rgba(52, 152, 219, 0.9);
+        }
+
+        /* 3D Buildings Simulation */
+        .building {
+            position: absolute;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .building:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .building.datacenter {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .building.office {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .building.research {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* Building Labels */
+        .building-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .building:hover .building-label {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .phase-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-panel, .ai-campus-panel {
+                font-size: 0.8em;
+                padding: 15px;
+            }
+            
+            .view-controls {
+                right: 10px;
+                top: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Back -->
+    <div class="nav-back">
+        <a href="index.html">← Back to HEART</a>
+    </div>
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Stats Panel -->
+    <div class="stats-panel">
+        <h3>📊 Thống kê</h3>
+        <div class="stat-item">
+            <span>FPS:</span>
+            <span id="fps-counter">60</span>
+        </div>
+        <div class="stat-item">
+            <span>Objects:</span>
+            <span id="object-counter">24</span>
+        </div>
+        <div class="stat-item">
+            <span>Triangles:</span>
+            <span id="triangle-counter">3654</span>
+        </div>
+    </div>
+
+    <!-- View Controls -->
+    <div class="view-controls">
+        <button class="view-btn active" data-view="overview">Overview</button>
+        <button class="view-btn" data-view="aerial">Aerial View</button>
+        <button class="view-btn" data-view="ground">Ground Level</button>
+    </div>
+
+    <!-- AI Campus Panel -->
+    <div class="ai-campus-panel">
+        <h3>🏛️ AI Campus 3D</h3>
+        <ul class="feature-list">
+            <li>🏗️ Khu Công Nghệ Cao AI Campus</li>
+            <li>🎮 Kéo chuột để xoay camera</li>
+            <li>🔍 Cuộn chuột để zoom in/out</li>
+            <li>📱 Vuốt màn hình để điều khiển trên thiết bị di động</li>
+        </ul>
+    </div>
+
+    <!-- Phase Controls -->
+    <div class="phase-controls">
+        <button class="phase-btn phase1 active" data-phase="1">Phase 1: Foundation</button>
+        <button class="phase-btn phase2" data-phase="2">Phase 2: Expansion</button>
+        <button class="phase-btn phase3" data-phase="3">Phase 3: Integration</button>
+    </div>
+
+    <!-- 3D Canvas Container -->
+    <div class="canvas-container" id="canvas-container"></div>
+
+    <script>
+        // Initialize 3D Campus Interface
+        class AI3DCampus {
+            constructor() {
+                this.currentPhase = 1;
+                this.currentView = 'overview';
+                this.stats = { fps: 60, objects: 24, triangles: 3654 };
+                this.buildings = [];
+                this.init();
+            }
+
+            init() {
+                this.createParticles();
+                this.setupEventListeners();
+                this.startStatsAnimation();
+                this.simulate3DRendering();
+                this.createBuildings();
+                console.log('🏛️ AI Campus 3D initialized');
+            }
+
+            createParticles() {
+                const container = document.getElementById('particles');
+                const colors = ['green', 'blue', 'yellow'];
+                
+                for (let i = 0; i < 20; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = `particle ${colors[Math.floor(Math.random() * colors.length)]}`;
+                    
+                    // Random size and position
+                    const size = Math.random() * 30 + 10;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    
+                    // Random animation delay
+                    particle.style.animationDelay = Math.random() * 6 + 's';
+                    
+                    container.appendChild(particle);
+                }
+            }
+
+            createBuildings() {
+                const canvas = document.getElementById('canvas-container');
+                
+                // Define building layouts for each phase
+                const phases = {
+                    1: [
+                        { x: 40, y: 40, w: 60, h: 80, type: 'datacenter', name: 'Main Data Center' },
+                        { x: 25, y: 60, w: 40, h: 50, type: 'office', name: 'Admin Building' },
+                        { x: 60, y: 70, w: 30, h: 40, type: 'office', name: 'Security Center' }
+                    ],
+                    2: [
+                        { x: 40, y: 40, w: 60, h: 80, type: 'datacenter', name: 'Main Data Center' },
+                        { x: 25, y: 60, w: 40, h: 50, type: 'office', name: 'Admin Building' },
+                        { x: 60, y: 70, w: 30, h: 40, type: 'office', name: 'Security Center' },
+                        { x: 20, y: 30, w: 45, h: 60, type: 'datacenter', name: 'Data Hall 2' },
+                        { x: 70, y: 25, w: 35, h: 55, type: 'research', name: 'R&D Center' },
+                        { x: 55, y: 15, w: 25, h: 35, type: 'office', name: 'Startup Hub' }
+                    ],
+                    3: [
+                        { x: 40, y: 40, w: 60, h: 80, type: 'datacenter', name: 'Main Data Center' },
+                        { x: 25, y: 60, w: 40, h: 50, type: 'office', name: 'Admin Building' },
+                        { x: 60, y: 70, w: 30, h: 40, type: 'office', name: 'Security Center' },
+                        { x: 20, y: 30, w: 45, h: 60, type: 'datacenter', name: 'Data Hall 2' },
+                        { x: 70, y: 25, w: 35, h: 55, type: 'research', name: 'R&D Center' },
+                        { x: 55, y: 15, w: 25, h: 35, type: 'office', name: 'Startup Hub' },
+                        { x: 15, y: 15, w: 30, h: 45, type: 'datacenter', name: 'Data Hall 3' },
+                        { x: 75, y: 60, w: 40, h: 35, type: 'office', name: 'Conference Center' }
+                    ]
+                };
+
+                this.renderBuildings(phases[this.currentPhase]);
+            }
+
+            renderBuildings(buildingData) {
+                const canvas = document.getElementById('canvas-container');
+                
+                // Clear existing buildings
+                this.buildings.forEach(building => building.remove());
+                this.buildings = [];
+
+                buildingData.forEach(data => {
+                    const building = document.createElement('div');
+                    building.className = `building ${data.type}`;
+                    building.style.left = `${data.x}%`;
+                    building.style.top = `${data.y}%`;
+                    building.style.width = `${data.w}px`;
+                    building.style.height = `${data.h}px`;
+                    
+                    const label = document.createElement('div');
+                    label.className = 'building-label';
+                    label.textContent = data.name;
+                    building.appendChild(label);
+                    
+                    building.addEventListener('click', () => {
+                        this.highlightBuilding(building, data.name);
+                    });
+                    
+                    canvas.appendChild(building);
+                    this.buildings.push(building);
+                });
+            }
+
+            highlightBuilding(building, name) {
+                // Remove previous highlights
+                this.buildings.forEach(b => b.style.border = 'none');
+                
+                // Highlight clicked building
+                building.style.border = '3px solid #3498db';
+                building.style.boxShadow = '0 0 20px rgba(52, 152, 219, 0.8)';
+                
+                console.log(`🏢 Selected building: ${name}`);
+                
+                // Show building info
+                setTimeout(() => {
+                    alert(`🏢 Building: ${name}\n✨ Click other buildings to explore the campus!`);
+                }, 100);
+            }
+
+            setupEventListeners() {
+                // Phase controls
+                document.querySelectorAll('.phase-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const phase = e.target.dataset.phase;
+                        this.switchPhase(phase);
+                    });
+                });
+
+                // View controls
+                document.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const view = e.target.dataset.view;
+                        this.switchView(view);
+                    });
+                });
+
+                // Canvas interaction simulation
+                const canvas = document.getElementById('canvas-container');
+                canvas.addEventListener('click', (e) => {
+                    if (e.target === canvas) {
+                        this.simulateInteraction();
+                    }
+                });
+            }
+
+            switchPhase(phase) {
+                this.currentPhase = parseInt(phase);
+                
+                // Update active button
+                document.querySelectorAll('.phase-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-phase="${phase}"]`).classList.add('active');
+
+                // Update stats based on phase
+                switch (this.currentPhase) {
+                    case 1:
+                        this.stats = { fps: 60, objects: 12, triangles: 1800 };
+                        break;
+                    case 2:
+                        this.stats = { fps: 55, objects: 24, triangles: 3654 };
+                        break;
+                    case 3:
+                        this.stats = { fps: 50, objects: 48, triangles: 7200 };
+                        break;
+                }
+
+                this.updateStats();
+                this.createBuildings(); // Recreate buildings for new phase
+                console.log(`📊 Switched to Phase ${phase}`);
+            }
+
+            switchView(view) {
+                this.currentView = view;
+                
+                // Update active button
+                document.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-view="${view}"]`).classList.add('active');
+
+                // Apply view effects
+                const canvas = document.getElementById('canvas-container');
+                switch(view) {
+                    case 'aerial':
+                        canvas.style.transform = 'scale(0.8) rotateX(30deg)';
+                        break;
+                    case 'ground':
+                        canvas.style.transform = 'scale(1.2) translateY(20%)';
+                        break;
+                    default:
+                        canvas.style.transform = 'scale(1)';
+                }
+
+                console.log(`👁️ Switched to ${view} view`);
+            }
+
+            updateStats() {
+                document.getElementById('fps-counter').textContent = this.stats.fps;
+                document.getElementById('object-counter').textContent = this.stats.objects;
+                document.getElementById('triangle-counter').textContent = this.stats.triangles;
+            }
+
+            startStatsAnimation() {
+                setInterval(() => {
+                    // Simulate FPS fluctuation
+                    const baseFps = this.stats.fps;
+                    const currentFps = baseFps + Math.floor(Math.random() * 10 - 5);
+                    document.getElementById('fps-counter').textContent = Math.max(30, currentFps);
+                }, 1000);
+            }
+
+            simulateInteraction() {
+                // Simulate 3D interaction feedback
+                const canvas = document.getElementById('canvas-container');
+                canvas.style.background = 'rgba(52, 152, 219, 0.1)';
+                setTimeout(() => {
+                    canvas.style.background = 'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23e3f2fd" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>\') repeat';
+                }, 200);
+                
+                console.log('🎮 3D Campus interaction detected');
+            }
+
+            simulate3DRendering() {
+                // Simulate 3D rendering activity
+                setInterval(() => {
+                    // Random minor stats changes to simulate live rendering
+                    const variation = Math.floor(Math.random() * 3 - 1);
+                    this.stats.triangles += variation;
+                    this.updateStats();
+                }, 5000);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.aiCampus3D = new AI3DCampus();
+            
+            // Welcome message
+            setTimeout(() => {
+                console.log('🏛️ Welcome to AI Campus 3D!');
+                console.log('🎮 Features: Interactive phases, multiple views, real-time stats');
+                alert('🎉 Welcome to HEART 3D Campus!\n\n🎮 Features:\n• Click buildings to explore\n• Switch between 3 development phases\n• Try different camera views\n• Watch real-time rendering stats\n\nEnjoy exploring the future of AI infrastructure!');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+🚑 EMERGENCY LOCALHOST FIX - HƯỚNG DẪN NHANH
+
+✅ ĐÃ TẠO CÁC SCRIPT SAU:
+================================
+
+1. emergency-localhost-fix.py      (Script gốc của bạn)
+2. fix-now.py                     (Script backup đã cải tiến)
+3. emergency-localhost-backup.py  (Script backup hoàn chỉnh)
+4. emergency-fix.sh              (Bash script)
+5. START-SERVER.command          (Double-click script cho Mac)
+
+🚀 CÁCH CHẠY (CHỌN 1 TRONG CÁC CÁCH):
+======================================
+
+CÁCH 1 - TERMINAL (KHUYẾN NGHỊ):
+--------------------------------
+1. Mở Terminal
+2. Copy và chạy lệnh này:
+
+cd "/Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18" && python3 fix-now.py
+
+CÁCH 2 - DOUBLE CLICK (MAC):
+---------------------------
+1. Tìm file "START-SERVER.command" trong folder
+2. Double-click để chạy
+3. Nếu macOS hỏi permission, chọn "Open"
+
+CÁCH 3 - MANUAL BACKUP:
+-----------------------
+1. Mở Terminal
+2. cd "/Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18"
+3. python3 -m http.server 8000
+4. Mở browser: http://localhost:8000
+
+CÁCH 4 - SCRIPT BACKUP:
+-----------------------
+python3 "/Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/emergency-localhost-backup.py"
+
+🎯 SAU KHI CHẠY, BẠN SẼ CÓ:
+============================
+✅ Tất cả server cũ đã bị tắt
+✅ Port trống đã được tìm thấy (8000, 8080, 8888, 9000, 9999)
+✅ Emergency index.html được tạo (nếu cần)
+✅ HTTP server đã khởi động
+✅ Browser tự động mở
+✅ Tất cả URLs available được hiển thị
+
+🌐 URLS SẼ AVAILABLE:
+====================
+🏠 Main: http://localhost:[PORT]/
+❤️ Heart: http://localhost:[PORT]/heart_standalone.html
+🎮 3D Campus: http://localhost:[PORT]/3d-campus-interactive.html
+🏢 Facilities: http://localhost:[PORT]/facilities.html
+
+⏹️ ĐỂ DỪNG SERVER:
+==================
+Nhấn Ctrl+C trong Terminal
+
+🔧 NẾU VẪN LỖI:
+===============
+1. Kiểm tra firewall/antivirus
+2. Thử port khác: python3 -m http.server 9000
+3. Restart Terminal
+4. Restart máy tính
+
+📞 SUPPORT:
+===========
+Nếu vẫn gặp vấn đề, cung cấp thông tin:
+- Hệ điều hành
+- Error message cụ thể
+- Port nào đã thử

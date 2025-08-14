@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🧪 Test 3D Campus Fix</title>
+    <style>
+        body { font-family: monospace; background: #0f172a; color: #10b981; padding: 20px; }
+        iframe { width: 100%; height: 600px; border: 2px solid #3b82f6; border-radius: 8px; }
+        .status { background: #1e293b; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test 3D Campus Fix</h1>
+    
+    <div class="status">
+        <h2>📊 Status</h2>
+        <div id="status">Loading...</div>
+    </div>
+    
+    <iframe src="3d-campus-smart-city.html" id="campusFrame"></iframe>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        const frame = document.getElementById('campusFrame');
+        
+        function updateStatus(message, type = 'info') {
+            const color = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#f59e0b';
+            statusDiv.innerHTML += `<div style="color: ${color}">${message}</div>`;
+        }
+        
+        updateStatus('🚀 Loading 3D Campus page...');
+        
+        frame.onload = () => {
+            updateStatus('✅ Frame loaded successfully', 'success');
+            
+            setTimeout(() => {
+                try {
+                    const frameWindow = frame.contentWindow;
+                    
+                    if (frameWindow.THREE) {
+                        updateStatus('✅ THREE.js loaded in frame', 'success');
+                    } else {
+                        updateStatus('❌ THREE.js not found in frame', 'error');
+                    }
+                    
+                    if (frameWindow.aiCampus3D) {
+                        updateStatus('✅ aiCampus3D instance found', 'success');
+                        
+                        if (frameWindow.aiCampus3D.scene) {
+                            updateStatus('✅ Scene created', 'success');
+                        } else {
+                            updateStatus('❌ Scene not created', 'error');
+                        }
+                        
+                        if (frameWindow.aiCampus3D.renderer) {
+                            updateStatus('✅ Renderer created', 'success');
+                        } else {
+                            updateStatus('❌ Renderer not created', 'error');
+                        }
+                        
+                    } else {
+                        updateStatus('❌ aiCampus3D instance not found', 'error');
+                    }
+                    
+                } catch (error) {
+                    updateStatus(`⚠️ Cross-origin check failed: ${error.message}`, 'info');
+                    updateStatus('🔍 This is normal for local testing', 'info');
+                }
+            }, 3000);
+        };
+        
+        frame.onerror = () => {
+            updateStatus('❌ Failed to load frame', 'error');
+        };
+    </script>
+</body>
+</html>

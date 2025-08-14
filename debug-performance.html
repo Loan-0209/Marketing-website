@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔧 Debug Performance - 3D Campus</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { margin: 0; background: #f0f8ff; font-family: monospace; }
+        #canvas-container { width: 100vw; height: 100vh; }
+        .debug-info { position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #10b981; padding: 20px; border-radius: 8px; }
+        .control-btn { background: #10b981; color: black; border: none; padding: 10px 20px; margin: 5px; cursor: pointer; border-radius: 5px; }
+        .control-btn:hover { background: #059669; color: white; }
+        .warning { color: #f59e0b; }
+        .error { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div class="debug-info">
+        <h3>🔧 Performance Debug</h3>
+        <div>FPS: <span id="fps">0</span></div>
+        <div>Objects: <span id="objects">0</span></div>
+        <div>Triangles: <span id="triangles">0</span></div>
+        <div>Draw Calls: <span id="drawcalls">0</span></div>
+        <div>Memory: <span id="memory">0</span> MB</div>
+        <div class="warning">Status: <span id="status">Loading...</span></div>
+        
+        <h4>Toggle Features:</h4>
+        <button class="control-btn" onclick="toggleInfrastructure()">Toggle Infrastructure</button>
+        <button class="control-btn" onclick="toggleAnimations()">Toggle Animations</button>
+        <button class="control-btn" onclick="reducedQuality()">Reduced Quality</button>
+        <button class="control-btn" onclick="resetScene()">Reset Scene</button>
+    </div>
+
+    <script>
+        let scene, camera, renderer, controls;
+        let infrastructureEnabled = false;
+        let animationsEnabled = false;
+        let stats = { fps: 0, lastTime: Date.now() };
+
+        // Initialize basic scene
+        function init() {
+            console.log('Initializing performance-optimized scene...');
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f8ff);
+            
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(120, 100, 120);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: false }); // Disable antialiasing for performance
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(1); // Force low pixel ratio
+            renderer.shadowMap.enabled = false; // Disable shadows initially
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            
+            // Simple lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(50, 50, 25);
+            scene.add(directionalLight);
+            
+            createBasicGrid();
+            animate();
+            
+            document.getElementById('status').textContent = 'Basic Scene Loaded';
+        }
+
+        // Create basic grid without heavy infrastructure
+        function createBasicGrid() {
+            const gridSize = 10;
+            const cellSize = 20;
+            
+            // Simple ground plane
+            const groundGeometry = new THREE.PlaneGeometry(200, 200);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xf0f0f0 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            scene.add(ground);
+            
+            // Basic buildings (reduced complexity)
+            const buildingMaterial = new THREE.MeshLambertMaterial({ vertexColors: true });
+            const buildingGeometry = new THREE.BoxGeometry(1, 1, 1);
+            
+            for (let i = 0; i < 10; i++) {
+                const height = 10 + Math.random() * 30;
+                const color = new THREE.Color().setHSL(Math.random(), 0.7, 0.6);
+                
+                const building = new THREE.Mesh(
+                    buildingGeometry.clone().scale(8, height, 8),
+                    new THREE.MeshLambertMaterial({ color: color })
+                );
+                
+                building.position.set(
+                    (Math.random() - 0.5) * 150,
+                    height / 2,
+                    (Math.random() - 0.5) * 150
+                );
+                
+                scene.add(building);
+            }
+            
+            updateStats();
+        }
+
+        // Toggle infrastructure on/off
+        function toggleInfrastructure() {
+            infrastructureEnabled = !infrastructureEnabled;
+            
+            if (infrastructureEnabled) {
+                console.log('Adding infrastructure...');
+                document.getElementById('status').textContent = 'Adding Infrastructure...';
+                
+                // Add simplified infrastructure
+                addSimplifiedInfrastructure();
+            } else {
+                console.log('Removing infrastructure...');
+                document.getElementById('status').textContent = 'Removing Infrastructure...';
+                
+                // Remove infrastructure objects
+                const toRemove = [];
+                scene.traverse((child) => {
+                    if (child.userData.isInfrastructure) {
+                        toRemove.push(child);
+                    }
+                });
+                
+                toRemove.forEach(obj => {
+                    scene.remove(obj);
+                    if (obj.geometry) obj.geometry.dispose();
+                    if (obj.material) obj.material.dispose();
+                });
+            }
+            
+            updateStats();
+        }
+
+        // Add simplified infrastructure
+        function addSimplifiedInfrastructure() {
+            // Simplified roads
+            const roadMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+            for (let i = -2; i <= 2; i++) {
+                const road = new THREE.Mesh(
+                    new THREE.PlaneGeometry(200, 4),
+                    roadMaterial
+                );
+                road.rotation.x = -Math.PI / 2;
+                road.position.set(0, 0.1, i * 40);
+                road.userData.isInfrastructure = true;
+                scene.add(road);
+            }
+            
+            // Simplified lights (no glow effects)
+            const lightPoleMaterial = new THREE.MeshBasicMaterial({ color: 0x666666 });
+            for (let x = -80; x <= 80; x += 80) {
+                for (let z = -80; z <= 80; z += 80) {
+                    const pole = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.5, 0.5, 10),
+                        lightPoleMaterial
+                    );
+                    pole.position.set(x, 5, z);
+                    pole.userData.isInfrastructure = true;
+                    scene.add(pole);
+                }
+            }
+            
+            document.getElementById('status').textContent = 'Infrastructure Added (Simplified)';
+        }
+
+        // Toggle animations
+        function toggleAnimations() {
+            animationsEnabled = !animationsEnabled;
+            document.getElementById('status').textContent = animationsEnabled ? 'Animations ON' : 'Animations OFF';
+        }
+
+        // Reduced quality mode
+        function reducedQuality() {
+            renderer.setPixelRatio(0.5);
+            renderer.shadowMap.enabled = false;
+            controls.enableDamping = false;
+            
+            // Reduce geometry complexity
+            scene.traverse((child) => {
+                if (child.isMesh && child.geometry) {
+                    if (child.geometry.type === 'SphereGeometry' || child.geometry.type === 'CylinderGeometry') {
+                        // Replace with simpler geometry
+                        const box = new THREE.BoxGeometry(1, 1, 1);
+                        child.geometry = box;
+                    }
+                }
+            });
+            
+            document.getElementById('status').textContent = 'Reduced Quality Mode';
+            updateStats();
+        }
+
+        // Reset scene
+        function resetScene() {
+            // Clear scene
+            while(scene.children.length > 0) {
+                const child = scene.children[0];
+                scene.remove(child);
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) child.material.dispose();
+            }
+            
+            // Recreate basic scene
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+            
+            createBasicGrid();
+            infrastructureEnabled = false;
+            animationsEnabled = false;
+            
+            document.getElementById('status').textContent = 'Scene Reset';
+        }
+
+        // Update stats
+        function updateStats() {
+            let triangles = 0;
+            let drawCalls = 0;
+            
+            scene.traverse((object) => {
+                if (object.isMesh) {
+                    drawCalls++;
+                    if (object.geometry) {
+                        const geometry = object.geometry;
+                        if (geometry.index) {
+                            triangles += geometry.index.count / 3;
+                        } else if (geometry.attributes.position) {
+                            triangles += geometry.attributes.position.count / 3;
+                        }
+                    }
+                }
+            });
+            
+            document.getElementById('objects').textContent = scene.children.length;
+            document.getElementById('triangles').textContent = Math.floor(triangles);
+            document.getElementById('drawcalls').textContent = drawCalls;
+            
+            // Memory estimate
+            const memory = (triangles * 0.001).toFixed(2); // Rough estimate
+            document.getElementById('memory').textContent = memory;
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Calculate FPS
+            const currentTime = Date.now();
+            const delta = currentTime - stats.lastTime;
+            if (delta > 100) {
+                stats.fps = Math.round(1000 / delta * 10);
+                document.getElementById('fps').textContent = stats.fps;
+                stats.lastTime = currentTime;
+            }
+            
+            // Simple animations if enabled
+            if (animationsEnabled) {
+                scene.traverse((child) => {
+                    if (child.userData.isInfrastructure && child.isMesh) {
+                        child.rotation.y += 0.001;
+                    }
+                });
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>

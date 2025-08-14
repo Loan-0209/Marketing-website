@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Error Test</title>
+    <style>
+        body { 
+            font-family: monospace; 
+            padding: 20px; 
+            background: #1a1a1a; 
+            color: #00ff00;
+        }
+        .error { color: #ff0000; }
+        .success { color: #00ff00; }
+        .warning { color: #ffff00; }
+    </style>
+</head>
+<body>
+    <h1>Testing 3D Campus Page for 404 Errors</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'success') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        // Test resources
+        const resources = [
+            { url: '/css/main.css', type: 'CSS' },
+            { url: '/css/components.css', type: 'CSS' },
+            { url: '/css/animations.css', type: 'CSS' },
+            { url: '/css/responsive.css', type: 'CSS' },
+            { url: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', type: 'Three.js' },
+            { url: 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js', type: 'OrbitControls' }
+        ];
+        
+        log('Starting resource tests...');
+        
+        resources.forEach(resource => {
+            fetch(resource.url, { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok) {
+                        log(`✓ ${resource.type}: ${resource.url}`, 'success');
+                    } else {
+                        log(`✗ ${resource.type}: ${resource.url} (${response.status})`, 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`✗ ${resource.type}: ${resource.url} (Network error)`, 'error');
+                });
+        });
+        
+        // Monitor network errors
+        window.addEventListener('error', (e) => {
+            if (e.filename) {
+                log(`✗ Script error: ${e.filename} - ${e.message}`, 'error');
+            }
+        }, true);
+        
+        // Check performance entries after page load
+        setTimeout(() => {
+            log('\nChecking performance entries for 404s...');
+            const entries = performance.getEntriesByType('resource');
+            entries.forEach(entry => {
+                if (entry.transferSize === 0 && !entry.name.includes('data:')) {
+                    log(`✗ Failed to load: ${entry.name}`, 'error');
+                }
+            });
+            log('Test complete!');
+        }, 3000);
+    </script>
+</body>
+</html>

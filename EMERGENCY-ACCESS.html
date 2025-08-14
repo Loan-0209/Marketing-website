@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚨 Emergency Access - 3D Campus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fbbf24;
+        }
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .access-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+        .access-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        .access-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .access-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: scale(1.05);
+        }
+        .access-btn.server {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        .access-btn.server:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+        .instructions {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚨 Emergency Access Portal</h1>
+        <p>Server connection issues detected. Use the options below to access your 3D Campus project.</p>
+        
+        <div class="status" id="status">
+            ⚠️ Server Status: Checking...
+        </div>
+
+        <div class="access-grid">
+            <div class="access-card">
+                <h3>🎯 Direct File Access</h3>
+                <p>Open files directly without server (Recommended)</p>
+                <a href="3d-campus-smart-city.html" class="access-btn" target="_blank">Open 3D Smart City</a>
+                <a href="index.html" class="access-btn" target="_blank">Open Homepage</a>
+                <a href="open-direct.html" class="access-btn" target="_blank">File Browser</a>
+            </div>
+
+            <div class="access-card">
+                <h3>🛠️ Working Versions</h3>
+                <p>Simplified versions guaranteed to work</p>
+                <a href="3d-campus-emergency-working.html" class="access-btn" target="_blank">Emergency Version</a>
+                <a href="fix-3d-campus-now.html" class="access-btn" target="_blank">Simple Version</a>
+                <a href="debug-performance.html" class="access-btn" target="_blank">Debug Version</a>
+            </div>
+        </div>
+
+        <div class="access-card">
+            <h3>🚀 Start Local Server</h3>
+            <p>Click to start HTTP server on different ports</p>
+            <button class="access-btn server" onclick="startServer(8000)">Start Server Port 8000</button>
+            <button class="access-btn server" onclick="startServer(8080)">Start Server Port 8080</button>
+            <button class="access-btn server" onclick="startServer(8888)">Start Server Port 8888</button>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 Manual Server Setup</h3>
+            <p><strong>Terminal Commands:</strong></p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; color: #10b981;">
+cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18
+python3 -m http.server 8000
+            </pre>
+            <p>Then visit: <code>http://localhost:8000</code></p>
+        </div>
+
+        <div id="server-output" style="display: none;">
+            <h3>📟 Server Output</h3>
+            <div id="output-content" style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; font-family: monospace; text-align: left; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Check server status
+        function checkServerStatus() {
+            const ports = [8000, 8080, 8888];
+            const statusDiv = document.getElementById('status');
+            
+            ports.forEach(port => {
+                fetch(`http://localhost:${port}`)
+                    .then(response => {
+                        if (response.ok) {
+                            statusDiv.innerHTML = `✅ Server running on port ${port}`;
+                            statusDiv.className = 'status';
+                            // Auto-redirect
+                            setTimeout(() => {
+                                window.open(`http://localhost:${port}/3d-campus-smart-city.html`, '_blank');
+                            }, 2000);
+                        }
+                    })
+                    .catch(() => {
+                        // Server not running on this port
+                    });
+            });
+            
+            // If no server found after 3 seconds
+            setTimeout(() => {
+                if (statusDiv.innerHTML.includes('Checking')) {
+                    statusDiv.innerHTML = '❌ No server running - Use direct file access or start server manually';
+                    statusDiv.className = 'status error';
+                }
+            }, 3000);
+        }
+
+        // Start server function (simulation)
+        function startServer(port) {
+            const outputDiv = document.getElementById('server-output');
+            const contentDiv = document.getElementById('output-content');
+            
+            outputDiv.style.display = 'block';
+            contentDiv.innerHTML = `
+                <div>🚀 Starting server on port ${port}...</div>
+                <div>📁 Directory: /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18</div>
+                <div>⚠️ Note: This is a simulation. Please start server manually using terminal commands above.</div>
+                <div>💡 Or use direct file access - no server needed!</div>
+            `;
+            
+            // Show instructions
+            alert(`To start server on port ${port}:
+
+1. Open Terminal
+2. Run: cd /Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18
+3. Run: python3 -m http.server ${port}
+4. Visit: http://localhost:${port}
+
+OR
+
+Use Direct File Access (no server needed) - click the direct access buttons above!`);
+        }
+
+        // Auto-check status on load
+        checkServerStatus();
+
+        // Check for file:// protocol
+        if (window.location.protocol === 'file:') {
+            console.log('✅ Running from local file system - Direct access working');
+        }
+    </script>
+</body>
+</html>

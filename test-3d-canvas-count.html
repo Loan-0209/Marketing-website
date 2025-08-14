@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Smart City Canvas Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #0f0;
+        }
+        .test-frame {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #0f0;
+            margin: 20px 0;
+        }
+        .stats {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .value {
+            color: #f00;
+            font-weight: bold;
+        }
+        .pass { color: #0f0; }
+        .fail { color: #f00; }
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0a0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 3D Smart City Canvas Count Test</h1>
+    
+    <div class="stats">
+        <h2>📊 Real-time Metrics</h2>
+        <div class="metric">
+            <span>Canvas Count:</span>
+            <span class="value" id="canvas-count">0</span>
+        </div>
+        <div class="metric">
+            <span>Animation Frames:</span>
+            <span class="value" id="anim-frames">0</span>
+        </div>
+        <div class="metric">
+            <span>SmartCity Instances:</span>
+            <span class="value" id="instances">0</span>
+        </div>
+        <div class="metric">
+            <span>Memory Usage (MB):</span>
+            <span class="value" id="memory">0</span>
+        </div>
+        <div class="metric">
+            <span>Test Status:</span>
+            <span class="value" id="status">WAITING</span>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="loadOriginal()">Load Original (Broken)</button>
+        <button onclick="loadFixed()">Load Fixed Version</button>
+        <button onclick="refresh()">Refresh Frame</button>
+        <button onclick="runTest()">Run Automated Test</button>
+    </div>
+    
+    <iframe id="test-frame" class="test-frame" style="display:none;"></iframe>
+    
+    <div id="test-log" style="margin-top: 20px;">
+        <h2>📝 Test Log</h2>
+        <pre id="log-content"></pre>
+    </div>
+
+    <script>
+        let testInterval;
+        let metrics = {
+            canvasCount: 0,
+            animFrames: 0,
+            instances: 0,
+            memory: 0
+        };
+        
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log-content');
+            const time = new Date().toLocaleTimeString();
+            const prefix = type === 'error' ? '❌' : type === 'success' ? '✅' : '📌';
+            logEl.innerHTML += `[${time}] ${prefix} ${message}\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        function updateMetrics() {
+            const frame = document.getElementById('test-frame');
+            if (!frame.contentWindow) return;
+            
+            try {
+                const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                
+                // Count canvas elements
+                const canvases = frameDoc.querySelectorAll('canvas');
+                metrics.canvasCount = canvases.length;
+                
+                // Check for multiple instances
+                const win = frame.contentWindow;
+                metrics.instances = 0;
+                if (win.smartCity) metrics.instances++;
+                if (win.campus) metrics.instances++;
+                
+                // Count active animation frames (approximate)
+                metrics.animFrames = 0;
+                canvases.forEach(canvas => {
+                    if (canvas.style.display !== 'none') {
+                        metrics.animFrames++;
+                    }
+                });
+                
+                // Memory usage (if available)
+                if (performance.memory) {
+                    metrics.memory = Math.round(performance.memory.usedJSHeapSize / 1048576);
+                }
+                
+                // Update display
+                document.getElementById('canvas-count').textContent = metrics.canvasCount;
+                document.getElementById('canvas-count').className = metrics.canvasCount === 1 ? 'value pass' : 'value fail';
+                
+                document.getElementById('anim-frames').textContent = metrics.animFrames;
+                document.getElementById('instances').textContent = metrics.instances;
+                document.getElementById('memory').textContent = metrics.memory;
+                
+                // Log issues
+                if (metrics.canvasCount > 1) {
+                    log(`WARNING: Multiple canvases detected (${metrics.canvasCount})`, 'error');
+                }
+                
+            } catch (e) {
+                log(`Error accessing frame: ${e.message}`, 'error');
+            }
+        }
+        
+        function loadOriginal() {
+            log('Loading original (broken) version...');
+            const frame = document.getElementById('test-frame');
+            frame.style.display = 'block';
+            frame.src = '3d-campus-smart-city-complete.html';
+            document.getElementById('status').textContent = 'TESTING ORIGINAL';
+            
+            clearInterval(testInterval);
+            testInterval = setInterval(updateMetrics, 500);
+            
+            setTimeout(() => {
+                log(`Original loaded - Canvas count: ${metrics.canvasCount}`, 
+                    metrics.canvasCount > 1 ? 'error' : 'success');
+            }, 5000);
+        }
+        
+        function loadFixed() {
+            log('Loading fixed version...');
+            const frame = document.getElementById('test-frame');
+            frame.style.display = 'block';
+            frame.src = '3d-campus-smart-city-fixed.html';
+            document.getElementById('status').textContent = 'TESTING FIXED';
+            
+            clearInterval(testInterval);
+            testInterval = setInterval(updateMetrics, 500);
+            
+            setTimeout(() => {
+                log(`Fixed version loaded - Canvas count: ${metrics.canvasCount}`, 
+                    metrics.canvasCount === 1 ? 'success' : 'error');
+            }, 5000);
+        }
+        
+        function refresh() {
+            log('Refreshing frame...');
+            const frame = document.getElementById('test-frame');
+            frame.src = frame.src;
+        }
+        
+        async function runTest() {
+            log('Starting automated test suite...', 'success');
+            document.getElementById('status').textContent = 'RUNNING TESTS';
+            
+            // Test 1: Load original
+            log('\n=== TEST 1: Original Version ===');
+            loadOriginal();
+            await new Promise(resolve => setTimeout(resolve, 7000));
+            
+            const originalMetrics = {...metrics};
+            log(`Results: ${originalMetrics.canvasCount} canvas(es), ${originalMetrics.instances} instance(s)`);
+            
+            // Test 2: Refresh original
+            log('\n=== TEST 2: Refresh Original ===');
+            refresh();
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            log(`After refresh: ${metrics.canvasCount} canvas(es)`);
+            
+            // Test 3: Load fixed
+            log('\n=== TEST 3: Fixed Version ===');
+            loadFixed();
+            await new Promise(resolve => setTimeout(resolve, 7000));
+            
+            const fixedMetrics = {...metrics};
+            log(`Results: ${fixedMetrics.canvasCount} canvas(es), ${fixedMetrics.instances} instance(s)`);
+            
+            // Test 4: Refresh fixed
+            log('\n=== TEST 4: Refresh Fixed ===');
+            refresh();
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            
+            log(`After refresh: ${metrics.canvasCount} canvas(es)`);
+            
+            // Summary
+            log('\n=== TEST SUMMARY ===', 'success');
+            log(`Original: ${originalMetrics.canvasCount > 1 ? 'FAILED ❌' : 'PASSED ✅'} (${originalMetrics.canvasCount} canvas)`);
+            log(`Fixed: ${fixedMetrics.canvasCount === 1 ? 'PASSED ✅' : 'FAILED ❌'} (${fixedMetrics.canvasCount} canvas)`);
+            
+            document.getElementById('status').textContent = 'TEST COMPLETE';
+        }
+        
+        // Auto-update metrics
+        setInterval(updateMetrics, 1000);
+        
+        log('Test suite ready. Click a button to start testing.');
+    </script>
+</body>
+</html>

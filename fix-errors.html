@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🔧 Fix 3D Campus Errors</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { 
+            font-family: monospace; 
+            background: #0f172a; 
+            color: #10b981; 
+            padding: 20px; 
+        }
+        .fix-panel { 
+            background: #1e293b; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 10px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .success { border-left-color: #10b981; }
+        .error { border-left-color: #ef4444; }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #2563eb; }
+        #log { 
+            background: #000; 
+            color: #0f0; 
+            padding: 15px; 
+            height: 300px; 
+            overflow-y: auto; 
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Fix 3D Campus Errors</h1>
+    
+    <div class="fix-panel">
+        <h2>🚨 Quick Fixes</h2>
+        <button onclick="fixOrbitControls()">Fix OrbitControls</button>
+        <button onclick="forceInitialization()">Force Initialization</button>
+        <button onclick="createFallbackCity()">Create Fallback City</button>
+        <button onclick="testThreeJS()">Test Three.js</button>
+        <button onclick="openMainPageFixed()">Open Fixed Page</button>
+    </div>
+
+    <div class="fix-panel">
+        <h2>📋 Fix Log</h2>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff0000' : type === 'success' ? '#00ff00' : '#ffff00';
+            logDiv.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function fixOrbitControls() {
+            log('🔧 Fixing OrbitControls import...', 'info');
+            
+            if (typeof THREE !== 'undefined') {
+                log('✅ THREE.js loaded successfully', 'success');
+                
+                if (typeof THREE.OrbitControls !== 'undefined') {
+                    log('✅ OrbitControls already available', 'success');
+                } else {
+                    log('⚠️ OrbitControls not found, attempting to load...', 'info');
+                    
+                    // Try to manually add OrbitControls
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+                    script.onload = () => {
+                        log('✅ OrbitControls loaded manually', 'success');
+                    };
+                    script.onerror = () => {
+                        log('❌ Failed to load OrbitControls', 'error');
+                    };
+                    document.head.appendChild(script);
+                }
+            } else {
+                log('❌ THREE.js not loaded', 'error');
+            }
+        }
+
+        function testThreeJS() {
+            log('🧪 Testing Three.js functionality...', 'info');
+            
+            try {
+                // Test basic Three.js objects
+                const scene = new THREE.Scene();
+                log('✅ THREE.Scene created', 'success');
+                
+                const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+                log('✅ THREE.PerspectiveCamera created', 'success');
+                
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                log('✅ THREE.BoxGeometry created', 'success');
+                
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                log('✅ THREE.MeshBasicMaterial created', 'success');
+                
+                const cube = new THREE.Mesh(geometry, material);
+                log('✅ THREE.Mesh created', 'success');
+                
+                scene.add(cube);
+                log('✅ Object added to scene', 'success');
+                
+                log('🎉 Three.js is working correctly!', 'success');
+                
+            } catch (error) {
+                log(`❌ Three.js error: ${error.message}`, 'error');
+            }
+        }
+
+        function forceInitialization() {
+            log('🚀 Force initializing 3D Campus...', 'info');
+            
+            try {
+                // Create a basic initialization script
+                const initScript = `
+                    console.log('🚀 Force initialization starting...');
+                    
+                    if (typeof AI3DCampusWithNav !== 'undefined') {
+                        console.log('✅ AI3DCampusWithNav class found');
+                        const campus = new AI3DCampusWithNav();
+                        campus.init();
+                        console.log('✅ Campus initialized');
+                    } else {
+                        console.log('❌ AI3DCampusWithNav class not found');
+                        
+                        // Create fallback
+                        class FallbackCampus {
+                            constructor() {
+                                this.scene = new THREE.Scene();
+                                this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                                this.renderer = new THREE.WebGLRenderer();
+                                this.init();
+                            }
+                            
+                            init() {
+                                console.log('🏗️ Creating fallback campus...');
+                                
+                                const container = document.getElementById('canvas-container');
+                                if (container) {
+                                    this.renderer.setSize(container.clientWidth, container.clientHeight);
+                                    container.appendChild(this.renderer.domElement);
+                                    
+                                    // Add a simple cube
+                                    const geometry = new THREE.BoxGeometry(10, 10, 10);
+                                    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                                    const cube = new THREE.Mesh(geometry, material);
+                                    this.scene.add(cube);
+                                    
+                                    this.camera.position.z = 30;
+                                    
+                                    const animate = () => {
+                                        requestAnimationFrame(animate);
+                                        cube.rotation.x += 0.01;
+                                        cube.rotation.y += 0.01;
+                                        this.renderer.render(this.scene, this.camera);
+                                    };
+                                    animate();
+                                    
+                                    console.log('✅ Fallback campus created');
+                                } else {
+                                    console.log('❌ Canvas container not found');
+                                }
+                            }
+                        }
+                        
+                        window.fallbackCampus = new FallbackCampus();
+                    }
+                `;
+                
+                // Execute in main page context
+                window.open(`javascript:${encodeURIComponent(initScript)}`);
+                log('📤 Initialization script sent to main page', 'success');
+                
+            } catch (error) {
+                log(`❌ Initialization error: ${error.message}`, 'error');
+            }
+        }
+
+        function createFallbackCity() {
+            log('🏗️ Creating fallback 3D city...', 'info');
+            
+            // Create fallback city in iframe
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '100%';
+            iframe.style.height = '400px';
+            iframe.style.border = '1px solid #333';
+            
+            const fallbackHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+                <style>body { margin: 0; background: #001122; }</style>
+            </head>
+            <body>
+                <script>
+                    const scene = new THREE.Scene();
+                    scene.background = new THREE.Color(0x001122);
+                    
+                    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    document.body.appendChild(renderer.domElement);
+                    
+                    // Create simple city
+                    for (let i = 0; i < 20; i++) {
+                        const height = 5 + Math.random() * 15;
+                        const geometry = new THREE.BoxGeometry(2, height, 2);
+                        const material = new THREE.MeshBasicMaterial({ 
+                            color: Math.random() * 0xffffff 
+                        });
+                        const building = new THREE.Mesh(geometry, material);
+                        
+                        building.position.x = (Math.random() - 0.5) * 50;
+                        building.position.z = (Math.random() - 0.5) * 50;
+                        building.position.y = height / 2;
+                        
+                        scene.add(building);
+                    }
+                    
+                    camera.position.set(30, 20, 30);
+                    camera.lookAt(0, 0, 0);
+                    
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                    
+                    console.log('✅ Fallback city created');
+                </script>
+            </body>
+            </html>
+            `;
+            
+            iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(fallbackHTML);
+            document.body.appendChild(iframe);
+            
+            log('✅ Fallback city created in iframe', 'success');
+        }
+
+        function openMainPageFixed() {
+            log('🌐 Opening main page with error fixes...', 'info');
+            
+            const fixedURL = `http://localhost:8000/3d-campus-smart-city.html?fix=1&t=${Date.now()}`;
+            window.open(fixedURL);
+            
+            log('✅ Main page opened with cache bypass', 'success');
+        }
+
+        // Initialize
+        log('🔧 Fix console ready');
+        log('👆 Click buttons above to apply fixes');
+        
+        // Test Three.js immediately
+        setTimeout(testThreeJS, 1000);
+    </script>
+</body>
+</html>

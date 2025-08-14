@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🚨 Emergency Debug</title>
+    <style>
+        body { 
+            background: #000; 
+            color: #0f0; 
+            font-family: monospace; 
+            padding: 20px; 
+        }
+        .error { color: #f00; }
+        .warning { color: #ff0; }
+        .success { color: #0f0; }
+        button {
+            background: #333;
+            color: #0f0;
+            border: 1px solid #0f0;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 Emergency Debug - Loading Issues</h1>
+    
+    <div id="status"></div>
+    
+    <button onclick="checkBasics()">Check Basics</button>
+    <button onclick="checkThreeJS()">Check Three.js</button>
+    <button onclick="forceLoad()">Force Load</button>
+    <button onclick="createMinimal()">Create Minimal</button>
+    
+    <script>
+        const status = document.getElementById('status');
+        
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            status.appendChild(div);
+            console.log(msg);
+        }
+        
+        function checkBasics() {
+            log('🔍 Checking basics...', 'info');
+            
+            // Check server
+            fetch('/')
+                .then(r => log(`✅ Server: ${r.status}`, 'success'))
+                .catch(e => log(`❌ Server: ${e.message}`, 'error'));
+            
+            // Check main file
+            fetch('/3d-campus-smart-city.html')
+                .then(r => {
+                    if (r.ok) {
+                        log(`✅ Main file: ${r.status}`, 'success');
+                        return r.text();
+                    } else {
+                        log(`❌ Main file: ${r.status}`, 'error');
+                    }
+                })
+                .then(html => {
+                    if (html) {
+                        if (html.includes('AI3DCampusWithNav')) {
+                            log('✅ Class found in file', 'success');
+                        } else {
+                            log('❌ Class missing from file', 'error');
+                        }
+                        
+                        if (html.includes('loadingScreen')) {
+                            log('✅ Loading screen in file', 'success');
+                        } else {
+                            log('❌ Loading screen missing', 'error');
+                        }
+                    }
+                })
+                .catch(e => log(`❌ File check: ${e.message}`, 'error'));
+        }
+        
+        function checkThreeJS() {
+            log('🔍 Checking Three.js...', 'info');
+            
+            const urls = [
+                'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+                'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'
+            ];
+            
+            urls.forEach(url => {
+                fetch(url, { method: 'HEAD' })
+                    .then(r => {
+                        if (r.ok) {
+                            log(`✅ CDN OK: ${url.split('/').pop()}`, 'success');
+                        } else {
+                            log(`❌ CDN Fail: ${url.split('/').pop()} (${r.status})`, 'error');
+                        }
+                    })
+                    .catch(e => log(`❌ CDN Error: ${url.split('/').pop()}`, 'error'));
+            });
+        }
+        
+        function forceLoad() {
+            log('🚀 Force loading main page...', 'warning');
+            
+            // Create iframe with debugging
+            const iframe = document.createElement('iframe');
+            iframe.src = '/3d-campus-smart-city.html';
+            iframe.style.width = '100%';
+            iframe.style.height = '400px';
+            iframe.style.border = '1px solid #0f0';
+            
+            iframe.onload = () => {
+                log('✅ Iframe loaded', 'success');
+                
+                setTimeout(() => {
+                    try {
+                        const iframeWindow = iframe.contentWindow;
+                        const iframeDoc = iframe.contentDocument;
+                        
+                        log(`📊 Iframe window: ${!!iframeWindow}`, 'info');
+                        log(`📊 Iframe document: ${!!iframeDoc}`, 'info');
+                        
+                        if (iframeDoc) {
+                            const loadingScreen = iframeDoc.getElementById('loadingScreen');
+                            log(`📊 Loading screen: ${!!loadingScreen}`, 'info');
+                            
+                            if (loadingScreen) {
+                                const isHidden = loadingScreen.classList.contains('hidden');
+                                const opacity = getComputedStyle(loadingScreen).opacity;
+                                log(`📊 Loading hidden: ${isHidden}, opacity: ${opacity}`, 'info');
+                                
+                                // Force hide
+                                loadingScreen.style.display = 'none';
+                                log('🔧 Force hidden loading screen', 'warning');
+                            }
+                            
+                            const canvas = iframeDoc.getElementById('canvas-container');
+                            log(`📊 Canvas container: ${!!canvas}`, 'info');
+                            
+                            if (iframeWindow.THREE) {
+                                log('✅ THREE.js loaded in iframe', 'success');
+                            } else {
+                                log('❌ THREE.js not loaded in iframe', 'error');
+                            }
+                            
+                            if (iframeWindow.aiCampus3D) {
+                                log('✅ aiCampus3D instance exists', 'success');
+                            } else {
+                                log('❌ aiCampus3D instance missing', 'error');
+                                
+                                // Try to create manually
+                                if (iframeWindow.AI3DCampusWithNav) {
+                                    log('🔧 Creating aiCampus3D manually...', 'warning');
+                                    iframeWindow.aiCampus3D = new iframeWindow.AI3DCampusWithNav();
+                                    iframeWindow.aiCampus3D.init();
+                                }
+                            }
+                        }
+                        
+                    } catch (error) {
+                        log(`⚠️ Cross-origin: ${error.message}`, 'warning');
+                    }
+                }, 3000);
+            };
+            
+            iframe.onerror = () => {
+                log('❌ Iframe failed to load', 'error');
+            };
+            
+            document.body.appendChild(iframe);
+        }
+        
+        function createMinimal() {
+            log('🏗️ Creating minimal 3D test...', 'warning');
+            
+            const minimalHTML = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Minimal 3D Test</title>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+                <style>
+                    body { margin: 0; background: #001122; }
+                    #loading { 
+                        position: fixed; 
+                        top: 50%; 
+                        left: 50%; 
+                        transform: translate(-50%, -50%);
+                        color: white; 
+                        font-family: monospace;
+                    }
+                </style>
+            </head>
+            <body>
+                <div id="loading">Loading 3D...</div>
+                <script>
+                    console.log('🚀 Minimal test starting...');
+                    
+                    setTimeout(() => {
+                        document.getElementById('loading').textContent = 'Creating scene...';
+                        
+                        if (typeof THREE !== 'undefined') {
+                            console.log('✅ THREE.js available');
+                            
+                            const scene = new THREE.Scene();
+                            scene.background = new THREE.Color(0x001122);
+                            
+                            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                            const renderer = new THREE.WebGLRenderer();
+                            renderer.setSize(window.innerWidth, window.innerHeight);
+                            document.body.appendChild(renderer.domElement);
+                            
+                            // Simple cube
+                            const geometry = new THREE.BoxGeometry(10, 10, 10);
+                            const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                            const cube = new THREE.Mesh(geometry, material);
+                            scene.add(cube);
+                            
+                            camera.position.z = 30;
+                            
+                            function animate() {
+                                requestAnimationFrame(animate);
+                                cube.rotation.x += 0.01;
+                                cube.rotation.y += 0.01;
+                                renderer.render(scene, camera);
+                            }
+                            animate();
+                            
+                            document.getElementById('loading').style.display = 'none';
+                            console.log('✅ Minimal 3D scene created');
+                            
+                        } else {
+                            console.log('❌ THREE.js not available');
+                            document.getElementById('loading').textContent = 'THREE.js failed to load';
+                        }
+                    }, 1000);
+                </script>
+            </body>
+            </html>
+            `;
+            
+            const blob = new Blob([minimalHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            
+            log('✅ Minimal test opened in new tab', 'success');
+        }
+        
+        // Auto-run basic checks
+        setTimeout(checkBasics, 500);
+        setTimeout(checkThreeJS, 1000);
+    </script>
+</body>
+</html>

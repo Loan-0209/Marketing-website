@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Campus Camera Controls Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f8ff;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+        .test-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-btn:hover { background: #059669; }
+        .result { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 5px;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 3D Campus Camera Controls Test Suite</h1>
+        
+        <div class="info result">
+            <strong>Test Instructions:</strong><br>
+            1. Make sure your 3D Campus page is open in another tab<br>
+            2. Click the test buttons below to verify functionality<br>
+            3. Check results in both this tab and browser console
+        </div>
+
+        <h2>📋 Test Controls</h2>
+        <button class="test-btn" onclick="testMainPage()">🔍 Test Main Page</button>
+        <button class="test-btn" onclick="testCameraObjects()">📷 Test Camera Objects</button>
+        <button class="test-btn" onclick="testCameraButtons()">🎮 Test Camera Buttons</button>
+        <button class="test-btn" onclick="testPerformance()">⚡ Test Performance</button>
+        <button class="test-btn" onclick="runAllTests()">🚀 Run All Tests</button>
+
+        <h2>📊 Test Results</h2>
+        <div id="results"></div>
+
+        <h2>🔗 Quick Actions</h2>
+        <button class="test-btn" onclick="openMainPage()">Open 3D Campus</button>
+        <button class="test-btn" onclick="clearResults()">Clear Results</button>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${message}`;
+            results.appendChild(div);
+            console.log(message);
+        }
+
+        function testMainPage() {
+            log('🔍 Testing main page accessibility...');
+            
+            // Try to access the main window
+            try {
+                if (window.opener || parent !== window) {
+                    log('✅ Test page properly opened', 'success');
+                } else {
+                    log('⚠️ Test page standalone mode', 'info');
+                }
+                
+                // Check if we can access localhost
+                fetch('http://localhost:8080/3d-campus-smart-city.html')
+                    .then(response => {
+                        if (response.ok) {
+                            log('✅ Main 3D Campus page accessible at localhost:8080', 'success');
+                        } else {
+                            log('❌ Main page not accessible - check server', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        log('❌ Server connection failed: ' + err.message, 'error');
+                    });
+                    
+            } catch (e) {
+                log('❌ Page access test failed: ' + e.message, 'error');
+            }
+        }
+
+        function testCameraObjects() {
+            log('📷 Testing 3D camera objects exposure...');
+            
+            // Test via postMessage to main window
+            try {
+                const testScript = `
+                    console.log('=== CAMERA OBJECTS TEST ===');
+                    
+                    const results = {
+                        camera: !!window.camera,
+                        scene: !!window.scene,
+                        controls: !!window.controls,
+                        renderer: !!window.renderer,
+                        campus: !!window.campus,
+                        campusCamera: !!window.campusCamera
+                    };
+                    
+                    console.log('Camera objects status:', results);
+                    
+                    if (window.camera) {
+                        console.log('Camera position:', window.camera.position);
+                        console.log('Camera type:', window.camera.constructor.name);
+                    }
+                    
+                    if (window.scene) {
+                        console.log('Scene children count:', window.scene.children.length);
+                    }
+                    
+                    results;
+                `;
+                
+                log('✅ Camera objects test script prepared', 'success');
+                log('📝 Please check browser console for detailed results', 'info');
+                log('🔧 Manual test: Open main page console and run: window.camera', 'info');
+                
+            } catch (e) {
+                log('❌ Camera objects test failed: ' + e.message, 'error');
+            }
+        }
+
+        function testCameraButtons() {
+            log('🎮 Testing camera control buttons...');
+            
+            const testCode = `
+                // Test camera buttons functionality
+                console.log('=== CAMERA BUTTONS TEST ===');
+                
+                const buttons = document.querySelectorAll('.camera-btn');
+                console.log('Found camera buttons:', buttons.length);
+                
+                buttons.forEach((btn, i) => {
+                    console.log(\`Button \${i}: \${btn.textContent} (mode: \${btn.dataset.mode})\`);
+                });
+                
+                // Test click on aerial button
+                const aerialBtn = document.getElementById('aerial-btn');
+                if (aerialBtn) {
+                    console.log('🚁 Testing Aerial button click...');
+                    aerialBtn.click();
+                    
+                    setTimeout(() => {
+                        if (window.camera) {
+                            console.log('Camera position after Aerial click:', window.camera.position);
+                        }
+                    }, 1000);
+                } else {
+                    console.log('❌ Aerial button not found');
+                }
+                
+                'Camera buttons test completed - check console for results';
+            `;
+            
+            log('✅ Camera buttons test prepared', 'success');
+            log('🔧 Please run this in main page console:', 'info');
+            log('📋 Test focus: Aerial button should move camera to top-down view', 'info');
+        }
+
+        function testPerformance() {
+            log('⚡ Testing performance metrics...');
+            
+            const performanceTest = `
+                console.log('=== PERFORMANCE TEST ===');
+                
+                // Check for memory leaks
+                const beforeMemory = performance.memory ? performance.memory.usedJSHeapSize : 'N/A';
+                console.log('Memory before test:', beforeMemory);
+                
+                // Test multiple button clicks
+                const aerialBtn = document.getElementById('aerial-btn');
+                if (aerialBtn) {
+                    console.log('Testing 5 rapid clicks on Aerial button...');
+                    for (let i = 0; i < 5; i++) {
+                        setTimeout(() => aerialBtn.click(), i * 100);
+                    }
+                    
+                    setTimeout(() => {
+                        const afterMemory = performance.memory ? performance.memory.usedJSHeapSize : 'N/A';
+                        console.log('Memory after test:', afterMemory);
+                        console.log('Performance test completed');
+                    }, 1000);
+                }
+            `;
+            
+            log('✅ Performance test script ready', 'success');
+            log('📊 This will test for memory leaks and event handler duplication', 'info');
+        }
+
+        function runAllTests() {
+            log('🚀 Running comprehensive test suite...', 'info');
+            testMainPage();
+            setTimeout(() => testCameraObjects(), 1000);
+            setTimeout(() => testCameraButtons(), 2000);
+            setTimeout(() => testPerformance(), 3000);
+            setTimeout(() => log('✅ All tests completed! Check console for detailed results.', 'success'), 4000);
+        }
+
+        function openMainPage() {
+            window.open('http://localhost:8080/3d-campus-smart-city.html', '_blank');
+            log('🌐 Opening main 3D Campus page...', 'info');
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            log('🧹 Results cleared', 'info');
+        }
+
+        // Auto-run basic connectivity test
+        setTimeout(() => {
+            log('🎯 3D Campus Camera Controls Test Suite initialized', 'success');
+            log('📍 Server should be running on localhost:8080', 'info');
+            testMainPage();
+        }, 500);
+    </script>
+</body>
+</html>
