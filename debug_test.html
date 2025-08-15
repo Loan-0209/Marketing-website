@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Smart City Debug Test</title>
+</head>
+<body>
+    <div style="padding: 20px; font-family: Arial, sans-serif;">
+        <h1>3D Smart City Debug Test</h1>
+        <p>This page tests the 3D Smart City initialization to identify any errors.</p>
+        
+        <div id="test-results">
+            <h2>Test Results:</h2>
+            <div id="results"></div>
+        </div>
+        
+        <button onclick="testDependencies()" style="padding: 10px 20px; font-size: 16px; margin: 10px;">
+            Test Dependencies
+        </button>
+        
+        <button onclick="testInitialization()" style="padding: 10px 20px; font-size: 16px; margin: 10px;">
+            Test Initialization
+        </button>
+        
+        <div id="console-output" style="background: #f0f0f0; padding: 10px; margin-top: 20px; border-radius: 5px;">
+            <h3>Console Output:</h3>
+            <pre id="console-log"></pre>
+        </div>
+    </div>
+
+    <!-- Load Three.js with the same configuration as the main file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" 
+            crossorigin="anonymous"
+            onerror="logError('Failed to load Three.js from primary CDN')"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"
+            crossorigin="anonymous"
+            onerror="logError('Failed to load OrbitControls')"></script>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+        const consoleDiv = document.getElementById('console-log');
+        
+        function logMessage(message) {
+            console.log(message);
+            consoleDiv.innerHTML += message + '\n';
+        }
+        
+        function logError(message) {
+            console.error(message);
+            consoleDiv.innerHTML += 'ERROR: ' + message + '\n';
+        }
+        
+        function addResult(test, status, details = '') {
+            const div = document.createElement('div');
+            div.style.padding = '5px';
+            div.style.margin = '2px 0';
+            div.style.backgroundColor = status === 'PASS' ? '#d4edda' : '#f8d7da';
+            div.style.border = `1px solid ${status === 'PASS' ? '#c3e6cb' : '#f5c6cb'}`;
+            div.style.borderRadius = '3px';
+            div.innerHTML = `<strong>${test}:</strong> ${status} ${details}`;
+            resultsDiv.appendChild(div);
+        }
+        
+        function testDependencies() {
+            resultsDiv.innerHTML = '';
+            logMessage('🔍 Testing dependencies...');
+            
+            // Test Three.js
+            if (typeof THREE !== 'undefined') {
+                addResult('Three.js Loading', 'PASS', `(version: ${THREE.REVISION})`);
+                logMessage('✅ Three.js loaded successfully');
+            } else {
+                addResult('Three.js Loading', 'FAIL', '- Library not found');
+                logError('❌ Three.js not loaded');
+                return;
+            }
+            
+            // Test OrbitControls
+            if (typeof THREE.OrbitControls !== 'undefined') {
+                addResult('OrbitControls Loading', 'PASS');
+                logMessage('✅ OrbitControls loaded successfully');
+            } else {
+                addResult('OrbitControls Loading', 'FAIL', '- Controls not found');
+                logError('❌ OrbitControls not loaded');
+                return;
+            }
+            
+            // Test WebGL support
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    addResult('WebGL Support', 'PASS', `(vendor: ${gl.getParameter(gl.VENDOR)})`);
+                    logMessage('✅ WebGL supported');
+                } else {
+                    addResult('WebGL Support', 'FAIL', '- WebGL context not available');
+                    logError('❌ WebGL not supported');
+                }
+            } catch (e) {
+                addResult('WebGL Support', 'FAIL', `- Error: ${e.message}`);
+                logError('❌ WebGL test failed: ' + e.message);
+            }
+        }
+        
+        function testInitialization() {
+            logMessage('🚀 Testing 3D scene initialization...');
+            
+            try {
+                // Test basic Three.js objects creation
+                const scene = new THREE.Scene();
+                addResult('Scene Creation', 'PASS');
+                logMessage('✅ Scene created');
+                
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                addResult('Camera Creation', 'PASS');
+                logMessage('✅ Camera created');
+                
+                const renderer = new THREE.WebGLRenderer({ antialias: true });
+                addResult('Renderer Creation', 'PASS');
+                logMessage('✅ Renderer created');
+                
+                const controls = new THREE.OrbitControls(camera, renderer.domElement);
+                addResult('Controls Creation', 'PASS');
+                logMessage('✅ Controls created');
+                
+                // Test basic geometry and material
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+                addResult('Basic Mesh Creation', 'PASS');
+                logMessage('✅ Basic mesh created and added to scene');
+                
+                // Clean up
+                renderer.dispose();
+                geometry.dispose();
+                material.dispose();
+                
+                logMessage('🎉 All initialization tests passed!');
+                
+            } catch (error) {
+                addResult('Initialization Test', 'FAIL', `- Error: ${error.message}`);
+                logError('❌ Initialization failed: ' + error.message);
+            }
+        }
+        
+        // Auto-run dependency test when page loads
+        window.onload = () => {
+            logMessage('📄 Page loaded, running automatic dependency check...');
+            setTimeout(testDependencies, 1000);
+        };
+    </script>
+</body>
+</html>

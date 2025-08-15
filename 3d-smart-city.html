@@ -1102,10 +1102,14 @@
                 scene.background = new THREE.Color(0x87CEEB);
                 // Fog removed for better visibility
 
+                // Get viewport dimensions with fallbacks
+                const width = window.innerWidth || 1920;
+                const height = window.innerHeight || 1080;
+                
                 // Camera setup
                 camera = new THREE.PerspectiveCamera(
                     75,
-                    window.innerWidth / window.innerHeight,
+                    width / height,
                     0.1,
                     1000
                 );
@@ -1117,7 +1121,7 @@
                     antialias: true,
                     powerPreference: "high-performance"
                 });
-                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setSize(width, height);
                 renderer.shadowMap.enabled = true;
                 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
