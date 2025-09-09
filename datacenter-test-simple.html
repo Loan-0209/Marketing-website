@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Center Test - Phía Đông Thành Phố</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #87CEEB 100%);
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>🏢 Data Center Test</h3>
+        <p>Vị trí: Phía Đông Thành Phố</p>
+        <p>DC-01: (150, 0) - Xanh ngọc</p>
+        <p>DC-02: (170, 15) - Xanh lam</p>
+        <p>DC-03: (160, -20) - Xanh biển</p>
+        <p>Nhấn số 1-3 để focus vào từng DC</p>
+    </div>
+    
+    <div id="container"></div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        let scene, camera, renderer, controls;
+        let dataCenters = [];
+        
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(200, 100, 200);
+            camera.lookAt(160, 0, 0); // Look at data center area
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.getElementById('container').appendChild(renderer.domElement);
+            
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(100, 100, 50);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+            
+            // Ground
+            const groundGeometry = new THREE.PlaneGeometry(500, 400);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x3a3a3a });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+            
+            // Create city buildings (for reference)
+            createCityBuildings();
+            
+            // Create Data Centers - PHÍA ĐÔNG
+            createDataCenters();
+            
+            // Controls (basic mouse control)
+            setupControls();
+            
+            // Keyboard controls
+            setupKeyboard();
+            
+            animate();
+        }
+        
+        function createCityBuildings() {
+            // Tạo một số building ở trung tâm để làm reference
+            const cityBuildings = [
+                { x: 0, z: 0, width: 15, height: 20, color: 0xcccccc, name: "City Center" },
+                { x: -30, z: 20, width: 12, height: 25, color: 0xffaa00, name: "Office 1" },
+                { x: 30, z: -20, width: 10, height: 30, color: 0x00aaff, name: "Office 2" },
+                { x: -50, z: -50, width: 8, height: 15, color: 0xaa00ff, name: "Residential" }
+            ];
+            
+            cityBuildings.forEach(building => {
+                const geometry = new THREE.BoxGeometry(building.width, building.height, building.width);
+                const material = new THREE.MeshLambertMaterial({ color: building.color });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(building.x, building.height/2, building.z);
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.userData = { name: building.name, type: 'city_building' };
+                scene.add(mesh);
+            });
+        }
+        
+        function createDataCenters() {
+            // Data Centers ở phía ĐÔNG thành phố
+            const dcConfigs = [
+                { x: 150, z: 0, width: 12, height: 22, depth: 10, color: 0x00CED1, name: "DC-01" },
+                { x: 170, z: 15, width: 14, height: 28, depth: 12, color: 0x40E0D0, name: "DC-02" },
+                { x: 160, z: -20, width: 13, height: 25, depth: 11, color: 0x48D1CC, name: "DC-03" }
+            ];
+            
+            dcConfigs.forEach((dc, index) => {
+                // Main building
+                const dcGeometry = new THREE.BoxGeometry(dc.width, dc.height, dc.depth);
+                const dcMaterial = new THREE.MeshLambertMaterial({ 
+                    color: dc.color,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const dcBuilding = new THREE.Mesh(dcGeometry, dcMaterial);
+                dcBuilding.position.set(dc.x, dc.height/2, dc.z);
+                dcBuilding.castShadow = true;
+                dcBuilding.receiveShadow = true;
+                dcBuilding.userData = { 
+                    name: dc.name,
+                    type: 'data_center',
+                    index: index 
+                };
+                
+                scene.add(dcBuilding);
+                dataCenters.push(dcBuilding);
+                
+                // Add label
+                addLabel(dc.x, dc.height + 5, dc.z, dc.name);
+                
+                // Add LED lights
+                for(let i = 0; i < 8; i++) {
+                    const led = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.3),
+                        new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+                    );
+                    led.position.set(
+                        dc.x + (Math.random() - 0.5) * dc.width,
+                        dc.height + 1,
+                        dc.z + (Math.random() - 0.5) * dc.depth
+                    );
+                    scene.add(led);
+                }
+                
+                console.log(`✅ Created ${dc.name} at position (${dc.x}, ${dc.z})`);
+            });
+            
+            // Platform for data center area
+            const platformGeometry = new THREE.PlaneGeometry(60, 80);
+            const platformMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x90EE90,
+                transparent: true,
+                opacity: 0.3
+            });
+            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+            platform.rotation.x = -Math.PI / 2;
+            platform.position.set(160, 0.1, 0);
+            scene.add(platform);
+        }
+        
+        function addLabel(x, y, z, text) {
+            // Simple label using CSS2D would be better, but for now just console log
+            console.log(`Label: ${text} at (${x}, ${y}, ${z})`);
+        }
+        
+        function setupControls() {
+            let mouseDown = false;
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            renderer.domElement.addEventListener('mousedown', (event) => {
+                mouseDown = true;
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+            
+            renderer.domElement.addEventListener('mouseup', () => {
+                mouseDown = false;
+            });
+            
+            renderer.domElement.addEventListener('mousemove', (event) => {
+                if (!mouseDown) return;
+                
+                const deltaX = event.clientX - mouseX;
+                const deltaY = event.clientY - mouseY;
+                
+                // Rotate camera around center
+                const spherical = new THREE.Spherical();
+                spherical.setFromVector3(camera.position);
+                spherical.theta -= deltaX * 0.01;
+                spherical.phi += deltaY * 0.01;
+                spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
+                
+                camera.position.setFromSpherical(spherical);
+                camera.lookAt(160, 0, 0);
+                
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+            
+            // Zoom
+            renderer.domElement.addEventListener('wheel', (event) => {
+                const distance = camera.position.distanceTo(new THREE.Vector3(160, 0, 0));
+                const newDistance = distance + event.deltaY * 0.1;
+                
+                const direction = new THREE.Vector3();
+                direction.subVectors(camera.position, new THREE.Vector3(160, 0, 0)).normalize();
+                camera.position.copy(direction.multiplyScalar(Math.max(50, Math.min(500, newDistance))).add(new THREE.Vector3(160, 0, 0)));
+            });
+        }
+        
+        function setupKeyboard() {
+            document.addEventListener('keydown', (event) => {
+                switch(event.key) {
+                    case '1':
+                        focusOnDataCenter(0);
+                        break;
+                    case '2':
+                        focusOnDataCenter(1);
+                        break;
+                    case '3':
+                        focusOnDataCenter(2);
+                        break;
+                    case 'o':
+                        // Overview
+                        camera.position.set(200, 100, 200);
+                        camera.lookAt(160, 0, 0);
+                        break;
+                }
+            });
+        }
+        
+        function focusOnDataCenter(index) {
+            if (dataCenters[index]) {
+                const dc = dataCenters[index];
+                const pos = dc.position;
+                camera.position.set(pos.x + 50, pos.y + 30, pos.z + 50);
+                camera.lookAt(pos.x, pos.y, pos.z);
+                console.log(`Focusing on ${dc.userData.name} at position:`, pos);
+            }
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Animate LED lights
+            scene.children.forEach(child => {
+                if (child.material && child.material.color && 
+                    child.material.color.getHex() === 0x00ff00) {
+                    child.material.opacity = 0.5 + 0.5 * Math.sin(Date.now() * 0.01 + child.position.x);
+                }
+            });
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Start
+        init();
+        
+        // Log info
+        console.log("🏢 Data Center Test Initialized");
+        console.log("📍 Data Centers positioned at EAST side of city");
+        console.log("🎮 Controls: Mouse to rotate, Wheel to zoom, Keys 1-3 to focus on DCs");
+    </script>
+</body>
+</html>

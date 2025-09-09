@@ -1,0 +1,424 @@
+/* HEART Technology Park - Exact Pattern Building */
+
+/* Exact Building Container */
+.building-container-exact {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 33.33vw;
+    height: 100vh;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Main Exact Building Structure */
+.building-exact {
+    width: 280px;
+    height: 420px;
+    background: linear-gradient(135deg, #5A67D8 0%, #667EEA 50%, #764BA2 100%);
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Building Header Label */
+.building-header-exact {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 8px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Building Subtitle */
+.building-subtitle-exact {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    right: 0;
+    background: white;
+    color: #5A67D8;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 4px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Exact Windows Container - Positioned Layout */
+.windows-exact-pattern {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    /* Exact pattern using multiple backgrounds positioned precisely */
+    background: 
+        /* Row 1: 3 windows (evenly spaced, sides empty) */
+        linear-gradient(to right, transparent 12.5%, #FFD54F 12.5%, #FFA726 25%, transparent 25%),
+        linear-gradient(to right, transparent 37.5%, #FFD54F 37.5%, #FFA726 50%, transparent 50%),
+        linear-gradient(to right, transparent 62.5%, #FFD54F 62.5%, #FFA726 75%, transparent 75%),
+        
+        /* Row 2: 4 windows (full row) */
+        linear-gradient(to right, #FFD54F 0%, #FFA726 12.5%, transparent 12.5%),
+        linear-gradient(to right, transparent 25%, #FFD54F 25%, #FFA726 37.5%, transparent 37.5%),
+        linear-gradient(to right, transparent 50%, #FFD54F 50%, #FFA726 62.5%, transparent 62.5%),
+        linear-gradient(to right, transparent 75%, #FFD54F 75%, #FFA726 100%),
+        
+        /* Row 3: Empty (no background needed) */
+        
+        /* Row 4: 2 windows (center, sides empty) */
+        linear-gradient(to right, transparent 25%, #FFD54F 25%, #FFA726 37.5%, transparent 37.5%),
+        linear-gradient(to right, transparent 62.5%, #FFD54F 62.5%, #FFA726 75%, transparent 75%),
+        
+        /* Row 5: 3 windows (left, center empty, right) */
+        linear-gradient(to right, #FFD54F 0%, #FFA726 12.5%, transparent 12.5%),
+        linear-gradient(to right, transparent 43.75%, #FFD54F 43.75%, #FFA726 56.25%, transparent 56.25%),
+        linear-gradient(to right, transparent 87.5%, #FFD54F 87.5%, #FFA726 100%),
+        
+        /* Row 6: Empty (no background needed) */
+        
+        /* Row 7: 4 windows (full row) */
+        linear-gradient(to right, #FFD54F 0%, #FFA726 12.5%, transparent 12.5%),
+        linear-gradient(to right, transparent 25%, #FFD54F 25%, #FFA726 37.5%, transparent 37.5%),
+        linear-gradient(to right, transparent 50%, #FFD54F 50%, #FFA726 62.5%, transparent 62.5%),
+        linear-gradient(to right, transparent 75%, #FFD54F 75%, #FFA726 100%),
+        
+        /* Row 8: 2 windows (sides, center large empty) */
+        linear-gradient(to right, #FFD54F 0%, #FFA726 12.5%, transparent 12.5%),
+        linear-gradient(to right, transparent 87.5%, #FFD54F 87.5%, #FFA726 100%),
+        
+        /* Row 9: 3 windows */
+        linear-gradient(to right, transparent 12.5%, #FFD54F 12.5%, #FFA726 25%, transparent 25%),
+        linear-gradient(to right, transparent 37.5%, #FFD54F 37.5%, #FFA726 50%, transparent 50%),
+        linear-gradient(to right, transparent 62.5%, #FFD54F 62.5%, #FFA726 75%, transparent 75%),
+        
+        /* Row 10: 4 windows (full row) */
+        linear-gradient(to right, #FFD54F 0%, #FFA726 12.5%, transparent 12.5%),
+        linear-gradient(to right, transparent 25%, #FFD54F 25%, #FFA726 37.5%, transparent 37.5%),
+        linear-gradient(to right, transparent 50%, #FFD54F 50%, #FFA726 62.5%, transparent 62.5%),
+        linear-gradient(to right, transparent 75%, #FFD54F 75%, #FFA726 100%);
+    
+    /* Position each row using background-position */
+    background-position: 
+        /* Row 1 */
+        0 5%, 0 5%, 0 5%,
+        /* Row 2 */
+        0 15%, 0 15%, 0 15%, 0 15%,
+        /* Row 4 */
+        0 35%, 0 35%,
+        /* Row 5 */
+        0 45%, 0 45%, 0 45%,
+        /* Row 7 */
+        0 65%, 0 65%, 0 65%, 0 65%,
+        /* Row 8 */
+        0 75%, 0 75%,
+        /* Row 9 */
+        0 85%, 0 85%, 0 85%,
+        /* Row 10 */
+        0 95%, 0 95%, 0 95%, 0 95%;
+    
+    background-size: 
+        /* Row 1 */
+        100% 8%, 100% 8%, 100% 8%,
+        /* Row 2 */
+        100% 8%, 100% 8%, 100% 8%, 100% 8%,
+        /* Row 4 */
+        100% 8%, 100% 8%,
+        /* Row 5 */
+        100% 8%, 100% 8%, 100% 8%,
+        /* Row 7 */
+        100% 8%, 100% 8%, 100% 8%, 100% 8%,
+        /* Row 8 */
+        100% 8%, 100% 8%,
+        /* Row 9 */
+        100% 8%, 100% 8%, 100% 8%,
+        /* Row 10 */
+        100% 8%, 100% 8%, 100% 8%, 100% 8%;
+    
+    background-repeat: no-repeat;
+    border-radius: 6px;
+    opacity: 0.9;
+    animation: windows-exact-glow 4s ease-in-out infinite;
+}
+
+/* Alternative Implementation using CSS Grid (more precise) */
+.windows-exact-grid {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    gap: 8px;
+    padding: 12px;
+}
+
+/* Window styles for grid implementation */
+.window-exact {
+    background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    animation: window-glow-exact 3s ease-in-out infinite;
+}
+
+.window-empty-exact {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Row-specific window positioning for grid */
+/* Row 1: 3 windows (positions 2, 3, 4 of 4) */
+.window-exact:nth-child(1) { background: transparent; } /* Empty */
+.window-exact:nth-child(2) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(3) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(4) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 2: 4 windows (all) */
+.window-exact:nth-child(5) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(6) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(7) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(8) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 3: Empty */
+.window-exact:nth-child(9) { background: transparent; }
+.window-exact:nth-child(10) { background: transparent; }
+.window-exact:nth-child(11) { background: transparent; }
+.window-exact:nth-child(12) { background: transparent; }
+
+/* Row 4: 2 windows (center) */
+.window-exact:nth-child(13) { background: transparent; }
+.window-exact:nth-child(14) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(15) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(16) { background: transparent; }
+
+/* Row 5: 3 windows (left, center empty, right) */
+.window-exact:nth-child(17) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(18) { background: transparent; }
+.window-exact:nth-child(19) { background: transparent; }
+.window-exact:nth-child(20) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 6: Empty */
+.window-exact:nth-child(21) { background: transparent; }
+.window-exact:nth-child(22) { background: transparent; }
+.window-exact:nth-child(23) { background: transparent; }
+.window-exact:nth-child(24) { background: transparent; }
+
+/* Row 7: 4 windows (all) */
+.window-exact:nth-child(25) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(26) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(27) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(28) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 8: 2 windows (sides) */
+.window-exact:nth-child(29) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(30) { background: transparent; }
+.window-exact:nth-child(31) { background: transparent; }
+.window-exact:nth-child(32) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 9: 3 windows */
+.window-exact:nth-child(33) { background: transparent; }
+.window-exact:nth-child(34) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(35) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(36) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Row 10: 4 windows (all) */
+.window-exact:nth-child(37) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(38) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(39) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+.window-exact:nth-child(40) { background: linear-gradient(135deg, #FFD54F 0%, #FFA726 100%); }
+
+/* Exact Pattern Animation */
+@keyframes windows-exact-glow {
+    0%, 100% { 
+        opacity: 0.9;
+        filter: brightness(1);
+    }
+    50% { 
+        opacity: 1;
+        filter: brightness(1.1);
+    }
+}
+
+@keyframes window-glow-exact {
+    0%, 100% { 
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+/* Building Float Animation */
+.building-exact {
+    animation: building-float-exact 6s ease-in-out infinite;
+}
+
+@keyframes building-float-exact {
+    0%, 100% { 
+        transform: translateY(0px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    50% { 
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* Hover Effects */
+.building-exact:hover .windows-exact-pattern,
+.building-exact:hover .windows-exact-grid {
+    animation-play-state: paused;
+    filter: brightness(1.15) saturate(1.2);
+}
+
+.window-exact:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+    .building-container-exact {
+        width: 50vw;
+    }
+    
+    .building-exact {
+        width: 220px;
+        height: 330px;
+    }
+    
+    .building-header-exact {
+        font-size: 12px;
+        padding: 10px 6px;
+    }
+    
+    .building-subtitle-exact {
+        font-size: 10px;
+        padding: 6px 4px;
+    }
+    
+    .windows-exact-pattern,
+    .windows-exact-grid {
+        top: 70px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .building-container-exact {
+        width: 60vw;
+    }
+    
+    .building-exact {
+        width: 180px;
+        height: 270px;
+    }
+    
+    .windows-exact-pattern,
+    .windows-exact-grid {
+        top: 60px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .building-container-exact {
+        display: none;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .building-exact {
+        background: linear-gradient(135deg, #4C1D95 0%, #5B21B6 50%, #6D28D9 100%);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .building-subtitle-exact {
+        background: #E5E7EB;
+        color: #374151;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .building-exact {
+        background: #000080;
+        border: 2px solid #FFFFFF;
+    }
+    
+    .window-exact {
+        background: #FFFF00 !important;
+        border: 1px solid #000000;
+    }
+    
+    .building-header-exact {
+        background: #FF8000;
+        color: #000000;
+        border-bottom: 2px solid #000000;
+    }
+    
+    .building-subtitle-exact {
+        background: #FFFFFF;
+        color: #000000;
+        border: 1px solid #000000;
+    }
+}
+
+/* Performance Optimizations */
+.building-container-exact,
+.building-exact,
+.windows-exact-pattern,
+.windows-exact-grid,
+.window-exact {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .building-exact {
+        animation: building-static-exact 10s ease-in-out infinite;
+    }
+    
+    .window-exact,
+    .windows-exact-pattern {
+        animation: window-static-exact 8s ease-in-out infinite;
+    }
+    
+    @keyframes building-static-exact {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.95; }
+    }
+    
+    @keyframes window-static-exact {
+        0%, 100% { opacity: 0.9; }
+        50% { opacity: 1; }
+    }
+}

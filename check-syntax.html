@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Syntax Check</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>JavaScript Syntax Checker</h1>
+    <div id="result"></div>
+    
+    <script>
+        const resultDiv = document.getElementById('result');
+        
+        // Test syntax by trying to load the main script
+        try {
+            // Create a test function to check syntax
+            const testCode = `
+                // This tests if our JavaScript has syntax errors
+                console.log('Syntax check starting...');
+                ${document.querySelector('script')?.textContent || ''}
+            `;
+            
+            // Try to create a function with the code
+            new Function(testCode);
+            
+            resultDiv.innerHTML = '<h2 style="color: green;">✅ No syntax errors detected!</h2>';
+            console.log('✅ Syntax check passed');
+            
+        } catch (error) {
+            resultDiv.innerHTML = `
+                <h2 style="color: red;">❌ Syntax Error Found!</h2>
+                <pre style="background: #f0f0f0; padding: 10px;">
+${error.toString()}
+
+Line: ${error.line || 'Unknown'}
+Column: ${error.column || 'Unknown'}
+                </pre>
+            `;
+            console.error('Syntax error:', error);
+        }
+        
+        // Also check in console
+        window.addEventListener('error', (e) => {
+            if (e.error instanceof SyntaxError) {
+                console.error('Syntax Error captured:', e.error);
+                console.error('At:', e.filename, 'line:', e.lineno, 'col:', e.colno);
+            }
+        });
+    </script>
+</body>
+</html>

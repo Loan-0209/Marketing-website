@@ -708,8 +708,8 @@ class MasterPlan3D {
                 type: 'tech'
             },
             datacenter: {
-                pos: [130, 0, -60],
-                size: [20, 28, 20],
+                pos: [180, 0, 0],
+                size: [25, 32, 25],
                 color: 0x00aaaa,
                 accentColor: 0x008888,
                 name: 'Data Center',

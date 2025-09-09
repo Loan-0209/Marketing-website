@@ -1,0 +1,413 @@
+/* HEART Technology Park - Responsive 3D Building */
+
+/* Base Mobile-First Approach */
+
+/* Extra Small Devices (320px and up) */
+@media (max-width: 479px) {
+    .building-container {
+        display: none;
+    }
+    
+    /* Show building preview in content if needed */
+    .mobile-building-preview {
+        display: block;
+        width: 100%;
+        height: 200px;
+        background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        border-radius: 15px;
+        margin: 20px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .mobile-building-preview::before {
+        content: '🏢 HEART Technology';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+    }
+}
+
+/* Small Devices (480px and up) */
+@media (min-width: 480px) and (max-width: 767px) {
+    .building-container {
+        display: none;
+    }
+}
+
+/* Medium Devices - Tablets (768px and up) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .building-container {
+        width: 50vw;
+        perspective: 800px;
+    }
+    
+    .building-3d {
+        right: 3%;
+        top: 20%;
+        width: 85%;
+        height: 60vh;
+    }
+    
+    /* Simplified 3D for tablets */
+    .building-side {
+        display: none;
+    }
+    
+    .building-roof {
+        width: 100%;
+        left: 0;
+        height: 8%;
+        top: -8%;
+    }
+    
+    .windows-container {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        gap: 6px;
+    }
+    
+    .window-large {
+        grid-column: span 1;
+    }
+    
+    .window-conference {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+    
+    /* Reduced animation complexity */
+    .building-3d {
+        animation: building-float-tablet 10s ease-in-out infinite;
+    }
+    
+    @keyframes building-float-tablet {
+        0%, 100% { 
+            transform: translateY(0px) rotateX(0deg) scale(1); 
+        }
+        50% { 
+            transform: translateY(-15px) rotateX(0.5deg) scale(1.01); 
+        }
+    }
+}
+
+/* Large Devices - Small Laptops (1024px and up) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .building-container {
+        width: 35vw;
+        perspective: 1000px;
+    }
+    
+    .building-3d {
+        right: 4%;
+        top: 18%;
+        width: 82%;
+        height: 65vh;
+    }
+    
+    .building-side {
+        width: 12%;
+        right: -12%;
+    }
+    
+    .building-roof {
+        width: 112%;
+        left: -6%;
+    }
+    
+    .windows-container {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(7, 1fr);
+    }
+}
+
+/* Extra Large Devices - Desktop (1200px and up) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .building-container {
+        width: 33.33vw;
+        perspective: 1200px;
+    }
+    
+    /* Full 3D effect */
+    .building-3d {
+        right: 5%;
+        top: 15%;
+        width: 80%;
+        height: 70vh;
+    }
+}
+
+/* Ultra Wide Screens (1400px and up) */
+@media (min-width: 1400px) {
+    .building-container {
+        width: 30vw;
+        perspective: 1500px;
+    }
+    
+    .building-3d {
+        right: 6%;
+        top: 12%;
+        width: 78%;
+        height: 75vh;
+    }
+    
+    /* Enhanced details for large screens */
+    .building-roof::before {
+        width: 25px;
+        height: 50px;
+    }
+    
+    .windows-container {
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+    }
+    
+    /* Add more windows for larger screens */
+    .extra-window {
+        display: block;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .window {
+        border-radius: 8px;
+    }
+    
+    .building-facade {
+        border-radius: 24px 24px 8px 8px;
+    }
+    
+    /* Enhanced shadows for retina displays */
+    .building-3d {
+        filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.5));
+    }
+}
+
+/* Portrait Orientation */
+@media (orientation: portrait) and (min-width: 768px) {
+    .building-container {
+        width: 45vw;
+    }
+    
+    .building-3d {
+        height: 50vh;
+        top: 25%;
+    }
+    
+    .windows-container {
+        grid-template-rows: repeat(6, 1fr);
+    }
+}
+
+/* Landscape Orientation */
+@media (orientation: landscape) and (max-height: 600px) {
+    .building-3d {
+        height: 80vh;
+        top: 10%;
+    }
+    
+    .windows-container {
+        grid-template-rows: repeat(5, 1fr);
+    }
+}
+
+/* Dark Mode Adaptations */
+@media (prefers-color-scheme: dark) {
+    .building-facade {
+        background: 
+            linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 30%),
+            linear-gradient(225deg, rgba(0,0,0,0.2) 0%, transparent 30%),
+            linear-gradient(135deg, #4A5568 0%, #2D3748 40%, #1A202C 70%, #171923 100%);
+        box-shadow: 
+            inset 8px 8px 16px rgba(255,255,255,0.1),
+            inset -8px -8px 16px rgba(0,0,0,0.4),
+            0 0 80px rgba(74, 108, 247, 0.6);
+    }
+    
+    .building-side {
+        background: 
+            linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 50%),
+            linear-gradient(90deg, #2D3748 0%, #1A202C 50%, #171923 100%);
+    }
+    
+    .building-roof {
+        background: 
+            linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%),
+            linear-gradient(45deg, #4C1D95 0%, #6B46C1 50%, #7C3AED 100%);
+    }
+    
+    .window {
+        filter: brightness(1.3) saturate(1.2);
+    }
+}
+
+/* Performance Optimizations for Lower-End Devices */
+@media (max-width: 1023px) {
+    /* Reduce animation complexity */
+    .building-3d {
+        animation-duration: 12s;
+    }
+    
+    .window {
+        animation-duration: 6s;
+    }
+    
+    /* Disable some effects on smaller devices */
+    .building-glow {
+        display: none;
+    }
+    
+    .building-atmosphere {
+        display: none;
+    }
+    
+    /* Simplify window effects */
+    .window::before {
+        opacity: 0.6;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .window:hover {
+        transform: none;
+        box-shadow: 
+            inset 2px 2px 4px rgba(255,255,255,0.4),
+            inset -2px -2px 4px rgba(0,0,0,0.2),
+            2px 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    .building-3d:hover {
+        animation-play-state: running;
+    }
+}
+
+/* Low Bandwidth / Data Saver Mode */
+@media (prefers-reduced-data: reduce) {
+    .building-glow,
+    .building-atmosphere {
+        display: none;
+    }
+    
+    .window::before {
+        display: none;
+    }
+    
+    .building-3d {
+        animation: building-float-minimal 15s ease-in-out infinite;
+    }
+    
+    @keyframes building-float-minimal {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+}
+
+/* Print Styles */
+@media print {
+    .building-container {
+        display: none;
+    }
+}
+
+/* Accessibility - High Contrast Mode */
+@media (prefers-contrast: high) {
+    .building-facade {
+        background: 
+            linear-gradient(135deg, #000080 0%, #000040 50%, #000020 100%);
+        border: 3px solid #FFFFFF;
+    }
+    
+    .window {
+        background: #FFFF00;
+        border: 2px solid #000000;
+    }
+    
+    .window-purple {
+        background: #FF00FF;
+    }
+    
+    .window-blue {
+        background: #00FFFF;
+    }
+    
+    .window-green {
+        background: #00FF00;
+    }
+}
+
+/* Forced Colors Mode (Windows High Contrast) */
+@media (forced-colors: active) {
+    .building-facade {
+        background: ButtonFace;
+        border: 2px solid ButtonText;
+    }
+    
+    .window {
+        background: Highlight;
+        border: 1px solid HighlightText;
+        forced-color-adjust: none;
+    }
+}
+
+/* Motion Sensitivity */
+@media (prefers-reduced-motion: reduce) {
+    .building-3d {
+        animation: building-static 20s ease-in-out infinite;
+    }
+    
+    .window {
+        animation: window-static 10s ease-in-out infinite;
+    }
+    
+    @keyframes building-static {
+        0%, 100% { opacity: 0.9; }
+        50% { opacity: 1; }
+    }
+    
+    @keyframes window-static {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
+    
+    /* Remove all transform animations */
+    .building-3d,
+    .window,
+    .building-roof::before {
+        transform: none !important;
+    }
+}
+
+/* Container Queries (Future-proof) */
+@container (max-width: 400px) {
+    .building-container {
+        display: none;
+    }
+}
+
+@container (min-width: 401px) and (max-width: 800px) {
+    .building-container {
+        width: 50vw;
+    }
+}
+
+/* Responsive Typography in Building */
+@media (max-width: 768px) {
+    .building-entrance::before {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .building-entrance::before {
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+}

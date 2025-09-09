@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Console for 3D Smart City</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .command {
+            background: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #00ff00;
+            cursor: pointer;
+        }
+        .command:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 3D Smart City Debug Console</h1>
+    <p>Click any command below to copy it to clipboard, then paste into Chrome DevTools Console:</p>
+    
+    <div class="command" onclick="copyToClipboard('console.log(\"📋 Available Commands:\"); console.log(\"1. Status Check - Check current scene status\"); console.log(\"2. Asset Analysis - Check Three.js dependencies\"); console.log(\"3. Canvas Status - Check canvas elements\"); console.log(\"4. Loading Status - Check loading screen\"); console.log(\"5. Force Retry - Clear fallback and retry main scene\"); console.log(\"6. Force Load - Complete WebGL reset\"); console.log(\"7. Smart City Analysis - Find Smart City code\");')">
+🔍 SHOW ALL AVAILABLE COMMANDS
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+console.log('=== MAIN SCENE STATUS ==='); console.log('THREE.js:', typeof THREE !== 'undefined'); console.log('Scene:', window.scene ? 'Present' : 'Missing'); console.log('Camera:', window.camera ? 'Present' : 'Missing'); console.log('Renderer:', window.renderer ? 'Present' : 'Missing'); console.log('Fallback active:', window.fallbackScene ? 'YES' : 'NO');
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// COMPREHENSIVE ASSET LOADING CHECK
+function checkAssetLoading() { console.log('=== ASSET LOADING CHECK ==='); const libs = ['THREE', 'OrbitControls']; libs.forEach(lib => { let status = '❌ Missing'; if (lib === 'THREE' && typeof THREE !== 'undefined') status = `✅ Loaded (v${THREE.REVISION})`; if (lib === 'OrbitControls' && typeof THREE !== 'undefined' && typeof THREE.OrbitControls !== 'undefined') status = '✅ Loaded'; console.log(`${lib}: ${status}`); }); const resources = performance.getEntriesByType('resource'); const failed = resources.filter(r => r.transferSize === 0 && r.decodedBodySize === 0); console.log(`Resources: ${resources.length} total, ${failed.length} failed`); if (failed.length > 0) { console.log('Failed:', failed.map(f => f.name)); } const canvas = document.createElement('canvas'); const webgl = canvas.getContext('webgl'); console.log('WebGL:', webgl ? '✅ Supported' : '❌ Not supported'); canvas.remove(); return {ready: typeof THREE !== 'undefined' && webgl && failed.length === 0}; } checkAssetLoading();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+const canvases = document.querySelectorAll('canvas'); console.log('Canvas count:', canvases.length); canvases.forEach((c,i) => console.log(`Canvas ${i}:`, {width: c.width, height: c.height, parent: c.parentElement?.id}));
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+console.log('Loading screen visible:', document.getElementById('loading-screen')?.style.display !== 'none'); console.log('Canvas container:', document.getElementById('canvas-container') ? 'Found' : 'Missing'); console.log('Init in progress:', window.initInProgress);
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// FORCE RETRY MAIN SCENE - Enhanced version
+function forceRetryMainScene() { console.log('🔄 FORCING MAIN SCENE RETRY...'); const fallbackElements = document.querySelectorAll('[data-fallback], .fallback-scene'); fallbackElements.forEach(el => el.remove()); const canvases = document.querySelectorAll('canvas'); canvases.forEach(canvas => { const ctx = canvas.getContext('2d'); if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); canvas.remove(); }); delete window.fallbackScene; delete window.fallbackCamera; delete window.fallbackRenderer; window.initInProgress = false; const initFuncs = ['init', 'initScene', 'initMainScene', 'init3DScene']; for (let func of initFuncs) { if (window[func] && typeof window[func] === 'function') { console.log('Found init function:', func); window[func](); break; } } } forceRetryMainScene();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+console.log('Error elements:', document.querySelectorAll('.error-message, [data-error]').length); document.querySelectorAll('.error-message, [data-error]').forEach((el,i) => console.log(`Error ${i}:`, el.textContent));
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// COMPREHENSIVE DIAGNOSTIC - Run this for complete analysis
+function quickDiagnostic() { console.log('🔍 === QUICK DIAGNOSTIC ==='); const three = typeof THREE !== 'undefined'; const controls = three && typeof THREE.OrbitControls !== 'undefined'; const canvas = document.createElement('canvas'); const webgl = canvas.getContext('webgl'); canvas.remove(); const container = document.getElementById('canvas-container'); const failed = performance.getEntriesByType('resource').filter(r => r.transferSize === 0 && r.decodedBodySize === 0 && r.name.includes('.')); console.log('Three.js:', three ? '✅' : '❌'); console.log('OrbitControls:', controls ? '✅' : '❌'); console.log('WebGL:', webgl ? '✅' : '❌'); console.log('Canvas Container:', container ? '✅' : '❌'); console.log('Failed Resources:', failed.length); console.log('Fallback Active:', window.fallbackScene ? '⚠️ YES' : '✅ NO'); const ready = three && controls && webgl && container && failed.length === 0; console.log('Ready for Main Scene:', ready ? '✅ YES' : '❌ NO'); if (!ready && typeof retryMainScene === 'function') { console.log('💡 Try running: retryMainScene()'); } return ready; } quickDiagnostic();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// FORCE MAIN SCENE LOAD - Complete WebGL reset and reinitialize
+function forceMainSceneLoad() { console.log('=== FORCE MAIN SCENE LOAD ==='); try { const canvas = document.querySelector('canvas'); if (canvas) { const ctx = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (ctx) { const loseExt = ctx.getExtension('WEBGL_lose_context'); if (loseExt) loseExt.loseContext(); } canvas.remove(); } document.querySelectorAll('[data-fallback-notification]').forEach(el => el.remove()); document.querySelectorAll('button').forEach(btn => { if (btn.textContent.includes('Retry')) btn.remove(); }); if (window.scene) { while(window.scene.children.length > 0) { const child = window.scene.children[0]; window.scene.remove(child); if (child.geometry) child.geometry.dispose(); if (child.material) { if (Array.isArray(child.material)) child.material.forEach(m => m.dispose()); else child.material.dispose(); } } } if (window.renderer) { window.renderer.dispose(); delete window.renderer; } delete window.camera; delete window.controls; delete window.fallbackScene; delete window.fallbackCamera; delete window.fallbackRenderer; window.initInProgress = false; const initFuncs = ['init', 'initSmartCity', 'createMainScene', 'initMainScene']; for (let func of initFuncs) { if (window[func] && typeof window[func] === 'function') { console.log('🚀 Calling', func); window[func](); break; } } setTimeout(() => { const newCanvas = document.querySelector('canvas'); const hasScene = !!window.scene; console.log('Result:', newCanvas && hasScene ? '🎉 SUCCESS' : '⚠️ FAILED'); }, 1000); } catch (e) { console.error('❌ Error:', e); } } forceMainSceneLoad();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// SMART CITY CODE ANALYSIS - Find all Smart City related code and objects
+function findSmartCityCode() { console.log('=== SMART CITY CODE SEARCH ==='); const cityFuncs = Object.keys(window).filter(k => k.toLowerCase().includes('smart') || k.toLowerCase().includes('city') || k.toLowerCase().includes('building') || k.toLowerCase().includes('datacenter')); console.log('Smart City functions:', cityFuncs); const initFuncs = Object.keys(window).filter(k => k.toLowerCase().includes('init') && typeof window[k] === 'function'); console.log('Init functions:', initFuncs); const checkObjs = ['smartCity', 'cityScene', 'buildings', 'dataCenter', 'mainScene']; checkObjs.forEach(obj => console.log(`${obj}:`, window[obj] ? '✅ Found' : '❌ Missing')); if (window.scene) { console.log('Scene children:', window.scene.children.length); const cityObjs = []; window.scene.traverse(child => { if (child.userData?.type?.toLowerCase().includes('building') || child.userData?.type?.toLowerCase().includes('datacenter')) cityObjs.push(child.userData.type); }); console.log('Smart City objects in scene:', [...new Set(cityObjs)]); } else { console.log('❌ No scene found'); } console.log('Fallback active:', window.fallbackScene ? '⚠️ YES' : '✅ NO'); return {initFuncs, cityFuncs, hasScene: !!window.scene, hasFallback: !!window.fallbackScene}; } findSmartCityCode();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// INITIALIZE THREE.JS AND CREATE DATA CENTERS - Complete setup from scratch
+function initializeThreeJS() { if (typeof THREE === 'undefined') { console.error('THREE.js not loaded'); return false; } let canvas = document.querySelector('canvas'); if (!canvas) { canvas = document.createElement('canvas'); canvas.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000;'; document.body.appendChild(canvas); } if (!window.renderer) { window.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true }); window.renderer.setSize(window.innerWidth, window.innerHeight); window.renderer.setClearColor(0x87CEEB); } if (!window.scene) { window.scene = new THREE.Scene(); } if (!window.camera) { window.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); window.camera.position.set(30, 25, 30); } if (typeof THREE.OrbitControls !== 'undefined' && !window.controls) { window.controls = new THREE.OrbitControls(window.camera, window.renderer.domElement); } return true; } function restoreOriginalDataCenters() { if (!initializeThreeJS()) { return; } while (window.scene.children.length > 0) { window.scene.remove(window.scene.children[0]); } window.scene.add(new THREE.AmbientLight(0x404040, 0.4)); const dirLight = new THREE.DirectionalLight(0xffffff, 0.8); dirLight.position.set(50, 50, 25); window.scene.add(dirLight); const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshLambertMaterial({ color: 0x555555 })); ground.rotation.x = -Math.PI / 2; window.scene.add(ground); for (let i = 0; i < 4; i++) { const dc = new THREE.Mesh(new THREE.BoxGeometry(8, 6, 12), new THREE.MeshLambertMaterial({ color: 0x2c3e50 })); dc.position.set(20 + i * 10, 3, -15); window.scene.add(dc); } const colors = [0x8e44ad, 0x3498db, 0xe67e22, 0x2ecc71, 0xe74c3c]; for (let i = 0; i < 25; i++) { const b = new THREE.Mesh(new THREE.BoxGeometry(4 + Math.random() * 4, 5 + Math.random() * 15, 4 + Math.random() * 4), new THREE.MeshLambertMaterial({ color: colors[Math.floor(Math.random() * colors.length)] })); let x, z; do { x = (Math.random() - 0.5) * 140; z = (Math.random() - 0.5) * 140; } while (x > 15 && x < 55 && z > -25 && z < -5); b.position.set(x, b.geometry.parameters.height / 2, z); window.scene.add(b); } function animate() { requestAnimationFrame(animate); if (window.controls) window.controls.update(); window.renderer.render(window.scene, window.camera); } animate(); console.log('Smart City with Data Centers created!'); return true; } restoreOriginalDataCenters();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// FIX BUILDING-RIVER COLLISIONS - Load collision system and fix overlapping buildings
+async function loadCollisionSystem() { const script1 = document.createElement('script'); script1.src = '/building-river-collision-fix.js'; document.head.appendChild(script1); await new Promise(r => script1.onload = r); const script2 = document.createElement('script'); script2.src = '/apply-collision-fix.js'; document.head.appendChild(script2); await new Promise(r => script2.onload = r); console.log('Collision system loaded!'); } async function fixBuildingCollisions() { if (typeof fixBuildingRiverCollisions === 'undefined') { await loadCollisionSystem(); } const result = quickFixExistingBuildings(); console.log('Building collisions fixed:', result); return result; } fixBuildingCollisions();
+    </div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// CHECK BUILDING POSITIONS - Analyze current building positions for water overlaps
+function checkBuildingPositions() { console.log('=== BUILDING POSITION ANALYSIS ==='); if (!window.scene) { console.error('Scene not available'); return; } let buildingCount = 0; let potentialCollisions = []; window.scene.traverse(child => { if (child.userData && (child.userData.isBuilding || (child.userData.type && child.userData.type.includes('building')))) { buildingCount++; const pos = child.position; console.log(`Building ${buildingCount}: ${child.userData.buildingType || 'unknown'} at (${pos.x.toFixed(1)}, ${pos.z.toFixed(1)})`); if (pos.x > 160 && pos.x < 260) { potentialCollisions.push({building: child, position: pos}); console.warn(`  ⚠️ Potential river collision (x=${pos.x.toFixed(1)})`); } } }); console.log(`Total buildings: ${buildingCount}`); console.log(`Potential river collisions: ${potentialCollisions.length}`); return {total: buildingCount, collisions: potentialCollisions}; } checkBuildingPositions();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// CHECK ROAD CLEARANCE - Validate buildings don't block roads or transportation corridors
+async function loadRoadValidation() { const script = document.createElement('script'); script.src = '/road-clearance-validation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('Road validation system loaded!'); } async function checkAndFixRoadClearance() { if (typeof validateAndRelocateBuildings === 'undefined') { await loadRoadValidation(); } const result = validateAndRelocateBuildings(); console.log('Road clearance validation complete:', result); return result; } checkAndFixRoadClearance();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// CHECK DATA CENTER LAND POSITIONING - Enhanced analysis with precise bounding box checking
+async function loadEnhancedDataCenterAnalyzer() { const script = document.createElement('script'); script.src = '/datacenter-land-optimization-fixed.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('Enhanced data center analyzer loaded!'); } async function runEnhancedDataCenterAnalysis() { if (typeof analyzeDataCenterPositioning === 'undefined') { await loadEnhancedDataCenterAnalyzer(); } const result = analyzeDataCenterPositioning(); console.log('Enhanced data center analysis complete:', result); return result; } runEnhancedDataCenterAnalysis();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// EXECUTE PRECISE DATA CENTER RELOCATION - Complete relocation with enhanced boundary detection
+async function loadPreciseRelocationSystem() { const script = document.createElement('script'); script.src = '/precise-datacenter-relocation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('Precise relocation system loaded!'); } async function executePreciseRelocation() { if (typeof executePreciseDataCenterRelocation === 'undefined') { await loadPreciseRelocationSystem(); } const result = executePreciseDataCenterRelocation(); console.log('Precise data center relocation complete:', result); return result; } executePreciseRelocation();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🚨 FORCE COMPLETE DATA CENTER RELOCATION - CRITICAL FIX - ZERO TOLERANCE FOR WATER OVERLAP
+async function loadForceRelocationSystem() { const script = document.createElement('script'); script.src = '/force-datacenter-relocation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🚨 FORCE RELOCATION SYSTEM LOADED'); } async function executeEmergencyFix() { if (typeof forceCompleteDataCenterRelocation === 'undefined') { await loadForceRelocationSystem(); } console.log('🚨 EXECUTING EMERGENCY DATA CENTER FIX...'); const result = forceCompleteDataCenterRelocation(); console.log('🚨 EMERGENCY FIX COMPLETE:', result); return result; } executeEmergencyFix();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🔄 EMERGENCY FIX WITH IMMEDIATE SCENE REFRESH - Forces multiple renders after relocation
+async function loadForceRelocationSystem() { const script = document.createElement('script'); script.src = '/force-datacenter-relocation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🚨 FORCE RELOCATION SYSTEM LOADED'); } async function executeEmergencyFixWithRefresh() { if (typeof emergencyDataCenterFixWithRefresh === 'undefined') { await loadForceRelocationSystem(); } console.log('🚨 EXECUTING WITH SCENE REFRESH...'); const result = emergencyDataCenterFixWithRefresh(); console.log('🚨 EMERGENCY FIX WITH REFRESH COMPLETE:', result); return result; } executeEmergencyFixWithRefresh();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🔄 EMERGENCY FIX WITH PAGE RELOAD - Reloads page after successful relocation  
+async function loadForceRelocationSystem() { const script = document.createElement('script'); script.src = '/force-datacenter-relocation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🚨 FORCE RELOCATION SYSTEM LOADED'); } async function executeEmergencyFixWithReload() { if (typeof emergencyDataCenterFixWithReload === 'undefined') { await loadForceRelocationSystem(); } console.log('🚨 EXECUTING WITH PAGE RELOAD...'); const result = emergencyDataCenterFixWithReload(); console.log('🚨 EMERGENCY FIX WITH RELOAD INITIATED:', result); return result; } executeEmergencyFixWithReload();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🎯 APPLY SPECIFIC POSITION FIXES - Fix known objects by name (transparent sections, etc.)
+async function loadForceRelocationSystem() { const script = document.createElement('script'); script.src = '/force-datacenter-relocation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🚨 FORCE RELOCATION SYSTEM LOADED'); } async function executeSpecificFixes() { if (typeof applySpecificPositionFixes === 'undefined') { await loadForceRelocationSystem(); } console.log('🎯 APPLYING SPECIFIC POSITION FIXES...'); const result = applySpecificPositionFixes(); console.log('🎯 SPECIFIC FIXES COMPLETE:', result); scene.updateMatrixWorld(true); renderer.render(scene, camera); return result; } executeSpecificFixes();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// ⚡ IMMEDIATE VISUAL UPDATE - FORCE SCENE REFRESH AND COORDINATE SYNC
+async function loadImmediateVisualUpdate() { const script = document.createElement('script'); script.src = '/immediate-visual-update.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('⚡ VISUAL UPDATE SYSTEM LOADED'); } async function executeImmediateVisualUpdate() { if (typeof executeImmediateVisualUpdate === 'undefined') { await loadImmediateVisualUpdate(); } console.log('⚡ EXECUTING IMMEDIATE VISUAL UPDATE...'); const result = executeImmediateVisualUpdate(); console.log('⚡ IMMEDIATE VISUAL UPDATE COMPLETE:', result); return result; } executeImmediateVisualUpdate();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🚨 EMERGENCY VISUAL SYNC - MAXIMUM FORCE REFRESH WITH CACHE CLEAR
+async function loadImmediateVisualUpdate() { const script = document.createElement('script'); script.src = '/immediate-visual-update.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('⚡ VISUAL UPDATE SYSTEM LOADED'); } async function executeEmergencyVisualSync() { if (typeof emergencyVisualSync === 'undefined') { await loadImmediateVisualUpdate(); } console.log('🚨 EXECUTING EMERGENCY VISUAL SYNC...'); const result = emergencyVisualSync(); console.log('🚨 EMERGENCY VISUAL SYNC COMPLETE:', result); return result; } executeEmergencyVisualSync();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🏗️ REPLACE WITH SAFE DATA CENTER - Replace existing data center with safe land positions
+async function loadSafeDataCenterCreation() { const script = document.createElement('script'); script.src = '/safe-datacenter-creation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🏗️ SAFE DATA CENTER SYSTEM LOADED'); } async function executeReplaceWithSafe() { if (typeof replaceWithSafeDataCenter === 'undefined') { await loadSafeDataCenterCreation(); } console.log('🏗️ REPLACING WITH SAFE DATA CENTER...'); const result = replaceWithSafeDataCenter(); console.log('🏗️ SAFE DATA CENTER REPLACEMENT COMPLETE:', result); return result; } executeReplaceWithSafe();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// ⚡ APPLY SAFE POSITIONS - Apply safe coordinates to existing components without recreating
+async function loadSafeDataCenterCreation() { const script = document.createElement('script'); script.src = '/safe-datacenter-creation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🏗️ SAFE DATA CENTER SYSTEM LOADED'); } async function executeApplySafePositions() { if (typeof applySafePositionsToExisting === 'undefined') { await loadSafeDataCenterCreation(); } console.log('⚡ APPLYING SAFE POSITIONS...'); const result = applySafePositionsToExisting(); console.log('⚡ SAFE POSITIONS APPLIED:', result); return result; } executeApplySafePositions();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🔄 APPLY NEW DATA CENTER CODE - Execute exact code provided by user
+async function loadNewDataCenterCode() { const script = document.createElement('script'); script.src = '/apply-new-datacenter-code.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🔄 NEW DATA CENTER CODE LOADED'); } async function executeNewCode() { if (typeof executeNewDataCenterCode === 'undefined') { await loadNewDataCenterCode(); } console.log('🔄 EXECUTING NEW DATA CENTER CODE...'); const result = executeNewDataCenterCode(); console.log('🔄 NEW DATA CENTER CODE APPLIED:', result); return result; } executeNewCode();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 🛡️ PERMANENT FIX VALIDATION - Force all objects to safe land positions
+async function loadPermanentFix() { const script = document.createElement('script'); script.src = '/permanent-fix-validation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🛡️ PERMANENT FIX LOADED'); } async function executePermanentFixValidation() { if (typeof executePermanentFix === 'undefined') { await loadPermanentFix(); } console.log('🛡️ EXECUTING PERMANENT FIX...'); const result = executePermanentFix(); console.log('🛡️ PERMANENT FIX COMPLETE:', result); return result; } executePermanentFixValidation();</div>
+
+    <div class="command" onclick="copyToClipboard(this.textContent)">
+// 👁️ START PERMANENT MONITORING - Auto-fix objects every 2 seconds
+async function loadPermanentFix() { const script = document.createElement('script'); script.src = '/permanent-fix-validation.js'; document.head.appendChild(script); await new Promise(r => script.onload = r); console.log('🛡️ PERMANENT FIX LOADED'); } async function startAutoFixMonitoring() { if (typeof startPermanentFixMonitoring === 'undefined') { await loadPermanentFix(); } console.log('👁️ STARTING PERMANENT MONITORING...'); const result = startPermanentFixMonitoring(); console.log('👁️ MONITORING ACTIVE:', result); return result; } startAutoFixMonitoring();</div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Command copied to clipboard! Paste into Chrome DevTools Console (F12)');
+            });
+        }
+    </script>
+</body>
+</html>

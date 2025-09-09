@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 echo "=== 3D FILES AUDIT REPORT ==="

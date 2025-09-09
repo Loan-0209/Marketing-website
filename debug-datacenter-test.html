@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Center Debug Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #87CEEB 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        .debug-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10001;
+        }
+        .debug-panel h3 {
+            margin-top: 0;
+            color: #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-panel">
+        <h3>🔍 Data Center Debug Panel</h3>
+        <div id="debug-output">Loading...</div>
+    </div>
+
+    <!-- Load Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Load original 3D script -->
+    <script src="js/master-plan-3d.js"></script>
+    
+    <!-- Debug script -->
+    <script>
+        const debugOutput = document.getElementById('debug-output');
+        
+        function addDebugLog(message) {
+            debugOutput.innerHTML += message + '<br>';
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log(message);
+        }
+        
+        addDebugLog('🚀 Starting data center debug...');
+        
+        // Override console.log to show in debug panel
+        const originalLog = console.log;
+        console.log = function(...args) {
+            const message = args.join(' ');
+            addDebugLog(message);
+            originalLog.apply(console, args);
+        };
+        
+        // Initialize 3D scene
+        addDebugLog('📝 Initializing MasterPlan3D...');
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            try {
+                const masterPlan = new MasterPlan3D();
+                window.masterPlan3D = masterPlan;
+                
+                masterPlan.init().then(() => {
+                    addDebugLog('✅ MasterPlan3D initialized successfully!');
+                    
+                    // Check data center specifically
+                    setTimeout(() => {
+                        if (masterPlan.buildings) {
+                            addDebugLog(`🏗️ Found ${masterPlan.buildings.length} buildings`);
+                            
+                            const dataCenter = masterPlan.buildings.find(b => 
+                                b.userData && b.userData.name === 'Data Center'
+                            );
+                            
+                            if (dataCenter) {
+                                addDebugLog(`🎯 DATA CENTER FOUND!`);
+                                addDebugLog(`Position: [${dataCenter.position.x}, ${dataCenter.position.y}, ${dataCenter.position.z}]`);
+                                addDebugLog(`Expected: [180, 0, 0]`);
+                                addDebugLog(`Visible: ${dataCenter.visible}`);
+                            } else {
+                                addDebugLog('❌ Data Center not found in buildings array');
+                            }
+                        }
+                    }, 1000);
+                    
+                }).catch(error => {
+                    addDebugLog(`❌ Error initializing: ${error}`);
+                });
+            } catch (error) {
+                addDebugLog(`❌ Error creating MasterPlan3D: ${error}`);
+            }
+        });
+    </script>
+    
+    <!-- Canvas for 3D scene -->
+    <div id="container" style="width: 100vw; height: 100vh;"></div>
+</body>
+</html>

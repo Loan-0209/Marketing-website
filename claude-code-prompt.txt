@@ -1,0 +1,44 @@
+Hãy giúp tôi khôi phục file 3D Smart City từ backup đã được xác định. Thực hiện các bước sau:
+
+🎯 NHIỆM VỤ:
+Khôi phục file `3d-smart-city-broken-backup-20250828_143000.html` (174KB, 4602 dòng) thành file chính `3d-smart-city.html`
+
+📋 CÁC BƯỚC THỰC HIỆN:
+
+Bước 1: Kiểm tra file backup
+- Xác nhận file `3d-smart-city-broken-backup-20250828_143000.html` tồn tại
+- Kiểm tra kích thước file (khoảng 174KB)
+- Đọc vài dòng đầu để verify đây là file 3D Smart City đúng
+
+Bước 2: Backup an toàn file hiện tại
+- Nếu `3d-smart-city.html` đã tồn tại, backup nó thành `3d-smart-city.html.backup-$(date +%Y%m%d_%H%M%S)`
+- Ghi log việc backup để tham khảo
+
+Bước 3: Khôi phục
+- Copy `3d-smart-city-broken-backup-20250828_143000.html` thành `3d-smart-city.html`
+- Verify file đã được copy thành công
+- Kiểm tra quyền file (644)
+
+Bước 4: Validation
+- Kiểm tra kích thước file mới
+- Đọc vài dòng đầu để confirm
+- Test cú pháp HTML cơ bản
+
+Bước 5: Tạo script khởi động
+- Tạo file `start-3d-smart-city.sh` để khởi động server
+- Chmod +x cho file script
+- Hướng dẫn cách sử dụng
+
+🎨 THÔNG TIN VỀ FILE BACKUP:
+- Ngày: 28/08/2025
+- Kích thước: 174KB (4,602 dòng)
+- Phiên bản: Enhanced Smart City v2.0
+- Tính năng: 3D scene với Smart City, Data Centers, con sông, cây xanh, controls hoàn chỉnh
+
+✅ KẾT QUẢ MONG MUỐN:
+- File `3d-smart-city.html` hoạt động hoàn hảo
+- Có thể khởi động bằng `python3 -m http.server 8000`
+- Truy cập tại `http://localhost:8000/3d-smart-city.html`
+- Tất cả controls và 3D scene hoạt động bình thường
+
+Hãy thực hiện từng bước một cách cẩn thận và báo cáo kết quả từng bước.
