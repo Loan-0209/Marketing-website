@@ -1,72 +1,225 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Test Simple Button</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - Image Display</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
             color: white;
-            font-family: Arial;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
         }
-        button {
-            padding: 20px 40px;
-            font-size: 20px;
-            background: #ff4444;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
+        
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .debug-section {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .debug-title {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .test-image {
+            border: 2px solid #00ffff;
             margin: 10px;
+            max-width: 400px;
+            height: auto;
         }
-        button:hover {
-            background: #ff6666;
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .status.success {
+            background: #27ae60;
+        }
+        
+        .status.error {
+            background: #e74c3c;
+        }
+        
+        .status.warning {
+            background: #f39c12;
+        }
+        
+        pre {
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .neon-cyan-base {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 12px;
+            border: 2px solid #00ffff;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .neon-cyan-medium {
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(0, 255, 255, 0.4),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .neon-cyan-medium:hover {
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                0 0 60px rgba(0, 255, 255, 0.6),
+                inset 0 0 30px rgba(0, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <h1>🧪 Test Page</h1>
-    <p>File timestamp: <?php echo date('Y-m-d H:i:s'); ?></p>
-    
-    <button onclick="testFunction()">Test Function Call</button>
-    <button onclick="showSuccess()">Show Success Directly</button>
-    <button onclick="window.open('emergency-fix.html', '_blank')">Open Emergency Fix</button>
-    
-    <div id="result"></div>
+    <div class="debug-container">
+        <h1 style="text-align: center; color: #00ffff;">Debug Test - Image Display & Paths</h1>
+        
+        <!-- Debug Info Section -->
+        <div class="debug-section">
+            <h2 class="debug-title">🔍 Debug Information</h2>
+            <div id="debugInfo"></div>
+        </div>
+        
+        <!-- Path Tests -->
+        <div class="debug-section">
+            <h2 class="debug-title">📁 Path Tests</h2>
+            <div id="pathTests"></div>
+        </div>
+        
+        <!-- Image Display Tests -->
+        <div class="debug-section">
+            <h2 class="debug-title">🖼️ Image Display Tests</h2>
+            
+            <h3>Test 1: Relative Path</h3>
+            <img src="assets/images/power-grid-map.jpg" 
+                 alt="Relative Path Test" 
+                 class="test-image" 
+                 id="relativeImg"
+                 onerror="logError('relativeImg', this.src)">
+            
+            <h3>Test 2: Absolute Path</h3>
+            <img src="file:///Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/assets/images/power-grid-map.jpg" 
+                 alt="Absolute Path Test" 
+                 class="test-image" 
+                 id="absoluteImg"
+                 onerror="logError('absoluteImg', this.src)">
+            
+            <h3>Test 3: Current Directory Path</h3>
+            <img src="./assets/images/power-grid-map.jpg" 
+                 alt="Current Dir Path Test" 
+                 class="test-image" 
+                 id="currentDirImg"
+                 onerror="logError('currentDirImg', this.src)">
+        </div>
+        
+        <!-- Neon Effect Test -->
+        <div class="debug-section">
+            <h2 class="debug-title">✨ Neon Effect Test</h2>
+            <div style="text-align: center;">
+                <div class="neon-cyan-base neon-cyan-medium">
+                    <img src="assets/images/power-grid-map.jpg" 
+                         alt="Neon Test" 
+                         style="width: 200px; height: auto; border-radius: 8px;"
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMyIvPgogIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE0IiBkeT0iLjNlbSI+SW1hZ2UgTm90IEZvdW5kPC90ZXh0Pgo8L3N2Zz4='">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Console Output -->
+        <div class="debug-section">
+            <h2 class="debug-title">📋 Console Output</h2>
+            <pre id="consoleOutput"></pre>
+        </div>
+    </div>
     
     <script>
-        console.log('🧪 Test page loaded at:', new Date().toLocaleTimeString());
+        // Debug info
+        const debugInfo = document.getElementById('debugInfo');
+        const pathTests = document.getElementById('pathTests');
+        const consoleOutput = document.getElementById('consoleOutput');
+        let logs = [];
         
-        function testFunction() {
-            console.log('✅ Test function called successfully!');
-            document.getElementById('result').innerHTML = '<p style="color: #4CAF50; font-size: 18px; margin-top: 20px;">✅ Function call working!</p>';
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            logs.push(logEntry);
+            consoleOutput.textContent = logs.join('\n');
+            console.log(logEntry);
         }
         
-        function showSuccess() {
-            console.log('🎉 Showing success page directly');
-            document.body.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; font-family: Arial; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                    <h1 style="font-size: 3em; margin-bottom: 20px;">🎉 SUCCESS!</h1>
-                    <h2 style="color: #4CAF50; font-size: 2em;">✅ Direct Function Call Works</h2>
-                    <p style="font-size: 1.5em; text-align: center; margin: 20px;">
-                        This proves JavaScript functions work correctly!
-                    </p>
-                    <button onclick="history.back()" style="padding: 15px 30px; font-size: 18px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">🔙 Go Back</button>
-                </div>
-            `;
+        function logError(imgId, src) {
+            log(`Image failed to load: ${imgId} - ${src}`, 'error');
+            document.getElementById(imgId).parentElement.innerHTML += 
+                '<span class="status error">Failed to load</span>';
         }
         
-        // Auto test after 2 seconds
+        // Display debug info
+        debugInfo.innerHTML = `
+            <p><strong>Current URL:</strong> ${window.location.href}</p>
+            <p><strong>Protocol:</strong> ${window.location.protocol}</p>
+            <p><strong>Path:</strong> ${window.location.pathname}</p>
+            <p><strong>User Agent:</strong> ${navigator.userAgent}</p>
+        `;
+        
+        // Test different path formats
+        const testPaths = [
+            'assets/images/power-grid-map.jpg',
+            './assets/images/power-grid-map.jpg',
+            '../Test_WEBSITE_2025.06.18/assets/images/power-grid-map.jpg',
+            'file:///Users/thuyloan0209/Documents/Test_WEBSITE_2025.06.18/assets/images/power-grid-map.jpg'
+        ];
+        
+        pathTests.innerHTML = '<h3>Testing Paths:</h3>';
+        testPaths.forEach((path, index) => {
+            const testImg = new Image();
+            testImg.onload = function() {
+                pathTests.innerHTML += `<p class="status success">✓ Path ${index + 1}: ${path}</p>`;
+                log(`Path test ${index + 1} successful: ${path}`, 'success');
+            };
+            testImg.onerror = function() {
+                pathTests.innerHTML += `<p class="status error">✗ Path ${index + 1}: ${path}</p>`;
+                log(`Path test ${index + 1} failed: ${path}`, 'error');
+            };
+            testImg.src = path;
+        });
+        
+        // Check all images on load
+        window.addEventListener('load', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach((img, index) => {
+                if (img.complete && img.naturalHeight !== 0) {
+                    log(`Image ${index + 1} loaded successfully: ${img.src}`, 'success');
+                    img.parentElement.innerHTML += '<span class="status success">Loaded</span>';
+                }
+            });
+        });
+        
+        // Add CORS test
         setTimeout(() => {
-            console.log('⏰ 2 second auto test');
-            document.getElementById('result').innerHTML += '<p style="color: #ffff00; margin-top: 10px;">⏰ Auto test at 2 seconds: SUCCESS</p>';
-        }, 2000);
+            log('Testing CORS policy...', 'info');
+            if (window.location.protocol === 'file:') {
+                log('Running from file:// protocol - CORS restrictions may apply', 'warning');
+                debugInfo.innerHTML += '<p class="status warning">⚠️ File protocol detected - some browsers block local file access</p>';
+            }
+        }, 1000);
     </script>
 </body>
 </html>

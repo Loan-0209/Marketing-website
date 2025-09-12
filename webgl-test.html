@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Diagnostic Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: #fff;
+        }
+        
+        .diagnostic-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .success { color: #00ff00; }
+        .warning { color: #ffaa00; }
+        .error { color: #ff0000; }
+        
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        
+        .status.success { border-color: #00ff00; background: rgba(0, 255, 0, 0.1); }
+        .status.warning { border-color: #ffaa00; background: rgba(255, 170, 0, 0.1); }
+        .status.error { border-color: #ff0000; background: rgba(255, 0, 0, 0.1); }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .spinner {
+            border: 2px solid #333;
+            border-top: 2px solid #007bff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 WebGL Diagnostic Test - HEART Technology Park</h1>
+    
+    <div class="diagnostic-panel">
+        <h2>📊 System Status</h2>
+        <div id="status-container">
+            <div class="status warning">
+                <span class="spinner"></span>
+                Initializing diagnostic tests...
+            </div>
+        </div>
+    </div>
+    
+    <div class="diagnostic-panel">
+        <h2>🎮 WebGL Test Area</h2>
+        <div id="canvas-container"></div>
+        <div style="margin-top: 10px;">
+            <button onclick="runBasicTest()">🔄 Run Basic Test</button>
+            <button onclick="runAdvancedTest()">⚡ Run Advanced Test</button>
+            <button onclick="testContextLoss()">💥 Test Context Loss</button>
+            <button onclick="clearResults()">🗑️ Clear Results</button>
+        </div>
+    </div>
+    
+    <div class="diagnostic-panel">
+        <h2>📋 Test Results</h2>
+        <div id="test-results">
+            <p>No tests run yet. Click a test button above to begin.</p>
+        </div>
+    </div>
+
+    <!-- Load our WebGL initialization system -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <script src="webgl-init-fix.js"></script>
+    
+    <script>
+        // Global test state
+        let currentRenderer = null;
+        let currentScene = null;
+        let currentCamera = null;
+        let animationId = null;
+        
+        // Update status display
+        function updateStatus(message, type = 'warning') {
+            const container = document.getElementById('status-container');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = message;
+            container.appendChild(statusDiv);
+            
+            // Keep only last 5 status messages
+            while (container.children.length > 5) {
+                container.removeChild(container.firstChild);
+            }
+            
+            // Auto-scroll
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        // Add test result
+        function addTestResult(test, result, details = '') {
+            const resultsContainer = document.getElementById('test-results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${result}`;
+            resultDiv.innerHTML = `
+                <strong>${test}:</strong> ${result.toUpperCase()}
+                ${details ? `<br><small>${details}</small>` : ''}
+                <small style="float: right;">${new Date().toLocaleTimeString()}</small>
+            `;
+            resultsContainer.appendChild(resultDiv);
+            resultsContainer.scrollTop = resultsContainer.scrollHeight;
+        }
+        
+        // Clear all results
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '<p>Results cleared.</p>';
+            document.getElementById('status-container').innerHTML = '<div class="status success">Ready for new tests</div>';
+        }
+        
+        // Run basic WebGL test
+        async function runBasicTest() {
+            updateStatus('🔄 Running basic WebGL test...', 'warning');
+            
+            try {
+                // Step 1: Initialize WebGL
+                const result = await window.WebGLInitializer.initialize();
+                
+                if (!result.success) {
+                    addTestResult('Basic WebGL Initialization', 'error', result.error);
+                    updateStatus('❌ Basic test failed', 'error');
+                    return;
+                }
+                
+                addTestResult('WebGL Initialization', 'success', 'WebGL context created successfully');
+                updateStatus('✅ WebGL initialized', 'success');
+                
+                // Step 2: Create simple scene
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, result.container.clientWidth / result.container.clientHeight, 0.1, 1000);
+                
+                // Add a simple cube
+                const geometry = new THREE.BoxGeometry(1, 1, 1);
+                const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+                
+                camera.position.z = 3;
+                
+                // Step 3: Render test
+                result.renderer.render(scene, camera);
+                
+                addTestResult('Basic Render Test', 'success', 'Simple cube rendered successfully');
+                updateStatus('✅ Basic test completed successfully', 'success');
+                
+                // Store for advanced tests
+                currentRenderer = result.renderer;
+                currentScene = scene;
+                currentCamera = camera;
+                
+            } catch (error) {
+                addTestResult('Basic WebGL Test', 'error', error.message);
+                updateStatus(`❌ Basic test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Run advanced WebGL test
+        async function runAdvancedTest() {
+            if (!currentRenderer) {
+                updateStatus('⚠️ Run basic test first', 'warning');
+                return;
+            }
+            
+            updateStatus('🔄 Running advanced WebGL test...', 'warning');
+            
+            try {
+                // Clear previous scene
+                while(currentScene.children.length > 0) {
+                    currentScene.remove(currentScene.children[0]);
+                }
+                
+                // Add lighting
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+                currentScene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+                directionalLight.position.set(5, 5, 5);
+                currentScene.add(directionalLight);
+                
+                addTestResult('Lighting Setup', 'success', 'Ambient and directional lights added');
+                
+                // Add multiple objects with different materials
+                const objects = [];
+                
+                // Phong material cube
+                const phongGeo = new THREE.BoxGeometry(1, 1, 1);
+                const phongMat = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+                const phongCube = new THREE.Mesh(phongGeo, phongMat);
+                phongCube.position.x = -2;
+                currentScene.add(phongCube);
+                objects.push(phongCube);
+                
+                // Standard material sphere
+                const sphereGeo = new THREE.SphereGeometry(0.7, 32, 32);
+                const standardMat = new THREE.MeshStandardMaterial({ color: 0x00ff00, metalness: 0.3, roughness: 0.4 });
+                const sphere = new THREE.Mesh(sphereGeo, standardMat);
+                sphere.position.x = 0;
+                currentScene.add(sphere);
+                objects.push(sphere);
+                
+                // Wireframe torus
+                const torusGeo = new THREE.TorusGeometry(0.7, 0.3, 8, 16);
+                const wireframeMat = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
+                const torus = new THREE.Mesh(torusGeo, wireframeMat);
+                torus.position.x = 2;
+                currentScene.add(torus);
+                objects.push(torus);
+                
+                addTestResult('Complex Geometry', 'success', 'Multiple objects with different materials created');
+                
+                // Animation loop
+                let frame = 0;
+                const animate = () => {
+                    frame++;
+                    
+                    // Rotate objects
+                    objects.forEach((obj, index) => {
+                        obj.rotation.x += 0.01 * (index + 1);
+                        obj.rotation.y += 0.01 * (index + 1);
+                    });
+                    
+                    currentRenderer.render(currentScene, currentCamera);
+                    
+                    if (frame < 120) { // Run for 2 seconds at 60fps
+                        animationId = requestAnimationFrame(animate);
+                    } else {
+                        addTestResult('Animation Test', 'success', 'Smooth 60fps animation for 2 seconds');
+                        updateStatus('✅ Advanced test completed successfully', 'success');
+                    }
+                };
+                
+                animate();
+                addTestResult('Advanced Rendering', 'success', 'Complex scene with lighting and materials');
+                
+            } catch (error) {
+                addTestResult('Advanced WebGL Test', 'error', error.message);
+                updateStatus(`❌ Advanced test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Test context loss simulation
+        function testContextLoss() {
+            updateStatus('🔄 Testing context loss handling...', 'warning');
+            
+            if (!currentRenderer) {
+                addTestResult('Context Loss Test', 'error', 'No renderer available - run basic test first');
+                return;
+            }
+            
+            try {
+                const gl = currentRenderer.getContext();
+                const ext = gl.getExtension('WEBGL_lose_context');
+                
+                if (ext) {
+                    addTestResult('Context Loss Extension', 'success', 'WEBGL_lose_context extension available');
+                    
+                    // Simulate context loss
+                    setTimeout(() => {
+                        updateStatus('💥 Simulating context loss...', 'warning');
+                        ext.loseContext();
+                        
+                        setTimeout(() => {
+                            updateStatus('🔄 Restoring context...', 'warning');
+                            ext.restoreContext();
+                        }, 2000);
+                        
+                    }, 1000);
+                    
+                } else {
+                    addTestResult('Context Loss Test', 'warning', 'WEBGL_lose_context extension not available');
+                }
+                
+            } catch (error) {
+                addTestResult('Context Loss Test', 'error', error.message);
+            }
+        }
+        
+        // Initialize diagnostics when page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            updateStatus('🚀 WebGL Diagnostic Test initialized', 'success');
+            
+            // Run capability detection
+            setTimeout(async () => {
+                try {
+                    const capabilities = window.WebGLInitializer.detectWebGLCapabilities();
+                    
+                    if (capabilities.supported) {
+                        addTestResult('WebGL Support', 'success', `${capabilities.renderer} - ${capabilities.version}`);
+                        updateStatus('✅ WebGL is supported on this device', 'success');
+                    } else {
+                        addTestResult('WebGL Support', 'error', capabilities.reason);
+                        updateStatus('❌ WebGL is not supported', 'error');
+                    }
+                } catch (error) {
+                    addTestResult('WebGL Detection', 'error', error.message);
+                    updateStatus('❌ WebGL detection failed', 'error');
+                }
+            }, 500);
+        });
+        
+        // Handle context events
+        window.addEventListener('webglcontextlost', () => {
+            addTestResult('Context Event', 'warning', 'WebGL context was lost');
+            updateStatus('⚠️ WebGL context lost detected', 'warning');
+        });
+        
+        window.addEventListener('webglcontextrestored', () => {
+            addTestResult('Context Event', 'success', 'WebGL context was restored');
+            updateStatus('✅ WebGL context restored', 'success');
+        });
+        
+    </script>
+</body>
+</html>

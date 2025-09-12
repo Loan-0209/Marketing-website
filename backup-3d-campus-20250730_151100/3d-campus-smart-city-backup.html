@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Smart City Campus - HEART Data Center</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #f0f8ff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 3D Canvas */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Header Navigation */
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            pointer-events: all;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: #fbbf24;
+            font-size: 2rem;
+            font-weight: 800;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo::before {
+            content: "🚀";
+            margin-right: 0.75rem;
+            font-size: 2.5rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav a.contact-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav a.contact-btn:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        /* Control Panels */
+        .control-panel {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            pointer-events: all;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats-panel {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            min-width: 200px;
+        }
+
+        .view-controls {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .phase-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-panel h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fbbf24;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            color: #10b981;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .view-btn, .phase-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            min-width: 120px;
+        }
+
+        .view-btn:hover, .phase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .view-btn.active, .phase-btn.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .phase-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .phase-btn:hover {
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        .phase-btn.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        /* Building Info Popup */
+        .building-info {
+            position: fixed;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            pointer-events: none;
+            z-index: 1001;
+            max-width: 300px;
+            display: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .building-info h4 {
+            margin: 0 0 1rem 0;
+            color: #fbbf24;
+            font-size: 1.1rem;
+        }
+
+        .building-info p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+            
+            .nav {
+                gap: 0.25rem;
+            }
+            
+            .nav a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .control-panel {
+                padding: 1rem;
+            }
+            
+            .stats-panel {
+                top: 80px;
+                left: 10px;
+                min-width: 150px;
+            }
+            
+            .view-controls {
+                top: 80px;
+                right: 10px;
+            }
+            
+            .phase-controls {
+                bottom: 10px;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">HEART</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="master-plan.html">Master Plan</a>
+                <a href="3d-campus-smart-city.html" class="active">3D Smart City</a>
+                <a href="facilities.html">Facilities</a>
+                <a href="investment.html">Investment</a>
+                <a href="technology.html">Technology</a>
+                <a href="news.html">News</a>
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 3D Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <!-- Stats Panel -->
+        <div class="control-panel stats-panel">
+            <h3>📊 Thống kê 3D</h3>
+            <div class="stat-item">
+                <span>FPS:</span>
+                <span class="stat-value" id="fps-counter">60</span>
+            </div>
+            <div class="stat-item">
+                <span>Objects:</span>
+                <span class="stat-value" id="object-counter">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Triangles:</span>
+                <span class="stat-value" id="triangle-counter">0</span>
+            </div>
+            <div class="stat-item">
+                <span>Phase:</span>
+                <span class="stat-value" id="current-phase">1</span>
+            </div>
+            <div class="stat-item">
+                <span>Camera:</span>
+                <span class="stat-value" id="camera-mode">Overview</span>
+            </div>
+        </div>
+
+        <!-- View Controls -->
+        <div class="control-panel view-controls">
+            <button class="view-btn active" data-view="overview">🌍 Overview</button>
+            <button class="view-btn" data-view="aerial">🚁 Aerial</button>
+            <button class="view-btn" data-view="ground">🚶 Ground</button>
+        </div>
+
+        <!-- Phase Controls -->
+        <div class="control-panel phase-controls">
+            <button class="phase-btn active" data-phase="1">Phase 1: Foundation</button>
+            <button class="phase-btn" data-phase="2">Phase 2: Expansion</button>
+            <button class="phase-btn" data-phase="3">Phase 3: Integration</button>
+        </div>
+
+        <!-- Building Info Popup -->
+        <div class="building-info" id="building-info">
+            <h4 id="building-title">Smart Building</h4>
+            <p id="building-description">Advanced IoT integration with real-time monitoring systems.</p>
+            <p><strong>Height:</strong> <span id="building-height">25m</span></p>
+            <p><strong>Type:</strong> <span id="building-type">Mixed Use</span></p>
+            <p><strong>Features:</strong> <span id="building-features">AI Management, Green Tech</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Initialize 3D Campus with Grid Layout
+        class AI3DCampusGridLayout {
+            constructor() {
+                this.currentPhase = 1;
+                this.currentView = 'overview';
+                this.stats = { fps: 60, objects: 0, triangles: 0 };
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.raycaster = new THREE.Raycaster();
+                this.mouse = new THREE.Vector2();
+                this.clickableObjects = [];
+                this.buildings = [];
+                this.trees = [];
+                
+                this.init();
+            }
+
+            init() {
+                console.log('🚀 Starting Grid Campus 3D initialization...');
+                
+                // Initialize Three.js
+                this.initThreeJS();
+                
+                // Create grid layout
+                this.createGridCampusLayout();
+                
+                // Setup controls and interaction
+                this.setupControls();
+                this.setupInteraction();
+                this.setupEventListeners();
+                
+                // Start animation and stats
+                this.startRenderLoop();
+                this.startStatsAnimation();
+                
+                console.log('✅ Grid Campus 3D initialized successfully');
+            }
+
+            initThreeJS() {
+                const container = document.getElementById('canvas-container');
+                
+                // Create scene with light background
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0xf0f8ff);
+                
+                // Create camera
+                this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                this.camera.position.set(120, 100, 120);
+                this.camera.lookAt(0, 0, 0);
+                
+                // Create renderer
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(container.clientWidth, container.clientHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                container.appendChild(this.renderer.domElement);
+                
+                // Add lighting
+                this.setupLighting();
+            }
+
+            setupLighting() {
+                // Ambient light
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+                this.scene.add(ambientLight);
+                
+                // Directional light with shadows
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+                directionalLight.position.set(100, 100, 50);
+                directionalLight.castShadow = true;
+                directionalLight.shadow.mapSize.width = 2048;
+                directionalLight.shadow.mapSize.height = 2048;
+                directionalLight.shadow.camera.near = 0.5;
+                directionalLight.shadow.camera.far = 500;
+                this.scene.add(directionalLight);
+            }
+
+            createGridCampusLayout() {
+                console.log('🏗️ Creating Grid Campus Layout...');
+                
+                const gridSize = 10;
+                const cellSize = 20;
+                const gridGroup = new THREE.Group();
+                
+                // White grid cells
+                for (let x = 0; x < gridSize; x++) {
+                    for (let z = 0; z < gridSize; z++) {
+                        const cellGeometry = new THREE.PlaneGeometry(cellSize - 1, cellSize - 1);
+                        const cellMaterial = new THREE.MeshLambertMaterial({ 
+                            color: 0xffffff,
+                            transparent: true,
+                            opacity: 0.9
+                        });
+                        
+                        const cell = new THREE.Mesh(cellGeometry, cellMaterial);
+                        cell.rotation.x = -Math.PI / 2;
+                        cell.position.set(
+                            (x - gridSize/2) * cellSize,
+                            0.1,
+                            (z - gridSize/2) * cellSize
+                        );
+                        gridGroup.add(cell);
+                    }
+                }
+                
+                // Gray grid lines
+                const lineMaterial = new THREE.LineBasicMaterial({ color: 0x888888 });
+                
+                // Horizontal lines
+                for (let i = 0; i <= gridSize; i++) {
+                    const points = [];
+                    points.push(new THREE.Vector3(-gridSize/2 * cellSize, 0.2, (i - gridSize/2) * cellSize));
+                    points.push(new THREE.Vector3(gridSize/2 * cellSize, 0.2, (i - gridSize/2) * cellSize));
+                    
+                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const line = new THREE.Line(geometry, lineMaterial);
+                    gridGroup.add(line);
+                }
+                
+                // Vertical lines
+                for (let i = 0; i <= gridSize; i++) {
+                    const points = [];
+                    points.push(new THREE.Vector3((i - gridSize/2) * cellSize, 0.2, -gridSize/2 * cellSize));
+                    points.push(new THREE.Vector3((i - gridSize/2) * cellSize, 0.2, gridSize/2 * cellSize));
+                    
+                    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                    const line = new THREE.Line(geometry, lineMaterial);
+                    gridGroup.add(line);
+                }
+                
+                this.scene.add(gridGroup);
+                
+                // Create buildings and trees
+                this.createBuildings();
+                this.createTrees();
+                
+                // Update stats
+                this.updateStats();
+            }
+
+            createBuildings() {
+                // Colorful buildings with exact positions
+                const buildingConfigs = [
+                    {x: 1, z: 3, color: 0x4a90e2, height: 25, width: 8, depth: 8, name: "Innovation Hub"},
+                    {x: 7, z: 1, color: 0x5dade2, height: 30, width: 6, depth: 12, name: "Research Center"},
+                    {x: 3, z: 6, color: 0x3498db, height: 20, width: 10, depth: 6, name: "Data Center"},
+                    {x: 5, z: 2, color: 0xe74c3c, height: 35, width: 12, depth: 8, name: "Main Tower"},
+                    {x: 1, z: 7, color: 0xf39c12, height: 15, width: 8, depth: 8, name: "Energy Lab"},
+                    {x: 8, z: 4, color: 0xff6b9d, height: 20, width: 6, depth: 10, name: "AI Institute"},
+                    {x: 6, z: 8, color: 0x9b59b6, height: 28, width: 8, depth: 12, name: "Tech Campus"},
+                    {x: 2, z: 8, color: 0x27ae60, height: 22, width: 10, depth: 8, name: "Green Building"},
+                    {x: 8, z: 7, color: 0x2ecc71, height: 18, width: 8, depth: 8, name: "Eco Center"},
+                    {x: 9, z: 3, color: 0x34495e, height: 40, width: 8, depth: 6, name: "Office Tower"},
+                    {x: 4, z: 1, color: 0x7f8c8d, height: 25, width: 6, depth: 8, name: "Administration"},
+                    {x: 0, z: 5, color: 0x1abc9c, height: 30, width: 8, depth: 10, name: "Smart Lab"},
+                    {x: 6, z: 6, color: 0x16a085, height: 25, width: 10, depth: 8, name: "Conference Center"}
+                ];
+                
+                const gridSize = 10;
+                const cellSize = 20;
+                
+                buildingConfigs.forEach(config => {
+                    const geometry = new THREE.BoxGeometry(config.width, config.height, config.depth);
+                    const material = new THREE.MeshLambertMaterial({ color: config.color });
+                    
+                    const building = new THREE.Mesh(geometry, material);
+                    building.position.set(
+                        (config.x - gridSize/2) * cellSize,
+                        config.height / 2,
+                        (config.z - gridSize/2) * cellSize
+                    );
+                    building.castShadow = true;
+                    building.receiveShadow = true;
+                    building.userData = {
+                        name: config.name,
+                        height: config.height + 'm',
+                        type: 'Smart Building',
+                        features: 'IoT Sensors, AI Management, Green Tech'
+                    };
+                    
+                    this.scene.add(building);
+                    this.buildings.push(building);
+                    this.clickableObjects.push(building);
+                });
+            }
+
+            createTrees() {
+                // Green trees at scattered positions
+                const treePositions = [
+                    {x: 0.5, z: 1.5}, {x: 2.5, z: 0.5}, {x: 4.5, z: 3.5}, {x: 1.5, z: 4.5},
+                    {x: 6.5, z: 2.5}, {x: 3.5, z: 7.5}, {x: 7.5, z: 6.5}, {x: 9.5, z: 8.5},
+                    {x: 0.5, z: 8.5}, {x: 5.5, z: 5.5}, {x: 8.5, z: 0.5}, {x: 2.5, z: 3.5},
+                    {x: 4.5, z: 9.5}, {x: 7.5, z: 4.5}, {x: 1.5, z: 6.5}, {x: 9.5, z: 1.5},
+                    {x: 3.5, z: 2.5}, {x: 6.5, z: 9.5}, {x: 0.5, z: 3.5}, {x: 8.5, z: 5.5}
+                ];
+                
+                const gridSize = 10;
+                const cellSize = 20;
+                
+                treePositions.forEach(pos => {
+                    // Tree trunk
+                    const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.8, 4);
+                    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+                    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                    trunk.position.set(
+                        (pos.x - gridSize/2) * cellSize,
+                        2,
+                        (pos.z - gridSize/2) * cellSize
+                    );
+                    trunk.castShadow = true;
+                    trunk.receiveShadow = true;
+                    this.scene.add(trunk);
+                    this.trees.push(trunk);
+                    
+                    // Tree leaves
+                    const leavesGeometry = new THREE.SphereGeometry(3, 8, 6);
+                    const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x228b22 });
+                    const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+                    leaves.position.set(
+                        (pos.x - gridSize/2) * cellSize,
+                        6,
+                        (pos.z - gridSize/2) * cellSize
+                    );
+                    leaves.castShadow = true;
+                    leaves.receiveShadow = true;
+                    this.scene.add(leaves);
+                    this.trees.push(leaves);
+                });
+            }
+
+            setupControls() {
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.05;
+                this.controls.screenSpacePanning = false;
+                this.controls.minDistance = 50;
+                this.controls.maxDistance = 500;
+                this.controls.maxPolarAngle = Math.PI / 2;
+            }
+
+            setupInteraction() {
+                this.renderer.domElement.addEventListener('click', (event) => {
+                    const rect = this.renderer.domElement.getBoundingClientRect();
+                    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                    
+                    this.raycaster.setFromCamera(this.mouse, this.camera);
+                    const intersects = this.raycaster.intersectObjects(this.clickableObjects);
+                    
+                    if (intersects.length > 0) {
+                        const object = intersects[0].object;
+                        if (object.userData.name) {
+                            this.showBuildingInfo(object, event);
+                        }
+                    } else {
+                        this.hideBuildingInfo();
+                    }
+                });
+            }
+
+            showBuildingInfo(building, event) {
+                const info = document.getElementById('building-info');
+                document.getElementById('building-title').textContent = building.userData.name;
+                document.getElementById('building-description').textContent = 'Advanced smart building with IoT integration and AI management systems.';
+                document.getElementById('building-height').textContent = building.userData.height;
+                document.getElementById('building-type').textContent = building.userData.type;
+                document.getElementById('building-features').textContent = building.userData.features;
+                
+                info.style.display = 'block';
+                info.style.left = event.clientX + 10 + 'px';
+                info.style.top = event.clientY + 10 + 'px';
+                
+                setTimeout(() => this.hideBuildingInfo(), 3000);
+            }
+
+            hideBuildingInfo() {
+                document.getElementById('building-info').style.display = 'none';
+            }
+
+            setupEventListeners() {
+                // View controls
+                document.querySelectorAll('.view-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const view = btn.dataset.view;
+                        this.switchView(view);
+                        
+                        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    });
+                });
+                
+                // Phase controls
+                document.querySelectorAll('.phase-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const phase = parseInt(btn.dataset.phase);
+                        this.switchPhase(phase);
+                        
+                        document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    });
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    const container = document.getElementById('canvas-container');
+                    this.camera.aspect = container.clientWidth / container.clientHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(container.clientWidth, container.clientHeight);
+                });
+            }
+
+            switchView(view) {
+                this.currentView = view;
+                
+                switch(view) {
+                    case 'overview':
+                        this.camera.position.set(120, 100, 120);
+                        this.camera.lookAt(0, 0, 0);
+                        break;
+                    case 'aerial':
+                        this.camera.position.set(0, 150, 0);
+                        this.camera.lookAt(0, 0, 0);
+                        break;
+                    case 'ground':
+                        this.camera.position.set(80, 20, 80);
+                        this.camera.lookAt(0, 0, 0);
+                        break;
+                }
+                
+                document.getElementById('camera-mode').textContent = view.charAt(0).toUpperCase() + view.slice(1);
+            }
+
+            switchPhase(phase) {
+                this.currentPhase = phase;
+                document.getElementById('current-phase').textContent = phase;
+                
+                // Simulate phase progression by showing/hiding buildings
+                this.buildings.forEach((building, index) => {
+                    const shouldShow = index < this.getCurrentPhaseBuildingCount();
+                    building.visible = shouldShow;
+                });
+                
+                this.updateStats();
+            }
+
+            getCurrentPhaseBuildingCount() {
+                switch(this.currentPhase) {
+                    case 1: return 5;
+                    case 2: return 8;
+                    case 3: return 13;
+                    default: return 13;
+                }
+            }
+
+            updateStats() {
+                const visibleObjects = this.scene.children.filter(child => child.visible !== false);
+                const triangles = this.calculateTriangles();
+                
+                document.getElementById('object-counter').textContent = visibleObjects.length;
+                document.getElementById('triangle-counter').textContent = triangles;
+            }
+
+            calculateTriangles() {
+                let triangles = 0;
+                this.scene.traverse((object) => {
+                    if (object.geometry) {
+                        if (object.geometry.index) {
+                            triangles += object.geometry.index.count / 3;
+                        } else if (object.geometry.attributes.position) {
+                            triangles += object.geometry.attributes.position.count / 3;
+                        }
+                    }
+                });
+                return Math.floor(triangles);
+            }
+
+            startRenderLoop() {
+                const animate = () => {
+                    requestAnimationFrame(animate);
+                    
+                    if (this.controls) {
+                        this.controls.update();
+                    }
+                    
+                    // Animate smart city elements
+                    this.animateSmartCityElements();
+                    
+                    this.renderer.render(this.scene, this.camera);
+                };
+                animate();
+            }
+
+            startStatsAnimation() {
+                let fps = 60;
+                setInterval(() => {
+                    fps = 58 + Math.random() * 4;
+                    document.getElementById('fps-counter').textContent = Math.floor(fps);
+                }, 100);
+            }
+
+            // SMART CITY INFRASTRUCTURE METHODS
+
+            createChessboardPathways() {
+                console.log('🛤️ Creating chessboard pathway system...');
+                
+                const gridSize = 10;
+                const cellSize = 20;
+                const pathwayGroup = new THREE.Group();
+                
+                // Main arterial roads (Đường chính)
+                const mainRoadMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x2c2c2c,
+                    transparent: true,
+                    opacity: 0.9 
+                });
+                
+                // Horizontal main roads
+                for (let z = -gridSize/2; z <= gridSize/2; z += 2) {
+                    const roadGeometry = new THREE.PlaneGeometry(gridSize * cellSize, 4);
+                    const road = new THREE.Mesh(roadGeometry, mainRoadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(0, 0.2, z * cellSize);
+                    pathwayGroup.add(road);
+                    
+                    // Road markings (Vạch kẻ đường)
+                    const markingMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+                    for (let x = -gridSize/2 * cellSize; x <= gridSize/2 * cellSize; x += 20) {
+                        const marking = new THREE.Mesh(
+                            new THREE.PlaneGeometry(2, 0.3),
+                            markingMaterial
+                        );
+                        marking.rotation.x = -Math.PI / 2;
+                        marking.position.set(x, 0.3, z * cellSize);
+                        pathwayGroup.add(marking);
+                    }
+                }
+                
+                // Vertical main roads
+                for (let x = -gridSize/2; x <= gridSize/2; x += 2) {
+                    const roadGeometry = new THREE.PlaneGeometry(4, gridSize * cellSize);
+                    const road = new THREE.Mesh(roadGeometry, mainRoadMaterial);
+                    road.rotation.x = -Math.PI / 2;
+                    road.position.set(x * cellSize, 0.2, 0);
+                    pathwayGroup.add(road);
+                    
+                    // Road markings
+                    const markingMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+                    for (let z = -gridSize/2 * cellSize; z <= gridSize/2 * cellSize; z += 20) {
+                        const marking = new THREE.Mesh(
+                            new THREE.PlaneGeometry(0.3, 2),
+                            markingMaterial
+                        );
+                        marking.rotation.x = -Math.PI / 2;
+                        marking.position.set(x * cellSize, 0.3, z);
+                        pathwayGroup.add(marking);
+                    }
+                }
+                
+                // Secondary pathways (Đường phụ)
+                const secondaryRoadMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x4a4a4a,
+                    transparent: true,
+                    opacity: 0.8 
+                });
+                
+                // Chess-like connecting paths
+                for (let x = -gridSize/2; x < gridSize/2; x++) {
+                    for (let z = -gridSize/2; z < gridSize/2; z++) {
+                        if ((x + z) % 2 === 0) { // Checkered pattern
+                            const pathGeometry = new THREE.PlaneGeometry(cellSize * 0.8, cellSize * 0.8);
+                            const path = new THREE.Mesh(pathGeometry, secondaryRoadMaterial);
+                            path.rotation.x = -Math.PI / 2;
+                            path.position.set(x * cellSize, 0.15, z * cellSize);
+                            pathwayGroup.add(path);
+                        }
+                    }
+                }
+                
+                this.scene.add(pathwayGroup);
+                return pathwayGroup;
+            }
+
+            createSmartLighting() {
+                console.log('💡 Creating smart lighting system...');
+                
+                const lightingGroup = new THREE.Group();
+                
+                // Smart street lights
+                for (let x = -80; x <= 80; x += 40) {
+                    for (let z = -80; z <= 80; z += 40) {
+                        // Light pole
+                        const poleGeometry = new THREE.CylinderGeometry(0.5, 0.8, 12);
+                        const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                        const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                        pole.position.set(x, 6, z);
+                        pole.castShadow = true;
+                        lightingGroup.add(pole);
+                        
+                        // Smart light head
+                        const lightHeadGeometry = new THREE.SphereGeometry(2, 8, 6);
+                        const lightHeadMaterial = new THREE.MeshBasicMaterial({ 
+                            color: 0x87ceeb,
+                            transparent: true,
+                            opacity: 0.6
+                        });
+                        const lightHead = new THREE.Mesh(lightHeadGeometry, lightHeadMaterial);
+                        lightHead.position.set(x, 11, z);
+                        lightHead.userData.isSmartLight = true;
+                        lightingGroup.add(lightHead);
+                        
+                        // Light glow effect
+                        const glowGeometry = new THREE.SphereGeometry(4, 8, 6);
+                        const glowMaterial = new THREE.MeshBasicMaterial({ 
+                            color: 0xffffff,
+                            transparent: true,
+                            opacity: 0.1
+                        });
+                        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                        glow.position.set(x, 11, z);
+                        glow.userData.isGlow = true;
+                        lightingGroup.add(glow);
+                        
+                        // Point light for illumination
+                        const pointLight = new THREE.PointLight(0x87ceeb, 0.8, 50);
+                        pointLight.position.set(x, 11, z);
+                        lightingGroup.add(pointLight);
+                    }
+                }
+                
+                this.scene.add(lightingGroup);
+                return lightingGroup;
+            }
+
+            createDigitalInfrastructure() {
+                console.log('📱 Creating digital infrastructure...');
+                
+                const digitalGroup = new THREE.Group();
+                
+                // Digital billboards
+                const billboardPositions = [
+                    {x: 60, z: 0}, {x: -60, z: 0}, {x: 0, z: 60}, {x: 0, z: -60}
+                ];
+                
+                billboardPositions.forEach(pos => {
+                    // Billboard structure
+                    const billboardGeometry = new THREE.BoxGeometry(20, 12, 2);
+                    const billboardMaterial = new THREE.MeshBasicMaterial({ color: 0x000033 });
+                    const billboard = new THREE.Mesh(billboardGeometry, billboardMaterial);
+                    billboard.position.set(pos.x, 15, pos.z);
+                    billboard.castShadow = true;
+                    digitalGroup.add(billboard);
+                    
+                    // Animated screen content
+                    const screenGeometry = new THREE.PlaneGeometry(18, 10);
+                    const screenMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x00ff88,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+                    screen.position.set(pos.x, 15, pos.z + 1.1);
+                    screen.userData.isDigitalScreen = true;
+                    digitalGroup.add(screen);
+                    
+                    // Support pole
+                    const poleGeometry = new THREE.CylinderGeometry(1, 1, 15);
+                    const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+                    const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                    pole.position.set(pos.x, 7.5, pos.z);
+                    pole.castShadow = true;
+                    digitalGroup.add(pole);
+                });
+                
+                // IoT sensors throughout the grid
+                for (let x = -60; x <= 60; x += 30) {
+                    for (let z = -60; z <= 60; z += 30) {
+                        if (Math.random() > 0.6) {
+                            const sensorGeometry = new THREE.BoxGeometry(2, 2, 2);
+                            const sensorMaterial = new THREE.MeshBasicMaterial({ 
+                                color: 0xff4444,
+                                transparent: true,
+                                opacity: 0.7
+                            });
+                            const sensor = new THREE.Mesh(sensorGeometry, sensorMaterial);
+                            sensor.position.set(x + Math.random() * 10 - 5, 8, z + Math.random() * 10 - 5);
+                            sensor.userData.isIoTSensor = true;
+                            digitalGroup.add(sensor);
+                            
+                            // Sensor connection lines
+                            const lineGeometry = new THREE.CylinderGeometry(0.1, 0.1, 8);
+                            const lineMaterial = new THREE.MeshBasicMaterial({ color: 0x0088ff });
+                            const line = new THREE.Mesh(lineGeometry, lineMaterial);
+                            line.position.set(x + Math.random() * 10 - 5, 4, z + Math.random() * 10 - 5);
+                            digitalGroup.add(line);
+                        }
+                    }
+                }
+                
+                this.scene.add(digitalGroup);
+                return digitalGroup;
+            }
+
+            createSmartLandscaping() {
+                console.log('🌿 Creating smart landscaping...');
+                
+                const landscapeGroup = new THREE.Group();
+                
+                // Smart parks with geometric patterns
+                const parkPositions = [
+                    {x: 40, z: 40, size: 25},
+                    {x: -40, z: -40, size: 25},
+                    {x: 40, z: -40, size: 20},
+                    {x: -40, z: 40, size: 20}
+                ];
+                
+                parkPositions.forEach(park => {
+                    // Park base
+                    const parkGeometry = new THREE.CircleGeometry(park.size, 12);
+                    const parkMaterial = new THREE.MeshLambertMaterial({ color: 0x2d5a27 });
+                    const parkBase = new THREE.Mesh(parkGeometry, parkMaterial);
+                    parkBase.rotation.x = -Math.PI / 2;
+                    parkBase.position.set(park.x, 0.1, park.z);
+                    parkBase.receiveShadow = true;
+                    landscapeGroup.add(parkBase);
+                    
+                    // Geometric tree arrangements
+                    const numTrees = 8;
+                    for (let i = 0; i < numTrees; i++) {
+                        const angle = (i / numTrees) * Math.PI * 2;
+                        const radius = park.size * 0.6;
+                        const treeX = park.x + Math.cos(angle) * radius;
+                        const treeZ = park.z + Math.sin(angle) * radius;
+                        
+                        // Smart tree with sensors
+                        const trunkGeometry = new THREE.CylinderGeometry(1, 1.5, 6);
+                        const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x4a2c2a });
+                        const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                        trunk.position.set(treeX, 3, treeZ);
+                        trunk.castShadow = true;
+                        trunk.receiveShadow = true;
+                        landscapeGroup.add(trunk);
+                        
+                        const leavesGeometry = new THREE.SphereGeometry(4, 8, 6);
+                        const leavesMaterial = new THREE.MeshLambertMaterial({ color: 0x2d8f47 });
+                        const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+                        leaves.position.set(treeX, 8, treeZ);
+                        leaves.castShadow = true;
+                        leaves.receiveShadow = true;
+                        landscapeGroup.add(leaves);
+                        
+                        // Tree monitoring sensor
+                        const treeSensorGeometry = new THREE.BoxGeometry(1, 1, 1);
+                        const treeSensorMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+                        const treeSensor = new THREE.Mesh(treeSensorGeometry, treeSensorMaterial);
+                        treeSensor.position.set(treeX, 2, treeZ);
+                        treeSensor.userData.isTreeSensor = true;
+                        landscapeGroup.add(treeSensor);
+                    }
+                    
+                    // Central fountain/water feature
+                    const fountainGeometry = new THREE.CylinderGeometry(5, 6, 2);
+                    const fountainMaterial = new THREE.MeshLambertMaterial({ color: 0x87ceeb });
+                    const fountain = new THREE.Mesh(fountainGeometry, fountainMaterial);
+                    fountain.position.set(park.x, 1, park.z);
+                    fountain.castShadow = true;
+                    fountain.receiveShadow = true;
+                    landscapeGroup.add(fountain);
+                    
+                    // Water surface
+                    const waterGeometry = new THREE.CircleGeometry(4.5, 16);
+                    const waterMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x006bb3,
+                        transparent: true,
+                        opacity: 0.7
+                    });
+                    const water = new THREE.Mesh(waterGeometry, waterMaterial);
+                    water.rotation.x = -Math.PI / 2;
+                    water.position.set(park.x, 2.1, park.z);
+                    water.userData.isWater = true;
+                    landscapeGroup.add(water);
+                });
+                
+                this.scene.add(landscapeGroup);
+                return landscapeGroup;
+            }
+
+            createTransportationHubs() {
+                console.log('🚌 Creating transportation hubs...');
+                
+                const transportGroup = new THREE.Group();
+                
+                // Bus stops at major intersections
+                const busStopPositions = [
+                    {x: 80, z: 0}, {x: -80, z: 0}, {x: 0, z: 80}, {x: 0, z: -80}
+                ];
+                
+                busStopPositions.forEach(pos => {
+                    // Bus stop shelter
+                    const shelterGeometry = new THREE.BoxGeometry(15, 8, 5);
+                    const shelterMaterial = new THREE.MeshLambertMaterial({ 
+                        color: 0xcccccc,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const shelter = new THREE.Mesh(shelterGeometry, shelterMaterial);
+                    shelter.position.set(pos.x, 4, pos.z);
+                    shelter.castShadow = true;
+                    shelter.receiveShadow = true;
+                    transportGroup.add(shelter);
+                    
+                    // Digital display
+                    const displayGeometry = new THREE.PlaneGeometry(8, 3);
+                    const displayMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+                    const display = new THREE.Mesh(displayGeometry, displayMaterial);
+                    display.position.set(pos.x, 6, pos.z + 2.6);
+                    display.userData.isBusDisplay = true;
+                    transportGroup.add(display);
+                    
+                    // Seating
+                    for (let i = 0; i < 3; i++) {
+                        const seatGeometry = new THREE.BoxGeometry(4, 1, 2);
+                        const seatMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                        const seat = new THREE.Mesh(seatGeometry, seatMaterial);
+                        seat.position.set(pos.x - 4 + i * 4, 1, pos.z - 1);
+                        seat.castShadow = true;
+                        seat.receiveShadow = true;
+                        transportGroup.add(seat);
+                    }
+                    
+                    // Smart charging stations
+                    const chargingGeometry = new THREE.CylinderGeometry(0.5, 0.5, 3);
+                    const chargingMaterial = new THREE.MeshLambertMaterial({ color: 0x00aa00 });
+                    const charging = new THREE.Mesh(chargingGeometry, chargingMaterial);
+                    charging.position.set(pos.x + 8, 1.5, pos.z);
+                    charging.castShadow = true;
+                    charging.receiveShadow = true;
+                    transportGroup.add(charging);
+                });
+                
+                this.scene.add(transportGroup);
+                return transportGroup;
+            }
+
+            createPedestrianInfrastructure() {
+                console.log('🚶 Creating pedestrian infrastructure...');
+                
+                const pedestrianGroup = new THREE.Group();
+                
+                // Crosswalks at intersections
+                const crosswalkPositions = [
+                    {x: 0, z: 40, rotation: 0},
+                    {x: 0, z: -40, rotation: 0},
+                    {x: 40, z: 0, rotation: Math.PI/2},
+                    {x: -40, z: 0, rotation: Math.PI/2}
+                ];
+                
+                crosswalkPositions.forEach(pos => {
+                    // Zebra crossing
+                    for (let i = 0; i < 8; i++) {
+                        const stripeGeometry = new THREE.PlaneGeometry(2, 8);
+                        const stripeMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                        const stripe = new THREE.Mesh(stripeGeometry, stripeMaterial);
+                        stripe.rotation.x = -Math.PI / 2;
+                        stripe.rotation.z = pos.rotation;
+                        stripe.position.set(
+                            pos.x + (i - 3.5) * 1.5 * Math.cos(pos.rotation),
+                            0.25,
+                            pos.z + (i - 3.5) * 1.5 * Math.sin(pos.rotation)
+                        );
+                        pedestrianGroup.add(stripe);
+                    }
+                    
+                    // Traffic lights
+                    const trafficLightGeometry = new THREE.CylinderGeometry(0.5, 0.5, 8);
+                    const trafficLightMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                    const trafficLight = new THREE.Mesh(trafficLightGeometry, trafficLightMaterial);
+                    trafficLight.position.set(pos.x + 6, 4, pos.z + 6);
+                    trafficLight.castShadow = true;
+                    pedestrianGroup.add(trafficLight);
+                    
+                    // LED lights
+                    const colors = [0xff0000, 0xffff00, 0x00ff00];
+                    colors.forEach((color, index) => {
+                        const ledGeometry = new THREE.SphereGeometry(0.8, 8, 6);
+                        const ledMaterial = new THREE.MeshBasicMaterial({ 
+                            color: color,
+                            transparent: true,
+                            opacity: 0.8
+                        });
+                        const led = new THREE.Mesh(ledGeometry, ledMaterial);
+                        led.position.set(pos.x + 6, 6 - index * 1.5, pos.z + 6);
+                        led.userData.isTrafficLight = true;
+                        led.userData.lightColor = color;
+                        pedestrianGroup.add(led);
+                    });
+                });
+                
+                this.scene.add(pedestrianGroup);
+                return pedestrianGroup;
+            }
+
+            createSmartCityInfrastructure() {
+                console.log('🏙️ Creating complete smart city infrastructure...');
+                
+                // Create all systems
+                this.pathways = this.createChessboardPathways();
+                this.lighting = this.createSmartLighting();
+                this.digital = this.createDigitalInfrastructure();
+                this.landscape = this.createSmartLandscaping();
+                this.transport = this.createTransportationHubs();
+                this.pedestrian = this.createPedestrianInfrastructure();
+                
+                // Update stats
+                this.updateStats();
+                
+                console.log('✅ Smart city infrastructure complete');
+                
+                return {
+                    pathways: this.pathways,
+                    lighting: this.lighting,
+                    digital: this.digital,
+                    landscape: this.landscape,
+                    transport: this.transport,
+                    pedestrian: this.pedestrian
+                };
+            }
+
+            animateSmartCityElements() {
+                // Only animate if smart city infrastructure exists
+                if (!this.pathways) return;
+                
+                // Limit animation frequency for performance
+                const time = Date.now() * 0.001;
+                if (Math.floor(time * 10) % 2 !== 0) return;
+                
+                // Animate digital screens
+                this.scene.traverse((child) => {
+                    if (child.userData.isDigitalScreen) {
+                        child.material.opacity = 0.5 + 0.3 * Math.sin(time * 3);
+                    }
+                    
+                    // Animate IoT sensors
+                    if (child.userData.isIoTSensor) {
+                        child.rotation.y += 0.01;
+                        child.material.opacity = 0.5 + 0.2 * Math.sin(time * 5);
+                    }
+                    
+                    // Animate smart lights
+                    if (child.userData.isSmartLight) {
+                        child.material.opacity = 0.4 + 0.2 * Math.sin(time * 2);
+                    }
+                    
+                    // Animate glow effects
+                    if (child.userData.isGlow) {
+                        child.material.opacity = 0.05 + 0.05 * Math.sin(time);
+                    }
+                    
+                    // Animate water surfaces
+                    if (child.userData.isWater) {
+                        child.material.opacity = 0.5 + 0.2 * Math.sin(time * 4);
+                    }
+                    
+                    // Animate traffic lights
+                    if (child.userData.isTrafficLight) {
+                        const cycle = Math.floor(time) % 3;
+                        const isActive = (cycle === 0 && child.userData.lightColor === 0xff0000) ||
+                                       (cycle === 1 && child.userData.lightColor === 0xffff00) ||
+                                       (cycle === 2 && child.userData.lightColor === 0x00ff00);
+                        child.material.opacity = isActive ? 1.0 : 0.3;
+                    }
+                });
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🔥 DOM LOADED - Starting Grid Campus...');
+            window.campus = new AI3DCampusGridLayout();
+            
+            // Initialize smart city infrastructure after 3 seconds (DISABLED FOR PERFORMANCE)
+            // Uncomment the following to enable smart city features
+            /*
+            setTimeout(() => {
+                console.log('🏙️ Initializing Smart City Infrastructure...');
+                window.campus.createSmartCityInfrastructure();
+            }, 3000);
+            */
+            
+            // Add performance-friendly features button
+            const perfButton = document.createElement('button');
+            perfButton.textContent = '🏙️ Enable Smart City';
+            perfButton.style.cssText = `
+                position: fixed;
+                bottom: 100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                color: white;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: 0.5rem;
+                font-weight: 600;
+                cursor: pointer;
+                z-index: 1000;
+                font-size: 1rem;
+            `;
+            perfButton.onclick = function() {
+                if (confirm('Enable Smart City Infrastructure? This may impact performance.')) {
+                    console.log('🏙️ User requested Smart City Infrastructure...');
+                    window.campus.createSmartCityInfrastructure();
+                    perfButton.style.display = 'none';
+                }
+            };
+            document.body.appendChild(perfButton);
+        });
+    </script>
+</body>
+</html>
