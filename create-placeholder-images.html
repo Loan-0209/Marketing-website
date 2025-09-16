@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create HEART Gallery Placeholder Images</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .placeholder { 
+            width: 400px; 
+            height: 300px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 10px 0;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .img1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .img2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .img3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .img4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .img5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .img6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .img7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .img8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🖼️ HEART Gallery Image Generator</h1>
+    <p>Click "Generate Images" to create placeholder images for the gallery.</p>
+    
+    <button onclick="generateImages()">Generate Images</button>
+    
+    <div id="images">
+        <div class="placeholder img1">Site Development Area<br>📍 HEART Status 1</div>
+        <div class="placeholder img2">Natural River Landscape<br>🌊 HEART Status 2</div>
+        <div class="placeholder img3">Site Panorama with Infrastructure<br>🏗️ HEART Status 3</div>
+        <div class="placeholder img4">Development Zone Overview<br>🎯 HEART Status 4</div>
+        <div class="placeholder img5">Forest and Water Resources<br>🌲 HEART Status 5</div>
+        <div class="placeholder img6">Aerial River View<br>🚁 HEART Status 6</div>
+        <div class="placeholder img7">Construction Equipment on Site<br>🚛 HEART Status 7</div>
+        <div class="placeholder img8">Current Status Overview<br>📊 HEART Status 8</div>
+    </div>
+
+    <script>
+        function generateImages() {
+            const placeholders = document.querySelectorAll('.placeholder');
+            
+            placeholders.forEach((placeholder, index) => {
+                html2canvas(placeholder).then(canvas => {
+                    // Convert to image and download
+                    const link = document.createElement('a');
+                    link.download = `heart-current-status-${index + 1}.jpg`;
+                    link.href = canvas.toDataURL('image/jpeg', 0.9);
+                    link.click();
+                });
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

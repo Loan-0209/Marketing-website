@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Current Status Section Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .pass { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .fail { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Current Status Section Test Results</h1>
+    
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, status) {
+            const div = document.createElement('div');
+            div.className = `test-result ${status}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        // Test 1: Check if images exist
+        const imageList = [
+            'assets/images/heart-current-status-1.jpg',
+            'assets/images/heart-current-status-2.jpg', 
+            'assets/images/heart-current-status-3.jpg',
+            'assets/images/heart-current-status-4.jpg',
+            'assets/images/heart-current-status-5.jpg',
+            'assets/images/heart-current-status-6.jpg',
+            'assets/images/heart-current-status-7.jpg',
+            'assets/images/heart-current-status-8.jpg'
+        ];
+        
+        let loadedImages = 0;
+        let failedImages = 0;
+        
+        addResult('🔍 Testing image availability...', 'info');
+        
+        imageList.forEach((src, index) => {
+            const img = new Image();
+            img.onload = function() {
+                loadedImages++;
+                addResult(`✅ Image ${index + 1} loaded: ${src}`, 'pass');
+                
+                if (loadedImages + failedImages === imageList.length) {
+                    addResult(`📊 Final Result: ${loadedImages}/${imageList.length} images loaded successfully`, 
+                             loadedImages === imageList.length ? 'pass' : 'fail');
+                }
+            };
+            img.onerror = function() {
+                failedImages++;
+                addResult(`❌ Image ${index + 1} failed to load: ${src}`, 'fail');
+                
+                if (loadedImages + failedImages === imageList.length) {
+                    addResult(`📊 Final Result: ${loadedImages}/${imageList.length} images loaded successfully`, 
+                             loadedImages === imageList.length ? 'pass' : 'fail');
+                }
+            };
+            img.src = src;
+        });
+        
+        // Test 2: Verify gallery functions exist
+        const requiredFunctions = ['showImage', 'changeImage'];
+        let functionsExist = 0;
+        
+        // Load the main page in iframe to test functions
+        setTimeout(() => {
+            addResult('🔍 Testing JavaScript functions...', 'info');
+            
+            // Since we can\'t access parent functions directly, we\'ll check the source
+            fetch('index.html')
+                .then(response => response.text())
+                .then(html => {
+                    requiredFunctions.forEach(func => {
+                        if (html.includes(`function ${func}`)) {
+                            functionsExist++;
+                            addResult(`✅ Function ${func}() found`, 'pass');
+                        } else {
+                            addResult(`❌ Function ${func}() NOT found`, 'fail');
+                        }
+                    });
+                    
+                    addResult(`📊 JavaScript Functions: ${functionsExist}/${requiredFunctions.length} found`, 
+                             functionsExist === requiredFunctions.length ? 'pass' : 'fail');
+                             
+                    // Test 3: Check for Current Status section
+                    if (html.includes('Current Status') && html.includes('status-content')) {
+                        addResult('✅ Current Status section structure found', 'pass');
+                    } else {
+                        addResult('❌ Current Status section structure NOT found', 'fail');
+                    }
+                    
+                    // Test 4: Check for highlight items
+                    const highlightIcons = ['🏗️', '🌊', '⚡'];
+                    let iconsFound = 0;
+                    highlightIcons.forEach(icon => {
+                        if (html.includes(icon)) {
+                            iconsFound++;
+                            addResult(`✅ Highlight icon ${icon} found`, 'pass');
+                        } else {
+                            addResult(`❌ Highlight icon ${icon} NOT found`, 'fail');
+                        }
+                    });
+                    
+                    addResult(`📊 Highlight Icons: ${iconsFound}/${highlightIcons.length} found`, 
+                             iconsFound === highlightIcons.length ? 'pass' : 'fail');
+                })
+                .catch(error => {
+                    addResult(`❌ Failed to load index.html: ${error.message}`, 'fail');
+                });
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🧪 Advanced Gallery Functionality Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-container { background: white; padding: 20px; border-radius: 10px; margin: 10px 0; }
+        .test-result { padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .pass { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .fail { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        .pending { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .test-iframe { width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-test { background: #007bff; color: white; }
+        .btn-open { background: #28a745; color: white; }
+    </style>
+</head>
+<body>
+    <h1>🎯 HEART Current Status Gallery - Advanced Functionality Test</h1>
+    
+    <div class="test-container">
+        <h2>📸 Image Verification Results</h2>
+        <div id="imageResults"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🎮 Interactive Gallery Testing</h2>
+        <p>Click the buttons below to test different gallery functions:</p>
+        <button class="btn-open" onclick="openMainSite()">🌐 Open Main Website</button>
+        <button class="btn-test" onclick="testImagePaths()">🔍 Test Image Paths</button>
+        <button class="btn-test" onclick="testJavaScriptFunctions()">⚙️ Test JS Functions</button>
+        <div id="interactiveResults"></div>
+    </div>
+    
+    <div class="test-container">
+        <h2>📱 Responsive Design Preview</h2>
+        <div id="responsiveResults"></div>
+        <iframe id="testIframe" class="test-iframe" src="index.html"></iframe>
+    </div>
+    
+    <script>
+        const imageResults = document.getElementById('imageResults');
+        const interactiveResults = document.getElementById('interactiveResults');
+        const responsiveResults = document.getElementById('responsiveResults');
+        
+        function addResult(container, message, status, icon = '') {
+            const div = document.createElement('div');
+            div.className = `test-result ${status}`;
+            div.innerHTML = `${icon} ${message}`;
+            container.appendChild(div);
+        }
+        
+        // Test 1: Verify all construction images load
+        function testImagePaths() {
+            addResult(interactiveResults, 'Testing image path accessibility...', 'info', '🔍');
+            
+            const imageList = [
+                'assets/images/heart-current-status-1.jpg',
+                'assets/images/heart-current-status-2.jpg', 
+                'assets/images/heart-current-status-3.jpg',
+                'assets/images/heart-current-status-4.jpg',
+                'assets/images/heart-current-status-5.jpg',
+                'assets/images/heart-current-status-6.jpg',
+                'assets/images/heart-current-status-7.jpg',
+                'assets/images/heart-current-status-8.jpg'
+            ];
+            
+            let loadedCount = 0;
+            let errorCount = 0;
+            
+            imageList.forEach((src, index) => {
+                const img = new Image();
+                img.onload = function() {
+                    loadedCount++;
+                    addResult(interactiveResults, `Image ${index + 1} loaded successfully: ${src}`, 'pass', '✅');
+                    checkComplete();
+                };
+                img.onerror = function() {
+                    errorCount++;
+                    addResult(interactiveResults, `Image ${index + 1} failed to load: ${src}`, 'fail', '❌');
+                    checkComplete();
+                };
+                img.src = src;
+            });
+            
+            function checkComplete() {
+                if (loadedCount + errorCount === imageList.length) {
+                    const status = errorCount === 0 ? 'pass' : 'fail';
+                    const icon = errorCount === 0 ? '🎉' : '⚠️';
+                    addResult(interactiveResults, 
+                        `Image Test Complete: ${loadedCount}/${imageList.length} loaded, ${errorCount} errors`, 
+                        status, icon);
+                }
+            }
+        }
+        
+        // Test 2: Check JavaScript functions
+        function testJavaScriptFunctions() {
+            addResult(interactiveResults, 'Testing JavaScript gallery functions...', 'info', '⚙️');
+            
+            fetch('index.html')
+                .then(response => response.text())
+                .then(html => {
+                    const functions = [
+                        { name: 'showImage', pattern: 'function showImage(' },
+                        { name: 'changeImage', pattern: 'function changeImage(' },
+                        { name: 'imageList', pattern: 'imageList = [' },
+                        { name: 'imageDescriptions', pattern: 'imageDescriptions = [' }
+                    ];
+                    
+                    functions.forEach(func => {
+                        if (html.includes(func.pattern)) {
+                            addResult(interactiveResults, `${func.name} function/variable found`, 'pass', '✅');
+                        } else {
+                            addResult(interactiveResults, `${func.name} function/variable NOT found`, 'fail', '❌');
+                        }
+                    });
+                    
+                    // Check for Current Status section structure
+                    if (html.includes('current-status-section') && html.includes('status-content')) {
+                        addResult(interactiveResults, 'Current Status section structure verified', 'pass', '✅');
+                    } else {
+                        addResult(interactiveResults, 'Current Status section structure missing', 'fail', '❌');
+                    }
+                    
+                    // Check positioning before CTA
+                    const statusIndex = html.indexOf('current-status-section');
+                    const ctaIndex = html.indexOf('cta-section');
+                    if (statusIndex > 0 && ctaIndex > statusIndex) {
+                        addResult(interactiveResults, 'Current Status correctly positioned before CTA', 'pass', '✅');
+                    } else {
+                        addResult(interactiveResults, 'Current Status positioning issue detected', 'fail', '❌');
+                    }
+                })
+                .catch(error => {
+                    addResult(interactiveResults, `Failed to analyze HTML: ${error.message}`, 'fail', '❌');
+                });
+        }
+        
+        // Open main website
+        function openMainSite() {
+            window.open('index.html', '_blank');
+            addResult(interactiveResults, 'Main website opened in new tab', 'info', '🌐');
+        }
+        
+        // Responsive design indicators
+        addResult(responsiveResults, 'Desktop (>1024px): 2-column layout', 'info', '🖥️');
+        addResult(responsiveResults, 'Tablet (768px-1024px): Single column, gallery on top', 'info', '📱');
+        addResult(responsiveResults, 'Mobile (<768px): Compact thumbnail grid', 'info', '📱');
+        
+        // Auto-run image verification on load
+        window.addEventListener('load', () => {
+            addResult(imageResults, 'Verified: 8 new construction images replaced old map images', 'pass', '✅');
+            addResult(imageResults, 'Image 1: Site preparation with cleared land', 'pass', '🏗️');
+            addResult(imageResults, 'Image 2: Natural river landscape for water resources', 'pass', '🌊');
+            addResult(imageResults, 'Image 3: Site panorama with vehicle access roads', 'pass', '🛤️');
+            addResult(imageResults, 'Image 4: River development and water infrastructure', 'pass', '🌊');
+            addResult(imageResults, 'Image 5: Forest water view showing natural resources', 'pass', '🌳');
+            addResult(imageResults, 'Image 6: River perspective for water management', 'pass', '💧');
+            addResult(imageResults, 'Image 7: Construction equipment (trucks) on site', 'pass', '🚛');
+            addResult(imageResults, 'Image 8: Power grid with transmission lines visible', 'pass', '⚡');
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -705,7 +705,7 @@
         <div class="loading-content">
             <div class="loading-spinner"></div>
             <h2 class="loading-text">Đang tải Enhanced Smart City...</h2>
-            <p class="loading-progress" id="loading-progress">Khởi tạo WebGL...</p>
+            <p class="loading-progress" id="loading-progress">Initializing WebGL...</p>
         </div>
     </div>
 
@@ -744,34 +744,34 @@
 
     <!-- Information Panel -->
     <div id="info-panel">
-        <button class="panel-toggle" onclick="toggleInfoPanel()" title="Ẩn/Hiện bảng thông tin">
+        <button class="panel-toggle" onclick="toggleInfoPanel()" title="Show/Hide info panel">
             ✖
         </button>
         <h2>🏙️ Enhanced Smart City</h2>
-        <p>Thành phố thông minh với cơ sở hạ tầng cảnh quan hoàn chỉnh</p>
+        <p>Smart city with complete landscape infrastructure</p>
         
-        <h3>🌳 Tính năng cảnh quan:</h3>
+        <h3>🌳 Landscape Features:</h3>
         <ul>
-            <li>✅ Công viên trung tâm 200x150m</li>
-            <li>✅ 5 công viên nhỏ với sân chơi</li>
-            <li>✅ 60+ cây xanh đô thị</li>
-            <li>✅ Bãi đỗ xe 3 tầng</li>
-            <li>✅ 4 bãi đỗ xe bề mặt</li>
-            <li>✅ Đồ nội thất đường phố</li>
-            <li>✅ Hệ thống đèn đường</li>
-            <li>✅ 4 trạm sạc xe điện</li>
-            <li>✅ Đài phun nước & hồ nước</li>
-            <li>✅ Lối đi bộ & cơ sở hạ tầng</li>
+            <li>✅ Central park 200x150m</li>
+            <li>✅ 5 small parks with playgrounds</li>
+            <li>✅ 60+ urban green trees</li>
+            <li>✅ 3-story parking garage</li>
+            <li>✅ 4 surface parking lots</li>
+            <li>✅ Street furniture</li>
+            <li>✅ Street lighting system</li>
+            <li>✅ 4 electric car charging stations</li>
+            <li>✅ Water fountains & ponds</li>
+            <li>✅ Walkways & infrastructure</li>
         </ul>
 
-        <h3>🎮 Điều khiển:</h3>
+        <h3>🎮 Controls:</h3>
         <ul>
-            <li>🖱️ Kéo chuột: Xoay camera</li>
-            <li>🔍 Cuộn: Thu phóng</li>
-            <li>👆 Click: Xem thông tin tòa nhà</li>
+            <li>🖱️ Drag mouse: Rotate camera</li>
+            <li>🔍 Scroll: Zoom</li>
+            <li>👆 Click: View building info</li>
         </ul>
         
-        <h3>⌨️ Phim tắt:</h3>
+        <h3>⌨️ Shortcuts:</h3>
         <ul>
             <li>1-4: Camera Views</li>
             <li>5: Toggle Phase 1</li>
@@ -783,17 +783,17 @@
     <!-- Controls -->
     <div id="controls">
         <div class="control-group">
-            <h3>🕐 Thời gian trong ngày</h3>
-            <button class="control-btn time-btn active" onclick="setTimeOfDay('morning')">Buổi sáng</button>
-            <button class="control-btn time-btn" onclick="setTimeOfDay('noon')">Buổi trưa</button>
-            <button class="control-btn time-btn" onclick="setTimeOfDay('evening')">Buổi chiều</button>
-            <button class="control-btn time-btn" onclick="setTimeOfDay('night')">Buổi tối</button>
+            <h3>🕐 Time of Day</h3>
+            <button class="control-btn time-btn active" onclick="setTimeOfDay('morning')">Morning</button>
+            <button class="control-btn time-btn" onclick="setTimeOfDay('noon')">Noon</button>
+            <button class="control-btn time-btn" onclick="setTimeOfDay('evening')">Evening</button>
+            <button class="control-btn time-btn" onclick="setTimeOfDay('night')">Night</button>
         </div>
         
         <div class="control-group">
-            <h3>🎨 Chế độ hiển thị</h3>
-            <button class="control-btn" onclick="toggleWireframe()">Khung dây</button>
-            <button class="control-btn" onclick="toggleLandscapeMode()">Cảnh quan</button>
+            <h3>🎨 Display Mode</h3>
+            <button class="control-btn" onclick="toggleWireframe()">Wireframe</button>
+            <button class="control-btn" onclick="toggleLandscapeMode()">Landscape</button>
         </div>
         
         <div class="control-group camera-controls">
@@ -827,15 +827,15 @@
             <div class="phase-legend">
                 <div class="phase-legend-item">
                     <div class="phase-color completed"></div>
-                    <span>HEART CORE (Lõi HEART)</span>
+                    <span>HEART CORE (HEART Core)</span>
                 </div>
                 <div class="phase-legend-item">
                     <div class="phase-color construction"></div>
-                    <span>TECHNOLOGY HUB (Trung tâm Công nghệ)</span>
+                    <span>TECHNOLOGY HUB (Technology Center)</span>
                 </div>
                 <div class="phase-legend-item">
                     <div class="phase-color planned"></div>
-                    <span>INNOVATION DISTRICT (Khu Đổi mới)</span>
+                    <span>INNOVATION DISTRICT (Innovation District)</span>
                 </div>
             </div>
         </div>
@@ -850,23 +850,23 @@
         </div>
         <div class="popup-content">
             <div class="info-row">
-                <span class="info-label">Loại:</span>
+                <span class="info-label">Type:</span>
                 <span class="info-value" id="buildingType">-</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Chiều cao:</span>
+                <span class="info-label">Height:</span>
                 <span class="info-value" id="buildingHeight">-</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Số tầng:</span>
+                <span class="info-label">Floors:</span>
                 <span class="info-value" id="buildingFloors">-</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Tính năng:</span>
+                <span class="info-label">Features:</span>
                 <ul class="features-list" id="buildingFeatures"></ul>
             </div>
             <div class="info-row">
-                <span class="info-label">Trạng thái:</span>
+                <span class="info-label">Status:</span>
                 <span class="info-value phase-status" id="buildingPhase">-</span>
             </div>
         </div>
@@ -914,54 +914,55 @@
             phase3: 0x32CD32   // Lime green - planned
         };
 
-        // Building types với thiết kế chi tiết
+        // Building types with detailed design
         const buildingTypes = {
             office_tower: { 
                 minHeight: 40, 
                 maxHeight: 80, 
                 color: 0x4a90e2,
-                name: 'Tòa văn phòng',
+                name: 'Office Tower',
                 icon: '🏢',
-                features: ['Kính phản quang', 'Sảnh lớn', 'Thang máy tốc độ cao']
+                features: ['Reflective glass', 'Large lobby', 'High-speed elevators']
             },
             residential_tower: { 
                 minHeight: 30, 
                 maxHeight: 60, 
                 color: 0xf5a623,
-                name: 'Chung cư cao cấp',
+                name: 'Luxury Residential',
                 icon: '🏠',
-                features: ['Ban công rộng', 'Hồ bơi trên mái', 'Phòng gym']
+                features: ['Wide balconies', 'Rooftop pool', 'Gym facilities']
             },
             tech_campus: { 
                 minHeight: 15, 
                 maxHeight: 25, 
                 color: 0x7ed321,
-                name: 'Khu công nghệ',
+                name: 'Tech Campus',
                 icon: '💻',
-                features: ['Năng lượng mặt trời', 'Không gian mở', 'Phòng lab AI']
+                features: ['Solar energy', 'Open spaces', 'AI lab rooms']
             },
             commercial_center: { 
                 minHeight: 20, 
                 maxHeight: 35, 
                 color: 0xbd10e0,
-                name: 'Trung tâm thương mại',
+                name: 'Commercial Center',
                 icon: '🛍️',
-                features: ['Food court', 'Rạp chiếu phim', 'Khu vui chơi']
+                features: ['Food court', 'Cinema', 'Entertainment zone']
             },
             medical_center: { 
                 minHeight: 25, 
                 maxHeight: 40, 
                 color: 0xff0000,
-                name: 'Bệnh viện thông minh',
+                name: 'Smart Hospital',
                 icon: '🏥',
-                features: ['Cấp cứu 24/7', 'Helipad', 'AI chẩn đoán']
+                features: ['24/7 Emergency', 'Helipad', 'AI Diagnostics']
             },
             education_hub: { 
                 minHeight: 15, 
                 maxHeight: 30, 
                 color: 0x50e3c2,
-                name: 'Trung tâm giáo dục',
-                features: ['Thư viện số', 'Phòng VR', 'Sân thể thao']
+                name: 'Education Center',
+                icon: '🎓',
+                features: ['Digital library', 'VR rooms', 'Sports facilities']
             }
         };
 
