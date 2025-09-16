@@ -395,14 +395,342 @@
         .location-map:hover .map-image {
             transform: scale(1.03);
         }
+
+        /* Current Status Section */
+        .current-status-section {
+            background: white;
+            padding: 100px 0;
+            border-top: 1px solid #e5e7eb;
+        }
         
-        .map-overlay {
-            position: absolute;
-            top: 25px;
-            left: 25px;
+        .status-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .status-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .status-subtitle {
+            font-size: 1.3rem;
+            color: var(--orange-accent);
+            font-weight: 600;
+            background: rgba(255, 167, 38, 0.1);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .status-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+        
+        .status-info h3 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .status-info > p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--light-text);
+            margin-bottom: 2.5rem;
+        }
+        
+        .progress-highlights {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1.5rem;
+        }
+        
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--orange-accent);
+        }
+        
+        .highlight-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left-color: var(--primary-blue);
+        }
+        
+        .highlight-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--orange-accent), #feca57);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 167, 38, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .highlight-content h4 {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .highlight-content p {
+            font-size: 1rem;
+            color: var(--light-text);
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .status-gallery-container h3 {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        
+        /* Enhanced Status Gallery Styles */
+        .status-gallery-container .status-gallery {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+        
+        .status-gallery-container .main-image {
+            height: 350px;
+            border-radius: 15px;
+        }
+        
+        /* Responsive Status Section */
+        @media (max-width: 1024px) {
+            .status-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .status-gallery-container {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .current-status-section {
+                padding: 60px 0;
+            }
+            
+            .status-header h2 {
+                font-size: 2rem;
+            }
+            
+            .status-subtitle {
+                font-size: 1.1rem;
+                padding: 0.8rem 1.5rem;
+            }
+            
+            .status-info h3,
+            .status-gallery-container h3 {
+                font-size: 1.5rem;
+            }
+            
+            .highlight-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .highlight-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .status-gallery-container .main-image {
+                height: 250px;
+            }
+        }
+
+        /* Status Gallery Styles */
+        .status-gallery {
+            margin-top: 1.5rem;
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .gallery-main {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .gallery-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.1);
+        }
+        
+        .image-counter {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .gallery-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            opacity: 0.7;
+        }
+        
+        .thumbnail:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            border-color: var(--orange-accent);
+        }
+        
+        .thumbnail.active {
+            opacity: 1;
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Responsive Gallery */
+        @media (max-width: 768px) {
+            .gallery-thumbnails {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.6rem;
+            }
+            
+            .thumbnail {
+                height: 50px;
+            }
+            
+            .main-image {
+                height: 250px;
+            }
+            
+            .gallery-controls {
+                bottom: 10px;
+                padding: 6px 12px;
+            }
+            
+            .gallery-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+            
+            .image-counter {
+                font-size: 12px;
+                min-width: 40px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-thumbnails {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .main-image {
+                height: 200px;
+            }
+            
+            .status-gallery {
+                padding: 1rem;
+            }
+        }
+
+        /* 🎯 CRITICAL FIX: Override all conflicting CSS */
+        .map-overlay {
+            position: absolute !important;
+            top: 25px !important;
+            left: 25px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.2rem !important;
+            pointer-events: auto !important; /* Allow clicks on overlay */
+        }
+
+        /* 🔥 EMERGENCY OVERRIDE: Force HEART button to be clickable */
+        .heart-button-relocated,
+        button.heart-button-relocated,
+        .map-overlay button.heart-button-relocated {
+            pointer-events: auto !important;
+            position: absolute !important;
+            z-index: 99999 !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            cursor: pointer !important;
+            touch-action: manipulation !important;
         }
         
         .map-marker {
@@ -454,6 +782,168 @@
         
         .badge-text {
             white-space: nowrap;
+        }
+
+        /* 🎯 MOVE HEART BUTTON TO HUE HI TECH PARK POSITION */
+
+        /* Hide original HEART overlay if it exists */
+        .map-overlay div:contains("HEART"):not(.heart-relocated) {
+            display: none !important;
+        }
+
+        /* Style for relocated HEART button */
+        .heart-button-relocated {
+            position: absolute !important;
+            top: 45% !important; /* Position near Hue Hi Tech Park area */
+            left: 35% !important; /* Adjust based on map layout */
+            z-index: 100 !important;
+            
+            /* Button styling */
+            background: linear-gradient(135deg, #4A90E2, #357ABD) !important;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 25px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important;
+            border: 2px solid rgba(255, 255, 255, 0.9) !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            
+            /* Ensure visibility */
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            min-width: 80px !important;
+            text-align: center !important;
+            justify-content: center !important;
+        }
+
+        /* Hover effect for relocated HEART button */
+        .heart-button-relocated:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.6) !important;
+            background: linear-gradient(135deg, #357ABD, #2E6BA8) !important;
+        }
+
+        /* Icon for HEART button */
+        .heart-button-relocated::before {
+            content: "❤️" !important;
+            font-size: 16px !important;
+            margin-right: 4px !important;
+        }
+
+        /* 🎯 GOOGLE MAPS MODAL STYLES */
+        .google-maps-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .google-maps-modal.show {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 800px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .google-maps-modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            padding: 5px 10px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .maps-container {
+            width: 100%;
+            height: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .maps-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .modal-footer {
+            margin-top: 15px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive modal */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95vw;
+                height: 90vh;
+                padding: 15px;
+                margin: 20px;
+            }
+            
+            .maps-container {
+                height: calc(90vh - 150px);
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
+            }
         }
 
         /* Large Screen Responsive */
@@ -588,6 +1078,13 @@
                 padding: 0.8rem 1.5rem;
                 margin-bottom: 2rem;
             }
+
+            .heart-button-relocated {
+                top: 50% !important;
+                left: 40% !important;
+                font-size: 12px !important;
+                padding: 6px 12px !important;
+            }
         }
         
         @media (max-width: 480px) {
@@ -660,783 +1157,15 @@
             .map-marker, .info-badge {
                 justify-content: center;
             }
+
+            .heart-button-relocated {
+                top: 55% !important;
+                left: 45% !important;
+                font-size: 11px !important;
+                padding: 5px 10px !important;
+            }
         }
-    
-        
-/* 🎯 FIX MAP LAYOUT - URGENT SOLUTION */
-
-/* 1. Giảm padding để tận dụng không gian */
-.location-section {
-    padding: 50px 0 !important; /* Giảm từ 100px xuống 50px */
-}
-
-/* 2. Fix map container - không crop hình */
-.location-map {
-    height: auto !important; /* Thay vì fixed 700px */
-    aspect-ratio: 16/10 !important; /* Tỷ lệ phù hợp */
-    max-height: 600px !important; /* Giới hạn tối đa */
-}
-
-/* 3. Hiển thị full image - không crop */
-.map-image {
-    object-fit: contain !important; /* Thay vì cover */
-    object-position: center !important;
-    background: #f8f9fa; /* Background khi có khoảng trống */
-}
-
-/* 4. Tối ưu grid cho map lớn hơn */
-.location-grid {
-    grid-template-columns: 0.7fr 1.3fr !important; /* Map chiếm nhiều không gian hơn */
-    gap: 2rem 3rem !important;
-}
-
-/* 5. Responsive cho mobile */
-@media (max-width: 1024px) {
-    .location-section {
-        padding: 30px 0 !important;
-    }
-    
-    .location-map {
-        height: auto !important;
-        aspect-ratio: 4/3 !important;
-        max-height: 400px !important;
-    }
-    
-    .location-grid {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
-    }
-}
-
-/* 6. Alternative: Fullwidth map option */
-.location-map-fullwidth {
-    grid-column: 1 / -1 !important;
-    width: 100% !important;
-    height: auto !important;
-    aspect-ratio: 21/9 !important; /* Wide aspect ratio */
-    margin: 2rem 0 !important;
-}
-
-/* 7. Hover effect adjustment */
-.location-map:hover .map-image {
-    transform: scale(1.01) !important; /* Giảm zoom effect */
-}
-
-/* 8. Map overlay positioning for new layout */
-.map-overlay {
-    top: 15px !important;
-    left: 15px !important;
-}
-
-/* 9. Container max-width optimization */
-.location-section .container {
-    max-width: 1400px !important; /* Tăng max-width */
-}
-
-/* 10. Text content optimization */
-.location-content {
-    padding-right: 1rem !important;
-}
-
-/* 
-🎯 USAGE INSTRUCTIONS:
-1. Add this CSS to your main stylesheet
-2. Test the layout immediately 
-3. Adjust aspect-ratio if needed (16/10, 4/3, 21/9)
-4. Consider using fullwidth option for maximum impact
-*/
-
-
-/* 🎯 FIX SCROLL ISSUE - Disable Sticky + Optimize Height */
-
-/* 1. DISABLE STICKY POSITIONING - Root cause fix */
-.location-map {
-    position: static !important; /* Thay vì sticky */
-    top: unset !important;
-    height: auto !important; /* Thay vì 700px fixed */
-    aspect-ratio: 16/10 !important; /* Responsive height */
-    max-height: 600px !important; /* Giới hạn reasonable */
-}
-
-/* 2. Fix cho large screens */
-@media (min-width: 1200px) {
-    .location-map {
-        max-height: 700px !important;
-        aspect-ratio: 18/10 !important; /* Wider cho desktop */
-    }
-}
-
-@media (min-width: 1400px) {
-    .location-map {
-        max-height: 800px !important;
-        aspect-ratio: 2/1 !important; /* Even wider */
-    }
-}
-
-/* 3. Alternative: Smart sticky với proper calculations */
-.location-map.smart-sticky {
-    position: sticky !important;
-    top: 20px !important;
-    height: auto !important;
-    max-height: calc(100vh - 80px) !important; /* Responsive to viewport */
-    aspect-ratio: 16/10 !important;
-}
-
-/* 4. Fix grid alignment for new positioning */
-.location-grid {
-    align-items: start !important; /* Thay vì center */
-}
-
-/* 5. Ensure proper overflow handling */
-.location-section {
-    overflow: visible !important;
-}
-
-/* 6. Mobile scroll optimization */
-@media (max-width: 1024px) {
-    .location-map {
-        position: static !important; /* Always static on mobile */
-        aspect-ratio: 4/3 !important;
-        max-height: 400px !important;
-        margin-bottom: 1rem !important;
-    }
-}
-
-/* 7. Smooth scroll behavior */
-.location-section {
-    scroll-margin-top: 2rem;
-}
-
-/* 8. Fix any remaining height issues */
-.location-map img,
-.location-map .map-image {
-    height: 100% !important;
-    width: 100% !important;
-    object-fit: contain !important;
-    object-position: center !important;
-}
-
-/* 9. Debug helper - Remove when confirmed working */
-
-
-/* 10. Performance optimization */
-.location-map {
-    will-change: auto !important; /* Remove expensive transforms */
-    transform: none !important;
-}
-
-
-/* 🎯 SMART MAP FIX - Hiển thị full image + Giữ scroll effect */
-
-/* 1. SMART STICKY POSITIONING - Giữ scroll effect nhưng không crop */
-.location-map {
-    position: sticky !important;
-    top: 20px !important;
-    height: auto !important; /* Không fixed height */
-    max-height: calc(100vh - 60px) !important; /* Responsive to viewport */
-    aspect-ratio: 16/10 !important; /* Tỷ lệ phù hợp với hình gốc */
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
-    transition: all 0.3s ease !important;
-}
-
-/* 2. FULL IMAGE DISPLAY - Không crop hình */
-.map-image {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important; /* Hiển thị full image */
-    object-position: center !important;
-    background: #f8f9fa !important; /* Background khi có letterbox */
-    transition: transform 0.3s ease !important;
-}
-
-/* 3. RESPONSIVE BREAKPOINTS - Tối ưu cho từng màn hình */
-@media (min-width: 1200px) {
-    .location-map {
-        aspect-ratio: 18/10 !important; /* Wider cho desktop */
-        max-height: 600px !important;
-    }
-}
-
-@media (min-width: 1400px) {
-    .location-map {
-        aspect-ratio: 2/1 !important; /* Even wider cho large screens */
-        max-height: 700px !important;
-    }
-}
-
-@media (max-width: 1024px) {
-    .location-map {
-        position: static !important; /* Disable sticky on tablet */
-        aspect-ratio: 4/3 !important;
-        max-height: 500px !important;
-        margin-bottom: 2rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .location-map {
-        aspect-ratio: 1/1 !important; /* Square cho mobile */
-        max-height: 400px !important;
-        margin-bottom: 1.5rem !important;
-    }
-}
-
-/* 4. ENHANCED SCROLL BEHAVIOR */
-.location-section {
-    padding: 60px 0 !important; /* Tối ưu spacing */
-    scroll-margin-top: 2rem !important;
-}
-
-.location-grid {
-    display: grid !important;
-    grid-template-columns: 0.8fr 1.2fr !important; /* Map lớn hơn */
-    gap: 2rem 3rem !important;
-    align-items: start !important;
-}
-
-/* 5. HOVER EFFECTS - Giữ interactivity */
-.location-map:hover .map-image {
-    transform: scale(1.02) !important;
-    filter: brightness(1.05) !important;
-}
-
-.location-map:hover {
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
-}
-
-/* 6. PERFORMANCE OPTIMIZATION */
-.location-map {
-    will-change: transform !important;
-    contain: layout style paint !important;
-}
-
-.map-image {
-    will-change: transform, filter !important;
-}
-
-/* 7. FALLBACK cho browsers không support aspect-ratio */
-@supports not (aspect-ratio: 16/10) {
-    .location-map {
-        height: 500px !important;
-    }
-    
-    @media (max-width: 1024px) {
-        .location-map {
-            height: 400px !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .location-map {
-            height: 350px !important;
-        }
-    }
-}
-
-/* 8. MAP OVERLAY ADJUSTMENTS */
-.map-overlay {
-    top: 20px !important;
-    left: 20px !important;
-    z-index: 10 !important;
-}
-
-/* 9. ENSURE VISIBILITY */
-.location-map,
-.map-image {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-/* 10. GRID RESPONSIVE */
-@media (max-width: 1024px) {
-    .location-grid {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: auto auto !important;
-        gap: 2rem !important;
-    }
-    
-    .location-header {
-        grid-column: 1 !important;
-    }
-    
-    .location-content {
-        grid-column: 1 !important;
-        grid-row: 2 !important;
-    }
-    
-    .location-map {
-        grid-column: 1 !important;
-        grid-row: 3 !important;
-    }
-}
-
-/* 11. SMOOTH SCROLL */
-html {
-    scroll-behavior: smooth !important;
-}
-
-
-
-
-
-
-
-/* 🚫 HIDE 300MW DATA CENTER BUTTON - PRECISION TARGETING */
-
-/* Method 1: Hide by exact text content */
-.map-overlay div:contains("300MW Data Center") {
-    display: none !important;
-}
-
-/* Method 2: Hide specific overlay structure */
-.location-map .map-overlay > div:nth-child(2) {
-    display: none !important;
-}
-
-/* Method 3: Hide orange button with lightning icon + 300MW text */
-.map-overlay div[style*="orange"] div:contains("300MW"),
-.map-overlay div[style*="FFA726"] div:contains("300MW"),
-.map-overlay div[style*="#FF"] div:contains("300MW") {
-    display: none !important;
-}
-
-/* Method 4: Hide by structure - lightning icon + 300MW Data Center */
-.map-overlay div:has(div:contains("⚡")) + div:contains("300MW") {
-    display: none !important;
-}
-
-/* Method 5: Hide any div that contains both ⚡ and 300MW */
-.map-overlay div:contains("⚡"):contains("300MW") {
-    display: none !important;
-}
-
-/* Method 6: Universal fallback - hide any element with 300MW in text */
-*:contains("300MW Data Center") {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-}
-
-/* Method 7: Specific for your layout */
-.location-map .map-overlay .overlay-item:contains("300MW") {
-    display: none !important;
-}
-
-/* Method 8: Hide by data attributes if they exist */
-[data-label*="300MW"],
-[data-content*="300MW"],
-[aria-label*="300MW"] {
-    display: none !important;
-}
-
-/* Method 9: CSS-only solution for modern browsers */
-.map-overlay div {
-    &:has-text("300MW Data Center") {
-        display: none !important;
-    }
-}
-
-/* Method 10: Fallback for older approach */
-.data-center-overlay,
-.tooltip-300mw,
-.map-button-300mw {
-    display: none !important;
-}
-
-
-/* 🎯 OPTIMIZED MAP DISPLAY - Fix Cropping + Space Utilization */
-
-/* 🎯 OPTIMIZED MAP DISPLAY - Fix Cropping + Space Utilization */
-
-/* 1. OPTIMAL ASPECT RATIO - Match original image proportions */
-.location-map {
-    position: sticky !important;
-    top: 20px !important;
-    width: 100% !important;
-    height: auto !important;
-    
-    /* Aspect ratio optimized for full content display */
-    aspect-ratio: 1.6/1 !important; /* Wider ratio to show full map */
-    
-    /* Increase max-height to utilize available space */
-    max-height: calc(100vh - 40px) !important; /* Use more viewport */
-    min-height: 500px !important; /* Ensure minimum size */
-    
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
-    transition: all 0.3s ease !important;
-}
-
-/* 2. SMART IMAGE FITTING - Show full content with minimal letterboxing */
-.map-image {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important; /* Cover to fill space, but with smart positioning */
-    object-position: center top !important; /* Prioritize top content (Phong Dien Port) */
-    transition: transform 0.3s ease !important;
-}
-
-/* 3. RESPONSIVE BREAKPOINTS - Optimized for each screen size */
-@media (min-width: 1400px) {
-    .location-map {
-        aspect-ratio: 1.8/1 !important; /* Even wider for large screens */
-        max-height: calc(100vh - 60px) !important;
-        min-height: 600px !important;
-    }
-}
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-    .location-map {
-        aspect-ratio: 1.7/1 !important;
-        max-height: calc(100vh - 50px) !important;
-        min-height: 550px !important;
-    }
-}
-
-@media (min-width: 1024px) and (max-width: 1199px) {
-    .location-map {
-        aspect-ratio: 1.5/1 !important;
-        max-height: calc(100vh - 40px) !important;
-        min-height: 500px !important;
-    }
-}
-
-@media (max-width: 1023px) {
-    .location-map {
-        position: static !important; /* Disable sticky on smaller screens */
-        aspect-ratio: 1.4/1 !important;
-        max-height: 70vh !important;
-        min-height: 400px !important;
-        margin-bottom: 2rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .location-map {
-        aspect-ratio: 1.2/1 !important;
-        max-height: 60vh !important;
-        min-height: 350px !important;
-    }
-}
-
-/* 4. GRID OPTIMIZATION - Better space allocation */
-.location-grid {
-    display: grid !important;
-    grid-template-columns: 0.75fr 1.25fr !important; /* More space for map */
-    gap: 2rem 3rem !important;
-    align-items: start !important;
-    min-height: 600px !important; /* Ensure adequate container height */
-}
-
-@media (max-width: 1023px) {
-    .location-grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-        min-height: auto !important;
-    }
-}
-
-/* 5. SECTION SPACING OPTIMIZATION */
-.location-section {
-    padding: 40px 0 60px 0 !important; /* Reduced top, more bottom for balance */
-    min-height: 70vh !important; /* Ensure section takes adequate space */
-}
-
-/* 6. ALTERNATIVE: Full Width Option for Maximum Display */
-.location-map.fullwidth {
-    grid-column: 1 / -1 !important;
-    aspect-ratio: 2.2/1 !important;
-    max-height: 80vh !important;
-    margin: 2rem 0 !important;
-}
-
-/* 7. SMART POSITIONING for object-fit: cover */
-.map-image.smart-position {
-    object-position: center 20% !important; /* Show more of top area */
-}
-
-/* 8. FALLBACK for browsers without aspect-ratio support */
-@supports not (aspect-ratio: 1.6/1) {
-    .location-map {
-        height: 600px !important;
-    }
-    
-    @media (min-width: 1400px) {
-        .location-map {
-            height: 700px !important;
-        }
-    }
-    
-    @media (max-width: 1023px) {
-        .location-map {
-            height: 500px !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .location-map {
-            height: 400px !important;
-        }
-    }
-}
-
-/* 9. PERFORMANCE OPTIMIZATION */
-.location-map {
-    contain: layout style paint !important;
-    will-change: transform !important;
-}
-
-/* 10. HOVER ENHANCEMENT */
-.location-map:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2) !important;
-}
-
-.location-map:hover .map-image {
-    transform: scale(1.01) !important;
-}
-
-
-/* 🎯 OPTIMIZED MAP DISPLAY - Fix Cropping + Space Utilization */
-
-/* 🎯 OPTIMIZED MAP DISPLAY - Fix Cropping + Space Utilization */
-
-/* 1. OPTIMAL ASPECT RATIO - Match original image proportions */
-.location-map {
-    position: sticky !important;
-    top: 20px !important;
-    width: 100% !important;
-    height: auto !important;
-    
-    /* Aspect ratio optimized for full content display */
-    aspect-ratio: 1.6/1 !important; /* Wider ratio to show full map */
-    
-    /* Increase max-height to utilize available space */
-    max-height: calc(100vh - 40px) !important; /* Use more viewport */
-    min-height: 500px !important; /* Ensure minimum size */
-    
-    border-radius: 20px !important;
-    overflow: hidden !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important;
-    transition: all 0.3s ease !important;
-}
-
-/* 2. SMART IMAGE FITTING - Show full content with minimal letterboxing */
-.map-image {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important; /* Cover to fill space, but with smart positioning */
-    object-position: center top !important; /* Prioritize top content (Phong Dien Port) */
-    transition: transform 0.3s ease !important;
-}
-
-/* 3. RESPONSIVE BREAKPOINTS - Optimized for each screen size */
-@media (min-width: 1400px) {
-    .location-map {
-        aspect-ratio: 1.8/1 !important; /* Even wider for large screens */
-        max-height: calc(100vh - 60px) !important;
-        min-height: 600px !important;
-    }
-}
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-    .location-map {
-        aspect-ratio: 1.7/1 !important;
-        max-height: calc(100vh - 50px) !important;
-        min-height: 550px !important;
-    }
-}
-
-@media (min-width: 1024px) and (max-width: 1199px) {
-    .location-map {
-        aspect-ratio: 1.5/1 !important;
-        max-height: calc(100vh - 40px) !important;
-        min-height: 500px !important;
-    }
-}
-
-@media (max-width: 1023px) {
-    .location-map {
-        position: static !important; /* Disable sticky on smaller screens */
-        aspect-ratio: 1.4/1 !important;
-        max-height: 70vh !important;
-        min-height: 400px !important;
-        margin-bottom: 2rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .location-map {
-        aspect-ratio: 1.2/1 !important;
-        max-height: 60vh !important;
-        min-height: 350px !important;
-    }
-}
-
-/* 4. GRID OPTIMIZATION - Better space allocation */
-.location-grid {
-    display: grid !important;
-    grid-template-columns: 0.75fr 1.25fr !important; /* More space for map */
-    gap: 2rem 3rem !important;
-    align-items: start !important;
-    min-height: 600px !important; /* Ensure adequate container height */
-}
-
-@media (max-width: 1023px) {
-    .location-grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-        min-height: auto !important;
-    }
-}
-
-/* 5. SECTION SPACING OPTIMIZATION */
-.location-section {
-    padding: 40px 0 60px 0 !important; /* Reduced top, more bottom for balance */
-    min-height: 70vh !important; /* Ensure section takes adequate space */
-}
-
-/* 6. ALTERNATIVE: Full Width Option for Maximum Display */
-.location-map.fullwidth {
-    grid-column: 1 / -1 !important;
-    aspect-ratio: 2.2/1 !important;
-    max-height: 80vh !important;
-    margin: 2rem 0 !important;
-}
-
-/* 7. SMART POSITIONING for object-fit: cover */
-.map-image.smart-position {
-    object-position: center 20% !important; /* Show more of top area */
-}
-
-/* 8. FALLBACK for browsers without aspect-ratio support */
-@supports not (aspect-ratio: 1.6/1) {
-    .location-map {
-        height: 600px !important;
-    }
-    
-    @media (min-width: 1400px) {
-        .location-map {
-            height: 700px !important;
-        }
-    }
-    
-    @media (max-width: 1023px) {
-        .location-map {
-            height: 500px !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .location-map {
-            height: 400px !important;
-        }
-    }
-}
-
-/* 9. PERFORMANCE OPTIMIZATION */
-.location-map {
-    contain: layout style paint !important;
-    will-change: transform !important;
-}
-
-/* 10. HOVER ENHANCEMENT */
-.location-map:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.2) !important;
-}
-
-.location-map:hover .map-image {
-    transform: scale(1.01) !important;
-}
-
-
-
-/* 🎯 MOVE HEART BUTTON TO HUE HI TECH PARK POSITION */
-
-/* Hide original HEART overlay if it exists */
-.map-overlay div:contains("HEART"):not(.heart-relocated) {
-    display: none !important;
-}
-
-/* Style for relocated HEART button */
-.heart-button-relocated {
-    position: absolute !important;
-    top: 45% !important; /* Position near Hue Hi Tech Park area */
-    left: 35% !important; /* Adjust based on map layout */
-    z-index: 100 !important;
-    
-    /* Button styling */
-    background: linear-gradient(135deg, #4A90E2, #357ABD) !important;
-    color: white !important;
-    padding: 8px 16px !important;
-    border-radius: 25px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important;
-    border: 2px solid rgba(255, 255, 255, 0.9) !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    
-    /* Ensure visibility */
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    min-width: 80px !important;
-    text-align: center !important;
-    justify-content: center !important;
-}
-
-/* Hover effect for relocated HEART button */
-.heart-button-relocated:hover {
-    transform: scale(1.05) !important;
-    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.6) !important;
-    background: linear-gradient(135deg, #357ABD, #2E6BA8) !important;
-}
-
-/* Icon for HEART button */
-.heart-button-relocated::before {
-    content: "📍" !important;
-    font-size: 16px !important;
-    margin-right: 4px !important;
-}
-
-/* Responsive positioning */
-@media (max-width: 1024px) {
-    .heart-button-relocated {
-        top: 50% !important;
-        left: 40% !important;
-        font-size: 12px !important;
-        padding: 6px 12px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .heart-button-relocated {
-        top: 55% !important;
-        left: 45% !important;
-        font-size: 11px !important;
-        padding: 5px 10px !important;
-    }
-}
-
-/* Alternative positioning if above doesn't work well */
-.heart-button-relocated.alternative-position {
-    top: 40% !important;
-    left: 30% !important;
-}
-
-/* Make sure it appears above other elements */
-.location-map {
-    position: relative !important;
-}
-
-
-</style>
+    </style>
 </head>
 <body>
 
@@ -1458,6 +1187,30 @@ html {
         </div>
     </header>
 
+    <!-- Simple Google Maps Modal -->
+    <div id="googleMapsModal" class="google-maps-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">❤️ HEART Data Center Location</h3>
+                <button class="modal-close" onclick="closeGoogleMaps()">&times;</button>
+            </div>
+            
+            <div class="maps-container">
+                <iframe 
+                    class="maps-iframe"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65648.52412755256!2d107.72062545!3d16.331499949999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3141977e5e0e8e6d%3A0x2267c15f5ac7aae6!2zTOG7mWMgQuG7lW4sIFR4LiBIxrDGoW5nIFRo4buneSwgVGjDoG5oIHBo4buRIEh14bq_LCBWaeG7h3QgTmFt!5e1!3m2!1svi!2s!4v1757663741666!5m2!1svi!2s" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+            
+            <div class="modal-footer">
+                <p>HEART Data Center - Hue Hi-Tech Park, Central Vietnam</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -1474,25 +1227,25 @@ html {
     <section class="stats-section">
         <div class="container">
             <div class="stats-grid">
-                <div class="stat-item fade-in">
+                <div class="stat-item">
                     <span class="stat-number">300</span>
-                    <div class="stat-label">MW</div>
-                    <div class="stat-description">Data Center Capacity</div>
+                    <div class="stat-label">MW Capacity</div>
+                    <div class="stat-description">AI-optimized hyperscale power</div>
                 </div>
-                <div class="stat-item fade-in">
+                <div class="stat-item">
                     <span class="stat-number">500</span>
-                    <div class="stat-label">kV</div>
-                    <div class="stat-description">Onsite Grid Power</div>
+                    <div class="stat-label">kV Onsite Grid</div>
+                    <div class="stat-description">Direct power infrastructure</div>
                 </div>
-                <div class="stat-item fade-in">
-                    <span class="stat-number">4</span>
-                    <div class="stat-label">Transmission Lines</div>
-                    <div class="stat-description">Grid Connections</div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <div class="stat-label">Operations</div>
+                    <div class="stat-description">Continuous AI processing</div>
                 </div>
-                <div class="stat-item fade-in">
-                    <span class="stat-number">99.99</span>
-                    <div class="stat-label">%</div>
-                    <div class="stat-description">Uptime Guarantee</div>
+                <div class="stat-item">
+                    <span class="stat-number">99.99%</span>
+                    <div class="stat-label">Uptime</div>
+                    <div class="stat-description">Enterprise reliability</div>
                 </div>
             </div>
         </div>
@@ -1502,21 +1255,14 @@ html {
     <section class="about-preview">
         <div class="container">
             <div class="about-grid">
-                <div class="about-content fade-in">
-                    <h2>Leading Hyperscale Data Center in Vietnam</h2>
-                    <p>
-                        HEART represents Vietnam's most ambitious leap into the future of hyperscale data infrastructure.
-                        Our 300MW AI-optimized facility in Hue Hi-Tech State-owned Park features a 500kV onsite grid with 4 existing 
-                        transmission lines, connecting directly to Da Nang's international submarine cables.
-                    </p>
-                    <p>
-                        From AI computing to cloud services, from data processing to international connectivity,
-                        HEART is where Vietnam's digital transformation accelerates.
-                    </p>
-                    <a href="about.html" class="cta-button">Learn More About HEART</a>
+                <div class="about-content">
+                    <h2>Strategic Location in Central Vietnam</h2>
+                    <p>HEART is strategically positioned in Hue Hi-Tech State-owned Park, offering unparalleled advantages for AI and hyperscale computing infrastructure.</p>
+                    <p>With direct access to Vietnam's backbone infrastructure and proximity to major economic centers, HEART represents the future of data center technology in Southeast Asia.</p>
+                    <a href="about.html" class="hero-cta">Learn More</a>
                 </div>
-                <div class="about-image fade-in">
-                    🏢
+                <div class="about-image">
+                    🚀
                 </div>
             </div>
         </div>
@@ -1525,27 +1271,22 @@ html {
     <!-- Location Section -->
     <section class="location-section">
         <div class="container">
-            <h2 class="page-title text-center">HEART</h2>
-            <div class="title-underline" style="margin: 0 auto 30px auto;"></div>
-            <p class="location-subtitle">Vietnam's First 300MW AI-Optimized Hyperscale Data Center</p>
+            <div class="location-header">
+                <h2>Strategic Location</h2>
+                <div class="location-subtitle">Central Vietnam's Premier Technology Hub</div>
+            </div>
             
             <div class="location-grid">
-                <div class="location-header fade-in">
-                    <h3>Strategic Location in Central Vietnam</h3>
-                    <p>
-                        Strategically positioned in Hue Hi-Tech State-owned Park with 500kV onsite grid, 
-                        4 existing transmission lines, and direct connection to Da Nang's international submarine cables.
-                    </p>
-                </div>
-                
-                <div class="location-content fade-in">
+                <div class="location-content">
+                    <h3>Hue Hi-Tech State-owned Park</h3>
+                    <p>HEART is strategically located in Central Vietnam, positioned to serve as the digital backbone connecting North and South Vietnam with seamless international connectivity.</p>
+                    
                     <div class="location-categories">
-                        <!-- AIR Section -->
                         <div class="location-category">
-                            <h4 class="category-title">
-                                <span class="category-icon">✈️</span>
-                                AIR CONNECTIVITY
-                            </h4>
+                            <div class="category-title">
+                                <div class="category-icon">✈️</div>
+                                <span>Air Connectivity</span>
+                            </div>
                             <div class="location-features">
                                 <div class="location-feature">
                                     <div class="feature-content">
@@ -1561,13 +1302,12 @@ html {
                                 </div>
                             </div>
                         </div>
-
-                        <!-- LAND Section -->
+                        
                         <div class="location-category">
-                            <h4 class="category-title">
-                                <span class="category-icon">🛣️</span>
-                                LAND TRANSPORT
-                            </h4>
+                            <div class="category-title">
+                                <div class="category-icon">🛣️</div>
+                                <span>Land Transport</span>
+                            </div>
                             <div class="location-features">
                                 <div class="location-feature">
                                     <div class="feature-content">
@@ -1575,142 +1315,86 @@ html {
                                         <p>Direct access to North-South Expressway and National Highway 1A</p>
                                     </div>
                                 </div>
-                                <div class="location-feature">
-                                    <div class="feature-content">
-                                        <h5>Strategic Position</h5>
-                                        <p>Connected to coastal roads with future highway expansions planned</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- SEA Section -->
-                        <div class="location-category">
-                            <h4 class="category-title">
-                                <span class="category-icon">🚢</span>
-                                SEA ACCESS
-                            </h4>
-                            <div class="location-features">
-                                <div class="location-feature">
-                                    <div class="feature-content">
-                                        <h5>Major Seaports</h5>
-                                        <p>Chan May Port • Thuan An Port • Da Nang Port (regional hub)</p>
-                                    </div>
-                                </div>
-                                <div class="location-feature">
-                                    <div class="feature-content">
-                                        <h5>Trade Capabilities</h5>
-                                        <p>General and containerized trade, plus specialty shipping services</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- POWER Section -->
-                        <div class="location-category">
-                            <h4 class="category-title">
-                                <span class="category-icon">⚡</span>
-                                POWER INFRASTRUCTURE
-                            </h4>
-                            <div class="location-features">
-                                <div class="location-feature">
-                                    <div class="feature-content">
-                                        <h5>500kV Onsite Grid</h5>
-                                        <p>4 existing transmission lines with direct grid connection</p>
-                                    </div>
-                                </div>
-                                <div class="location-feature">
-                                    <div class="feature-content">
-                                        <h5>International Connectivity</h5>
-                                        <p>Connected to Da Nang's international submarine cables</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="location-map fade-in emergency-debug">
-                    <picture>
-                        <source type="image/webp" srcset="assets/images/hue-location-map-mobile.webp 400w,
-                                assets/images/hue-location-map-tablet.webp 800w,
-                                assets/images/hue-location-map-desktop.webp 1200w,
-                                assets/images/hue-location-map-high.webp 1600w"
-                                sizes="(max-width: 768px) 400px,
-                                       (max-width: 1024px) 800px,
-                                       (max-width: 1440px) 1200px,
-                                       1600px">
-                        <img srcset="assets/images/hue-location-map-mobile.jpg 400w,
-                                    assets/images/hue-location-map-tablet.jpg 800w,
-                                    assets/images/hue-location-map-desktop.jpg 1200w,
-                                    assets/images/hue-location-map-high.jpg 1600w"
-                             sizes="(max-width: 768px) 400px,
-                                    (max-width: 1024px) 800px,
-                                    (max-width: 1440px) 1200px,
-                                    1600px"
-                             src="assets/images/hue-location-map-desktop.jpg" 
-                             alt="HEART Location Map - Enhanced High Quality" 
-                             class="map-image"
-                             loading="lazy">
-                    </picture>
-                    
+                <div class="location-map">
+                    <img src="assets/images/hue-location-map-high.jpg" alt="HEART Location Map" class="map-image">
                     <div class="map-overlay">
-                        <div class="map-marker">
-                            <span class="marker-icon">📍</span>
-                            <span class="marker-text">HEART</span>
-                        </div>
-                        <div class="map-info">
-                            <div class="info-badge">
-                                <span class="badge-icon">⚡</span>
-                                <span class="badge-text">300MW Data Center</span>
-                            </div>
-                        </div>
+                        <!-- HEART Button - clickable to show Google Maps -->
+                        <button class="heart-button-relocated" onclick="showGoogleMaps()" type="button" style="background: linear-gradient(135deg, #4A90E2, #357ABD) !important; color: white !important; padding: 12px 20px !important; border: none !important; border-radius: 25px !important; font-size: 16px !important; font-weight: 600 !important; cursor: pointer !important; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important; position: absolute !important; top: 45% !important; left: 35% !important; z-index: 9999 !important; pointer-events: auto !important;">
+                            ❤️ HEART
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features Grid -->
-    <section class="container" style="padding: 80px 0;">
-        <h2 class="page-title text-center">Why Choose HEART?</h2>
-        <div class="title-underline" style="margin: 0 auto 50px auto;"></div>
-        
-        <div class="features-grid">
-            <div class="feature-card fade-in">
-                <div class="feature-icon">⚡</div>
-                <h3>300MW Power Capacity</h3>
-                <p>Massive 300MW data center capacity with 500kV onsite grid and 4 transmission lines</p>
+    <!-- Current Status Section -->
+    <section class="current-status-section">
+        <div class="container">
+            <div class="status-header">
+                <h2>Current Status</h2>
+                <p class="status-subtitle">Real-time Development Progress of HEART Data Center</p>
             </div>
             
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🌐</div>
-                <h3>International Connectivity</h3>
-                <p>Direct connection to Da Nang's international submarine cables for global reach</p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🧠</div>
-                <h3>AI-Optimized Infrastructure</h3>
-                <p>Purpose-built hyperscale data center optimized for AI workloads and machine learning</p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🚢</div>
-                <h3>Strategic Location</h3>
-                <p>Central Vietnam location with access to Chan May, Thuan An, and Da Nang ports</p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🛡️</div>
-                <h3>99.99% Uptime</h3>
-                <p>Enterprise-grade reliability with redundant systems and disaster recovery capabilities</p>
-            </div>
-            
-            <div class="feature-card fade-in">
-                <div class="feature-icon">🏗️</div>
-                <h3>Scalable Infrastructure</h3>
-                <p>Modular design allowing rapid expansion to meet growing data processing demands</p>
+            <div class="status-content">
+                <div class="status-info">
+                    <h3>Development Progress</h3>
+                    <p>Follow the latest construction and infrastructure development phases of Vietnam's first 300MW AI-optimized hyperscale data center. From site preparation to advanced infrastructure deployment, witness the transformation of Central Vietnam's technology landscape.</p>
+                    
+                    <div class="progress-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🏗️</div>
+                            <div class="highlight-content">
+                                <h4>Site Preparation</h4>
+                                <p>Land clearing and infrastructure planning completed</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🌊</div>
+                            <div class="highlight-content">
+                                <h4>Water Infrastructure</h4>
+                                <p>River access and water management systems development</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">⚡</div>
+                            <div class="highlight-content">
+                                <h4>Power Grid Integration</h4>
+                                <p>500kV onsite grid connection in progress</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-gallery-container">
+                    <h3>Site Development Portfolio</h3>
+                    <div class="status-gallery">
+                        <div class="gallery-main">
+                            <img id="mainImage" src="assets/images/heart-current-status-1.jpg" alt="HEART Development Progress" class="main-image">
+                            <div class="gallery-controls">
+                                <button class="gallery-btn prev-btn" onclick="changeImage(-1)">‹</button>
+                                <span class="image-counter">1 / 8</span>
+                                <button class="gallery-btn next-btn" onclick="changeImage(1)">›</button>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-thumbnails">
+                            <img src="assets/images/heart-current-status-1.jpg" alt="Site Development" class="thumbnail active" onclick="showImage(0)">
+                            <img src="assets/images/heart-current-status-2.jpg" alt="River Landscape" class="thumbnail" onclick="showImage(1)">
+                            <img src="assets/images/heart-current-status-3.jpg" alt="Site Panorama" class="thumbnail" onclick="showImage(2)">
+                            <img src="assets/images/heart-current-status-4.jpg" alt="Development Area" class="thumbnail" onclick="showImage(3)">
+                            <img src="assets/images/heart-current-status-5.jpg" alt="Forest Water View" class="thumbnail" onclick="showImage(4)">
+                            <img src="assets/images/heart-current-status-6.jpg" alt="Aerial River View" class="thumbnail" onclick="showImage(5)">
+                            <img src="assets/images/heart-current-status-7.jpg" alt="Construction Equipment" class="thumbnail" onclick="showImage(6)">
+                            <img src="assets/images/heart-current-status-8.jpg" alt="Current Status Overview" class="thumbnail" onclick="showImage(7)">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1718,331 +1402,175 @@ html {
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
-            <h2>Ready to Power Your Digital Future?</h2>
-            <p>Join HEART and be part of Vietnam's hyperscale data center revolution</p>
+            <h2>Ready to Power Your AI Future?</h2>
+            <p>Join the digital transformation with Vietnam's most advanced hyperscale data center</p>
             <div class="hero-buttons">
-                <a href="investment.html" class="hero-cta">Investment Opportunities</a>
-                <a href="contact.html" class="hero-secondary">Get in Touch</a>
+                <a href="contact.html" class="hero-cta">Contact Us Today</a>
+                <a href="investment.html" class="hero-secondary">Investment Opportunities</a>
             </div>
         </div>
     </section>
 
-    <!-- JavaScript -->
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 HEART - Vietnam's First 300MW AI-Optimized Hyperscale Data Center</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Google Maps Modal -->
     <script>
-        // Smooth scroll animation for fade-in elements
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationDelay = '0s';
-                    entry.target.classList.add('fade-in');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-        
-        // Navigation active state management
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav a');
-            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        // Function to show Google Maps modal
+        function showGoogleMaps() {
+            console.log('showGoogleMaps function called!'); // Debug log
+            const modal = document.getElementById('googleMapsModal');
+            console.log('Modal element found:', modal); // Debug log
             
-            navLinks.forEach(link => {
-                const linkPage = link.getAttribute('href');
-                if (linkPage === currentPage) {
-                    link.classList.add('active');
-                } else {
-                    link.classList.remove('active');
+            if (modal) {
+                modal.style.display = 'flex';
+                // Add slight delay for smooth animation
+                setTimeout(() => {
+                    modal.classList.add('show');
+                    console.log('Modal should now be visible'); // Debug log
+                }, 10);
+            } else {
+                console.error('Modal element not found!');
+            }
+        }
+
+        // Function to close Google Maps modal
+        function closeGoogleMaps() {
+            console.log('closeGoogleMaps function called!'); // Debug log
+            const modal = document.getElementById('googleMapsModal');
+            if (modal) {
+                modal.classList.remove('show');
+                // Wait for animation to complete before hiding
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    console.log('Modal hidden'); // Debug log
+                }, 300);
+            }
+        }
+
+        // Close modal when clicking outside of it
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, setting up event listeners'); // Debug log
+            const modal = document.getElementById('googleMapsModal');
+            
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeGoogleMaps();
+                    }
+                });
+                
+                // Close modal with Escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && modal.classList.contains('show')) {
+                        closeGoogleMaps();
+                    }
+                });
+                
+                console.log('Event listeners setup successfully'); // Debug log
+            } else {
+                console.error('Modal not found during DOMContentLoaded');
+            }
+        });
+
+        // Image Gallery Functionality
+        let currentImageIndex = 0;
+        const imageList = [
+            'assets/images/heart-current-status-1.jpg',
+            'assets/images/heart-current-status-2.jpg', 
+            'assets/images/heart-current-status-3.jpg',
+            'assets/images/heart-current-status-4.jpg',
+            'assets/images/heart-current-status-5.jpg',
+            'assets/images/heart-current-status-6.jpg',
+            'assets/images/heart-current-status-7.jpg',
+            'assets/images/heart-current-status-8.jpg'
+        ];
+
+        const imageDescriptions = [
+            'Site Development Area',
+            'Natural River Landscape', 
+            'Site Panorama with Infrastructure',
+            'Development Zone Overview',
+            'Forest and Water Resources',
+            'Aerial River View',
+            'Construction Equipment on Site',
+            'Current Status Overview'
+        ];
+
+        function showImage(index) {
+            if (index < 0 || index >= imageList.length) return;
+            
+            currentImageIndex = index;
+            const mainImage = document.getElementById('mainImage');
+            const counter = document.querySelector('.image-counter');
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            
+            if (mainImage) {
+                mainImage.src = imageList[index];
+                mainImage.alt = imageDescriptions[index];
+            }
+            
+            if (counter) {
+                counter.textContent = `${index + 1} / ${imageList.length}`;
+            }
+            
+            // Update active thumbnail
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function changeImage(direction) {
+            const newIndex = currentImageIndex + direction;
+            
+            if (newIndex >= imageList.length) {
+                showImage(0); // Loop to first image
+            } else if (newIndex < 0) {
+                showImage(imageList.length - 1); // Loop to last image
+            } else {
+                showImage(newIndex);
+            }
+        }
+
+        // Auto-advance slideshow (optional)
+        function startAutoSlideshow() {
+            setInterval(() => {
+                changeImage(1);
+            }, 5000); // Change image every 5 seconds
+        }
+
+        // Initialize gallery when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize first image
+            showImage(0);
+            
+            // Uncomment to enable auto-slideshow
+            // startAutoSlideshow();
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    changeImage(-1);
+                } else if (e.key === 'ArrowRight') {
+                    changeImage(1);
                 }
             });
         });
-        
-        // Smooth scrolling for anchor links
+
+        // Add smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Performance monitoring and initialization
-        window.addEventListener('load', function() {
-            console.log('🎯 HEART Homepage loaded successfully!');
-            console.log('✨ Hero section: Ready');
-            console.log('📊 Stats section: Active');
-            console.log('📱 Responsive design: Ready');
-            console.log('🚀 Performance optimized: Yes');
-            
-        });
-        
-        // Add dynamic counter animation for stats
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-number');
-            
-            counters.forEach(counter => {
-                const target = parseInt(counter.textContent.replace(/\D/g, ''));
-                const suffix = counter.textContent.replace(/\d/g, '');
-                let current = 0;
-                const increment = target / 50;
-                
-                const updateCounter = () => {
-                    if (current < target) {
-                        current += increment;
-                        counter.textContent = Math.ceil(current) + suffix;
-                        setTimeout(updateCounter, 50);
-                    } else {
-                        counter.textContent = target + suffix;
-                    }
-                };
-                
-                // Start animation when element comes into view
-                const counterObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            updateCounter();
-                            counterObserver.unobserve(entry.target);
-                        }
-                    });
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-                
-                counterObserver.observe(counter);
             });
-        }
-        
-        document.addEventListener('DOMContentLoaded', animateCounters);
+        });
     </script>
-    
-    <!-- Cache Busting System -->
-    <script src="js/cache-buster.js"></script>
-    
-    <!-- Public Access System -->
-    <script src="js/public-access.js"></script>
-    
-    <!-- 🎯 MAP SCROLL FIX - JavaScript backup solution -->
-    <script src="map-scroll-fix.js"></script>
-
-<script>
-// 🚫 Hide 300MW Data Center Button - JavaScript Backup Solution
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔍 Searching for 300MW Data Center button...');
-    
-    function hide300MWButton() {
-        // Method 1: Find by text content
-        const allElements = document.querySelectorAll('*');
-        let hiddenCount = 0;
-        
-        allElements.forEach(element => {
-            const text = element.textContent || element.innerText || '';
-            
-            // Hide if contains "300MW Data Center"
-            if (text.includes('300MW Data Center') && !text.includes('Vietnam')) {
-                // Don't hide if it's part of a larger text block
-                if (text.length < 50) {
-                    element.style.display = 'none';
-                    element.style.visibility = 'hidden';
-                    element.style.opacity = '0';
-                    console.log('🚫 Hidden element:', element);
-                    hiddenCount++;
-                }
-            }
-            
-            // Hide if contains just "300MW" and is small element
-            if (text.trim() === '300MW Data Center' || 
-                (text.includes('300MW') && text.includes('⚡') && text.length < 30)) {
-                element.style.display = 'none';
-                element.style.visibility = 'hidden';
-                element.style.opacity = '0';
-                console.log('🚫 Hidden 300MW element:', element);
-                hiddenCount++;
-            }
-        });
-        
-        // Method 2: Find by common attributes
-        const selectors = [
-            '[data-label*="300MW"]',
-            '[aria-label*="300MW"]', 
-            '[title*="300MW"]',
-            '.data-center-overlay',
-            '.tooltip-300mw',
-            '.map-button-300mw'
-        ];
-        
-        selectors.forEach(selector => {
-            const elements = document.querySelectorAll(selector);
-            elements.forEach(el => {
-                el.style.display = 'none';
-                hiddenCount++;
-            });
-        });
-        
-        // Method 3: Find in map overlay specifically
-        const mapOverlays = document.querySelectorAll('.map-overlay, .location-map .overlay');
-        mapOverlays.forEach(overlay => {
-            const children = overlay.children;
-            for (let child of children) {
-                const text = child.textContent || child.innerText || '';
-                if (text.includes('300MW') && text.length < 50) {
-                    child.style.display = 'none';
-                    console.log('🚫 Hidden overlay element:', child);
-                    hiddenCount++;
-                }
-            }
-        });
-        
-        console.log(`✅ Hidden ${hiddenCount} elements containing 300MW Data Center`);
-        return hiddenCount;
-    }
-    
-    // Run immediately
-    hide300MWButton();
-    
-    // Run again after a short delay (in case content loads dynamically)
-    setTimeout(hide300MWButton, 500);
-    setTimeout(hide300MWButton, 1000);
-    
-    // Set up observer for dynamic content
-    const observer = new MutationObserver(function(mutations) {
-        let shouldCheck = false;
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                shouldCheck = true;
-            }
-        });
-        
-        if (shouldCheck) {
-            setTimeout(hide300MWButton, 100);
-        }
-    });
-    
-    // Start observing
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-    
-    console.log('👀 Observer set up to hide 300MW button if it appears dynamically');
-});
-</script>
-
-<script>
-// 🎯 JavaScript to move HEART button to Hue Hi Tech Park position
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎯 Moving HEART button to Hue Hi Tech Park position...');
-    
-    function createRelocatedHeartButton() {
-        // Find the map container
-        const mapContainer = document.querySelector('.location-map, .map-container');
-        
-        if (!mapContainer) {
-            console.log('❌ Map container not found');
-            return;
-        }
-        
-        // Remove any existing relocated button
-        const existingButton = mapContainer.querySelector('.heart-button-relocated');
-        if (existingButton) {
-            existingButton.remove();
-        }
-        
-        // Create new HEART button
-        const heartButton = document.createElement('div');
-        heartButton.className = 'heart-button-relocated';
-        heartButton.textContent = 'HEART';
-        heartButton.title = 'HEART - 300MW Data Center Location';
-        
-        // Add click handler
-        heartButton.addEventListener('click', function() {
-            console.log('🎯 HEART button clicked!');
-            // Add your click handler logic here
-            alert('HEART - Vietnam's First 300MW AI-Optimized Hyperscale Data Center');
-        });
-        
-        // Add button to map container
-        mapContainer.style.position = 'relative';
-        mapContainer.appendChild(heartButton);
-        
-        console.log('✅ HEART button relocated to Hue Hi Tech Park position');
-        
-        return heartButton;
-    }
-    
-    // Function to position button precisely
-    function positionHeartButton() {
-        const heartButton = document.querySelector('.heart-button-relocated');
-        const mapImage = document.querySelector('.map-image, .location-map img');
-        
-        if (!heartButton || !mapImage) return;
-        
-        // Get map dimensions
-        const mapRect = mapImage.getBoundingClientRect();
-        const mapContainer = heartButton.parentElement.getBoundingClientRect();
-        
-        // Calculate relative position for Hue Hi Tech Park area
-        // Based on typical map layout where Hue Hi Tech Park is roughly center-left
-        const relativeX = 0.35; // 35% from left
-        const relativeY = 0.45; // 45% from top
-        
-        // Set position
-        heartButton.style.left = (relativeX * 100) + '%';
-        heartButton.style.top = (relativeY * 100) + '%';
-        
-        console.log('📍 HEART button positioned at', relativeX * 100 + '%', relativeY * 100 + '%');
-    }
-    
-    // Create button immediately
-    createRelocatedHeartButton();
-    
-    // Position after a short delay to ensure map is loaded
-    setTimeout(positionHeartButton, 500);
-    
-    // Reposition on window resize
-    window.addEventListener('resize', positionHeartButton);
-    
-    // Observer for dynamic content changes
-    const observer = new MutationObserver(function(mutations) {
-        let shouldReposition = false;
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList' || mutation.type === 'attributes') {
-                shouldReposition = true;
-            }
-        });
-        
-        if (shouldReposition) {
-            setTimeout(function() {
-                if (!document.querySelector('.heart-button-relocated')) {
-                    createRelocatedHeartButton();
-                }
-                positionHeartButton();
-            }, 100);
-        }
-    });
-    
-    // Start observing
-    const mapContainer = document.querySelector('.location-map, .map-container');
-    if (mapContainer) {
-        observer.observe(mapContainer, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['style', 'class']
-        });
-    }
-    
-    console.log('👀 Observer set up for HEART button positioning');
-});
-</script>
 
 </body>
 </html>
