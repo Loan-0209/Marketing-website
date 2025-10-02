@@ -13,10 +13,462 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
     
+    <!-- Organization Structure Styles -->
+    <style>
+        .org-structure-container {
+            margin: 40px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .org-tab-container {
+            display: flex;
+            background: #ecf0f1;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .org-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background: #ecf0f1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #2c3e50;
+            border: none;
+        }
+        
+        .org-tab.active {
+            background: white;
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .org-tab:hover {
+            background: #d5dbdb;
+        }
+        
+        .org-tab-content {
+            display: none;
+            padding: 30px;
+            background: white;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .org-tab-content.active {
+            display: block;
+        }
+        
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .org-level {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .position-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .position-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .gov-level-1 .position-box { border-left-color: #e74c3c; background: #fff5f5; }
+        .gov-level-2 .position-box { border-left-color: #3498db; background: #f0f8ff; }
+        .gov-level-3 .position-box { border-left-color: #2ecc71; background: #f0fff0; }
+        
+        .private-level-1 .position-box { border-left-color: #9b59b6; background: #faf5ff; }
+        .private-level-2 .position-box { border-left-color: #e67e22; background: #fff8f0; }
+        .private-level-3 .position-box { border-left-color: #1abc9c; background: #f0fffc; }
+        
+        .position-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .position-staff {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        
+        .position-count {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            display: inline-block;
+        }
+        
+        .org-connector {
+            width: 2px;
+            height: 20px;
+            background: #bdc3c7;
+            margin: 0 auto;
+        }
+        
+        .org-level-label {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+        
+        .org-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .org-stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .org-stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .org-stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .org-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .org-table th {
+            background: #34495e;
+            color: white;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .org-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        
+        .org-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .org-category-header {
+            background: #3498db !important;
+            color: white !important;
+            font-weight: 600;
+        }
+        
+        .org-legal-framework {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .org-legal-framework h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+        
+        .org-legal-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .org-legal-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9em;
+        }
+        
+        .org-legal-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="stylesheet" href="css/org-structure.css">
+    
     <!-- Preload fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Organization Structure Styles -->
+    <style>
+        .org-structure-container {
+            margin: 40px 0;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        
+        .org-tab-container {
+            display: flex;
+            background: #ecf0f1;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+        
+        .org-tab {
+            flex: 1;
+            padding: 18px 20px;
+            text-align: center;
+            background: #ecf0f1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #2c3e50;
+            border: none;
+        }
+        
+        .org-tab.active {
+            background: white;
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .org-tab:hover {
+            background: #d5dbdb;
+        }
+        
+        .org-tab-content {
+            display: none;
+            padding: 30px;
+            background: white;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .org-tab-content.active {
+            display: block;
+        }
+        
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .org-level {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .position-box {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid;
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .position-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .gov-level-1 .position-box { border-left-color: #e74c3c; background: #fff5f5; }
+        .gov-level-2 .position-box { border-left-color: #3498db; background: #f0f8ff; }
+        .gov-level-3 .position-box { border-left-color: #2ecc71; background: #f0fff0; }
+        
+        .private-level-1 .position-box { border-left-color: #9b59b6; background: #faf5ff; }
+        .private-level-2 .position-box { border-left-color: #e67e22; background: #fff8f0; }
+        .private-level-3 .position-box { border-left-color: #1abc9c; background: #f0fffc; }
+        
+        .position-title {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .position-staff {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        
+        .position-count {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            display: inline-block;
+        }
+        
+        .org-connector {
+            width: 2px;
+            height: 20px;
+            background: #bdc3c7;
+            margin: 0 auto;
+        }
+        
+        .level-label {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+        
+        .org-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        .org-stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .org-stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .org-stat-label {
+            font-size: 0.9em;
+            opacity: 0.95;
+        }
+        
+        .org-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .org-table th {
+            background: #34495e;
+            color: white;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .org-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            text-align: center;
+            font-size: 0.8em;
+        }
+        
+        .org-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .category-header {
+            background: #3498db !important;
+            color: white !important;
+            font-weight: 600;
+        }
+        
+        .legal-framework {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .legal-framework h3 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+        
+        .legal-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .legal-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9em;
+        }
+        
+        .legal-list li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <!-- Fixed Header -->
@@ -27,7 +479,7 @@
                 <a href="index.html">Home</a>
                 <a href="about.html" class="active">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
-                <a href="3d-smart-city.html" class="campus-3d">3D Smart City</a>
+                <a href="3d-smart-city.html" class="campus-3d">High-Tech Park</a>
                 <a href="facilities.html">Facilities</a>
                 <a href="investment.html">Investment</a>
                 <a href="technology.html">Technology</a>
@@ -99,6 +551,386 @@
                     <p>
                         We foster deep collaboration between academia, industry, and government to ensure that AI research translates into practical solutions that benefit society and drive economic growth.
                     </p>
+                    
+                    <h2>Organization Structure</h2>
+                    <p>
+                        HEART Technology Park operates under a Public-Private Partnership (PPP) model, combining government oversight with private sector efficiency. Our organizational structure is designed to maximize innovation, ensure regulatory compliance, and deliver world-class infrastructure and services.
+                    </p>
+                    
+                    <div class="org-structure-container">
+                        <div class="org-tab-container">
+                            <button class="org-tab active" onclick="switchOrgTab('government')">
+                                🏛️ Government Management Board
+                            </button>
+                            <button class="org-tab" onclick="switchOrgTab('private')">
+                                🏢 Private Development Company
+                            </button>
+                        </div>
+                        
+                        <!-- Government Tab -->
+                        <div id="government" class="org-tab-content active">
+                            <div class="org-chart">
+                                <!-- Level 1: Management Board Leadership -->
+                                <div class="org-level gov-level-1">
+                                    <div class="org-level-label">Management Board Leadership</div>
+                                </div>
+                                <div class="org-level gov-level-1">
+                                    <div class="position-box">
+                                        <div class="position-title">President</div>
+                                        <div class="position-staff">Chief Executive Officer</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Vice Presidents</div>
+                                        <div class="position-staff">Deputy Executives</div>
+                                        <div class="position-count">4 persons</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="org-connector"></div>
+                                
+                                <!-- Level 2: Administrative Departments -->
+                                <div class="org-level gov-level-2">
+                                    <div class="org-level-label">Administrative Departments</div>
+                                </div>
+                                <div class="org-level gov-level-2">
+                                    <div class="position-box">
+                                        <div class="position-title">Administration Dept.</div>
+                                        <div class="position-staff">HR & General Affairs</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Planning & Environment</div>
+                                        <div class="position-staff">Development Planning</div>
+                                        <div class="position-count">3 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Investment Dept.</div>
+                                        <div class="position-staff">Investment Promotion</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Finance Dept.</div>
+                                        <div class="position-staff">Budget & Finance</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="org-connector"></div>
+                                
+                                <!-- Level 3: Service Units -->
+                                <div class="org-level gov-level-3">
+                                    <div class="org-level-label">Public Service Units</div>
+                                </div>
+                                <div class="org-level gov-level-3">
+                                    <div class="position-box">
+                                        <div class="position-title">Technology Center</div>
+                                        <div class="position-staff">R&D Support</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Project Management</div>
+                                        <div class="position-staff">Infrastructure PMO</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="org-stats-grid">
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">18</div>
+                                    <div class="org-stat-label">Total Staff</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">5</div>
+                                    <div class="org-stat-label">Executive Level</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">4</div>
+                                    <div class="org-stat-label">Departments</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">2</div>
+                                    <div class="org-stat-label">Service Units</div>
+                                </div>
+                            </div>
+                            
+                            <table class="org-table">
+                                <thead>
+                                    <tr>
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                        <th>Staff Count</th>
+                                        <th>Key Responsibilities</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="category-header">
+                                        <td colspan="4">Executive Leadership</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Management Board</td>
+                                        <td>President</td>
+                                        <td>1</td>
+                                        <td>Overall strategic direction, government relations</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Management Board</td>
+                                        <td>Vice Presidents</td>
+                                        <td>4</td>
+                                        <td>Departmental oversight, policy implementation</td>
+                                    </tr>
+                                    <tr class="category-header">
+                                        <td colspan="4">Administrative Departments</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Administration</td>
+                                        <td>Department Head + Staff</td>
+                                        <td>2</td>
+                                        <td>HR management, legal affairs, general administration</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Planning & Environment</td>
+                                        <td>Department Head + Staff</td>
+                                        <td>3</td>
+                                        <td>Master planning, environmental compliance, construction oversight</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Investment</td>
+                                        <td>Department Head + Staff</td>
+                                        <td>2</td>
+                                        <td>FDI promotion, investor services, project evaluation</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Finance</td>
+                                        <td>Department Head + Staff</td>
+                                        <td>2</td>
+                                        <td>Budget management, financial oversight, accounting</td>
+                                    </tr>
+                                    <tr class="category-header">
+                                        <td colspan="4">Service Units</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Technology Center</td>
+                                        <td>Center Head + Staff</td>
+                                        <td>2</td>
+                                        <td>R&D support, technology transfer, innovation programs</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Project Management</td>
+                                        <td>Unit Head + Staff</td>
+                                        <td>2</td>
+                                        <td>Infrastructure project management, quality control</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Private Tab -->
+                        <div id="private" class="org-tab-content">
+                            <div class="org-chart">
+                                <!-- Level 1: Executive Leadership -->
+                                <div class="org-level private-level-1">
+                                    <div class="org-level-label">Executive Leadership</div>
+                                </div>
+                                <div class="org-level private-level-1">
+                                    <div class="position-box">
+                                        <div class="position-title">Chief Executive Officer</div>
+                                        <div class="position-staff">Company Leadership</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Chief Operating Officer</div>
+                                        <div class="position-staff">Operations Management</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Chief Financial Officer</div>
+                                        <div class="position-staff">Financial Management</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="org-connector"></div>
+                                
+                                <!-- Level 2: Department Heads -->
+                                <div class="org-level private-level-2">
+                                    <div class="org-level-label">Department Management</div>
+                                </div>
+                                <div class="org-level private-level-2">
+                                    <div class="position-box">
+                                        <div class="position-title">Marketing Director</div>
+                                        <div class="position-staff">Business Development</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Development Director</div>
+                                        <div class="position-staff">Infrastructure Development</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Operations Director</div>
+                                        <div class="position-staff">Facility Management</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Technology Director</div>
+                                        <div class="position-staff">IT & Innovation</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="org-connector"></div>
+                                
+                                <!-- Level 3: Staff Level -->
+                                <div class="org-level private-level-3">
+                                    <div class="org-level-label">Operational Staff</div>
+                                </div>
+                                <div class="org-level private-level-3">
+                                    <div class="position-box">
+                                        <div class="position-title">Marketing Team</div>
+                                        <div class="position-staff">Sales & Promotion</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Engineering Team</div>
+                                        <div class="position-staff">Technical Staff</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Finance Team</div>
+                                        <div class="position-staff">Accounting & Control</div>
+                                        <div class="position-count">2 persons</div>
+                                    </div>
+                                    <div class="position-box">
+                                        <div class="position-title">Admin Team</div>
+                                        <div class="position-staff">Support Services</div>
+                                        <div class="position-count">1 person</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="org-stats-grid">
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">14</div>
+                                    <div class="org-stat-label">Total Staff</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">3</div>
+                                    <div class="org-stat-label">C-Level Executives</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">4</div>
+                                    <div class="org-stat-label">Department Heads</div>
+                                </div>
+                                <div class="org-stat-box">
+                                    <div class="org-stat-number">7</div>
+                                    <div class="org-stat-label">Operational Staff</div>
+                                </div>
+                            </div>
+                            
+                            <table class="org-table">
+                                <thead>
+                                    <tr>
+                                        <th>Department</th>
+                                        <th>Position</th>
+                                        <th>Staff Count</th>
+                                        <th>Key Responsibilities</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="category-header">
+                                        <td colspan="4">Executive Leadership</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Executive</td>
+                                        <td>Chief Executive Officer</td>
+                                        <td>1</td>
+                                        <td>Strategic leadership, stakeholder relations, business development</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Executive</td>
+                                        <td>Chief Operating Officer</td>
+                                        <td>1</td>
+                                        <td>Daily operations, project execution, quality management</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Executive</td>
+                                        <td>Chief Financial Officer</td>
+                                        <td>1</td>
+                                        <td>Financial strategy, investor relations, risk management</td>
+                                    </tr>
+                                    <tr class="category-header">
+                                        <td colspan="4">Department Management</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marketing</td>
+                                        <td>Marketing Director</td>
+                                        <td>1</td>
+                                        <td>Business development, client acquisition, market analysis</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Development</td>
+                                        <td>Development Director</td>
+                                        <td>1</td>
+                                        <td>Infrastructure planning, construction management, permits</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Operations</td>
+                                        <td>Operations Director</td>
+                                        <td>1</td>
+                                        <td>Facility management, maintenance, tenant services</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Technology</td>
+                                        <td>Technology Director</td>
+                                        <td>1</td>
+                                        <td>IT infrastructure, digital systems, innovation programs</td>
+                                    </tr>
+                                    <tr class="category-header">
+                                        <td colspan="4">Operational Staff</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Marketing</td>
+                                        <td>Marketing Specialists</td>
+                                        <td>2</td>
+                                        <td>Lead generation, client relations, market research</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Engineering</td>
+                                        <td>Technical Staff</td>
+                                        <td>2</td>
+                                        <td>Project coordination, technical oversight, quality control</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Finance</td>
+                                        <td>Finance Specialists</td>
+                                        <td>2</td>
+                                        <td>Accounting, budgeting, financial reporting</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Administration</td>
+                                        <td>Admin Coordinator</td>
+                                        <td>1</td>
+                                        <td>HR support, office management, documentation</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="org-legal-framework">
+                            <h3>📋 Legal Framework & Regulatory References</h3>
+                            <ul class="org-legal-list">
+                                <li><strong>Decree 10/2024/ND-CP</strong> - Regulations on High Technology (Effective: March 25, 2024)</li>
+                                <li><strong>Investment Law No. 61/2020/QH14</strong> - Article 12: Investment incentives for high-tech industries</li>
+                                <li><strong>Law on Science and Technology No. 29/2013/QH13</strong> - Article 30: Science and technology zones</li>
+                                <li><strong>Decree 180/2025/ND-CP</strong> - Public-Private Partnership investment framework (Effective: July 1, 2025)</li>
+                                <li><strong>Circular 16/2021/TT-BKHDT</strong> - Guidelines for high-tech park management organization</li>
+                                <li><strong>Decision 844/QD-TTg</strong> - National high-tech development strategy to 2030</li>
+                                <li><strong>Hoa Lac Hi-tech Park Regulations</strong> - Reference model for organizational structure</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -189,6 +1021,23 @@
 
     <!-- JavaScript -->
     <script>
+        // Organization Structure Tab Switching
+        function switchOrgTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.org-tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.org-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        
         // Smooth scroll animation for fade-in elements
         const observerOptions = {
             threshold: 0.1,
@@ -252,6 +1101,29 @@
                 }
             });
         });
+        
+        // Organization Structure Tab Switching
+        function switchOrgTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.org-tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.org-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            const selectedContent = document.getElementById(tabName);
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            // Add active class to clicked tab
+            const clickedTab = event ? event.target : null;
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+        }
         
         // Performance monitoring
         window.addEventListener('load', function() {

@@ -192,8 +192,8 @@
         
         .about-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 0.8fr 1.4fr;
+            gap: 3rem;
             align-items: center;
         }
         
@@ -374,14 +374,15 @@
             position: sticky;
             top: 2rem;
             border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            height: 700px;
+            overflow: visible !important;
+            box-shadow: none !important;
+            height: auto !important;
             max-width: none;
             width: 100%;
             grid-column: 2;
             grid-row: 2;
             align-self: start;
+            padding: 0 !important;
         }
         
         .map-image {
@@ -1178,7 +1179,7 @@
                 <a href="index.html" class="active">Home</a>
                 <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
-                <a href="3d-smart-city.html" class="campus-3d">3D Smart City</a>
+                <a href="3d-smart-city.html" class="campus-3d">High-Tech Park</a>
                 <a href="facilities.html">Facilities</a>
                 <a href="investment.html">Investment</a>
                 <a href="technology.html">Technology</a>
@@ -1262,8 +1263,16 @@
                     <p>With direct access to Vietnam's backbone infrastructure and proximity to major economic centers, HEART represents the future of data center technology in Southeast Asia.</p>
                     <a href="about.html" class="hero-cta">Learn More</a>
                 </div>
-                <div class="about-image">
-                    🚀
+                <div class="about-image" style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.15); height: 450px;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d131261.3354384569!2d107.73797752211392!3d16.38460211295824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3141977ef5bfca3d%3A0x7963f352c66c8d3d!2zTOG7mWMgQuG7lW4sIFBow7ogTOG7mWMsIFRow6BuaCBwaOG7kSBIdeG6vywgVmnhu4d0IE5hbQ!5e1!3m2!1svi!2s!4v1759309854976!5m2!1svi!2s"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
         </div>
@@ -1272,10 +1281,6 @@
     <!-- Location Section -->
     <section class="location-section">
         <div class="container">
-            <div class="location-header">
-                <h2>Strategic Location</h2>
-                <div class="location-subtitle">Central Vietnam's Premier Technology Hub</div>
-            </div>
             
             <div class="location-grid">
                 <div class="location-content">
@@ -1318,16 +1323,47 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="location-category">
+                            <div class="category-title">
+                                <div class="category-icon">🚄</div>
+                                <span>Railway Infrastructure</span>
+                            </div>
+                            <div class="location-features">
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>North-South Railway Line</h5>
+                                        <p>Strategic positioning at Hue Station on Vietnam's main railway backbone, ensuring optimal logistics for large-scale equipment transport</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Central Hub Advantage</h5>
+                                        <p>Direct rail connections linking Hanoi and Ho Chi Minh City, with future international cross-border railway integration</p>
+                                    </div>
+                                </div>
+                                <div class="location-feature">
+                                    <div class="feature-content">
+                                        <h5>Vietnam High-Speed Railway Network</h5>
+                                        <p>Future 350 km/h high-speed rail connecting Hanoi to Ho Chi Minh City via Hue, reducing travel time to 5.5 hours with strategic stops at major cities (see map on the right)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="location-map">
-                    <img src="assets/images/hue-location-map-high.jpg" alt="HEART Location Map" class="map-image">
-                    <div class="map-overlay">
-                        <!-- HEART Button - clickable to show Google Maps -->
-                        <button class="heart-button-relocated" onclick="showGoogleMaps()" type="button" style="background: linear-gradient(135deg, #4A90E2, #357ABD) !important; color: white !important; padding: 12px 20px !important; border: none !important; border-radius: 25px !important; font-size: 16px !important; font-weight: 600 !important; cursor: pointer !important; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4) !important; position: absolute !important; top: 45% !important; left: 35% !important; z-index: 9999 !important; pointer-events: auto !important;">
-                            ❤️ HEART
-                        </button>
+                <div class="location-map" style="padding: 0 !important;">
+                    <div style="display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 2rem !important; height: 100% !important;">
+                        <!-- Location Map - Left -->
+                        <div style="position: relative; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); height: 100%;">
+                            <img src="assets/images/hue-location-map-high.jpg" alt="HEART Location Map" style="width: 100%; height: 100%; object-fit: cover; display: block; margin: 0;">
+                        </div>
+                        
+                        <!-- Railway Network Map - Right -->
+                        <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); height: 100%;">
+                            <img src="assets/images/vietnam-railway-network.jpg" alt="Vietnam Railway Network" style="width: 100%; height: 100%; object-fit: cover; display: block; margin: 0;">
+                        </div>
                     </div>
                 </div>
             </div>
