@@ -703,15 +703,17 @@
         .grid-background-map {
             position: relative;
             width: 100%;
-            height: 600px;
+            height: auto;
+            min-height: 600px;
             overflow: hidden;
         }
         
         .grid-map-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            object-fit: contain;
             object-position: center;
+            display: block;
         }
         
         .power-flow-overlay {
@@ -744,29 +746,29 @@
             top: 15px;
             left: 15px;
             background: rgba(255,255,255,0.98); /* Tăng opacity */
-            padding: 15px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 6px;
             backdrop-filter: blur(5px); /* Giảm blur */
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             z-index: 20;
         }
 
         .legend-title {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
             color: #2c3e50;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            margin: 6px 0;
+            margin: 4px 0;
             cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 4px;
+            padding: 3px 4px;
+            border-radius: 3px;
             transition: all 0.2s ease;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 500;
         }
 
@@ -776,21 +778,24 @@
         }
 
         .legend-line {
-            width: 20px;
+            width: 16px;
             height: 2px;
-            margin-right: 8px;
+            margin-right: 6px;
             border-radius: 1px;
         }
 
-        .legend-500kv { background: #e74c3c; }
-        .legend-220kv { background: #3498db; }
-        .legend-110kv { background: #9b59b6; }
+        .legend-purple { background: #9b59b6; }
+        .legend-green { background: #10b981; }
+        .legend-yellow { background: #f59e0b; }
+        .legend-brown { background: #8b4513; }
+        .legend-blue { background: #3b82f6; }
+        .legend-orange { background: #f97316; }
 
         .legend-point {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            margin-right: 8px;
+            margin-right: 6px;
         }
 
         /* CONTROL BUTTONS */
@@ -946,14 +951,15 @@
             }
             
             .grid-background-map {
-                height: 400px;
+                height: auto;
+                min-height: 400px;
             }
             
             .interactive-legend {
                 bottom: 10px;
                 left: 10px;
-                padding: 10px;
-                font-size: 10px;
+                padding: 8px;
+                font-size: 8px;
             }
             
             .infrastructure-pulse-point {
@@ -2048,7 +2054,7 @@
                 <a href="index.html">Home</a>
                 <a href="about.html">About Us</a>
                 <a href="master-plan.html">Master Plan</a>
-                <a href="3d-campus-smart-city.html" class="campus-3d">3D Smart City</a>
+                <a href="3d-smart-city.html" class="campus-3d">High-Tech Park</a>
                 <a href="facilities.html" class="active">Facilities</a>
                 <a href="investment.html">Investment</a>
                 <a href="technology.html">Technology</a>
@@ -2539,36 +2545,51 @@
                         <div class="interactive-legend">
                             <div class="legend-title">Submarine Cable Systems Legend</div>
                             <div class="legend-item" data-target="apg">
-                                <div class="legend-line legend-500kv"></div>
+                                <div class="legend-line legend-purple"></div>
                                 <span>APG (140 Tbps)</span>
                             </div>
                             <div class="legend-item" data-target="smw3">
-                                <div class="legend-line legend-220kv"></div>
+                                <div class="legend-line legend-green"></div>
                                 <span>SMW3 (Decommissioned 2024)</span>
                             </div>
                             <div class="legend-item" data-target="alc">
-                                <div class="legend-line legend-110kv"></div>
+                                <div class="legend-line legend-yellow"></div>
                                 <span>ALC (336 Tbps - Ready 2026)</span>
                             </div>
                             <div class="legend-item" data-target="adc">
-                                <div class="legend-point legend-500kv"></div>
+                                <div class="legend-line legend-brown"></div>
                                 <span>ADC (160 Tbps)</span>
                             </div>
                             <div class="legend-item" data-target="sjc2">
-                                <div class="legend-point legend-220kv"></div>
+                                <div class="legend-line legend-blue"></div>
                                 <span>SJC2 (144 Tbps - Under construction)</span>
                             </div>
-                            <div class="legend-item" data-target="ame1">
-                                <div class="legend-point legend-110kv"></div>
-                                <span>AME-1 (100+ Tbps)</span>
+                            <div class="legend-item" data-target="aae1">
+                                <div class="legend-line legend-orange"></div>
+                                <span>AAE-1 (40 Tbps)</span>
+                            </div>
+                            <div class="legend-item" data-target="aag">
+                                <div class="legend-line legend-purple"></div>
+                                <span>AAG (54 Tbps)</span>
+                            </div>
+                            <div class="legend-item" data-target="tgn-ia">
+                                <div class="legend-line legend-green"></div>
+                                <span>TGN-IA (3.84 Tbps)</span>
                             </div>
                         </div>
 
                         <!-- Hue Location Indicator -->
-                        <div style="position: absolute; top: 18%; left: 50.5%; transform: translate(-50%, -50%); z-index: 15;">
-                            <div style="background: #1e40af; color: white; padding: 14px 32px; border-radius: 26px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4); border: 2px solid #fbbf24; min-width: 180px; text-align: center; line-height: 1.3;">
+                        <div style="position: absolute; top: 15%; left: 45%; transform: translate(-50%, -50%); z-index: 15;">
+                            <!-- Connection Line -->
+                            <div style="position: absolute; top: 100%; left: 50%; width: 2px; height: 150px; background: #1e40af; transform: translate(-50%, 0); z-index: -1;"></div>
+                            
+                            <!-- Connection Point with Pulse Animation (Ngay dòng chữ VSTN) -->
+                            <div style="position: absolute; top: 100%; left: 50%; transform: translate(-50%, 150px); width: 24px; height: 24px; background: #1e40af; border: 4px solid #fbbf24; border-radius: 50%; box-shadow: 0 0 25px rgba(30, 64, 175, 0.7); animation: pulseEffect 2s infinite;"></div>
+                            
+                            <!-- Label Box -->
+                            <div style="background: #1e40af; color: white; padding: 12px 28px; border-radius: 24px; font-weight: 600; font-size: 14px; box-shadow: 0 4px 15px rgba(30, 64, 175, 0.5); border: 3px solid #fbbf24; min-width: 180px; text-align: center; line-height: 1.4;">
                                 Hue - 300MW DC<br>
-                                <span style="font-size: 12px; color: #fbbf24;">80 km to Da Nang</span>
+                                <span style="font-size: 11px; color: #fbbf24; font-weight: 700;">80 km to Da Nang</span>
                             </div>
                         </div>
 
